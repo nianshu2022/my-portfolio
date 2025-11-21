@@ -28,7 +28,7 @@ export const metadata: Metadata = {
   },
   description: "00后产品运营的个人网站，分享运营心得、增长策略与技术折腾笔记。致力于构建连接用户价值与技术实现的桥梁。",
   keywords: ["产品运营", "念舒", "个人博客", "Next.js", "技术折腾", "增长黑客", "00后"],
-  authors: [{ name: "念舒", url: "https://nianshu.site" }], // Replace with your actual domain
+  authors: [{ name: "念舒", url: "https://www.nianshu2022.cn" }], // Replace with your actual domain
   creator: "念舒",
   icons: {
     icon: "/img/avatar.png", // Use your avatar as favicon
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "zh_CN",
-    url: "https://nianshu.site", // Replace with your actual domain
+    url:  "https://www.nianshu2022.cn", // Replace with your actual domain
     title: "念舒的数字花园",
     description: "00后产品运营的个人网站，分享运营心得与技术折腾笔记。",
     siteName: "念舒的数字花园",
