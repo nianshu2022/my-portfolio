@@ -149,3 +149,66 @@
     @apply bg-background text-foreground;
   }
 }
+
+  /* Custom Typography Styles */
+@layer utilities {
+  /* Indent first line of paragraphs in prose */
+  .prose p {
+    text-indent: 2em;
+  }
+  
+  /* But don't indent blockquotes or list items if they contain p */
+  .prose blockquote p {
+    text-indent: 0;
+  }
+  .prose ul p, .prose ol p {
+    text-indent: 0;
+  }
+}
+
+/* Typography Enhancements */
+@layer components {
+  .prose blockquote {
+    @apply not-italic border-none bg-transparent px-0 py-2 my-8 text-center;
+  }
+  
+  /* Limit image size inside blockquotes */
+  .prose blockquote img {
+    @apply max-h-[200px] w-auto mx-auto rounded-lg shadow-md my-4 hover:scale-105 transition-transform duration-300;
+  }
+
+  /* Special style for mobile screenshots in markdown */
+  .prose img[alt*="mobile-screenshot"] {
+    @apply w-[300px] max-w-full mx-auto rounded-xl shadow-lg my-6 border border-zinc-200 dark:border-zinc-700;
+  }
+
+  .prose a {
+    @apply no-underline relative font-medium text-blue-600 dark:text-blue-400 transition-colors;
+  }
+  
+  .prose a::after {
+    content: '';
+    @apply absolute bottom-0 left-0 w-full h-[1px] bg-blue-600/40 dark:bg-blue-400/40 transition-transform duration-300 scale-x-0 origin-right;
+  }
+  
+  .prose a:hover::after {
+    @apply scale-x-100 origin-left;
+  }
+
+  .prose h2 {
+    @apply relative pl-4 border-l-4 border-purple-500;
+  }
+
+  .prose h3 {
+    @apply flex items-center gap-2;
+  }
+  
+  .prose h3::before {
+    content: '#';
+    @apply text-purple-400/60 font-light;
+  }
+
+  .prose code {
+    @apply bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded border border-zinc-200 dark:border-zinc-700/50 font-mono text-sm font-normal text-pink-600 dark:text-pink-400 before:content-none after:content-none;
+  }
+}

@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
+import readingTime from 'reading-time';
 
 const postsDirectory = path.join(process.cwd(), 'src/content/posts');
 
@@ -11,6 +12,10 @@ export type Post = {
   description: string;
   tags: string[];
   content: string;
+  wordCount: number;
+  readingTime: string;
+  cover?: string;
+  award?: string;
 };
 
 export function getAllPosts(): Post[] {
@@ -30,11 +35,16 @@ export function getAllPosts(): Post[] {
 
     // Use gray-matter to parse the post metadata section
     const matterResult = matter(fileContents);
+    const stats = readingTime(matterResult.content);
 
     // Combine the data with the id
     return {
       slug,
       content: matterResult.content,
+      wordCount: matterResult.content.length, // Simple character count for Chinese
+      readingTime: Math.ceil(stats.minutes) + ' 分钟',
+      cover: matterResult.data.cover || null,
+      award: matterResult.data.award || null,
       ...(matterResult.data as { title: string; date: string; description: string; tags: string[] }),
     };
   });
@@ -51,17 +61,24 @@ export function getAllPosts(): Post[] {
 
 export function getPostBySlug(slug: string): Post | null {
   try {
-    const fullPath = path.join(postsDirectory, `${slug}.md`);
+    // Decode slug to handle Chinese characters in URL
+    const decodedSlug = decodeURIComponent(slug);
+    const fullPath = path.join(postsDirectory, `${decodedSlug}.md`);
     const fileContents = fs.readFileSync(fullPath, 'utf8');
     const matterResult = matter(fileContents);
+    const stats = readingTime(matterResult.content);
 
     return {
-      slug,
+      slug: decodedSlug,
       content: matterResult.content,
+      wordCount: matterResult.content.length,
+      readingTime: Math.ceil(stats.minutes) + ' 分钟',
+      cover: matterResult.data.cover || null,
+      award: matterResult.data.award || null,
       ...(matterResult.data as { title: string; date: string; description: string; tags: string[] }),
     };
-  } catch {
+  } catch (e) {
+    console.error(`Error reading post ${slug}:`, e);
     return null;
   }
 }
-
