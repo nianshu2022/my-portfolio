@@ -1,7 +1,6 @@
 "use client";
 
 import Giscus from "@giscus/react";
-import { useTheme } from "next-themes"; // We might need to add next-themes later for perfect dark mode sync, but for now let's assume a simple toggle or system pref
 import { useEffect, useState } from "react";
 
 export default function Comments() {
