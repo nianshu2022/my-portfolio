@@ -1,7 +1,6 @@
 import { getPostBySlug, getAllPosts } from "@/lib/posts";
 import Markdown from "react-markdown";
 import Link from "next/link";
-import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Clock, BookOpen, Shield, Eye } from "lucide-react";
 import rehypeSlug from 'rehype-slug';
@@ -63,9 +62,9 @@ export default async function PostPage(props: { params: Promise<{ slug: string }
             </Link>
         </div>
 
-        <div className="flex flex-col lg:flex-row">
+        <div className="flex flex-col lg:flex-row lg:gap-12">
             {/* Main Content */}
-            <article className="flex-1 min-w-0 pt-24 sm:pt-28"> {/* Increased desktop padding to clear button */}
+            <article className="flex-1 min-w-0 pt-24 sm:pt-28 lg:max-w-3xl xl:max-w-4xl"> {/* Limited max width on desktop */}
                 
                 <div className="px-6 sm:px-12 pb-12">
                 <header className="mb-10 pb-10 border-b border-zinc-200/50 dark:border-zinc-700/50 sm:pl-4">
