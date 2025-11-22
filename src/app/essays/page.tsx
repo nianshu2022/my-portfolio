@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { ArrowLeft, Quote } from "lucide-react";
+import { ArrowLeft, Quote, Feather } from "lucide-react";
 import { getAllEssays } from "@/lib/posts";
 
 export default function EssaysPage() {
@@ -25,7 +25,8 @@ export default function EssaysPage() {
         </div>
 
         <div className="space-y-2 text-center sm:text-left pt-8 sm:pt-4 sm:pl-20">
-             <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent inline-block font-serif">
+             <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent inline-flex items-center gap-3 font-serif">
+                <Feather className="w-8 h-8 text-purple-600 dark:text-purple-400" />
                 生活随笔
             </h1>
             <p className="text-zinc-500 dark:text-zinc-400 font-serif italic">
