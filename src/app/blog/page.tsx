@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, BookOpen } from "lucide-react";
 import { getAllPosts } from "@/lib/posts";
 
 export default function BlogPage() {
@@ -14,15 +14,20 @@ export default function BlogPage() {
          {/* Back Button inside card */}
         <div className="absolute top-6 left-6 sm:top-8 sm:left-8 z-20">
              <Link href="/">
-                <Button variant="ghost" size="icon" className="rounded-full w-10 h-10 bg-white/80 dark:bg-zinc-800/80 backdrop-blur-md shadow-md hover:shadow-lg border border-white/50 dark:border-zinc-700/50 transition-all duration-300 hover:-translate-y-0.5">
-                    <ArrowLeft className="h-5 w-5 text-zinc-600 dark:text-zinc-300" />
+                <Button 
+                    variant="secondary" 
+                    size="icon" 
+                    className="rounded-full w-10 h-10 sm:w-12 sm:h-12 bg-white/80 dark:bg-zinc-800/80 backdrop-blur-xl shadow-sm border border-zinc-200/50 dark:border-zinc-700/50 hover:bg-white hover:dark:bg-zinc-700 hover:scale-110 hover:shadow-xl hover:border-blue-200 dark:hover:border-blue-800 transition-all duration-300 group"
+                >
+                    <ArrowLeft className="h-5 w-5 text-zinc-600 dark:text-zinc-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors" />
                 </Button>
             </Link>
         </div>
 
-        <div className="space-y-2 text-center sm:text-left pt-8 sm:pt-4 sm:pl-16">
-             <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-blue-600 to-violet-600 bg-clip-text text-transparent inline-block">
-                博客文章
+        <div className="space-y-2 text-center sm:text-left pt-8 sm:pt-4 sm:pl-20">
+             <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-blue-600 to-violet-600 bg-clip-text text-transparent inline-flex items-center gap-3">
+                <BookOpen className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+                技术博客
             </h1>
             <p className="text-zinc-500 dark:text-zinc-400">
                 分享产品思考与技术折腾笔记。

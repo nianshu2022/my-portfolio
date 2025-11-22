@@ -45,15 +45,20 @@ export default function PortalPage() {
         {/* Back Button inside card */}
         <div className="absolute top-6 left-6 sm:top-8 sm:left-8 z-20">
              <Link href="/">
-                <Button variant="ghost" size="icon" className="rounded-full w-10 h-10 bg-white/80 dark:bg-zinc-800/80 backdrop-blur-md shadow-md hover:shadow-lg border border-white/50 dark:border-zinc-700/50 transition-all duration-300 hover:-translate-y-0.5">
-                    <ArrowLeft className="h-5 w-5 text-zinc-600 dark:text-zinc-300" />
+                <Button 
+                    variant="secondary" 
+                    size="icon" 
+                    className="rounded-full w-10 h-10 sm:w-12 sm:h-12 bg-white/80 dark:bg-zinc-800/80 backdrop-blur-xl shadow-sm border border-zinc-200/50 dark:border-zinc-700/50 hover:bg-white hover:dark:bg-zinc-700 hover:scale-110 hover:shadow-xl hover:border-cyan-200 dark:hover:border-cyan-800 transition-all duration-300 group"
+                >
+                    <ArrowLeft className="h-5 w-5 text-zinc-600 dark:text-zinc-300 group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors" />
                 </Button>
             </Link>
         </div>
 
         {/* Header */}
-        <div className="space-y-2 text-center sm:text-left pt-8 sm:pt-4 sm:pl-16">
-            <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-cyan-500 to-blue-500 bg-clip-text text-transparent inline-block">
+        <div className="space-y-2 text-center sm:text-left pt-8 sm:pt-4 sm:pl-20">
+            <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-cyan-500 to-blue-500 bg-clip-text text-transparent inline-flex items-center gap-3">
+                <Server className="w-8 h-8 text-cyan-500 dark:text-cyan-400" />
                 我的传送门
             </h1>
             <p className="text-zinc-500 dark:text-zinc-400">
