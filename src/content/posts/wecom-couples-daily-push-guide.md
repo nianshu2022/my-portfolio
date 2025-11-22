@@ -7,8 +7,9 @@ tags: ["Python", "企业微信", "自动化", "教程"]
 
 ## 注册企业微信
 
-企业微信：https://open.work.weixin.qq.com/wwopen/login
-
+```
+https://open.work.weixin.qq.com/wwopen/login
+```
 1.  注册  
     ![jJVPySQxv8kFesq.png](https://s2.loli.net/2024/03/04/jJVPySQxv8kFesq.png)
     
@@ -41,7 +42,9 @@ tags: ["Python", "企业微信", "自动化", "教程"]
 ## 申请和风天气Key
 
 1.  注册  
-    和平天气官方：https://id.qweather.com/#/login
+```
+https://id.qweather.com/#/login
+```
     
 2.  点击“开发服务控制台”  
     ![vAFWCm8Kyp3Igrj.png](https://s2.loli.net/2024/03/04/vAFWCm8Kyp3Igrj.png)
@@ -56,8 +59,9 @@ tags: ["Python", "企业微信", "自动化", "教程"]
 ## 部署程序
 
 1. 源文件  
-
-下载网址：https://download.csdn.net/download/qq_52716296/88906655
+```
+https://download.csdn.net/download/qq_52716296/88906655
+```
 
 2. 修好配置文件config.py
 
