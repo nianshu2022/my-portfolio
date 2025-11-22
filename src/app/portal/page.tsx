@@ -57,11 +57,11 @@ export default function PortalPage() {
 
         {/* Header */}
         <div className="space-y-2 text-center sm:text-left pt-8 sm:pt-4 sm:pl-20">
-            <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-cyan-500 to-blue-500 bg-clip-text text-transparent inline-flex items-center gap-3">
+            <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-cyan-500 to-blue-500 bg-clip-text text-transparent inline-flex items-center gap-3 font-serif">
                 <Server className="w-8 h-8 text-cyan-500 dark:text-cyan-400" />
                 我的传送门
             </h1>
-            <p className="text-zinc-500 dark:text-zinc-400">
+            <p className="text-zinc-500 dark:text-zinc-400 font-serif">
                 私有部署的服务与站点入口。
             </p>
         </div>

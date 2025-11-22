@@ -196,11 +196,11 @@
   }
 
   .prose h2 {
-    @apply relative pl-4 border-l-4 border-purple-500;
+    @apply relative pl-4 border-l-4 border-purple-500 font-serif;
   }
 
   .prose h3 {
-    @apply flex items-center gap-2;
+    @apply flex items-center gap-2 font-serif;
   }
   
   .prose h3::before {

@@ -66,11 +66,11 @@ export default async function PostPage(props: { params: Promise<{ slug: string }
             {/* Main Content */}
             <article className="flex-1 min-w-0 pt-24 sm:pt-28 lg:max-w-3xl xl:max-w-4xl"> {/* Limited max width on desktop */}
                 
-                <div className="px-6 sm:px-12 pb-12">
-                <header className="mb-10 pb-10 border-b border-zinc-200/50 dark:border-zinc-700/50 sm:pl-4">
-                    <h1 className="text-3xl sm:text-4xl font-bold mb-6 text-zinc-900 dark:text-zinc-50 leading-tight tracking-tight mt-8 sm:mt-0">{post.title}</h1>
-                    
-                    {/* Meta Info Row */}
+                        <div className="px-6 sm:px-12 pb-12">
+                        <header className="mb-10 pb-10 border-b border-zinc-200/50 dark:border-zinc-700/50 sm:pl-4">
+                            <h1 className="text-3xl sm:text-4xl font-bold mb-6 text-zinc-900 dark:text-zinc-50 leading-tight tracking-tight mt-8 sm:mt-0 font-serif">{post.title}</h1>
+                            
+                            {/* Meta Info Row */}
                     <div className="flex flex-wrap items-center gap-y-3 gap-x-6 text-zinc-500 text-sm">
                         <div className="flex items-center gap-2">
                             <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>

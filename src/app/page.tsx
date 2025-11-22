@@ -27,11 +27,11 @@ export default function Home() {
               </div>
               
               <div className="space-y-4">
-                <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight lg:text-6xl text-zinc-800 dark:text-zinc-100 drop-shadow-sm px-2">
+                <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight lg:text-6xl text-zinc-800 dark:text-zinc-100 drop-shadow-sm px-2 font-serif">
                   你好，我是 <span className="bg-gradient-to-r from-blue-600 to-violet-600 bg-clip-text text-transparent whitespace-nowrap">念舒</span>
                 </h1>
                 
-                <p className="mx-auto max-w-xl text-base sm:text-lg text-zinc-600 dark:text-zinc-300 leading-relaxed font-medium px-4">
+                <p className="mx-auto max-w-xl text-base sm:text-lg text-zinc-600 dark:text-zinc-300 leading-relaxed font-medium px-4 font-serif">
                   <span className="font-bold text-zinc-900 dark:text-zinc-50">产品运营</span> / 00后 / 技术折腾家
                   <br />
                   <span className="text-sm mt-2 block opacity-90">

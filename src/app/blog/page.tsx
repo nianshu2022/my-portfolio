@@ -25,11 +25,11 @@ export default function BlogPage() {
         </div>
 
         <div className="space-y-2 text-center sm:text-left pt-8 sm:pt-4 sm:pl-20">
-             <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-blue-600 to-violet-600 bg-clip-text text-transparent inline-flex items-center gap-3">
+             <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-blue-600 to-violet-600 bg-clip-text text-transparent inline-flex items-center gap-3 font-serif">
                 <BookOpen className="w-8 h-8 text-blue-600 dark:text-blue-400" />
                 技术博客
             </h1>
-            <p className="text-zinc-500 dark:text-zinc-400">
+            <p className="text-zinc-500 dark:text-zinc-400 font-serif">
                 分享产品思考与技术折腾笔记。
             </p>
         </div>
@@ -39,7 +39,7 @@ export default function BlogPage() {
               <Link key={post.slug} href={`/blog/${post.slug}`}>
                 <div className="p-6 bg-white/60 dark:bg-zinc-800/40 rounded-2xl border border-zinc-200/50 dark:border-zinc-700/50 shadow-sm hover:shadow-lg transition-all cursor-pointer group hover:-translate-x-1">
                     <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 mb-2">
-                         <h2 className="text-xl font-semibold text-zinc-800 dark:text-zinc-100 group-hover:text-blue-600 transition-colors">
+                         <h2 className="text-xl font-semibold text-zinc-800 dark:text-zinc-100 group-hover:text-blue-600 transition-colors font-serif">
                              {post.title}
                         </h2>
                         <span className="text-xs font-mono text-zinc-400 bg-zinc-100 dark:bg-zinc-800 px-2 py-1 rounded self-start sm:self-auto shrink-0">
