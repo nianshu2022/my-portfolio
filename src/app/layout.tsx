@@ -70,6 +70,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen relative overflow-x-hidden bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100`}
       >
+        {/* Hidden image for WeChat sharing hack */}
+        <div style={{ display: 'none', position: 'absolute', top: 0, left: 0, width: 0, height: 0, overflow: 'hidden' }}>
+          <img src="https://zj.nianshu2022.cn/img/avatar.png" alt="thumb" width="300" height="300" />
+        </div>
+
          {/* Global Background Decoration */}
          <div className="fixed inset-0 z-[-1] pointer-events-none">
             {/* Animated Blobs */}
