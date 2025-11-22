@@ -29,8 +29,20 @@ export default async function EssayPage(props: { params: Promise<{ slug: string 
     <main className="flex min-h-screen flex-col items-center p-4 sm:p-24 relative font-serif">
       <ReadingProgress />
       
-      <div className="max-w-3xl w-full flex flex-col backdrop-blur-xl bg-white/40 dark:bg-zinc-900/40 rounded-3xl border border-white/20 shadow-2xl relative">
+      <div className="max-w-3xl w-full flex flex-col backdrop-blur-xl bg-white/40 dark:bg-zinc-900/40 rounded-3xl border border-white/20 shadow-2xl relative overflow-hidden">
         
+        {/* Cover Image */}
+        {post.cover && (
+            <div className="w-full h-64 sm:h-80 relative">
+                <img 
+                    src={post.cover} 
+                    alt={post.title} 
+                    className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent to-white/40 dark:to-zinc-900/40"></div>
+            </div>
+        )}
+
         {/* Back Button */}
         <div className="absolute top-6 left-6 sm:top-8 sm:left-8 z-30">
             <Link href="/essays">
@@ -44,7 +56,7 @@ export default async function EssayPage(props: { params: Promise<{ slug: string 
             </Link>
         </div>
 
-        <article className="w-full pt-24 sm:pt-28 pb-12 px-6 sm:px-16">
+        <article className={`w-full pb-12 px-6 sm:px-16 ${post.cover ? 'pt-10 sm:pt-12' : 'pt-24 sm:pt-28'}`}>
             <header className="mb-12 text-center">
                 <h1 className="text-3xl sm:text-5xl font-bold mb-6 text-zinc-900 dark:text-zinc-50 leading-tight tracking-tight font-serif">
                     {post.title}
@@ -81,7 +93,7 @@ export default async function EssayPage(props: { params: Promise<{ slug: string 
             {/* Award Display - Centered for essays */}
             {post.award && (
                 <div className="mt-12 flex justify-center">
-                     <div className="max-w-md w-full transform hover:scale-105 transition-transform duration-500">
+                     <div className="max-w-3xl w-full transform hover:scale-105 transition-transform duration-500">
                         <SidebarAward src={post.award} />
                      </div>
                 </div>

@@ -164,6 +164,15 @@
   .prose ul p, .prose ol p {
     text-indent: 0;
   }
+
+  /* 
+   * Add CSS feature settings for lining figures (lnum) and tabular figures (tnum)
+   * This makes numbers look more standard and less "old-style" (variable height)
+   */
+  .font-serif {
+    font-feature-settings: "lnum", "tnum";
+    font-variant-numeric: lining-nums tabular-nums;
+  }
 }
 
 /* Typography Enhancements */
