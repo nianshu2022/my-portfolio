@@ -38,11 +38,11 @@ export default function BlogPage() {
             {posts.map((post) => (
               <Link key={post.slug} href={`/blog/${post.slug}`}>
                 <div className="p-6 bg-white/60 dark:bg-zinc-800/40 rounded-2xl border border-zinc-200/50 dark:border-zinc-700/50 shadow-sm hover:shadow-lg transition-all cursor-pointer group hover:-translate-x-1">
-                    <div className="flex justify-between items-start">
-                         <h2 className="text-xl font-semibold mb-2 text-zinc-800 dark:text-zinc-100 group-hover:text-blue-600 transition-colors">
+                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 mb-2">
+                         <h2 className="text-xl font-semibold text-zinc-800 dark:text-zinc-100 group-hover:text-blue-600 transition-colors">
                              {post.title}
                         </h2>
-                        <span className="text-xs font-mono text-zinc-400 bg-zinc-100 dark:bg-zinc-800 px-2 py-1 rounded">
+                        <span className="text-xs font-mono text-zinc-400 bg-zinc-100 dark:bg-zinc-800 px-2 py-1 rounded self-start sm:self-auto shrink-0">
                             {post.date}
                         </span>
                     </div>
@@ -51,14 +51,14 @@ export default function BlogPage() {
                         {post.description}
                     </p>
                     <div className="flex justify-between items-center mt-4">
-                        <div className="flex gap-2">
+                        <div className="flex gap-2 flex-wrap">
                             {post.tags?.map(tag => (
                                 <span key={tag} className="text-xs px-2.5 py-0.5 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-300 rounded-full font-medium border border-blue-100 dark:border-blue-800/30">
                                     #{tag}
                                 </span>
                             ))}
                         </div>
-                        <span className="text-xs text-blue-500 opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1">
+                        <span className="text-xs text-blue-500 opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1 shrink-0 ml-2">
                             阅读全文 &rarr;
                         </span>
                     </div>
