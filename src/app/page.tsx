@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Github, BookOpen, Wrench, Server, User } from "lucide-react";
+import { Github, BookOpen, Feather, Server, User } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -46,14 +46,14 @@ export default function Home() {
               <Link href="/blog" className="w-full sm:w-auto">
                 <Button size="lg" className="w-full sm:w-auto h-12 px-6 min-w-[150px] gap-2 shadow-lg shadow-blue-500/20 bg-gradient-to-r from-blue-600 to-violet-600 border-0 text-white transition-all duration-300 hover:scale-105 hover:-translate-y-1 hover:shadow-blue-500/40">
                   <BookOpen className="h-4 w-4" />
-                  阅读博客
+                  技术博客
                 </Button>
               </Link>
               
-              <Link href="/tools" className="w-full sm:w-auto">
+              <Link href="/essays" className="w-full sm:w-auto">
                 <Button size="lg" variant="secondary" className="w-full sm:w-auto h-12 px-6 min-w-[150px] gap-2 shadow-md bg-white/80 dark:bg-zinc-800/80 backdrop-blur-md hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:text-purple-600 dark:hover:text-purple-400 hover:border-purple-200/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl group border border-transparent hover:border-purple-500/20">
-                  <Wrench className="h-4 w-4 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors" />
-                  在线工具箱
+                  <Feather className="h-4 w-4 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors" />
+                  生活随笔
                 </Button>
               </Link>
 

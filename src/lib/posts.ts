@@ -4,6 +4,7 @@ import matter from 'gray-matter';
 import readingTime from 'reading-time';
 
 const postsDirectory = path.join(process.cwd(), 'src/content/posts');
+const essaysDirectory = path.join(process.cwd(), 'src/content/essays');
 
 export type Post = {
   slug: string;
@@ -18,39 +19,32 @@ export type Post = {
   award?: string;
 };
 
-export function getAllPosts(): Post[] {
-  // Ensure directory exists to avoid crash on first run if empty
-  if (!fs.existsSync(postsDirectory)) {
+// Helper function to get all items from a directory
+function getAllItems(directory: string): Post[] {
+  if (!fs.existsSync(directory)) {
     return [];
   }
 
-  const fileNames = fs.readdirSync(postsDirectory);
-  const allPostsData = fileNames.map((fileName) => {
-    // Remove ".md" from file name to get slug
+  const fileNames = fs.readdirSync(directory);
+  const allItemsData = fileNames.map((fileName) => {
     const slug = fileName.replace(/\.md$/, '');
-
-    // Read markdown file as string
-    const fullPath = path.join(postsDirectory, fileName);
+    const fullPath = path.join(directory, fileName);
     const fileContents = fs.readFileSync(fullPath, 'utf8');
-
-    // Use gray-matter to parse the post metadata section
     const matterResult = matter(fileContents);
     const stats = readingTime(matterResult.content);
 
-    // Combine the data with the id
     return {
       slug,
       content: matterResult.content,
-      wordCount: matterResult.content.length, // Simple character count for Chinese
+      wordCount: matterResult.content.length,
       readingTime: Math.ceil(stats.minutes) + ' 分钟',
       cover: matterResult.data.cover || null,
       award: matterResult.data.award || null,
       ...(matterResult.data as { title: string; date: string; description: string; tags: string[] }),
     };
   });
-  
-  // Sort posts by date
-  return allPostsData.sort((a, b) => {
+
+  return allItemsData.sort((a, b) => {
     if (a.date < b.date) {
       return 1;
     } else {
@@ -59,11 +53,11 @@ export function getAllPosts(): Post[] {
   });
 }
 
-export function getPostBySlug(slug: string): Post | null {
+// Helper function to get a single item by slug
+function getItemBySlug(directory: string, slug: string): Post | null {
   try {
-    // Decode slug to handle Chinese characters in URL
     const decodedSlug = decodeURIComponent(slug);
-    const fullPath = path.join(postsDirectory, `${decodedSlug}.md`);
+    const fullPath = path.join(directory, `${decodedSlug}.md`);
     const fileContents = fs.readFileSync(fullPath, 'utf8');
     const matterResult = matter(fileContents);
     const stats = readingTime(matterResult.content);
@@ -78,7 +72,25 @@ export function getPostBySlug(slug: string): Post | null {
       ...(matterResult.data as { title: string; date: string; description: string; tags: string[] }),
     };
   } catch (e) {
-    console.error(`Error reading post ${slug}:`, e);
+    console.error(`Error reading item ${slug} from ${directory}:`, e);
     return null;
   }
+}
+
+// Posts API
+export function getAllPosts(): Post[] {
+  return getAllItems(postsDirectory);
+}
+
+export function getPostBySlug(slug: string): Post | null {
+  return getItemBySlug(postsDirectory, slug);
+}
+
+// Essays API
+export function getAllEssays(): Post[] {
+  return getAllItems(essaysDirectory);
+}
+
+export function getEssayBySlug(slug: string): Post | null {
+  return getItemBySlug(essaysDirectory, slug);
 }
