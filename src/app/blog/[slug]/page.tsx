@@ -108,7 +108,43 @@ export default async function PostPage(props: { params: Promise<{ slug: string }
                 </header>
 
                 <div className="prose prose-zinc dark:prose-invert max-w-none prose-headings:scroll-mt-28 sm:pl-4">
-                    <Markdown rehypePlugins={[rehypeSlug]}>{post.content}</Markdown>
+                    <Markdown 
+                        rehypePlugins={[rehypeSlug]}
+                        components={{
+                            img: (props) => {
+                                const src = props.src as string || '';
+                                let style: React.CSSProperties = { 
+                                    height: 'auto', 
+                                    borderRadius: '8px', 
+                                    maxWidth: '100%',
+                                    backgroundColor: 'transparent'
+                                };
+                                
+                                try {
+                                    // Parse URL query parameters
+                                    const url = new URL(src, 'http://dummy.com'); // Base URL needed for relative paths
+                                    const width = url.searchParams.get('width') || url.searchParams.get('w');
+                                    const shadow = url.searchParams.get('shadow');
+
+                                    if (width) {
+                                        style.maxWidth = width;
+                                        style.width = '100%'; // Ensure it scales down responsively
+                                    }
+                                    
+                                    if (shadow === 'true' || shadow === '1') {
+                                        // Use drop-shadow filter instead of box-shadow to respect transparency
+                                        style.filter = 'drop-shadow(0 4px 12px rgba(0, 0, 0, 0.1))';
+                                    }
+                                } catch (e) {
+                                    // Ignore URL parsing errors
+                                }
+
+                                return <img {...props} style={style} />;
+                            }
+                        }}
+                    >
+                        {post.content}
+                    </Markdown>
                 </div>
 
                 {/* Copyright Section */}
@@ -136,23 +172,24 @@ export default async function PostPage(props: { params: Promise<{ slug: string }
         </article>
 
         {/* Sidebar TOC - Hidden on mobile, sticky on desktop */}
-        <aside className="hidden lg:block w-64 shrink-0 pt-12 pr-6">
+        <aside className="hidden lg:block w-64 shrink-0 pt-12 pr-2">
             <div className="sticky top-8 space-y-6">
-                <div className="p-6 bg-white/50 dark:bg-zinc-800/50 rounded-2xl border border-white/20 dark:border-zinc-700/30 backdrop-blur-md shadow-sm">
-                    <h4 className="font-bold mb-4 text-sm text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-                        <span className="w-1 h-4 bg-blue-500 rounded-full"></span>
+                <div className="p-5 bg-white/40 dark:bg-zinc-900/40 rounded-2xl border border-white/20 dark:border-zinc-800/50 backdrop-blur-md shadow-sm">
+                    <h4 className="font-bold mb-4 text-sm text-zinc-900 dark:text-zinc-100 flex items-center gap-2 select-none">
+                        <span className="w-1 h-4 bg-blue-500 rounded-full shadow-sm shadow-blue-500/50"></span>
                         目录
                     </h4>
-                    <nav className="space-y-1 text-sm relative max-h-[50vh] overflow-y-auto custom-scrollbar">
+                    <nav className="space-y-0.5 text-sm relative max-h-[75vh] overflow-y-auto custom-scrollbar pr-2">
                         {headings.length === 0 && <p className="text-zinc-400 text-xs pl-2">暂无目录</p>}
                         {headings.map((heading, index) => (
                             <a 
                                 key={index} 
                                 href={`#${heading.slug}`}
-                                className={`block py-1.5 text-zinc-500 hover:text-blue-600 dark:hover:text-blue-400 transition-colors border-l-2 border-transparent hover:border-blue-500 pl-3 -ml-[1px]
-                                    ${heading.level === 3 ? 'ml-2 text-xs' : ''}`}
+                                className={`block py-1.5 text-zinc-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-200 border-l-[2px] border-transparent hover:border-blue-500 hover:bg-blue-50/50 dark:hover:bg-blue-900/10 rounded-r-md
+                                    ${heading.level === 3 ? 'pl-6 text-xs' : 'pl-3'}
+                                `}
                             >
-                                {heading.text}
+                                <span className="truncate block">{heading.text}</span>
                             </a>
                         ))}
                     </nav>
