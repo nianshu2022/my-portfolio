@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -87,6 +88,13 @@ export default function RootLayout({
           </div>
 
         {children}
+
+        {/* Cloudflare Web Analytics */}
+        <Script 
+          defer 
+          src='https://static.cloudflareinsights.com/beacon.min.js' 
+          data-cf-beacon='{"token": "28026dc377bc4925815998f861056ae1"}' 
+        />
       </body>
     </html>
   );
