@@ -96,7 +96,7 @@ export default function RootLayout({
           data-cf-beacon='{"token": "28026dc377bc4925815998f861056ae1"}' 
         />
         
-        {/* Google AdSense (Placeholder - Replace "ca-pub-XXXXXXXXXXXXXXXX" with your actual ID) */}
+        {/* Google AdSense */}
         <Script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6153369929341681"
