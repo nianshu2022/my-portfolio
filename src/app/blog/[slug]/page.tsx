@@ -10,6 +10,7 @@ import BusuanziCounter from "@/components/Busuanzi";
 import ReadingProgress from "@/components/ReadingProgress";
 import SidebarAward from "@/components/SidebarAward";
 import Comments from "@/components/Comments";
+import DonateButton from "@/components/DonateButton";
 
 // Generate static params for static export
 export async function generateStaticParams() {
@@ -161,8 +162,11 @@ export default async function PostPage(props: { params: Promise<{ slug: string }
                             本文由 <span className="font-medium text-zinc-700 dark:text-zinc-300">念舒</span> 原创，采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">CC BY-NC-SA 4.0</a> 协议进行许可。
                         </p>
                         <p className="z-10">
-                            转载请注明出处：<span className="select-all bg-white dark:bg-zinc-900 px-1 py-0.5 rounded border border-zinc-200 dark:border-zinc-700">https://zj.nianshu2022.cn/blog/{post.slug}</span>
+                            转载请注明出处：<span className="select-all bg-white dark:bg-zinc-900 px-1 py-0.5 rounded border border-zinc-200 dark:border-zinc-700">https://nianshu2022.cn/blog/{post.slug}</span>
                         </p>
+                        <div className="z-10 pt-2">
+                            <DonateButton />
+                        </div>
                     </div>
                 </div>
 

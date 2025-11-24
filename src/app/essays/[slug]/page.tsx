@@ -2,12 +2,13 @@ import { getEssayBySlug, getAllEssays } from "@/lib/posts";
 import Markdown from "react-markdown";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, BookOpen, Clock, Eye } from "lucide-react";
+import { ArrowLeft, BookOpen, Clock, Eye, Shield } from "lucide-react";
 import { notFound } from "next/navigation";
 import BusuanziCounter from "@/components/Busuanzi";
 import ReadingProgress from "@/components/ReadingProgress";
 import SidebarAward from "@/components/SidebarAward";
 import Comments from "@/components/Comments";
+import DonateButton from "@/components/DonateButton";
 
 export async function generateStaticParams() {
   const posts = getAllEssays();
@@ -93,13 +94,33 @@ export default async function EssayPage(props: { params: Promise<{ slug: string 
             {/* Award Display - Centered for essays */}
             {post.award && (
                 <div className="mt-12 flex justify-center">
-                     <div className="max-w-3xl w-full transform hover:scale-105 transition-transform duration-500">
+                     <div className="max-w-sm w-full transform hover:scale-105 transition-transform duration-500">
                         <SidebarAward src={post.award} />
                      </div>
                 </div>
             )}
 
             <div className="mt-16 pt-8 border-t border-zinc-200/50 dark:border-zinc-700/50">
+                 {/* Copyright Section */}
+                 <div className="bg-zinc-50/50 dark:bg-zinc-800/30 rounded-xl p-6 border border-zinc-100 dark:border-zinc-700/50 flex flex-col gap-2 text-sm text-zinc-500 dark:text-zinc-400 relative overflow-hidden group font-sans text-left mb-8">
+                    <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                        <Shield className="w-24 h-24 -rotate-12" />
+                    </div>
+                    <div className="flex items-center gap-2 font-semibold text-zinc-900 dark:text-zinc-200 z-10">
+                        <Shield className="w-4 h-4" />
+                        <span>版权声明</span>
+                    </div>
+                    <p className="z-10">
+                        本文由 <span className="font-medium text-zinc-700 dark:text-zinc-300">念舒</span> 原创，采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">CC BY-NC-SA 4.0</a> 协议进行许可。
+                    </p>
+                    <p className="z-10">
+                        转载请注明出处：<span className="select-all bg-white dark:bg-zinc-900 px-1 py-0.5 rounded border border-zinc-200 dark:border-zinc-700">https://nianshu2022.cn/essays/{post.slug}</span>
+                    </p>
+                    <div className="z-10 pt-2">
+                        <DonateButton />
+                    </div>
+                </div>
+
                 <div className="text-center text-sm text-zinc-400 font-serif italic">
                     <p>—— 完 ——</p>
                 </div>

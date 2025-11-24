@@ -14,22 +14,22 @@ export default function Home() {
               <div className="relative inline-block group cursor-pointer">
                 <div className="absolute -inset-1 bg-gradient-to-r from-pink-600 to-purple-600 rounded-full blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
                 <div className="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full bg-white dark:bg-zinc-900 flex items-center justify-center border-4 border-white dark:border-zinc-800 shadow-xl overflow-hidden transition-transform duration-500 ease-in-out group-hover:scale-110 group-hover:rotate-3">
-                   <Image 
+        <Image
                       src="/img/avatar.gif" 
                       alt="念舒 Avatar" 
                       width={128} 
                       height={128} 
                       className="object-cover w-full h-full"
-                      priority
+          priority
                       unoptimized
-                   />
+        />
                 </div>
               </div>
               
               <div className="space-y-4">
                 <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight lg:text-6xl text-zinc-800 dark:text-zinc-100 drop-shadow-sm px-2 font-serif">
                   你好，我是 <span className="bg-gradient-to-r from-blue-600 to-violet-600 bg-clip-text text-transparent whitespace-nowrap">念舒</span>
-                </h1>
+          </h1>
                 
                 <p className="mx-auto max-w-xl text-base sm:text-lg text-zinc-600 dark:text-zinc-300 leading-relaxed font-medium px-4 font-serif">
                   <span className="font-bold text-zinc-900 dark:text-zinc-50">产品运营</span> / 00后 / 技术折腾家
@@ -37,8 +37,8 @@ export default function Home() {
                   <span className="text-sm mt-2 block opacity-90">
                     致力于构建连接 <span className="underline decoration-blue-400 decoration-2 underline-offset-2">用户价值</span> 与 <span className="underline decoration-purple-400 decoration-2 underline-offset-2">技术实现</span> 的桥梁
                   </span>
-                </p>
-              </div>
+          </p>
+        </div>
             </div>
 
             {/* Action Buttons - Unified Sizing & Style & Animation with Hover Colors */}
@@ -79,8 +79,8 @@ export default function Home() {
       <footer className="w-full py-6 mt-16 flex flex-col sm:flex-row items-center justify-center gap-4 text-xs text-zinc-500 dark:text-zinc-500 z-10 text-center px-4">
          <a 
             href="https://beian.miit.gov.cn/" 
-            target="_blank" 
-            rel="noopener noreferrer" 
+            target="_blank"
+            rel="noopener noreferrer"
             className="flex items-center gap-1.5 hover:text-zinc-800 dark:hover:text-zinc-300 transition-colors justify-center"
         >
              <Image src="/img/miit.ico" alt="ICP" width={18} height={18} className="w-4 h-4 object-contain" unoptimized />
@@ -91,14 +91,14 @@ export default function Home() {
 
          <a 
             href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=62010202004273" 
-            target="_blank" 
-            rel="noopener noreferrer" 
+            target="_blank"
+            rel="noopener noreferrer"
             className="flex items-center gap-1.5 hover:text-zinc-800 dark:hover:text-zinc-300 transition-colors justify-center"
-        >
+          >
              <Image src="/img/mps.ico" alt="公安" width={18} height={18} className="w-4 h-4 object-contain" unoptimized />
              <span>甘公网安备62010202004273号</span>
-         </a>
+          </a>
       </footer>
-    </main>
+      </main>
   );
 }
