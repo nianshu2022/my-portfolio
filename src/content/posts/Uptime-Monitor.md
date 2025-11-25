@@ -121,5 +121,5 @@ npx wrangler pages deploy . --project-name uptime-monitor
 
 > **GitHub**: https://github.com/nianshu2022/Uptime-Monitor
 > 
-> **Blog**: https://nianshu2022.cn
+> **Blog**: https://blog.nianshu2022.cn
 

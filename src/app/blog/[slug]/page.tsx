@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Clock, BookOpen, Shield, Eye } from "lucide-react";
 import rehypeSlug from 'rehype-slug';
+import remarkGfm from 'remark-gfm';
 import GithubSlugger from 'github-slugger';
 import { notFound } from "next/navigation";
 import BusuanziCounter from "@/components/Busuanzi";
@@ -69,7 +70,7 @@ export default async function PostPage(props: { params: Promise<{ slug: string }
                 
                         <div className="px-6 sm:px-12 pb-12">
                         <header className="mb-10 pb-10 border-b border-zinc-200/50 dark:border-zinc-700/50 sm:pl-4">
-                            <h1 className="text-3xl sm:text-4xl font-bold mb-6 text-zinc-900 dark:text-zinc-50 leading-tight tracking-tight mt-8 sm:mt-0 font-serif">{post.title}</h1>
+                            <h1 className="text-3xl sm:text-4xl font-bold mb-6 text-zinc-900 dark:text-zinc-50 leading-tight tracking-tight mt-8 sm:mt-0 font-sans">{post.title}</h1>
                             
                             {/* Meta Info Row */}
                     <div className="flex flex-wrap items-center gap-y-3 gap-x-6 text-zinc-500 text-sm">
@@ -108,8 +109,9 @@ export default async function PostPage(props: { params: Promise<{ slug: string }
                     </div>
                 </header>
 
-                <div className="prose prose-zinc dark:prose-invert max-w-none prose-headings:scroll-mt-28 sm:pl-4">
+                <div className="blog-content prose prose-zinc dark:prose-invert max-w-none prose-headings:scroll-mt-28 sm:pl-4">
                     <Markdown 
+                        remarkPlugins={[remarkGfm]}
                         rehypePlugins={[rehypeSlug]}
                         components={{
                             img: (props) => {
@@ -162,7 +164,7 @@ export default async function PostPage(props: { params: Promise<{ slug: string }
                             本文由 <span className="font-medium text-zinc-700 dark:text-zinc-300">念舒</span> 原创，采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">CC BY-NC-SA 4.0</a> 协议进行许可。
                         </p>
                         <p className="z-10">
-                            转载请注明出处：<span className="select-all bg-white dark:bg-zinc-900 px-1 py-0.5 rounded border border-zinc-200 dark:border-zinc-700">https://nianshu2022.cn/blog/{post.slug}</span>
+                            转载请注明出处：<span className="select-all bg-white dark:bg-zinc-900 px-1 py-0.5 rounded border border-zinc-200 dark:border-zinc-700">https://blog.nianshu2022.cn/blog/{post.slug}</span>
                         </p>
                         <div className="z-10 pt-2">
                             <DonateButton />

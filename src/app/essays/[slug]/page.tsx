@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, BookOpen, Clock, Eye, Shield } from "lucide-react";
 import { notFound } from "next/navigation";
+import remarkGfm from 'remark-gfm';
 import BusuanziCounter from "@/components/Busuanzi";
 import ReadingProgress from "@/components/ReadingProgress";
 import SidebarAward from "@/components/SidebarAward";
@@ -87,8 +88,8 @@ export default async function EssayPage(props: { params: Promise<{ slug: string 
                 </div>
             </header>
 
-            <div className="prose prose-lg prose-zinc dark:prose-invert max-w-none prose-p:indent-8 prose-p:text-justify prose-headings:font-serif prose-headings:text-center prose-img:rounded-xl prose-img:shadow-lg">
-                <Markdown>{post.content}</Markdown>
+            <div className="essay-content prose prose-lg prose-zinc dark:prose-invert max-w-none prose-p:indent-8 prose-p:text-justify prose-headings:font-serif prose-headings:text-center prose-img:rounded-xl prose-img:shadow-lg">
+                <Markdown remarkPlugins={[remarkGfm]}>{post.content}</Markdown>
             </div>
 
             {/* Award Display - Centered for essays */}
@@ -114,7 +115,7 @@ export default async function EssayPage(props: { params: Promise<{ slug: string 
                         本文由 <span className="font-medium text-zinc-700 dark:text-zinc-300">念舒</span> 原创，采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">CC BY-NC-SA 4.0</a> 协议进行许可。
                     </p>
                     <p className="z-10">
-                        转载请注明出处：<span className="select-all bg-white dark:bg-zinc-900 px-1 py-0.5 rounded border border-zinc-200 dark:border-zinc-700">https://nianshu2022.cn/essays/{post.slug}</span>
+                        转载请注明出处：<span className="select-all bg-white dark:bg-zinc-900 px-1 py-0.5 rounded border border-zinc-200 dark:border-zinc-700">https://blog.nianshu2022.cn/essays/{post.slug}</span>
                     </p>
                     <div className="z-10 pt-2">
                         <DonateButton />

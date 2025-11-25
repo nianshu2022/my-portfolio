@@ -19,6 +19,14 @@ export type Post = {
   award?: string;
 };
 
+// Helper function to format date
+const formatDate = (date: string | Date): string => {
+  if (date instanceof Date) {
+    return date.toISOString().split('T')[0];
+  }
+  return date || '';
+};
+
 // Helper function to get all items from a directory
 function getAllItems(directory: string): Post[] {
   if (!fs.existsSync(directory)) {
@@ -40,7 +48,10 @@ function getAllItems(directory: string): Post[] {
       readingTime: Math.ceil(stats.minutes) + ' 分钟',
       cover: matterResult.data.cover || null,
       award: matterResult.data.award || null,
-      ...(matterResult.data as { title: string; date: string; description: string; tags: string[] }),
+      title: matterResult.data.title,
+      description: matterResult.data.description || '',
+      tags: matterResult.data.tags || [],
+      date: formatDate(matterResult.data.date),
     };
   });
 
@@ -69,7 +80,10 @@ function getItemBySlug(directory: string, slug: string): Post | null {
       readingTime: Math.ceil(stats.minutes) + ' 分钟',
       cover: matterResult.data.cover || null,
       award: matterResult.data.award || null,
-      ...(matterResult.data as { title: string; date: string; description: string; tags: string[] }),
+      title: matterResult.data.title,
+      description: matterResult.data.description || '',
+      tags: matterResult.data.tags || [],
+      date: formatDate(matterResult.data.date),
     };
   } catch (e) {
     console.error(`Error reading item ${slug} from ${directory}:`, e);

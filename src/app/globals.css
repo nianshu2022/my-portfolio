@@ -237,12 +237,26 @@
     @apply scale-x-100 origin-left;
   }
 
+  /* For Essays (Life) - Use Serif Headings */
+  .essay-content .prose h2,
+  .essay-content .prose h3,
+  .essay-content .prose h4 {
+    @apply font-serif;
+  }
+
+  /* For Blog (Technical) - Use Sans-Serif Headings */
+  .blog-content .prose h2,
+  .blog-content .prose h3,
+  .blog-content .prose h4 {
+    @apply font-sans tracking-tight;
+  }
+
   .prose h2 {
-    @apply relative pl-4 border-l-4 border-purple-500 font-serif;
+    @apply relative pl-4 border-l-4 border-purple-500;
   }
 
   .prose h3 {
-    @apply flex items-center gap-2 font-serif;
+    @apply flex items-center gap-2;
   }
   
   .prose h3::before {

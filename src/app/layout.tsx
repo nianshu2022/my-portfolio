@@ -23,14 +23,14 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://nianshu2022.cn'),
+  metadataBase: new URL('https://blog.nianshu2022.cn'),
   title: {
     default: "念舒的数字花园 | 产品运营 & 技术折腾",
     template: "%s | 念舒",
   },
   description: "00后产品运营的个人网站，分享运营心得、增长策略与技术折腾笔记。致力于构建连接用户价值与技术实现的桥梁。",
   keywords: ["产品运营", "念舒", "个人博客", "Next.js", "技术折腾", "增长黑客", "00后"],
-  authors: [{ name: "念舒", url: "https://nianshu2022.cn" }],
+  authors: [{ name: "念舒", url: "https://blog.nianshu2022.cn" }],
   creator: "念舒",
   icons: {
     icon: "/img/avatar.png",
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "zh_CN",
-    url: "https://nianshu2022.cn",
+    url: "https://blog.nianshu2022.cn",
     title: "念舒的数字花园",
     description: "00后产品运营的个人网站，分享运营心得与技术折腾笔记。",
     siteName: "念舒的数字花园",
@@ -76,7 +76,7 @@ export default function RootLayout({
       >
         {/* Hidden image for WeChat sharing hack */}
         <div style={{ display: 'none', position: 'absolute', top: 0, left: 0, width: 0, height: 0, overflow: 'hidden' }}>
-          <img src="https://nianshu2022.cn/img/avatar.png" alt="thumb" width="300" height="300" />
+          <img src="https://blog.nianshu2022.cn/img/avatar.png" alt="thumb" width="300" height="300" />
         </div>
 
          {/* Global Background Decoration */}
