@@ -147,6 +147,13 @@
   }
   body {
     @apply bg-background text-foreground;
+    /* Smooth scrolling for anchor links */
+    scroll-behavior: smooth;
+  }
+  
+  /* Global smooth scrolling override */
+  html {
+    scroll-behavior: smooth;
   }
 }
 

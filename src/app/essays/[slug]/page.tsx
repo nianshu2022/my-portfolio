@@ -2,7 +2,7 @@ import { getEssayBySlug, getAllEssays } from "@/lib/posts";
 import Markdown from "react-markdown";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, BookOpen, Clock, Eye, Shield } from "lucide-react";
+import { ArrowLeft, BookOpen, Clock, Eye, Shield, Home } from "lucide-react";
 import { notFound } from "next/navigation";
 import remarkGfm from 'remark-gfm';
 import BusuanziCounter from "@/components/Busuanzi";
@@ -89,7 +89,18 @@ export default async function EssayPage(props: { params: Promise<{ slug: string 
             </header>
 
             <div className="essay-content prose prose-lg prose-zinc dark:prose-invert max-w-none prose-p:indent-8 prose-p:text-justify prose-headings:font-serif prose-headings:text-center prose-img:rounded-xl prose-img:shadow-lg">
-                <Markdown remarkPlugins={[remarkGfm]}>{post.content}</Markdown>
+                <Markdown 
+                    remarkPlugins={[remarkGfm]}
+                    components={{
+                        table: (props) => (
+                            <div className="overflow-x-auto my-8 custom-scrollbar rounded-lg border border-zinc-200 dark:border-zinc-700">
+                                <table {...props} className="min-w-full divide-y divide-zinc-200 dark:divide-zinc-700" />
+                            </div>
+                        )
+                    }}
+                >
+                    {post.content}
+                </Markdown>
             </div>
 
             {/* Award Display - Centered for essays */}

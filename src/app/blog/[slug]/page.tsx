@@ -2,7 +2,7 @@ import { getPostBySlug, getAllPosts } from "@/lib/posts";
 import Markdown from "react-markdown";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Clock, BookOpen, Shield, Eye } from "lucide-react";
+import { ArrowLeft, Clock, BookOpen, Shield, Eye, Home } from "lucide-react";
 import rehypeSlug from 'rehype-slug';
 import remarkGfm from 'remark-gfm';
 import GithubSlugger from 'github-slugger';
@@ -52,14 +52,25 @@ export default async function PostPage(props: { params: Promise<{ slug: string }
       <div className="max-w-6xl w-full flex flex-col backdrop-blur-xl bg-white/40 dark:bg-zinc-900/40 rounded-3xl border border-white/20 shadow-2xl relative">
         
         {/* Back Button - Enhanced Style & Better Positioning */}
-        <div className="absolute top-6 left-6 sm:top-8 sm:left-8 z-30">
+        <div className="absolute top-6 left-6 sm:top-8 sm:left-8 z-30 flex gap-3">
              <Link href="/blog">
                 <Button 
                     variant="secondary" 
                     size="icon" 
                     className="rounded-full w-10 h-10 sm:w-12 sm:h-12 bg-white/80 dark:bg-zinc-800/80 backdrop-blur-xl shadow-sm border border-zinc-200/50 dark:border-zinc-700/50 hover:bg-white hover:dark:bg-zinc-700 hover:scale-110 hover:shadow-xl hover:border-blue-200 dark:hover:border-blue-800 transition-all duration-300 group"
+                    title="返回列表"
                 >
                     <ArrowLeft className="h-5 w-5 text-zinc-600 dark:text-zinc-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors" />
+                </Button>
+            </Link>
+            <Link href="/">
+                <Button 
+                    variant="secondary" 
+                    size="icon" 
+                    className="rounded-full w-10 h-10 sm:w-12 sm:h-12 bg-white/80 dark:bg-zinc-800/80 backdrop-blur-xl shadow-sm border border-zinc-200/50 dark:border-zinc-700/50 hover:bg-white hover:dark:bg-zinc-700 hover:scale-110 hover:shadow-xl hover:border-teal-200 dark:hover:border-teal-800 transition-all duration-300 group"
+                    title="回到首页"
+                >
+                    <Home className="h-5 w-5 text-zinc-600 dark:text-zinc-300 group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors" />
                 </Button>
             </Link>
         </div>
@@ -142,8 +153,13 @@ export default async function PostPage(props: { params: Promise<{ slug: string }
                                     // Ignore URL parsing errors
                                 }
 
-                                return <img {...props} style={style} />;
-                            }
+                                return <img {...props} style={style} referrerPolicy="no-referrer" />;
+                            },
+                            table: (props) => (
+                                <div className="overflow-x-auto my-8 custom-scrollbar rounded-lg border border-zinc-200 dark:border-zinc-700">
+                                    <table {...props} className="min-w-full divide-y divide-zinc-200 dark:divide-zinc-700" />
+                                </div>
+                            )
                         }}
                     >
                         {post.content}

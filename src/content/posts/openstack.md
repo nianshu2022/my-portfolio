@@ -1,6 +1,6 @@
 ---
 title: 部署 OpenStack 云平台
-date: 2025-11-25
+date: 2022-10-25
 description: 基于 CentOS 7.5 环境，详细记录从系统镜像准备、网络架构规划到各个核心组件（Keystone, Glance, Nova, Neutron, Dashboard）的安装与配置过程。
 tags: [OpenStack, 运维, 云计算, CentOS]
 ---

@@ -64,10 +64,10 @@ export default function Home() {
                 </Button>
               </Link>
               
-              <Link href="/contact" className="w-full sm:w-auto">
+              <Link href="/about" className="w-full sm:w-auto">
                 <Button size="lg" variant="secondary" className="w-full sm:w-auto h-12 px-6 min-w-[150px] gap-2 shadow-md bg-white/80 dark:bg-zinc-800/80 backdrop-blur-md hover:bg-teal-50 dark:hover:bg-teal-900/20 hover:text-teal-600 dark:hover:text-teal-400 hover:border-teal-200/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl group border border-transparent hover:border-teal-500/20">
                   <User className="h-4 w-4 group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors" />
-                  联系我
+                  关于我
                 </Button>
               </Link>
             </div>
@@ -75,29 +75,15 @@ export default function Home() {
           </div>
       </div>
       
-      {/* Footer / ICP Filing Info */}
-      <footer className="w-full py-6 mt-16 flex flex-col sm:flex-row items-center justify-center gap-4 text-xs text-zinc-500 dark:text-zinc-500 z-10 text-center px-4">
-         <a 
-            href="https://beian.miit.gov.cn/" 
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-1.5 hover:text-zinc-800 dark:hover:text-zinc-300 transition-colors justify-center"
-        >
-             <Image src="/img/miit.ico" alt="ICP" width={18} height={18} className="w-4 h-4 object-contain" unoptimized />
-             <span>陇ICP备2023001612号-1</span>
-         </a>
-         
-         <span className="hidden sm:inline text-zinc-300 dark:text-zinc-700">|</span>
-
-         <a 
-            href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=62010202004273" 
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-1.5 hover:text-zinc-800 dark:hover:text-zinc-300 transition-colors justify-center"
-          >
-             <Image src="/img/mps.ico" alt="公安" width={18} height={18} className="w-4 h-4 object-contain" unoptimized />
-             <span>甘公网安备62010202004273号</span>
-          </a>
+      {/* Footer */}
+      <footer className="w-full py-8 mt-16 flex flex-col items-center justify-center gap-3 z-10 text-center px-4 font-sans">
+         <span className="text-sm font-medium text-zinc-600 dark:text-zinc-400">© 2025 念舒. All Rights Reserved.</span>
+         <div className="text-xs text-zinc-400 dark:text-zinc-600 flex items-center gap-1.5">
+            <span>Powered by</span>
+            <a href="https://nextjs.org" target="_blank" rel="noreferrer" className="hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors">Next.js</a>
+            <span>&</span>
+            <a href="https://pages.cloudflare.com" target="_blank" rel="noreferrer" className="hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors">Cloudflare</a>
+         </div>
       </footer>
       </main>
   );

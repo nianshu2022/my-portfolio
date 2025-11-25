@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
+import ScrollToTop from "@/components/ScrollToTop";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -67,7 +68,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="zh-CN" suppressHydrationWarning>
+    <html lang="zh-CN" suppressHydrationWarning className="scroll-smooth">
       <head>
         <meta name="google-adsense-account" content="ca-pub-6153369929341681" />
       </head>
@@ -91,6 +92,8 @@ export default function RootLayout({
           </div>
 
         {children}
+
+        <ScrollToTop />
 
         {/* Cloudflare Web Analytics */}
         <Script 
