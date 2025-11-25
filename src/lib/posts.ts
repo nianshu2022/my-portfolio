@@ -27,19 +27,40 @@ const formatDate = (date: string | Date): string => {
   return date || '';
 };
 
-// Helper function to get all items from a directory
-function getAllItems(directory: string): Post[] {
-  if (!fs.existsSync(directory)) {
-    return [];
+// Helper function to recursively get all files from a directory
+function getAllFiles(dirPath: string, arrayOfFiles: string[] = []) {
+  if (!fs.existsSync(dirPath)) {
+    return arrayOfFiles;
   }
 
-  const fileNames = fs.readdirSync(directory);
-  const allItemsData = fileNames.map((fileName) => {
-    const slug = fileName.replace(/\.md$/, '');
-    const fullPath = path.join(directory, fileName);
+  const files = fs.readdirSync(dirPath);
+
+  files.forEach(file => {
+    const fullPath = path.join(dirPath, file);
+    if (fs.statSync(fullPath).isDirectory()) {
+      arrayOfFiles = getAllFiles(fullPath, arrayOfFiles);
+    } else {
+      if (file.endsWith('.md')) {
+        arrayOfFiles.push(fullPath);
+      }
+    }
+  });
+
+  return arrayOfFiles;
+}
+
+// Helper function to get all items (posts/essays)
+function getAllItems(baseDirectory: string): Post[] {
+  const allFilePaths = getAllFiles(baseDirectory);
+
+  const allItemsData = allFilePaths.map((fullPath) => {
     const fileContents = fs.readFileSync(fullPath, 'utf8');
     const matterResult = matter(fileContents);
     const stats = readingTime(matterResult.content);
+    
+    // Extract slug from filename, ignoring directory structure for the URL
+    const fileName = path.basename(fullPath);
+    const slug = fileName.replace(/\.md$/, '');
 
     return {
       slug,
@@ -64,12 +85,24 @@ function getAllItems(directory: string): Post[] {
   });
 }
 
-// Helper function to get a single item by slug
-function getItemBySlug(directory: string, slug: string): Post | null {
+// Helper function to get a single item by slug (searches recursively)
+function getItemBySlug(baseDirectory: string, slug: string): Post | null {
   try {
     const decodedSlug = decodeURIComponent(slug);
-    const fullPath = path.join(directory, `${decodedSlug}.md`);
-    const fileContents = fs.readFileSync(fullPath, 'utf8');
+    const allFilePaths = getAllFiles(baseDirectory);
+    
+    // Find the file that matches the slug regardless of which subdirectory it's in
+    const targetPath = allFilePaths.find(filePath => {
+      const fileName = path.basename(filePath);
+      return fileName.replace(/\.md$/, '') === decodedSlug;
+    });
+
+    if (!targetPath) {
+      console.error(`File not found for slug: ${decodedSlug} in ${baseDirectory}`);
+      return null;
+    }
+
+    const fileContents = fs.readFileSync(targetPath, 'utf8');
     const matterResult = matter(fileContents);
     const stats = readingTime(matterResult.content);
 
@@ -86,7 +119,7 @@ function getItemBySlug(directory: string, slug: string): Post | null {
       date: formatDate(matterResult.data.date),
     };
   } catch (e) {
-    console.error(`Error reading item ${slug} from ${directory}:`, e);
+    console.error(`Error reading item ${slug} from ${baseDirectory}:`, e);
     return null;
   }
 }
