@@ -83,7 +83,7 @@ export default function Home() {
             <a href="https://nextjs.org" target="_blank" rel="noreferrer" className="hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors">Next.js</a>
             <span>&</span>
             <a href="https://pages.cloudflare.com" target="_blank" rel="noreferrer" className="hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors">Cloudflare</a>
-         </div>
+        </div>
       </footer>
       </main>
   );

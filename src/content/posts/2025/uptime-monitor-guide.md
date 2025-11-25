@@ -18,13 +18,13 @@ tags: ["Cloudflare", "Workers", "Vue3", "监控", "开源"]
 
 ### 📱 移动端 & 桌面端 (深色模式)
 
-![](/img/Uptime-Monitor-pc.png?width=700px&shadow=true) ![](/img/Uptime-Monitor-app.png?width=300px&shadow=true)
+![](/img/Uptime-Monitor-pc.png?width=520px&shadow=true) ![](/img/Uptime-Monitor-app.png?width=150px&shadow=true)
 
 *演示地址：[https://uptime.nianshu2022.cn](https://uptime.nianshu2022.cn)*
 
 ### 🔔 钉钉告警 (Markdown 格式)
 
-![](/img/Uptime-Monitor-down.png?width=300px&shadow=true)
+![](/img/Uptime-Monitor-down.png?width=200px&shadow=true)
 
 *告警信息包含：状态码、耗时、失败原因，一目了然。*
 

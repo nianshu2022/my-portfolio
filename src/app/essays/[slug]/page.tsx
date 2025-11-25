@@ -8,6 +8,7 @@ import remarkGfm from 'remark-gfm';
 import BusuanziCounter from "@/components/Busuanzi";
 import ReadingProgress from "@/components/ReadingProgress";
 import SidebarAward from "@/components/SidebarAward";
+import FloatingNav from "@/components/FloatingNav";
 import Comments from "@/components/Comments";
 import DonateButton from "@/components/DonateButton";
 
@@ -31,6 +32,8 @@ export default async function EssayPage(props: { params: Promise<{ slug: string 
     <main className="flex min-h-screen flex-col items-center p-4 sm:p-24 relative font-serif">
       <ReadingProgress />
       
+      <FloatingNav backUrl="/essays" />
+      
       <div className="max-w-3xl w-full flex flex-col backdrop-blur-xl bg-white/40 dark:bg-zinc-900/40 rounded-3xl border border-white/20 shadow-2xl relative overflow-hidden">
         
         {/* Cover Image */}
@@ -45,18 +48,7 @@ export default async function EssayPage(props: { params: Promise<{ slug: string 
             </div>
         )}
 
-        {/* Back Button */}
-        <div className="absolute top-6 left-6 sm:top-8 sm:left-8 z-30">
-            <Link href="/essays">
-                <Button 
-                    variant="secondary" 
-                    size="icon" 
-                    className="rounded-full w-10 h-10 sm:w-12 sm:h-12 bg-white/80 dark:bg-zinc-800/80 backdrop-blur-xl shadow-sm border border-zinc-200/50 dark:border-zinc-700/50 hover:bg-white hover:dark:bg-zinc-700 hover:scale-110 hover:shadow-xl hover:border-purple-200 dark:hover:border-purple-800 transition-all duration-300 group"
-                >
-                    <ArrowLeft className="h-5 w-5 text-zinc-600 dark:text-zinc-300 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors" />
-                </Button>
-            </Link>
-        </div>
+        {/* Back Button Removed from here */}
 
         <article className={`w-full pb-12 px-6 sm:px-16 ${post.cover ? 'pt-10 sm:pt-12' : 'pt-24 sm:pt-28'}`}>
             <header className="mb-12 text-center">
@@ -88,10 +80,38 @@ export default async function EssayPage(props: { params: Promise<{ slug: string 
                 </div>
             </header>
 
-            <div className="essay-content prose prose-lg prose-zinc dark:prose-invert max-w-none prose-p:indent-8 prose-p:text-justify prose-headings:font-serif prose-headings:text-center prose-img:rounded-xl prose-img:shadow-lg">
+            <div className="essay-content prose prose-lg prose-zinc dark:prose-invert max-w-none prose-p:indent-8 prose-p:text-justify prose-headings:font-serif prose-headings:text-center prose-img:rounded-xl prose-img:shadow-lg prose-a:break-all prose-img:mx-auto">
                 <Markdown 
                     remarkPlugins={[remarkGfm]}
                     components={{
+                        img: (props) => {
+                            const src = props.src as string || '';
+                            let style: React.CSSProperties = { 
+                                height: 'auto', 
+                                borderRadius: '8px', 
+                                backgroundColor: 'transparent',
+                                verticalAlign: 'top'
+                            };
+                            let className = "rounded-lg block mx-auto"; // 默认居中
+
+                            try {
+                                const url = new URL(src, 'http://dummy.com');
+                                const width = url.searchParams.get('width') || url.searchParams.get('w');
+                                const shadow = url.searchParams.get('shadow');
+
+                                if (width) {
+                                    style.width = width;
+                                    style.maxWidth = '100%';
+                                    className += " mb-6 sm:inline-block sm:mx-0 sm:mb-4 sm:mr-8";
+                                }
+
+                                if (shadow === 'true' || shadow === '1') {
+                                    style.filter = 'drop-shadow(0 4px 12px rgba(0, 0, 0, 0.1))';
+                                }
+                            } catch (e) { }
+
+                            return <img {...props} style={style} className={className} referrerPolicy="no-referrer" />;
+                        },
                         table: (props) => (
                             <div className="overflow-x-auto my-8 custom-scrollbar rounded-lg border border-zinc-200 dark:border-zinc-700">
                                 <table {...props} className="min-w-full divide-y divide-zinc-200 dark:divide-zinc-700" />

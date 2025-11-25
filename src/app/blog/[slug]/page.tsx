@@ -10,10 +10,11 @@ import { notFound } from "next/navigation";
 import BusuanziCounter from "@/components/Busuanzi";
 import ReadingProgress from "@/components/ReadingProgress";
 import SidebarAward from "@/components/SidebarAward";
+import TableOfContents from "@/components/TableOfContents";
+import FloatingNav from "@/components/FloatingNav";
 import Comments from "@/components/Comments";
-import DonateButton from "@/components/DonateButton";
 
-// Generate static params for static export
+import DonateButton from "@/components/DonateButton";
 export async function generateStaticParams() {
   const posts = getAllPosts();
   return posts.map((post) => ({
@@ -48,43 +49,23 @@ export default async function PostPage(props: { params: Promise<{ slug: string }
     <main className="flex min-h-screen flex-col items-center p-4 sm:p-24 relative">
       <ReadingProgress />
       
-       {/* Glassmorphism Container - Changed to flex-col to allow full-width cover */}
-      <div className="max-w-6xl w-full flex flex-col backdrop-blur-xl bg-white/40 dark:bg-zinc-900/40 rounded-3xl border border-white/20 shadow-2xl relative">
-        
-        {/* Back Button - Enhanced Style & Better Positioning */}
-        <div className="absolute top-6 left-6 sm:top-8 sm:left-8 z-30 flex gap-3">
-             <Link href="/blog">
-                <Button 
-                    variant="secondary" 
-                    size="icon" 
-                    className="rounded-full w-10 h-10 sm:w-12 sm:h-12 bg-white/80 dark:bg-zinc-800/80 backdrop-blur-xl shadow-sm border border-zinc-200/50 dark:border-zinc-700/50 hover:bg-white hover:dark:bg-zinc-700 hover:scale-110 hover:shadow-xl hover:border-blue-200 dark:hover:border-blue-800 transition-all duration-300 group"
-                    title="返回列表"
-                >
-                    <ArrowLeft className="h-5 w-5 text-zinc-600 dark:text-zinc-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors" />
-                </Button>
-            </Link>
-            <Link href="/">
-                <Button 
-                    variant="secondary" 
-                    size="icon" 
-                    className="rounded-full w-10 h-10 sm:w-12 sm:h-12 bg-white/80 dark:bg-zinc-800/80 backdrop-blur-xl shadow-sm border border-zinc-200/50 dark:border-zinc-700/50 hover:bg-white hover:dark:bg-zinc-700 hover:scale-110 hover:shadow-xl hover:border-teal-200 dark:hover:border-teal-800 transition-all duration-300 group"
-                    title="回到首页"
-                >
-                    <Home className="h-5 w-5 text-zinc-600 dark:text-zinc-300 group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors" />
-                </Button>
-            </Link>
-        </div>
+      <FloatingNav backUrl="/blog" />
 
-        <div className="flex flex-col lg:flex-row lg:gap-12">
+       {/* Main Content Wrapper - Includes Article Card and Sidebar */}
+       <div className="max-w-7xl w-full flex flex-col lg:flex-row lg:gap-8 relative">
+      
+      {/* Article Card Container */}
+      <div className="flex-1 min-w-0 backdrop-blur-xl bg-white/40 dark:bg-zinc-900/40 rounded-3xl border border-white/20 shadow-2xl relative">
+        
             {/* Main Content */}
-            <article className="flex-1 min-w-0 pt-24 sm:pt-28 lg:max-w-3xl xl:max-w-4xl"> {/* Limited max width on desktop */}
+            <article className="w-full pt-10 sm:pt-16 pb-10">
                 
-                        <div className="px-6 sm:px-12 pb-12">
+                        <div className="px-6 sm:px-12">
                         <header className="mb-10 pb-10 border-b border-zinc-200/50 dark:border-zinc-700/50 sm:pl-4">
                             <h1 className="text-3xl sm:text-4xl font-bold mb-6 text-zinc-900 dark:text-zinc-50 leading-tight tracking-tight mt-8 sm:mt-0 font-sans">{post.title}</h1>
                             
                             {/* Meta Info Row */}
-                    <div className="flex flex-wrap items-center gap-y-3 gap-x-6 text-zinc-500 text-sm">
+                    <div className="flex flex-wrap items-center gap-y-3 gap-x-6 text-zinc-500 text-sm mb-4">
                         <div className="flex items-center gap-2">
                             <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
                             <span className="font-mono">{post.date}</span>
@@ -104,23 +85,21 @@ export default async function PostPage(props: { params: Promise<{ slug: string }
                             <Eye className="w-4 h-4" />
                             <BusuanziCounter />
                         </div>
-
-                        {post.tags?.length > 0 && (
-                            <>
-                                <span className="text-zinc-300 dark:text-zinc-700 hidden sm:inline">|</span>
-                                <div className="flex gap-2">
-                                    {post.tags.map(tag => (
-                                        <span key={tag} className="bg-blue-50 dark:bg-blue-900/20 px-2 py-0.5 rounded-md text-xs font-medium text-blue-600 dark:text-blue-300 border border-blue-100 dark:border-blue-800/30">
-                                            #{tag}
-                                        </span>
-                                    ))}
-                                </div>
-                            </>
-                        )}
                     </div>
+
+                    {/* Tags Row - Optimized for mobile */}
+                    {post.tags?.length > 0 && (
+                        <div className="flex gap-2 overflow-x-auto pb-2 custom-scrollbar -ml-1 pl-1">
+                            {post.tags.map(tag => (
+                                <span key={tag} className="whitespace-nowrap bg-blue-50 dark:bg-blue-900/20 px-2.5 py-1 rounded-md text-xs font-medium text-blue-600 dark:text-blue-300 border border-blue-100 dark:border-blue-800/30">
+                                    #{tag}
+                                </span>
+                            ))}
+                        </div>
+                    )}
                 </header>
 
-                <div className="blog-content prose prose-zinc dark:prose-invert max-w-none prose-headings:scroll-mt-28 sm:pl-4">
+                <div className="blog-content prose prose-zinc dark:prose-invert max-w-none prose-headings:scroll-mt-28 sm:pl-4 prose-a:break-all prose-img:mx-auto">
                     <Markdown 
                         remarkPlugins={[remarkGfm]}
                         rehypePlugins={[rehypeSlug]}
@@ -130,30 +109,38 @@ export default async function PostPage(props: { params: Promise<{ slug: string }
                                 let style: React.CSSProperties = { 
                                     height: 'auto', 
                                     borderRadius: '8px', 
-                                    maxWidth: '100%',
-                                    backgroundColor: 'transparent'
+                                    backgroundColor: 'transparent',
+                                    verticalAlign: 'top' // 顶部对齐，防止高度不一致时错位
                                 };
+                                let className = "rounded-lg"; // 默认类名，移到 try 外部
                                 
                                 try {
                                     // Parse URL query parameters
-                                    const url = new URL(src, 'http://dummy.com'); // Base URL needed for relative paths
+                                    const url = new URL(src, 'http://dummy.com');
                                     const width = url.searchParams.get('width') || url.searchParams.get('w');
                                     const shadow = url.searchParams.get('shadow');
 
                                     if (width) {
-                                        style.maxWidth = width;
-                                        style.width = '100%'; // Ensure it scales down responsively
+                                        style.width = width;      // 设置固定宽度
+                                        style.maxWidth = '100%';  // 保证移动端不溢出
+                                        
+                                        // 关键修改：使用 Tailwind 响应式类
+                                        // 移动端 (默认): block + mx-auto (独占一行居中) + mb-4 (下间距)
+                                        // PC端 (sm以上): inline-block + mx-0 (靠左并排) + mr-8 (右间距)
+                                        className += " block mx-auto mb-6 sm:inline-block sm:mx-0 sm:mb-4 sm:mr-8";
+                                    } else {
+                                        style.maxWidth = '100%';
+                                        className += " block mx-auto"; // 默认居中
                                     }
                                     
                                     if (shadow === 'true' || shadow === '1') {
-                                        // Use drop-shadow filter instead of box-shadow to respect transparency
                                         style.filter = 'drop-shadow(0 4px 12px rgba(0, 0, 0, 0.1))';
                                     }
                                 } catch (e) {
                                     // Ignore URL parsing errors
                                 }
 
-                                return <img {...props} style={style} referrerPolicy="no-referrer" />;
+                                return <img {...props} style={style} className={className} referrerPolicy="no-referrer" />;
                             },
                             table: (props) => (
                                 <div className="overflow-x-auto my-8 custom-scrollbar rounded-lg border border-zinc-200 dark:border-zinc-700">
@@ -192,39 +179,29 @@ export default async function PostPage(props: { params: Promise<{ slug: string }
                 <Comments />
             </div>
         </article>
+      </div>
 
-        {/* Sidebar TOC - Hidden on mobile, sticky on desktop */}
-        <aside className="hidden lg:block w-64 shrink-0 pt-12 pr-2">
-            <div className="sticky top-8 space-y-6">
-                <div className="p-5 bg-white/40 dark:bg-zinc-900/40 rounded-2xl border border-white/20 dark:border-zinc-800/50 backdrop-blur-md shadow-sm">
+        {/* Sidebar - Separated Card */}
+        <aside className="hidden lg:block w-72 shrink-0">
+            <div className="sticky top-6 space-y-6">
+                {/* TOC Card */}
+                <div className="p-6 bg-white/40 dark:bg-zinc-900/40 rounded-3xl border border-white/20 dark:border-zinc-800/50 backdrop-blur-xl shadow-xl max-h-[80vh] flex flex-col snap-y snap-mandatory overflow-y-auto custom-scrollbar pr-1">
                     <h4 className="font-bold mb-4 text-sm text-zinc-900 dark:text-zinc-100 flex items-center gap-2 select-none">
                         <span className="w-1 h-4 bg-blue-500 rounded-full shadow-sm shadow-blue-500/50"></span>
                         目录
                     </h4>
-                    <nav className="space-y-0.5 text-sm relative max-h-[75vh] overflow-y-auto custom-scrollbar pr-2">
-                        {headings.length === 0 && <p className="text-zinc-400 text-xs pl-2">暂无目录</p>}
-                        {headings.map((heading, index) => (
-                            <a 
-                                key={index} 
-                                href={`#${heading.slug}`}
-                                className={`block py-1.5 text-zinc-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-200 border-l-[2px] border-transparent hover:border-blue-500 hover:bg-blue-50/50 dark:hover:bg-blue-900/10 rounded-r-md
-                                    ${heading.level === 3 ? 'pl-6 text-xs' : 'pl-3'}
-                                `}
-                            >
-                                <span className="truncate block">{heading.text}</span>
-                            </a>
-                        ))}
-                    </nav>
+                    <TableOfContents headings={headings} />
                 </div>
 
-                {/* Award Section in Sidebar */}
+                {/* Award Card */}
                 {post.award && (
-                    <SidebarAward src={post.award} />
+                    <div className="rounded-3xl border border-white/20 dark:border-zinc-800/50 shadow-xl overflow-hidden backdrop-blur-xl bg-white/40 dark:bg-zinc-900/40">
+                         <SidebarAward src={post.award} />
+                    </div>
                 )}
             </div>
         </aside>
 
-      </div>
       </div>
     </main>
   );

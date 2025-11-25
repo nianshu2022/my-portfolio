@@ -1,5 +1,4 @@
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import FloatingNav from "@/components/FloatingNav";
 import { ArrowLeft, Mail, Github, Music, Copy, User, Code, Server, Cpu, Terminal } from "lucide-react";
 
 // Custom icon for QQ
@@ -75,21 +74,10 @@ export default function AboutPage() {
   return (
     <main className="flex min-h-screen flex-col items-center p-6 sm:p-24 relative">
       
+      <FloatingNav backUrl="/" />
+
       <div className="max-w-3xl w-full space-y-12 backdrop-blur-xl bg-white/30 dark:bg-zinc-900/30 p-8 sm:p-12 rounded-3xl border border-white/20 shadow-2xl relative">
         
-        {/* Back Button */}
-        <div className="absolute top-6 left-6 sm:top-8 sm:left-8 z-20">
-             <Link href="/">
-                <Button 
-                    variant="secondary" 
-                    size="icon" 
-                    className="rounded-full w-10 h-10 sm:w-12 sm:h-12 bg-white/80 dark:bg-zinc-800/80 backdrop-blur-xl shadow-sm border border-zinc-200/50 dark:border-zinc-700/50 hover:bg-white hover:dark:bg-zinc-700 hover:scale-110 hover:shadow-xl hover:border-teal-200 dark:hover:border-teal-800 transition-all duration-300 group"
-                >
-                    <ArrowLeft className="h-5 w-5 text-zinc-600 dark:text-zinc-300 group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors" />
-                </Button>
-            </Link>
-        </div>
-
         {/* Header */}
         <div className="space-y-2 text-center sm:text-left pt-8 sm:pt-4 sm:pl-20">
             <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-teal-500 to-emerald-500 bg-clip-text text-transparent inline-flex items-center gap-3 font-serif">
