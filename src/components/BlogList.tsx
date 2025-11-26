@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { BookOpen } from "lucide-react";
+import { BookOpen, X } from "lucide-react";
 import type { Post } from "@/lib/posts";
 
 type BlogListProps = {
@@ -105,24 +105,25 @@ export default function BlogList({ posts }: BlogListProps) {
 
       <aside className="xl:w-72 flex-shrink-0">
         <div className="p-5 bg-white/40 dark:bg-zinc-900/40 rounded-3xl border border-white/20 dark:border-zinc-800/50 backdrop-blur-xl shadow-xl sticky top-10">
-          <div className="mb-4">
-            <h3 className="text-base font-semibold text-zinc-800 dark:text-zinc-100">
-              标签分类
-            </h3>
-            <p className="text-xs text-zinc-400 mt-0.5">
-              共 {sortedTags.length} 类 · {posts.length} 篇
-            </p>
-          </div>
-          {activeTag !== ALL_TAG && (
-            <div className="mb-3 flex justify-end">
-              <button
-                className="text-xs text-blue-600 dark:text-blue-300 hover:underline"
-                onClick={() => setActiveTag(ALL_TAG)}
-              >
-                清除筛选
-              </button>
+          <div className="mb-4 flex items-start justify-between gap-3">
+            <div>
+              <h3 className="text-base font-semibold text-zinc-800 dark:text-zinc-100">
+                标签分类
+              </h3>
+              <p className="text-xs text-zinc-400 mt-0.5">
+                共 {sortedTags.length} 类 · {posts.length} 篇
+              </p>
             </div>
-          )}
+            {activeTag !== ALL_TAG && (
+              <button
+                className="p-2 rounded-full border border-blue-200/60 dark:border-blue-800/50 bg-blue-50/70 dark:bg-blue-900/30 text-blue-600 dark:text-blue-200 shadow-sm hover:shadow-md hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-all"
+                onClick={() => setActiveTag(ALL_TAG)}
+                aria-label="清除筛选"
+              >
+                <X className="h-3.5 w-3.5" strokeWidth={2.5} />
+              </button>
+            )}
+          </div>
           <div className="flex flex-wrap gap-2">
             {[{ tag: ALL_TAG, count: posts.length }, ...sortedTags].map(({ tag, count }) => {
               const isActive = tag === activeTag;
