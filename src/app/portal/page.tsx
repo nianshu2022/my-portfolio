@@ -1,6 +1,6 @@
-import { Button } from "@/components/ui/button";
+import FloatingNav from "@/components/FloatingNav";
 import Link from "next/link";
-import { ArrowLeft, ExternalLink, Server } from "lucide-react";
+import { ExternalLink, Server } from "lucide-react";
 import Image from "next/image";
 
 const myServices = [
@@ -40,20 +40,9 @@ export default function PortalPage() {
   return (
     <main className="flex min-h-screen flex-col items-center p-6 sm:p-24 relative">
       
+      <FloatingNav backUrl="/" />
+
       <div className="max-w-5xl w-full space-y-12 backdrop-blur-xl bg-white/30 dark:bg-zinc-900/30 p-8 sm:p-12 rounded-3xl border border-white/20 shadow-2xl relative">
-        
-        {/* Back Button inside card */}
-        <div className="absolute top-6 left-6 sm:top-8 sm:left-8 z-20">
-             <Link href="/">
-                <Button 
-                    variant="secondary" 
-                    size="icon" 
-                    className="rounded-full w-10 h-10 sm:w-12 sm:h-12 bg-white/80 dark:bg-zinc-800/80 backdrop-blur-xl shadow-sm border border-zinc-200/50 dark:border-zinc-700/50 hover:bg-white hover:dark:bg-zinc-700 hover:scale-110 hover:shadow-xl hover:border-cyan-200 dark:hover:border-cyan-800 transition-all duration-300 group"
-                >
-                    <ArrowLeft className="h-5 w-5 text-zinc-600 dark:text-zinc-300 group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors" />
-                </Button>
-            </Link>
-        </div>
 
         {/* Header */}
         <div className="space-y-2 text-center sm:text-left pt-8 sm:pt-4 sm:pl-20">
