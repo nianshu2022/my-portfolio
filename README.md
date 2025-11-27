@@ -1,36 +1,256 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 念舒的数字花园
 
-## Getting Started
+> 00后产品运营的个人博客与数字花园，基于 Next.js 构建。分享技术折腾笔记、运营心得与生活随笔。
 
-First, run the development server:
+🌐 **在线访问**: [https://blog.nianshu2022.cn](https://blog.nianshu2022.cn)
+
+---
+
+## ✨ 功能特性
+
+### 📝 内容管理
+- **技术博客**：分享技术折腾笔记、开源项目、部署教程等
+- **生活随笔**：记录生活感悟、成长经历
+- **Markdown 支持**：完整的 Markdown 渲染，支持代码高亮、表格、图片等
+- **标签分类**：按标签筛选文章，快速找到感兴趣的内容
+- **目录导航**：文章自动生成目录，支持滚动高亮定位
+
+### 🎨 用户体验
+- **响应式设计**：完美适配 PC、平板、手机等设备
+- **暗黑模式**：支持系统自动切换和手动切换
+- **平滑滚动**：优雅的页面滚动动画
+- **滚动记忆**：列表页记住滚动位置，返回时自动恢复
+- **阅读进度**：文章阅读进度条显示
+- **返回顶部**：快速返回页面顶部
+
+### 🔧 技术亮点
+- **Next.js 16**：使用最新的 App Router 和 Turbopack
+- **TypeScript**：完整的类型安全
+- **Tailwind CSS**：现代化的样式方案
+- **静态生成**：所有页面预渲染，极速加载
+- **SEO 优化**：完整的元数据配置，支持 Open Graph 和 Twitter Card
+
+### 💬 互动功能
+- **Giscus 评论**：基于 GitHub Discussions 的评论系统
+- **访问统计**：不蒜子统计访问量
+
+---
+
+## 🛠️ 技术栈
+
+- **框架**: [Next.js 16.0.3](https://nextjs.org/) (App Router + Turbopack)
+- **语言**: TypeScript 5
+- **样式**: [Tailwind CSS 4](https://tailwindcss.com/)
+- **UI 组件**: [Radix UI](https://www.radix-ui.com/) + [Lucide Icons](https://lucide.dev/)
+- **内容渲染**: 
+  - `react-markdown` - Markdown 渲染
+  - `remark-gfm` - GitHub Flavored Markdown 支持
+  - `rehype-slug` - 自动生成标题锚点
+- **内容处理**:
+  - `gray-matter` - Frontmatter 解析
+  - `reading-time` - 阅读时间计算
+  - `github-slugger` - Slug 生成
+- **评论系统**: [Giscus](https://giscus.app/)
+- **部署**: [Cloudflare Pages](https://pages.cloudflare.com/)
+
+---
+
+## 📁 项目结构
+
+```
+my-portfolio/
+├── src/
+│   ├── app/                    # Next.js App Router 页面
+│   │   ├── about/              # 关于我页面
+│   │   ├── blog/               # 技术博客
+│   │   │   ├── [slug]/         # 文章详情页
+│   │   │   └── page.tsx        # 博客列表页
+│   │   ├── essays/             # 生活随笔
+│   │   │   ├── [slug]/         # 文章详情页
+│   │   │   └── page.tsx        # 随笔列表页
+│   │   ├── portal/             # 服务导航页
+│   │   ├── layout.tsx          # 根布局
+│   │   └── page.tsx            # 首页
+│   ├── components/             # 组件
+│   │   ├── BlogList.tsx        # 博客列表组件（支持标签筛选）
+│   │   ├── FloatingNav.tsx    # 浮动导航按钮
+│   │   ├── TableOfContents.tsx # 目录组件（滚动高亮）
+│   │   ├── ScrollToTop.tsx     # 返回顶部按钮
+│   │   ├── ScrollMemory.tsx   # 滚动位置记忆
+│   │   ├── Comments.tsx        # 评论组件
+│   │   └── ui/                # UI 基础组件
+│   ├── content/               # 内容文件
+│   │   ├── posts/             # 技术博客文章（按年份组织）
+│   │   └── essays/            # 生活随笔文章
+│   └── lib/                   # 工具函数
+│       ├── posts.ts           # 文章读取和处理
+│       └── utils.ts           # 通用工具函数
+├── public/                    # 静态资源
+└── package.json
+```
+
+---
+
+## 🚀 快速开始
+
+### 环境要求
+
+- Node.js 18+ 
+- npm / yarn / pnpm / bun
+
+### 安装依赖
+
+```bash
+npm install
+# 或
+yarn install
+# 或
+pnpm install
+```
+
+### 开发运行
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+访问 [http://localhost:3000](http://localhost:3000) 查看效果。
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 构建生产版本
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+npm start
+```
 
-## Learn More
+### 代码检查
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm run lint
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 📝 添加文章
 
-## Deploy on Vercel
+### 技术博客
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+在 `src/content/posts/` 目录下创建 Markdown 文件（可按年份组织到子文件夹）：
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```markdown
+---
+title: "文章标题"
+date: "2025-01-01"
+description: "文章描述"
+tags: ["标签1", "标签2"]
+cover: "/img/cover.jpg"  # 可选：封面图
+award: "🏆 获奖信息"      # 可选：获奖信息
+---
+
+文章内容...
+```
+
+### 生活随笔
+
+在 `src/content/essays/` 目录下创建 Markdown 文件，格式同上。
+
+### 图片使用
+
+- 将图片放在 `public/img/` 目录
+- 在 Markdown 中使用：`![](/img/image.png)`
+- 支持 URL 参数：
+  - `?width=400px` - 设置图片宽度
+  - `?shadow=true` - 添加阴影效果
+
+---
+
+## 🌐 部署
+
+### Cloudflare Pages
+
+1. 将代码推送到 GitHub
+2. 在 Cloudflare Pages 中连接仓库
+3. 构建配置：
+   - **构建命令**: `npm run build`
+   - **构建输出目录**: `.next`
+   - **Node.js 版本**: 18 或更高
+
+### 环境变量（如需要）
+
+如需使用 Giscus 评论，在 Cloudflare Pages 设置中添加环境变量：
+
+- `NEXT_PUBLIC_GISCUS_REPO` - GitHub 仓库（格式：`owner/repo`）
+- `NEXT_PUBLIC_GISCUS_REPO_ID` - Repository ID
+- `NEXT_PUBLIC_GISCUS_CATEGORY_ID` - Category ID
+
+---
+
+## 🎨 自定义配置
+
+### 修改网站信息
+
+编辑 `src/app/layout.tsx` 中的 `metadata` 对象：
+
+```typescript
+export const metadata: Metadata = {
+  metadataBase: new URL('https://blog.nianshu2022.cn'),
+  title: {
+    default: "你的网站标题",
+    template: "%s | 你的名字",
+  },
+  description: "网站描述",
+  // ...
+};
+```
+
+### 修改首页内容
+
+编辑 `src/app/page.tsx`
+
+### 修改样式
+
+- 全局样式：`src/app/globals.css`
+- Tailwind 配置：`tailwind.config.ts`
+
+---
+
+## 📄 许可证
+
+本项目为个人项目，代码仅供学习参考。
+
+---
+
+## 👤 作者
+
+**念舒**
+
+- 网站: [https://blog.nianshu2022.cn](https://blog.nianshu2022.cn)
+- GitHub: [@your-username](https://github.com/your-username)
+
+---
+
+## 🙏 致谢
+
+- [Next.js](https://nextjs.org/) - React 全栈框架
+- [Tailwind CSS](https://tailwindcss.com/) - 实用优先的 CSS 框架
+- [Lucide](https://lucide.dev/) - 精美的图标库
+- [Giscus](https://giscus.app/) - 基于 GitHub Discussions 的评论系统
+- [Cloudflare](https://www.cloudflare.com/) - 免费的 CDN 和 Pages 托管
+
+---
+
+## 📈 更新日志
+
+### v0.1.0 (2025-01)
+- ✨ 初始版本发布
+- ✨ 技术博客和生活随笔功能
+- ✨ 标签分类和筛选
+- ✨ 目录导航和滚动高亮
+- ✨ 响应式设计和暗黑模式
+- ✨ Giscus 评论集成
+- ✨ 滚动位置记忆
+- ✨ 服务导航页面
+
+---
+
+⭐ 如果这个项目对你有帮助，欢迎 Star！
