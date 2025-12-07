@@ -1,4 +1,5 @@
 import { getEssayBySlug, getAllEssays } from "@/lib/posts";
+import { Metadata } from "next";
 import Markdown from "react-markdown";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -17,6 +18,39 @@ export async function generateStaticParams() {
   return posts.map((post) => ({
     slug: post.slug,
   }));
+}
+
+export async function generateMetadata(
+  props: { params: Promise<{ slug: string }> }
+): Promise<Metadata> {
+  const params = await props.params;
+  const slug = decodeURIComponent(params.slug);
+  const post = getEssayBySlug(slug);
+
+  if (!post) {
+    return {
+      title: "文章未找到",
+    };
+  }
+
+  return {
+    title: post.title,
+    description: post.description,
+    openGraph: {
+      title: post.title,
+      description: post.description,
+      type: "article",
+      publishedTime: post.date,
+      authors: ["念舒"],
+      images: post.cover ? [{ url: post.cover }] : undefined,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: post.description,
+      images: post.cover ? [post.cover] : undefined,
+    },
+  };
 }
 
 export default async function EssayPage(props: { params: Promise<{ slug: string }> }) {
