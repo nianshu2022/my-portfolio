@@ -35,21 +35,23 @@ export default function Comments() {
         <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">评论区</h3>
       </div>
       
-      <Giscus
-        id="comments"
-        repo="nianshu2022/my-portfolio"
-        repoId="R_kgDOQaY3gQ" 
-        category="Announcements"
-        categoryId="DIC_kwDOQaY3gc4CyEnq" 
-        mapping="pathname"
-        term="Welcome to @giscus/react component!"
-        reactionsEnabled="1"
-        emitMetadata="0"
-        inputPosition="top"
-        theme={theme}
-        lang="zh-CN"
-        loading="lazy"
-      />
+      {process.env.NEXT_PUBLIC_GISCUS_REPO && process.env.NEXT_PUBLIC_GISCUS_REPO_ID && (
+        <Giscus
+          id="comments"
+          repo={process.env.NEXT_PUBLIC_GISCUS_REPO}
+          repoId={process.env.NEXT_PUBLIC_GISCUS_REPO_ID}
+          category="Announcements"
+          categoryId={process.env.NEXT_PUBLIC_GISCUS_CATEGORY_ID || ''}
+          mapping="pathname"
+          term="Welcome to @giscus/react component!"
+          reactionsEnabled="1"
+          emitMetadata="0"
+          inputPosition="top"
+          theme={theme}
+          lang="zh-CN"
+          loading="lazy"
+        />
+      )}
     </div>
   );
 }

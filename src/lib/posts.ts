@@ -85,10 +85,31 @@ function getAllItems(baseDirectory: string): Post[] {
   });
 }
 
+// Helper function to validate slug format (prevent path traversal)
+function isValidSlug(slug: string): boolean {
+  // Only allow alphanumeric, hyphens, underscores, and Chinese characters
+  // This prevents path traversal attacks like ../../etc/passwd
+  const slugPattern = /^[a-zA-Z0-9\u4e00-\u9fa5-_]+$/;
+  return slugPattern.test(slug);
+}
+
 // Helper function to get a single item by slug (searches recursively)
 function getItemBySlug(baseDirectory: string, slug: string): Post | null {
   try {
+    // Validate slug to prevent path traversal
+    if (!isValidSlug(slug)) {
+      console.error(`Invalid slug format: ${slug}`);
+      return null;
+    }
+
     const decodedSlug = decodeURIComponent(slug);
+    
+    // Additional validation after decoding
+    if (!isValidSlug(decodedSlug)) {
+      console.error(`Invalid decoded slug: ${decodedSlug}`);
+      return null;
+    }
+
     const allFilePaths = getAllFiles(baseDirectory);
     
     // Find the file that matches the slug regardless of which subdirectory it's in
@@ -99,6 +120,13 @@ function getItemBySlug(baseDirectory: string, slug: string): Post | null {
 
     if (!targetPath) {
       console.error(`File not found for slug: ${decodedSlug} in ${baseDirectory}`);
+      return null;
+    }
+
+    // Additional security: ensure the target path is within the expected directory
+    const relativePath = path.relative(baseDirectory, targetPath);
+    if (relativePath.startsWith('..') || path.isAbsolute(relativePath)) {
+      console.error(`Security violation: attempted access outside directory`);
       return null;
     }
 

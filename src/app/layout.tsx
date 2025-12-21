@@ -24,14 +24,14 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://blog.nianshu2022.cn'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://blog.nianshu2022.cn'),
   title: {
     default: "念舒的数字花园 | 产品运营 & 技术折腾",
     template: "%s | 念舒",
   },
   description: "00后产品运营的个人网站，分享运营心得、增长策略与技术折腾笔记。致力于构建连接用户价值与技术实现的桥梁。",
   keywords: ["产品运营", "念舒", "个人博客", "Next.js", "技术折腾", "增长黑客", "00后"],
-  authors: [{ name: "念舒", url: "https://blog.nianshu2022.cn" }],
+  authors: [{ name: "念舒", url: process.env.NEXT_PUBLIC_SITE_URL || 'https://blog.nianshu2022.cn' }],
   creator: "念舒",
   icons: {
     icon: "/img/avatar.png",
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "zh_CN",
-    url: "https://blog.nianshu2022.cn",
+    url: process.env.NEXT_PUBLIC_SITE_URL || 'https://blog.nianshu2022.cn',
     title: "念舒的数字花园",
     description: "00后产品运营的个人网站，分享运营心得与技术折腾笔记。",
     siteName: "念舒的数字花园",
@@ -96,18 +96,22 @@ export default function RootLayout({
         <ScrollToTop />
 
         {/* Cloudflare Web Analytics */}
-        <Script 
-          defer 
-          src='https://static.cloudflareinsights.com/beacon.min.js' 
-          data-cf-beacon='{"token": "28026dc377bc4925815998f861056ae1"}' 
-        />
+        {process.env.NEXT_PUBLIC_CLOUDFLARE_TOKEN && (
+          <Script 
+            defer 
+            src='https://static.cloudflareinsights.com/beacon.min.js' 
+            data-cf-beacon={`{"token": "${process.env.NEXT_PUBLIC_CLOUDFLARE_TOKEN}"}`} 
+          />
+        )}
         
         {/* Google AdSense */}
-        <Script
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6153369929341681"
-          crossOrigin="anonymous"
-          strategy="afterInteractive"
-        />
+        {process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_ID && (
+          <Script
+            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_ID}`}
+            crossOrigin="anonymous"
+            strategy="afterInteractive"
+          />
+        )}
       </body>
     </html>
   );

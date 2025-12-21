@@ -14,8 +14,8 @@ import SidebarAward from "@/components/SidebarAward";
 import TableOfContents from "@/components/TableOfContents";
 import FloatingNav from "@/components/FloatingNav";
 import Comments from "@/components/Comments";
-
 import DonateButton from "@/components/DonateButton";
+import DOMPurify from 'isomorphic-dompurify';
 export async function generateStaticParams() {
   const posts = getAllPosts();
   return posts.map((post) => ({
@@ -66,12 +66,25 @@ export default async function PostPage(props: { params: Promise<{ slug: string }
     notFound();
   }
 
+  // Sanitize content to prevent XSS
+  const sanitizedContent = DOMPurify.sanitize(post.content, {
+    ALLOWED_TAGS: [
+      'p', 'br', 'strong', 'em', 'u', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+      'ul', 'ol', 'li', 'blockquote', 'code', 'pre', 'a', 'img', 'table',
+      'thead', 'tbody', 'tr', 'th', 'td', 'hr', 'span', 'div'
+    ],
+    ALLOWED_ATTR: ['href', 'src', 'alt', 'title', 'class', 'id', 'style'],
+    ALLOW_DATA_ATTR: false,
+    ALLOW_UNKNOWN_PROTOCOLS: false,
+    SAFE_FOR_TEMPLATES: true
+  });
+
   const slugger = new GithubSlugger();
   const regX = /^(#{2,3})\s+(.+)$/gm;
   const headings = [];
   let match;
 
-  while ((match = regX.exec(post.content)) !== null) {
+  while ((match = regX.exec(sanitizedContent)) !== null) {
     headings.push({
       level: match[1].length,
       text: match[2],
@@ -140,31 +153,51 @@ export default async function PostPage(props: { params: Promise<{ slug: string }
                         components={{
                             img: (props) => {
                                 const src = props.src as string || '';
+                                
+                                // 验证图片URL安全性
+                                try {
+                                    const url = new URL(src, 'http://dummy.com');
+                                    const protocol = url.protocol;
+                                    
+                                    // 只允许安全协议
+                                    if (!['http:', 'https:', 'data:'].includes(protocol)) {
+                                        return <span className="text-red-500">[无效的图片链接]</span>;
+                                    }
+                                    
+                                    // 防止data URI过长攻击
+                                    if (protocol === 'data:' && src.length > 10000) {
+                                        return <span className="text-red-500">[图片过大]</span>;
+                                    }
+                                } catch (e) {
+                                    return <span className="text-red-500">[无效的URL]</span>;
+                                }
+
                                 let style: React.CSSProperties = { 
                                     height: 'auto', 
                                     borderRadius: '8px', 
                                     backgroundColor: 'transparent',
-                                    verticalAlign: 'top' // 顶部对齐，防止高度不一致时错位
+                                    verticalAlign: 'top'
                                 };
-                                let className = "rounded-lg"; // 默认类名，移到 try 外部
+                                let className = "rounded-lg";
                                 
                                 try {
-                                    // Parse URL query parameters
                                     const url = new URL(src, 'http://dummy.com');
                                     const width = url.searchParams.get('width') || url.searchParams.get('w');
                                     const shadow = url.searchParams.get('shadow');
 
                                     if (width) {
-                                        style.width = width;      // 设置固定宽度
-                                        style.maxWidth = '100%';  // 保证移动端不溢出
-                                        
-                                        // 关键修改：使用 Tailwind 响应式类
-                                        // 移动端 (默认): block + mx-auto (独占一行居中) + mb-4 (下间距)
-                                        // PC端 (sm以上): inline-block + mx-0 (靠左并排) + mr-8 (右间距)
+                                        // 验证宽度参数
+                                        const widthValue = parseInt(width);
+                                        if (isNaN(widthValue) || widthValue < 1 || widthValue > 2000) {
+                                            style.width = '100%';
+                                        } else {
+                                            style.width = width;
+                                        }
+                                        style.maxWidth = '100%';
                                         className += " block mx-auto mb-6 sm:inline-block sm:mx-0 sm:mb-4 sm:mr-8";
                                     } else {
                                         style.maxWidth = '100%';
-                                        className += " block mx-auto"; // 默认居中
+                                        className += " block mx-auto";
                                     }
                                     
                                     if (shadow === 'true' || shadow === '1') {
@@ -183,7 +216,7 @@ export default async function PostPage(props: { params: Promise<{ slug: string }
                             )
                         }}
                     >
-                        {post.content}
+                        {sanitizedContent}
                     </Markdown>
                 </div>
 

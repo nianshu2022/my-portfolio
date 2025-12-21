@@ -12,6 +12,7 @@ import SidebarAward from "@/components/SidebarAward";
 import FloatingNav from "@/components/FloatingNav";
 import Comments from "@/components/Comments";
 import DonateButton from "@/components/DonateButton";
+import DOMPurify from 'isomorphic-dompurify';
 
 export async function generateStaticParams() {
   const posts = getAllEssays();
@@ -61,6 +62,19 @@ export default async function EssayPage(props: { params: Promise<{ slug: string 
   if (!post) {
     notFound();
   }
+
+  // Sanitize content to prevent XSS
+  const sanitizedContent = DOMPurify.sanitize(post.content, {
+    ALLOWED_TAGS: [
+      'p', 'br', 'strong', 'em', 'u', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+      'ul', 'ol', 'li', 'blockquote', 'code', 'pre', 'a', 'img', 'table',
+      'thead', 'tbody', 'tr', 'th', 'td', 'hr', 'span', 'div'
+    ],
+    ALLOWED_ATTR: ['href', 'src', 'alt', 'title', 'class', 'id', 'style'],
+    ALLOW_DATA_ATTR: false,
+    ALLOW_UNKNOWN_PROTOCOLS: false,
+    SAFE_FOR_TEMPLATES: true
+  });
 
   return (
     <main className="flex min-h-screen flex-col items-center p-4 sm:p-24 relative font-serif">
@@ -120,13 +134,32 @@ export default async function EssayPage(props: { params: Promise<{ slug: string 
                     components={{
                         img: (props) => {
                             const src = props.src as string || '';
+                            
+                            // 验证图片URL安全性
+                            try {
+                                const url = new URL(src, 'http://dummy.com');
+                                const protocol = url.protocol;
+                                
+                                // 只允许安全协议
+                                if (!['http:', 'https:', 'data:'].includes(protocol)) {
+                                    return <span className="text-red-500">[无效的图片链接]</span>;
+                                }
+                                
+                                // 防止data URI过长攻击
+                                if (protocol === 'data:' && src.length > 10000) {
+                                    return <span className="text-red-500">[图片过大]</span>;
+                                }
+                            } catch (e) {
+                                return <span className="text-red-500">[无效的URL]</span>;
+                            }
+
                             let style: React.CSSProperties = { 
                                 height: 'auto', 
                                 borderRadius: '8px', 
                                 backgroundColor: 'transparent',
                                 verticalAlign: 'top'
                             };
-                            let className = "rounded-lg block mx-auto"; // 默认居中
+                            let className = "rounded-lg block mx-auto";
 
                             try {
                                 const url = new URL(src, 'http://dummy.com');
@@ -134,7 +167,13 @@ export default async function EssayPage(props: { params: Promise<{ slug: string 
                                 const shadow = url.searchParams.get('shadow');
 
                                 if (width) {
-                                    style.width = width;
+                                    // 验证宽度参数
+                                    const widthValue = parseInt(width);
+                                    if (isNaN(widthValue) || widthValue < 1 || widthValue > 2000) {
+                                        style.width = '100%';
+                                    } else {
+                                        style.width = width;
+                                    }
                                     style.maxWidth = '100%';
                                     className += " mb-6 sm:inline-block sm:mx-0 sm:mb-4 sm:mr-8";
                                 }
@@ -153,7 +192,7 @@ export default async function EssayPage(props: { params: Promise<{ slug: string 
                         )
                     }}
                 >
-                    {post.content}
+                    {sanitizedContent}
                 </Markdown>
             </div>
 

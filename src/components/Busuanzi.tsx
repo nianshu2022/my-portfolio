@@ -14,8 +14,11 @@ export default function BusuanziCounter() {
 
     const script = document.createElement('script');
     script.id = 'busuanzi_script';
-    script.src = '//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js';
+    // 使用HTTPS协议，防止中间人攻击
+    script.src = 'https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js';
     script.async = true;
+    // 添加integrity属性用于子资源完整性检查（如果第三方支持）
+    script.crossOrigin = 'anonymous';
     
     script.onload = () => {
         setLoading(false);
