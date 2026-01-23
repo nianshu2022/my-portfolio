@@ -3,10 +3,10 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { BookOpen, X } from "lucide-react";
-import type { Post } from "@/lib/posts";
+import type { PostSummary } from "@/lib/posts";
 
 type BlogListProps = {
-  posts: Post[];
+  posts: PostSummary[];
 };
 
 const FALLBACK_TAG = "未分类";

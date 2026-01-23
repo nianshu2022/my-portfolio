@@ -1,256 +1,182 @@
-# 念舒的数字花园
+# 念舒的数字花园 (Digital Garden)
 
-> 00后产品运营的个人博客与数字花园，基于 Next.js 构建。分享技术折腾笔记、运营心得与生活随笔。
+> 一个基于 **Next.js 16** 和 **React 19** 构建的现代化个人博客与数字花园。
+> 融合了技术笔记、生活随笔与个人服务导航，致力于提供优雅、快速且极致的阅读体验。
+
+[![部署状态](https://img.shields.io/badge/Deploy-Cloudflare%20Pages-orange?style=flat-square&logo=cloudflare)](https://pages.cloudflare.com/)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](LICENSE)
 
 🌐 **在线访问**: [https://blog.nianshu2022.cn](https://blog.nianshu2022.cn)
 
 ---
 
-## ✨ 功能特性
+## ✨ 核心特性
 
-### 📝 内容管理
-- **技术博客**：分享技术折腾笔记、开源项目、部署教程等
-- **生活随笔**：记录生活感悟、成长经历
-- **Markdown 支持**：完整的 Markdown 渲染，支持代码高亮、表格、图片等
-- **标签分类**：按标签筛选文章，快速找到感兴趣的内容
-- **目录导航**：文章自动生成目录，支持滚动高亮定位
+### � 极致性能与技术
+- **Next.js 16 (App Router)**: 拥抱最新的 React 服务端组件 (RSC) 架构。
+- **Turbopack**: 采用 Rust 编写的下一代打包工具，秒级热更新。
+- **React 19**: 尝鲜最新的 React 特性。
+- **Tailwind CSS 4**: 下一代 CSS 框架，构建高性能的原子化样式。
+- **PWA 支持**: 支持安装到桌面或手机，离线访问能力（Service Worker）。
+- **静态导出 (SSG)**: 纯静态 HTML 生成，依托 Edge Network 实现全球极速加载。
 
-### 🎨 用户体验
-- **响应式设计**：完美适配 PC、平板、手机等设备
-- **暗黑模式**：支持系统自动切换和手动切换
-- **平滑滚动**：优雅的页面滚动动画
-- **滚动记忆**：列表页记住滚动位置，返回时自动恢复
-- **阅读进度**：文章阅读进度条显示
-- **返回顶部**：快速返回页面顶部
+### 📝 内容与体验
+- **双内容流**: 
+  - **技术博客**: 专注代码、部署与技术折腾。
+  - **生活随笔**: 记录感悟、阅读与生活点滴（独立样式设计）。
+- **极致阅读体验**:
+  - **暗黑模式**: 完美的亮/暗色主题切换。
+  - **Markdown 渲染**: 基于 `react-markdown` + `rehype-sanitize` 的安全渲染，支持 GFM 语法。
+  - **代码高亮**: 精美的代码块样式。
+  - **目录导航**: 自动生成 TOC，支持滚动高亮监听。
+  - **滚动记忆**: 智能记录列表页滚动位置，丝滑的返回体验。
+- **交互与统计**:
+  - **评论系统**: 集成 [Giscus](https://giscus.app/)，基于 GitHub Discussions。
+  - **访问统计**: 集成不蒜子 (Busuanzi) 统计，已解决跨域兼容性问题。
+  - **阅读进度**: 顶部的阅读进度条。
 
-### 🔧 技术亮点
-- **Next.js 16**：使用最新的 App Router 和 Turbopack
-- **TypeScript**：完整的类型安全
-- **Tailwind CSS**：现代化的样式方案
-- **静态生成**：所有页面预渲染，极速加载
-- **SEO 优化**：完整的元数据配置，支持 Open Graph 和 Twitter Card
-
-### 💬 互动功能
-- **Giscus 评论**：基于 GitHub Discussions 的评论系统
-- **访问统计**：不蒜子统计访问量
-
----
-
-## 🛠️ 技术栈
-
-- **框架**: [Next.js 16.0.3](https://nextjs.org/) (App Router + Turbopack)
-- **语言**: TypeScript 5
-- **样式**: [Tailwind CSS 4](https://tailwindcss.com/)
-- **UI 组件**: [Radix UI](https://www.radix-ui.com/) + [Lucide Icons](https://lucide.dev/)
-- **内容渲染**: 
-  - `react-markdown` - Markdown 渲染
-  - `remark-gfm` - GitHub Flavored Markdown 支持
-  - `rehype-slug` - 自动生成标题锚点
-- **内容处理**:
-  - `gray-matter` - Frontmatter 解析
-  - `reading-time` - 阅读时间计算
-  - `github-slugger` - Slug 生成
-- **评论系统**: [Giscus](https://giscus.app/)
-- **部署**: [Cloudflare Pages](https://pages.cloudflare.com/)
+### 🎨 界面设计
+- **现代化 UI**: 使用 Radix UI 无头组件库配合 Lucide 图标。
+- **动态效果**: 平滑的过渡动画与微交互。
+- **响应式布局**: 移动端优先的适配策略。
 
 ---
 
-## 📁 项目结构
+## 🛠️ 技术栈清单
 
-```
-my-portfolio/
-├── src/
-│   ├── app/                    # Next.js App Router 页面
-│   │   ├── about/              # 关于我页面
-│   │   ├── blog/               # 技术博客
-│   │   │   ├── [slug]/         # 文章详情页
-│   │   │   └── page.tsx        # 博客列表页
-│   │   ├── essays/             # 生活随笔
-│   │   │   ├── [slug]/         # 文章详情页
-│   │   │   └── page.tsx        # 随笔列表页
-│   │   ├── portal/             # 服务导航页
-│   │   ├── layout.tsx          # 根布局
-│   │   └── page.tsx            # 首页
-│   ├── components/             # 组件
-│   │   ├── BlogList.tsx        # 博客列表组件（支持标签筛选）
-│   │   ├── FloatingNav.tsx    # 浮动导航按钮
-│   │   ├── TableOfContents.tsx # 目录组件（滚动高亮）
-│   │   ├── ScrollToTop.tsx     # 返回顶部按钮
-│   │   ├── ScrollMemory.tsx   # 滚动位置记忆
-│   │   ├── Comments.tsx        # 评论组件
-│   │   └── ui/                # UI 基础组件
-│   ├── content/               # 内容文件
-│   │   ├── posts/             # 技术博客文章（按年份组织）
-│   │   └── essays/            # 生活随笔文章
-│   └── lib/                   # 工具函数
-│       ├── posts.ts           # 文章读取和处理
-│       └── utils.ts           # 通用工具函数
-├── public/                    # 静态资源
-└── package.json
-```
+| 类别 | 技术/库 | 说明 |
+| --- | --- | --- |
+| **核心框架** | [Next.js 16.1](https://nextjs.org/) | App Router, Turbopack |
+| **UI 库** | [React 19](https://react.dev/) | Server Components, Actions |
+| **样式** | [Tailwind CSS 4](https://tailwindcss.com/) | Styling, Dark Mode |
+| **内容处理** | `gray-matter` | Frontmatter 解析 |
+| | `react-markdown` | Markdown 转 React 组件 |
+| | `rehype-sanitize` | **安全加固**，防止 XSS 攻击 |
+| | `rehype-slug` | 自动生成标题 ID |
+| | `remark-gfm` | 表格、删除线等扩展语法 |
+| | `reading-time` | 阅读时长预估 |
+| **图标** | [Lucide React](https://lucide.dev/) | 现代化图标库 |
+| **评论** | [@giscus/react](https://giscus.app/) | 评论系统 |
+| **工具** | `clsx` + `tailwind-merge` | 样式类名合并 |
+| **部署** | Cloudflare Pages | 全球边缘网络托管 |
 
 ---
 
-## 🚀 快速开始
+## 🚀 本地开发
 
 ### 环境要求
+- **Node.js**: 18.17 或更高版本
+- **包管理器**: npm, yarn, pnpm 或 bun
 
-- Node.js 18+ 
-- npm / yarn / pnpm / bun
-
-### 安装依赖
-
+### 1. 克隆项目
 ```bash
-npm install
-# 或
-yarn install
-# 或
-pnpm install
+git clone https://github.com/nianshu2022/my-portfolio.git
+cd my-portfolio
 ```
 
-### 开发运行
+### 2. 安装依赖
+```bash
+npm install
+```
 
+### 3. 启动开发服务器
+使用 Turbopack 启动开发环境：
 ```bash
 npm run dev
 ```
 
-访问 [http://localhost:3000](http://localhost:3000) 查看效果。
+打开浏览器访问 [http://localhost:3000](http://localhost:3000)。
 
-### 构建生产版本
-
+### 4. 构建生产版本
 ```bash
 npm run build
-npm start
 ```
-
-### 代码检查
-
-```bash
-npm run lint
-```
+构建产物将位于 `.next/` 目录（或 `out/` 目录，取决于配置）。
 
 ---
 
-## 📝 添加文章
+## 📝 内容创作指南
 
-### 技术博客
+### 1. 新建文章
+在 `src/content` 目录下创建 Markdown 文件：
+- **技术博客**: `src/content/posts/YYYY/filename.md`
+- **生活随笔**: `src/content/essays/filename.md`
 
-在 `src/content/posts/` 目录下创建 Markdown 文件（可按年份组织到子文件夹）：
+### 2. Frontmatter 格式
+文件头部需包含 YAML 格式的元数据：
 
 ```markdown
 ---
-title: "文章标题"
-date: "2025-01-01"
-description: "文章描述"
-tags: ["标签1", "标签2"]
-cover: "/img/cover.jpg"  # 可选：封面图
-award: "🏆 获奖信息"      # 可选：获奖信息
+title: "Next.js 16 尝鲜体验"
+date: "2025-01-23"
+description: "探索 Turbopack 带来的极致开发体验..."
+tags: ["Next.js", "React", "Frontend"]
+cover: "/img/cover-nextjs.png"  # [可选] 封面图，存放在 public/img/
+award: ""                        # [可选] 随笔专属：获奖或特殊标注
 ---
 
-文章内容...
+这里是正文内容...
 ```
 
-### 生活随笔
-
-在 `src/content/essays/` 目录下创建 Markdown 文件，格式同上。
-
-### 图片使用
-
-- 将图片放在 `public/img/` 目录
-- 在 Markdown 中使用：`![](/img/image.png)`
-- 支持 URL 参数：
-  - `?width=400px` - 设置图片宽度
-  - `?shadow=true` - 添加阴影效果
+### 3. 图片引用
+支持标准 Markdown 图片语法，图片建议存放于 `public/img/`：
+```markdown
+![图片描述](/img/my-image.png)
+```
+支持通过 URL 参数控制样式：
+- `?width=500px`: 强制设置宽度
+- `?shadow=true`: 添加阴影效果
 
 ---
 
-## 🌐 部署
+## 🌐 部署指南 (Cloudflare Pages)
 
-### Cloudflare Pages
+本项目针对 Cloudflare Pages 进行了优化。
 
-1. 将代码推送到 GitHub
-2. 在 Cloudflare Pages 中连接仓库
-3. 构建配置：
-   - **构建命令**: `npm run build`
-   - **构建输出目录**: `.next`
-   - **Node.js 版本**: 18 或更高
-
-### 环境变量（如需要）
-
-如需使用 Giscus 评论，在 Cloudflare Pages 设置中添加环境变量：
-
-- `NEXT_PUBLIC_GISCUS_REPO` - GitHub 仓库（格式：`owner/repo`）
-- `NEXT_PUBLIC_GISCUS_REPO_ID` - Repository ID
-- `NEXT_PUBLIC_GISCUS_CATEGORY_ID` - Category ID
+1. **GitHub 连接**: 将代码推送到 GitHub 仓库。
+2. **创建项目**: 在 Cloudflare Dashboard 中选择 "Pages" -> "Connect to Git"。
+3. **构建配置**:
+   - **Framework Preset**: Next.js (Static HTML Export) 或 None
+   - **Build Command**: `npm run build`
+   - **Output Directory**: `.next` (或 `out`，视 `next.config.ts` 配置而定)
+4. **环境变量** (可选):
+   - `NEXT_PUBLIC_GISCUS_REPO`: `your/repo`
+   - `NEXT_PUBLIC_GISCUS_REPO_ID`: `R_kgD...`
+   - `NEXT_PUBLIC_GISCUS_CATEGORY_ID`: `DIC_...`
 
 ---
 
-## 🎨 自定义配置
+## 📁 目录结构
 
-### 修改网站信息
-
-编辑 `src/app/layout.tsx` 中的 `metadata` 对象：
-
-```typescript
-export const metadata: Metadata = {
-  metadataBase: new URL('https://blog.nianshu2022.cn'),
-  title: {
-    default: "你的网站标题",
-    template: "%s | 你的名字",
-  },
-  description: "网站描述",
-  // ...
-};
+```
+.
+├── public/                 # 静态资源 (图片, favicon, sw.js 等)
+├── src/
+│   ├── app/                # Next.js App Router 路由
+│   │   ├── about/          # [页面] 关于我
+│   │   ├── blog/           # [页面] 技术博客列表 & 详情
+│   │   ├── essays/         # [页面] 生活随笔列表 & 详情
+│   │   ├── portal/         # [页面] 服务导航
+│   │   ├── globals.css     # 全局样式 (Tailwind @theme)
+│   │   ├── layout.tsx      # 根布局
+│   │   └── page.tsx        # 首页
+│   ├── components/         # React 组件
+│   │   ├── ui/             # 基础 UI 组件
+│   │   ├── BlogList.tsx    # 博客列表逻辑
+│   │   ├── Comments.tsx    # Giscus 评论
+│   │   └── ...
+│   ├── content/            # Markdown 内容源文件
+│   └── lib/                # 工具函数 (posts.ts 等)
+├── next.config.ts          # Next.js 配置
+├── package.json            # 依赖声明
+└── README.md               # 项目文档
 ```
 
-### 修改首页内容
-
-编辑 `src/app/page.tsx`
-
-### 修改样式
-
-- 全局样式：`src/app/globals.css`
-- Tailwind 配置：`tailwind.config.ts`
-
 ---
 
-## 📄 许可证
+## 📄 版权说明
 
-本项目为个人项目，代码仅供学习参考。
+除另有声明外，本博客内容采用 [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/) 许可协议。
+源代码采用 MIT 协议开源。
 
----
-
-## 👤 作者
-
-**念舒**
-
-- 网站: [https://blog.nianshu2022.cn](https://blog.nianshu2022.cn)
-- GitHub: [@your-username](https://github.com/your-username)
-
----
-
-## 🙏 致谢
-
-- [Next.js](https://nextjs.org/) - React 全栈框架
-- [Tailwind CSS](https://tailwindcss.com/) - 实用优先的 CSS 框架
-- [Lucide](https://lucide.dev/) - 精美的图标库
-- [Giscus](https://giscus.app/) - 基于 GitHub Discussions 的评论系统
-- [Cloudflare](https://www.cloudflare.com/) - 免费的 CDN 和 Pages 托管
-
----
-
-## 📈 更新日志
-
-### v0.1.0 (2025-01)
-- ✨ 初始版本发布
-- ✨ 技术博客和生活随笔功能
-- ✨ 标签分类和筛选
-- ✨ 目录导航和滚动高亮
-- ✨ 响应式设计和暗黑模式
-- ✨ Giscus 评论集成
-- ✨ 滚动位置记忆
-- ✨ 服务导航页面
-
----
-
-⭐ 如果这个项目对你有帮助，欢迎 Star！
+Copyright © 2025 念舒.

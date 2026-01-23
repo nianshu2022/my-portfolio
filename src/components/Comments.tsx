@@ -8,24 +8,24 @@ export default function Comments() {
   const [theme, setTheme] = useState("light");
 
   useEffect(() => {
-    // Simple check for system preference or class-based dark mode
-    // Since we use Tailwind 'dark' class on html/body
-    const isDark = document.documentElement.classList.contains("dark");
-    setTheme(isDark ? "transparent_dark" : "light");
+    // Initial check - use requestAnimationFrame to avoid synchronous setState warning
+    const handle = requestAnimationFrame(() => {
+      const isDark = document.documentElement.classList.contains("dark");
+      setTheme(isDark ? "transparent_dark" : "light");
+    });
 
-    // Optional: Listen for theme changes if you add a theme toggler later
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        if (mutation.attributeName === "class") {
-          const isDark = document.documentElement.classList.contains("dark");
-          setTheme(isDark ? "transparent_dark" : "light");
-        }
-      });
+    // Listen for theme changes
+    const observer = new MutationObserver(() => {
+      const isDark = document.documentElement.classList.contains("dark");
+      setTheme(isDark ? "transparent_dark" : "light");
     });
 
     observer.observe(document.documentElement, { attributes: true });
 
-    return () => observer.disconnect();
+    return () => {
+      cancelAnimationFrame(handle);
+      observer.disconnect();
+    };
   }, []);
 
   return (
@@ -34,14 +34,14 @@ export default function Comments() {
         <span className="text-xl">💬</span>
         <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">评论区</h3>
       </div>
-      
+
       {process.env.NEXT_PUBLIC_GISCUS_REPO && process.env.NEXT_PUBLIC_GISCUS_REPO_ID && (
         <Giscus
           id="comments"
           repo={process.env.NEXT_PUBLIC_GISCUS_REPO}
           repoId={process.env.NEXT_PUBLIC_GISCUS_REPO_ID}
           category="Announcements"
-          categoryId={process.env.NEXT_PUBLIC_GISCUS_CATEGORY_ID || ''}
+          categoryId={(process.env.NEXT_PUBLIC_GISCUS_CATEGORY_ID as `${string}/${string}`) || ("" as `${string}/${string}`)}
           mapping="pathname"
           term="Welcome to @giscus/react component!"
           reactionsEnabled="1"
@@ -55,4 +55,3 @@ export default function Comments() {
     </div>
   );
 }
-

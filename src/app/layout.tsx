@@ -77,19 +77,19 @@ export default function RootLayout({
       >
         {/* Hidden image for WeChat sharing hack */}
         <div style={{ display: 'none', position: 'absolute', top: 0, left: 0, width: 0, height: 0, overflow: 'hidden' }}>
-          <img src="https://blog.nianshu2022.cn/img/avatar.png" alt="thumb" width="300" height="300" />
+          <img src="https://blog.nianshu2022.cn/img/avatar.png" alt="念舒头像" width="300" height="300" />
         </div>
 
-         {/* Global Background Decoration */}
-         <div className="fixed inset-0 z-[-1] pointer-events-none">
-            {/* Animated Blobs */}
-            <div className="absolute top-[-10%] left-[-10%] w-96 h-96 bg-purple-400/20 rounded-full blur-[100px] mix-blend-multiply dark:mix-blend-screen dark:bg-purple-900/30 animate-blob"></div>
-            <div className="absolute top-[20%] right-[-10%] w-96 h-96 bg-blue-400/20 rounded-full blur-[100px] mix-blend-multiply dark:mix-blend-screen dark:bg-blue-900/30 animate-blob animation-delay-2000"></div>
-            <div className="absolute bottom-[-10%] left-[20%] w-96 h-96 bg-pink-400/20 rounded-full blur-[100px] mix-blend-multiply dark:mix-blend-screen dark:bg-pink-900/30 animate-blob animation-delay-4000"></div>
-            
-            {/* Grid Pattern Overlay */}
-            <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))] opacity-10"></div>
-          </div>
+        {/* Global Background Decoration */}
+        <div className="fixed inset-0 z-[-1] pointer-events-none">
+          {/* Animated Blobs */}
+          <div className="absolute top-[-10%] left-[-10%] w-96 h-96 bg-purple-400/20 rounded-full blur-[100px] mix-blend-multiply dark:mix-blend-screen dark:bg-purple-900/30 animate-blob"></div>
+          <div className="absolute top-[20%] right-[-10%] w-96 h-96 bg-blue-400/20 rounded-full blur-[100px] mix-blend-multiply dark:mix-blend-screen dark:bg-blue-900/30 animate-blob animation-delay-2000"></div>
+          <div className="absolute bottom-[-10%] left-[20%] w-96 h-96 bg-pink-400/20 rounded-full blur-[100px] mix-blend-multiply dark:mix-blend-screen dark:bg-pink-900/30 animate-blob animation-delay-4000"></div>
+
+          {/* Grid Pattern Overlay */}
+          <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))] opacity-10"></div>
+        </div>
 
         {children}
 
@@ -97,13 +97,13 @@ export default function RootLayout({
 
         {/* Cloudflare Web Analytics */}
         {process.env.NEXT_PUBLIC_CLOUDFLARE_TOKEN && (
-          <Script 
-            defer 
-            src='https://static.cloudflareinsights.com/beacon.min.js' 
-            data-cf-beacon={`{"token": "${process.env.NEXT_PUBLIC_CLOUDFLARE_TOKEN}"}`} 
+          <Script
+            defer
+            src='https://static.cloudflareinsights.com/beacon.min.js'
+            data-cf-beacon={`{"token": "${process.env.NEXT_PUBLIC_CLOUDFLARE_TOKEN}"}`}
           />
         )}
-        
+
         {/* Google AdSense */}
         {process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_ID && (
           <Script

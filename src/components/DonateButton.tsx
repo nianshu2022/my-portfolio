@@ -1,18 +1,16 @@
 "use client";
 
 import { useState } from "react";
-import { Coffee, X, Check } from "lucide-react";
+import { Coffee, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { createPortal } from "react-dom";
 
 export default function DonateButton() {
   const [isOpen, setIsOpen] = useState(false);
-  const [copied, setCopied] = useState(false);
-
   // ALIPAY_URL: urlencoded alipay qr code string.
   // In a real scenario, you would replace these with your actual image paths or payment links
-  const ALIPAY_IMG = "/img/alipay.jpg"; 
+  const ALIPAY_IMG = "/img/alipay.jpg";
   const WECHAT_IMG = "/img/wechat.jpg";
 
   return (
@@ -64,7 +62,7 @@ export default function DonateButton() {
                     <div className="relative w-32 h-32 bg-white p-2 rounded-lg shadow-sm">
                       {/* Placeholder for WeChat QR Code */}
                       <div className="w-full h-full bg-zinc-100 flex items-center justify-center text-xs text-zinc-400">
-                         <Image src={WECHAT_IMG} alt="WeChat Pay" width={120} height={120} className="w-full h-full object-contain" unoptimized />
+                        <Image src={WECHAT_IMG} alt="WeChat Pay" width={120} height={120} className="w-full h-full object-contain" unoptimized />
                       </div>
                     </div>
                     <span className="text-sm font-medium text-[#2DB16D]">微信支付</span>
@@ -74,16 +72,16 @@ export default function DonateButton() {
                   <div className="flex flex-col items-center gap-3 p-4 rounded-xl bg-[#1677FF]/5 border border-[#1677FF]/20">
                     <div className="relative w-32 h-32 bg-white p-2 rounded-lg shadow-sm">
                       {/* Placeholder for Alipay QR Code */}
-                       <div className="w-full h-full bg-zinc-100 flex items-center justify-center text-xs text-zinc-400">
-                         <Image src={ALIPAY_IMG} alt="Alipay" width={120} height={120} className="w-full h-full object-contain" unoptimized />
+                      <div className="w-full h-full bg-zinc-100 flex items-center justify-center text-xs text-zinc-400">
+                        <Image src={ALIPAY_IMG} alt="Alipay" width={120} height={120} className="w-full h-full object-contain" unoptimized />
                       </div>
                     </div>
                     <span className="text-sm font-medium text-[#1677FF]">支付宝</span>
                   </div>
                 </div>
-                
+
                 <div className="mt-8 text-xs text-zinc-400">
-                    <p>赞赏仅作为对作者的鼓励，不构成任何服务承诺。</p>
+                  <p>赞赏仅作为对作者的鼓励，不构成任何服务承诺。</p>
                 </div>
               </div>
             </div>

@@ -6,6 +6,9 @@ import readingTime from 'reading-time';
 const postsDirectory = path.join(process.cwd(), 'src/content/posts');
 const essaysDirectory = path.join(process.cwd(), 'src/content/essays');
 
+// Simple cache to avoid redundant file system scans during build
+const filesCache = new Map<string, string[]>();
+
 export type Post = {
   slug: string;
   title: string;
@@ -19,6 +22,8 @@ export type Post = {
   award?: string;
 };
 
+export type PostSummary = Omit<Post, 'content'>;
+
 // Helper function to format date
 const formatDate = (date: string | Date): string => {
   if (date instanceof Date) {
@@ -29,6 +34,10 @@ const formatDate = (date: string | Date): string => {
 
 // Helper function to recursively get all files from a directory
 function getAllFiles(dirPath: string, arrayOfFiles: string[] = []) {
+  if (filesCache.has(dirPath)) {
+    return filesCache.get(dirPath)!;
+  }
+
   if (!fs.existsSync(dirPath)) {
     return arrayOfFiles;
   }
@@ -46,6 +55,7 @@ function getAllFiles(dirPath: string, arrayOfFiles: string[] = []) {
     }
   });
 
+  filesCache.set(dirPath, arrayOfFiles);
   return arrayOfFiles;
 }
 
@@ -57,7 +67,7 @@ function getAllItems(baseDirectory: string): Post[] {
     const fileContents = fs.readFileSync(fullPath, 'utf8');
     const matterResult = matter(fileContents);
     const stats = readingTime(matterResult.content);
-    
+
     // Extract slug from filename, ignoring directory structure for the URL
     const fileName = path.basename(fullPath);
     const slug = fileName.replace(/\.md$/, '');
@@ -85,6 +95,34 @@ function getAllItems(baseDirectory: string): Post[] {
   });
 }
 
+// Helper function to get summaries to reduce bundle size for list pages
+function getAllSummaries(baseDirectory: string): PostSummary[] {
+  const allFilePaths = getAllFiles(baseDirectory);
+
+  const allItemsData = allFilePaths.map((fullPath) => {
+    const fileContents = fs.readFileSync(fullPath, 'utf8');
+    const matterResult = matter(fileContents);
+    const stats = readingTime(matterResult.content);
+
+    const fileName = path.basename(fullPath);
+    const slug = fileName.replace(/\.md$/, '');
+
+    return {
+      slug,
+      wordCount: matterResult.content.length,
+      readingTime: Math.ceil(stats.minutes) + ' 分钟',
+      cover: matterResult.data.cover || null,
+      award: matterResult.data.award || null,
+      title: matterResult.data.title,
+      description: matterResult.data.description || '',
+      tags: matterResult.data.tags || [],
+      date: formatDate(matterResult.data.date),
+    };
+  });
+
+  return allItemsData.sort((a, b) => (a.date < b.date ? 1 : -1));
+}
+
 // Helper function to validate slug format (prevent path traversal)
 function isValidSlug(slug: string): boolean {
   // Only allow alphanumeric, hyphens, underscores, and Chinese characters
@@ -102,24 +140,31 @@ function getItemBySlug(baseDirectory: string, slug: string): Post | null {
       return null;
     }
 
-    const decodedSlug = decodeURIComponent(slug);
-    
-    // Additional validation after decoding
-    if (!isValidSlug(decodedSlug)) {
-      console.error(`Invalid decoded slug: ${decodedSlug}`);
-      return null;
-    }
-
     const allFilePaths = getAllFiles(baseDirectory);
-    
-    // Find the file that matches the slug regardless of which subdirectory it's in
-    const targetPath = allFilePaths.find(filePath => {
+
+    // Find the file that matches the slug
+    let targetPath = allFilePaths.find(filePath => {
       const fileName = path.basename(filePath);
-      return fileName.replace(/\.md$/, '') === decodedSlug;
+      return fileName.replace(/\.md$/, '') === slug;
     });
 
+    // If not found, try decoding (though Next.js usually handles this)
     if (!targetPath) {
-      console.error(`File not found for slug: ${decodedSlug} in ${baseDirectory}`);
+      try {
+        const decoded = decodeURIComponent(slug);
+        if (decoded !== slug) {
+          targetPath = allFilePaths.find(filePath => {
+            const fileName = path.basename(filePath);
+            return fileName.replace(/\.md$/, '') === decoded;
+          });
+        }
+      } catch {
+        // Ignore decoding errors
+      }
+    }
+
+    if (!targetPath) {
+      console.error(`File not found for slug: ${slug} in ${baseDirectory}`);
       return null;
     }
 
@@ -135,7 +180,7 @@ function getItemBySlug(baseDirectory: string, slug: string): Post | null {
     const stats = readingTime(matterResult.content);
 
     return {
-      slug: decodedSlug,
+      slug: slug,
       content: matterResult.content,
       wordCount: matterResult.content.length,
       readingTime: Math.ceil(stats.minutes) + ' 分钟',
@@ -157,6 +202,10 @@ export function getAllPosts(): Post[] {
   return getAllItems(postsDirectory);
 }
 
+export function getAllPostSummaries(): PostSummary[] {
+  return getAllSummaries(postsDirectory);
+}
+
 export function getPostBySlug(slug: string): Post | null {
   return getItemBySlug(postsDirectory, slug);
 }
@@ -164,6 +213,10 @@ export function getPostBySlug(slug: string): Post | null {
 // Essays API
 export function getAllEssays(): Post[] {
   return getAllItems(essaysDirectory);
+}
+
+export function getAllEssaySummaries(): PostSummary[] {
+  return getAllSummaries(essaysDirectory);
 }
 
 export function getEssayBySlug(slug: string): Post | null {

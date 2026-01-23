@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { ArrowLeft, Home, ChevronRight, X } from "lucide-react";
+import { ArrowLeft, Home, ChevronRight } from "lucide-react";
 
 interface FloatingNavProps {
   backUrl?: string;
@@ -58,7 +58,7 @@ export default function FloatingNav({ backUrl = "/blog" }: FloatingNavProps) {
 
       {/* ================= 移动端 (xl 以下) ================= */}
       {/* 侧边抽屉交互 - 极简版 */}
-      <div 
+      <div
         ref={navRef}
         className="xl:hidden fixed top-32 left-0 z-50 flex items-center gap-3"
       >
@@ -96,18 +96,18 @@ export default function FloatingNav({ backUrl = "/blog" }: FloatingNavProps) {
               className="rounded-full w-10 h-10 bg-white/90 dark:bg-zinc-800/90 backdrop-blur-md shadow-lg border border-zinc-200/60 dark:border-zinc-700/60"
               title="返回列表"
             >
-               <ArrowLeft className="h-5 w-5 text-zinc-600 dark:text-zinc-300" />
+              <ArrowLeft className="h-5 w-5 text-zinc-600 dark:text-zinc-300" />
             </Button>
           </Link>
 
           <Link href="/" onClick={() => setIsOpen(false)}>
-             <Button
+            <Button
               variant="secondary"
               size="icon"
               className="rounded-full w-10 h-10 bg-white/90 dark:bg-zinc-800/90 backdrop-blur-md shadow-lg border border-zinc-200/60 dark:border-zinc-700/60"
               title="回到首页"
             >
-               <Home className="h-5 w-5 text-zinc-600 dark:text-zinc-300" />
+              <Home className="h-5 w-5 text-zinc-600 dark:text-zinc-300" />
             </Button>
           </Link>
         </div>

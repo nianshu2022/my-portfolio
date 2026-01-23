@@ -8,8 +8,8 @@ export default function BusuanziCounter() {
   useEffect(() => {
     // Check if script is already loaded
     if (document.getElementById('busuanzi_script')) {
-        setLoading(false);
-        return;
+      const handle = requestAnimationFrame(() => setLoading(false));
+      return () => cancelAnimationFrame(handle);
     }
 
     const script = document.createElement('script');
@@ -17,17 +17,15 @@ export default function BusuanziCounter() {
     // 使用HTTPS协议，防止中间人攻击
     script.src = 'https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js';
     script.async = true;
-    // 添加integrity属性用于子资源完整性检查（如果第三方支持）
-    script.crossOrigin = 'anonymous';
-    
+
     script.onload = () => {
-        setLoading(false);
+      setLoading(false);
     };
 
     document.body.appendChild(script);
 
     return () => {
-        // Optional: Cleanup if needed, but usually we want the script to persist
+      // Optional: Cleanup if needed, but usually we want the script to persist
     };
   }, []);
 
@@ -40,10 +38,10 @@ export default function BusuanziCounter() {
 
   return (
     <span className="flex items-center gap-1" id="busuanzi_container_page_pv" style={{ display: 'inline-flex' }}>
-       <span id="busuanzi_value_page_pv" className="font-mono min-w-[1ch] text-center">
-         {loading ? '...' : ''}
-       </span>
-       <span>次阅读</span>
+      <span id="busuanzi_value_page_pv" className="font-mono min-w-[1ch] text-center">
+        {loading ? '...' : ''}
+      </span>
+      <span>次阅读</span>
     </span>
   );
 }
