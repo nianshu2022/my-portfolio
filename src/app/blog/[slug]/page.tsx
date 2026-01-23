@@ -181,6 +181,7 @@ export default async function PostPage(props: { params: Promise<{ slug: string }
                                     components={{
                                         img: (props) => {
                                             const src = props.src as string || '';
+                                            let imageSrc = src;
 
                                             // 验证图片URL安全性
                                             try {
@@ -231,11 +232,22 @@ export default async function PostPage(props: { params: Promise<{ slug: string }
                                                 if (shadow === 'true' || shadow === '1') {
                                                     style.filter = 'drop-shadow(0 4px 12px rgba(0, 0, 0, 0.1))';
                                                 }
+
+                                                // Image Proxy Logic (wsrv.nl)
+                                                // Only proxy http/https URLs, ignore data: and relative URLs
+                                                if (url.protocol === 'http:' || url.protocol === 'https:') {
+                                                    // Avoid double proxying
+                                                    if (!url.hostname.includes('wsrv.nl')) {
+                                                        const originalSrc = src;
+                                                        // We pass the original source to wsrv.nl
+                                                        imageSrc = `https://wsrv.nl/?url=${encodeURIComponent(originalSrc)}&w=1200&q=85&output=webp`;
+                                                    }
+                                                }
                                             } catch {
                                                 // Ignore URL parsing errors
                                             }
 
-                                            return <img {...props} alt={props.alt || ''} style={style} className={className} referrerPolicy="no-referrer" />;
+                                            return <img {...props} src={imageSrc} alt={props.alt || ''} style={style} className={className} referrerPolicy="no-referrer" loading="lazy" />;
                                         },
                                         table: (props) => (
                                             <div className="overflow-x-auto my-8 custom-scrollbar rounded-xl border border-zinc-200 dark:border-zinc-800 shadow-sm">

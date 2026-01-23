@@ -138,6 +138,7 @@ export default async function EssayPage(props: { params: Promise<{ slug: string 
                             components={{
                                 img: (props) => {
                                     const src = props.src as string || '';
+                                    let imageSrc = src;
 
                                     // 验证图片URL安全性
                                     try {
@@ -185,9 +186,17 @@ export default async function EssayPage(props: { params: Promise<{ slug: string 
                                         if (shadow === 'true' || shadow === '1') {
                                             style.filter = 'drop-shadow(0 4px 12px rgba(0, 0, 0, 0.1))';
                                         }
+
+                                        // Image Proxy Logic (wsrv.nl)
+                                        if (url.protocol === 'http:' || url.protocol === 'https:') {
+                                            if (!url.hostname.includes('wsrv.nl')) {
+                                                const originalSrc = src;
+                                                imageSrc = `https://wsrv.nl/?url=${encodeURIComponent(originalSrc)}&w=1200&q=85&output=webp`;
+                                            }
+                                        }
                                     } catch { }
 
-                                    return <img {...props} alt={props.alt || ''} style={style} className={className} referrerPolicy="no-referrer" />;
+                                    return <img {...props} src={imageSrc} alt={props.alt || ''} style={style} className={className} referrerPolicy="no-referrer" loading="lazy" />;
                                 },
                                 table: (props) => (
                                     <div className="overflow-x-auto my-8 custom-scrollbar rounded-xl border border-zinc-200 dark:border-zinc-800 shadow-sm">
