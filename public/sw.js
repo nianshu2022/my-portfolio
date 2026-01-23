@@ -1,5 +1,5 @@
 // 使用版本号管理缓存，部署时可手动或自动修改此值
-const CACHE_VERSION = 'v2';
+const CACHE_VERSION = 'v3';
 const CACHE_NAME = `nianshu-blog-${CACHE_VERSION}`;
 
 self.addEventListener('install', (event) => {
@@ -27,10 +27,39 @@ self.addEventListener('fetch', (event) => {
     const url = new URL(event.request.url);
     if (url.protocol !== 'http:' && url.protocol !== 'https:') return;
 
+    // 静态资源缓存策略：CacheFirst (优先读取缓存，不更新)
+    // 适用于：图片、Next.js 静态资源、字体等带指纹或不常变的文件
+    const isStaticAsset =
+        url.pathname.startsWith('/img/') ||
+        url.pathname.startsWith('/_next/static/') ||
+        url.pathname.match(/\.(png|jpg|jpeg|gif|svg|ico|css|js|woff2?)$/);
+
+    if (isStaticAsset) {
+        event.respondWith(
+            caches.open(CACHE_NAME).then((cache) => {
+                return cache.match(event.request).then((cachedResponse) => {
+                    if (cachedResponse) {
+                        return cachedResponse;
+                    }
+                    return fetch(event.request).then((networkResponse) => {
+                        if (networkResponse.ok) {
+                            cache.put(event.request, networkResponse.clone());
+                        }
+                        return networkResponse;
+                    });
+                });
+            })
+        );
+        return;
+    }
+
+    // 其他资源（HTML、Data）：StaleWhileRevalidate (优先显示缓存，后台更新)
+    // 确保用户看到内容，同时获取最新版
     event.respondWith(
         caches.match(event.request).then((cachedResponse) => {
             const fetchPromise = fetch(event.request)
                 .then((networkResponse) => {
+                    // 处理 404
                     if (networkResponse.status === 404) {
                         if (cachedResponse) {
                             caches.open(CACHE_NAME).then(cache => cache.delete(event.request));
@@ -51,9 +80,9 @@ self.addEventListener('fetch', (event) => {
                     return cachedResponse || new Response('Error', { status: 503 });
                 });
 
-            // 如果有缓存，立即返回缓存并在后台更新
+            // 如果有缓存，立即返回缓存
             if (cachedResponse) {
-                // Background update
+                // Background update for next visit
                 if (event.waitUntil) {
                     event.waitUntil(fetchPromise);
                 }

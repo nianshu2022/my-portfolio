@@ -6,8 +6,10 @@ import { Button } from "@/components/ui/button";
 
 export default function ScrollToTop() {
   const [isVisible, setIsVisible] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     const toggleVisibility = () => {
       if (window.scrollY > 300) {
         setIsVisible(true);
@@ -30,11 +32,12 @@ export default function ScrollToTop() {
     });
   };
 
+  if (!mounted) return null;
+
   return (
-    <div 
-      className={`fixed bottom-8 right-8 xl:right-[calc(50%-42rem)] z-50 print:hidden transition-all duration-500 transform ${
-        isVisible ? "translate-y-0 opacity-100" : "translate-y-16 opacity-0 pointer-events-none"
-      }`}
+    <div
+      className={`fixed bottom-8 right-8 xl:right-[calc(50%-42rem)] z-50 print:hidden transition-all duration-500 transform ${isVisible ? "translate-y-0 opacity-100" : "translate-y-16 opacity-0 pointer-events-none"
+        }`}
     >
       <Button
         onClick={scrollToTop}
