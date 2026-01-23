@@ -30,9 +30,8 @@ self.addEventListener('fetch', (event) => {
     event.respondWith(
         caches.match(event.request).then((cachedResponse) => {
             const fetchPromise = fetch(event.request).then((networkResponse) => {
-                // 如果后端返回 404，说明文件可能已经因为版本更新而变更了路径（Hash 变了）
+                // 如果后端返回 404，说明文件可能已经因为版本更新而变更了路径
                 if (networkResponse.status === 404) {
-                    // 如果缓存中有这个“已不存在”的文件，立即清理它
                     if (cachedResponse) {
                         caches.open(CACHE_NAME).then(cache => cache.delete(event.request));
                     }
@@ -47,13 +46,22 @@ self.addEventListener('fetch', (event) => {
                     });
                 }
                 return networkResponse;
-            }).catch(() => {
-                // 网络彻底断开时回退到缓存
-                return cachedResponse;
+            }).catch((error) => {
+                console.error('Fetch failed in SW:', error);
+
+                // 重点修复：如果 fetch 失败且没有缓存，必须返回一个 Response 对象，而不是让 Promise Reject
+                if (cachedResponse) {
+                    return cachedResponse;
+                }
+
+                // 返回一个自定义的错误响应，避免 SW 崩溃引发后续 React 错误
+                return new Response('Network or Security Error', {
+                    status: 408,
+                    statusText: 'Network Timeout or Security Block'
+                });
             });
 
-            // SWR 策略：优先返回缓存，后台异步同步最新资源
-            // 但如果缓存已知会导致 404 (JS chunk)，这里可以根据后缀做特殊处理，但目前通用 SWR 已能缓解大部分问题
+            // SWR 策略
             return cachedResponse || fetchPromise;
         })
     );
