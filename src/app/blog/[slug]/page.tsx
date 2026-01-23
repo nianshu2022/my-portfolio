@@ -13,6 +13,7 @@ import TableOfContents from "@/components/TableOfContents";
 import FloatingNav from "@/components/FloatingNav";
 import Comments from "@/components/Comments";
 import DonateButton from "@/components/DonateButton";
+import CodeBlock from "@/components/ui/CodeBlock";
 import RelatedPosts from "@/components/RelatedPosts";
 import PostNavigation from "@/components/PostNavigation";
 import rehypeSanitize, { defaultSchema } from 'rehype-sanitize';
@@ -265,7 +266,8 @@ export default async function PostPage(props: { params: Promise<{ slug: string }
                                         ),
                                         td: (props) => (
                                             <td {...props} className="px-4 py-3 text-sm text-zinc-600 dark:text-zinc-300 border-b border-zinc-100 dark:border-zinc-800/50" />
-                                        )
+                                        ),
+                                        pre: (props) => <CodeBlock {...props} />
                                     }}
                                 >
                                     {post.content}
