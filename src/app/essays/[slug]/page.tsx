@@ -9,7 +9,6 @@ import BusuanziCounter from "@/components/Busuanzi";
 import ReadingProgress from "@/components/ReadingProgress";
 import SidebarAward from "@/components/SidebarAward";
 import FloatingNav from "@/components/FloatingNav";
-import Comments from "@/components/Comments";
 import DonateButton from "@/components/DonateButton";
 import CodeBlock from "@/components/ui/CodeBlock";
 import rehypeSanitize, { defaultSchema } from 'rehype-sanitize';
@@ -254,9 +253,6 @@ export default async function EssayPage(props: { params: Promise<{ slug: string 
 
                         <div className="text-center text-sm text-zinc-400 font-serif italic">
                             <p>—— 完 ——</p>
-                        </div>
-                        <div className="mt-8">
-                            <Comments />
                         </div>
                     </div>
                 </article>

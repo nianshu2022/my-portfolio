@@ -11,7 +11,6 @@ import ReadingProgress from "@/components/ReadingProgress";
 import SidebarAward from "@/components/SidebarAward";
 import TableOfContents from "@/components/TableOfContents";
 import FloatingNav from "@/components/FloatingNav";
-import Comments from "@/components/Comments";
 import DonateButton from "@/components/DonateButton";
 import CodeBlock from "@/components/ui/CodeBlock";
 import RelatedPosts from "@/components/RelatedPosts";
@@ -299,9 +298,6 @@ export default async function PostPage(props: { params: Promise<{ slug: string }
                             <PostNavigation prev={prev} next={next} />
 
                             <RelatedPosts posts={relatedPosts} />
-
-                            {/* Comments Section */}
-                            <Comments />
                         </div>
                     </article>
                 </div>
