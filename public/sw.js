@@ -31,16 +31,25 @@ self.addEventListener('fetch', (event) => {
 
                 // Clone the response to cache it
                 const responseToCache = response.clone();
+                const url = new URL(event.request.url);
 
-                caches.open(CACHE_NAME).then((cache) => {
-                    cache.put(event.request, responseToCache);
-                });
+                // Only cache http/https resources to avoid NetworkError
+                if (url.protocol === 'http:' || url.protocol === 'https:') {
+                    caches.open(CACHE_NAME).then((cache) => {
+                        cache.put(event.request, responseToCache);
+                    });
+                }
 
                 return response;
             })
             .catch(() => {
                 // If fetch fails (offline), try to get from cache
-                return caches.match(event.request);
+                return caches.match(event.request).then((cachedResponse) => {
+                    return cachedResponse || new Response('Network error occurred', {
+                        status: 408,
+                        statusText: 'Network Timeout'
+                    });
+                });
             })
     );
 });

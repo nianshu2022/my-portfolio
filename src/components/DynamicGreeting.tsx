@@ -4,8 +4,10 @@ import { useEffect, useState } from "react";
 
 export default function DynamicGreeting() {
     const [greeting, setGreeting] = useState("你好");
+    const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
+        setMounted(true);
         const updateGreeting = () => {
             const now = new Date();
             const hour = now.getHours();
@@ -28,6 +30,8 @@ export default function DynamicGreeting() {
         const interval = setInterval(updateGreeting, 60000);
         return () => clearInterval(interval);
     }, []);
+
+    if (!mounted) return <span className="opacity-0">你好</span>;
 
     return <span>{greeting}</span>;
 }

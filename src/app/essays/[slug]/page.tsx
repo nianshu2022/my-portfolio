@@ -188,11 +188,13 @@ export default async function EssayPage(props: { params: Promise<{ slug: string 
                                         }
 
                                         // Image Proxy Logic (wsrv.nl)
-                                        if (url.protocol === 'http:' || url.protocol === 'https:') {
-                                            if (!url.hostname.includes('wsrv.nl')) {
-                                                const originalSrc = src;
-                                                imageSrc = `https://wsrv.nl/?url=${encodeURIComponent(originalSrc)}&w=1200&q=85&output=webp`;
-                                            }
+                                        if (src.startsWith('http')) {
+                                            try {
+                                                const imageUrl = new URL(src);
+                                                if (!imageUrl.hostname.includes('wsrv.nl')) {
+                                                    imageSrc = `https://wsrv.nl/?url=${encodeURIComponent(src)}&w=1200&q=85&output=webp`;
+                                                }
+                                            } catch { }
                                         }
                                     } catch { }
 

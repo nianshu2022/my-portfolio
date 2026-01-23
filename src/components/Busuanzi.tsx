@@ -22,6 +22,11 @@ export default function BusuanziCounter() {
       setLoading(false);
     };
 
+    script.onerror = () => {
+      setLoading(false);
+      console.warn('Busuanzi script failed to load');
+    };
+
     document.body.appendChild(script);
 
     return () => {

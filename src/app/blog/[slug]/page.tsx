@@ -234,13 +234,16 @@ export default async function PostPage(props: { params: Promise<{ slug: string }
                                                 }
 
                                                 // Image Proxy Logic (wsrv.nl)
-                                                // Only proxy http/https URLs, ignore data: and relative URLs
-                                                if (url.protocol === 'http:' || url.protocol === 'https:') {
-                                                    // Avoid double proxying
-                                                    if (!url.hostname.includes('wsrv.nl')) {
-                                                        const originalSrc = src;
-                                                        // We pass the original source to wsrv.nl
-                                                        imageSrc = `https://wsrv.nl/?url=${encodeURIComponent(originalSrc)}&w=1200&q=85&output=webp`;
+                                                // Only proxy absolute external http/https URLs
+                                                if (src.startsWith('http')) {
+                                                    try {
+                                                        const imageUrl = new URL(src);
+                                                        // Avoid double proxying
+                                                        if (!imageUrl.hostname.includes('wsrv.nl')) {
+                                                            imageSrc = `https://wsrv.nl/?url=${encodeURIComponent(src)}&w=1200&q=85&output=webp`;
+                                                        }
+                                                    } catch {
+                                                        // Fallback for invalid URLs
                                                     }
                                                 }
                                             } catch {
