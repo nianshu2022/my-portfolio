@@ -6,4 +6,4 @@
   X-XSS-Protection: 1; mode=block
   Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
   Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com https://pagead2.googlesyndication.com https://busuanzi.ibruce.info; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: https://wsrv.nl; font-src 'self'; connect-src 'self' https://cloudlfareinsights.com https://wsrv.nl https://*.wsrv.nl; frame-src 'self' https://giscus.app; object-src 'none'; base-uri 'self'; form-action 'self'
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com https://pagead2.googlesyndication.com https://busuanzi.ibruce.info; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: https://wsrv.nl; font-src 'self'; connect-src 'self' https://cloudlfareinsights.com https://wsrv.nl https://*.wsrv.nl https://busuanzi.ibruce.info; frame-src 'self' https://giscus.app; object-src 'none'; base-uri 'self'; form-action 'self'

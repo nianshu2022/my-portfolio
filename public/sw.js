@@ -1,5 +1,5 @@
 // 使用版本号管理缓存，部署时可手动或自动修改此值
-const CACHE_VERSION = 'v3';
+const CACHE_VERSION = 'v4';
 const CACHE_NAME = `nianshu-blog-${CACHE_VERSION}`;
 
 self.addEventListener('install', (event) => {
@@ -32,7 +32,7 @@ self.addEventListener('fetch', (event) => {
     const isStaticAsset =
         url.pathname.startsWith('/img/') ||
         url.pathname.startsWith('/_next/static/') ||
-        url.pathname.match(/\.(png|jpg|jpeg|gif|svg|ico|css|js|woff2?)$/);
+        url.pathname.match(/\.(png|jpg|jpeg|gif|svg|ico|css|js|woff2?)(\?.*)?$/i);
 
     if (isStaticAsset) {
         event.respondWith(
