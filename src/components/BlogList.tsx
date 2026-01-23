@@ -68,7 +68,7 @@ export default function BlogList({ posts }: BlogListProps) {
           )}
 
           {filteredPosts.map((post) => (
-            <Link key={post.slug} href={`/blog/${post.slug}`}>
+            <Link key={post.slug} href={`/blog/${post.slug}`} prefetch={true}>
               <div className="p-6 bg-white/60 dark:bg-zinc-800/40 rounded-2xl border border-zinc-200/50 dark:border-zinc-700/50 shadow-sm hover:shadow-lg transition-all cursor-pointer group hover:-translate-x-1">
                 <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 mb-2">
                   <h2 className="text-xl font-semibold text-zinc-800 dark:text-zinc-100 group-hover:text-blue-600 transition-colors font-serif">
@@ -132,11 +132,10 @@ export default function BlogList({ posts }: BlogListProps) {
                   key={tag}
                   type="button"
                   onClick={() => setActiveTag(tag)}
-                  className={`flex items-center gap-2 px-3 py-1.5 rounded-full border text-sm transition-all ${
-                    isActive
+                  className={`flex items-center gap-2 px-3 py-1.5 rounded-full border text-sm transition-all ${isActive
                       ? "bg-blue-600 text-white border-blue-600 shadow-md"
                       : "bg-white/70 dark:bg-zinc-900/40 text-zinc-700 dark:text-zinc-200 border-zinc-100/60 dark:border-zinc-800/60"
-                  }`}
+                    }`}
                 >
                   <span className="inline-block w-1.5 h-1.5 rounded-full bg-gradient-to-r from-blue-500 to-violet-500"></span>
                   <span className="font-medium">{tag}</span>

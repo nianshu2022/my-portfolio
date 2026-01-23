@@ -112,7 +112,7 @@ export default function RootLayout({
         {/* Cloudflare Web Analytics */}
         {process.env.NEXT_PUBLIC_CLOUDFLARE_TOKEN && (
           <Script
-            defer
+            strategy="afterInteractive"
             src='https://static.cloudflareinsights.com/beacon.min.js'
             data-cf-beacon={`{"token": "${process.env.NEXT_PUBLIC_CLOUDFLARE_TOKEN}"}`}
           />
@@ -121,6 +121,7 @@ export default function RootLayout({
         {/* Google AdSense */}
         {process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_ID && (
           <Script
+            strategy="lazyOnload"
             src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_ID}`}
             crossOrigin="anonymous"
           />

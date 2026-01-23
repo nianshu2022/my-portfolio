@@ -34,7 +34,7 @@ export default function FloatingNav({ backUrl = "/blog" }: FloatingNavProps) {
       {/* ================= PC 端 (xl 以上) ================= */}
       {/* 保持原有的设计：垂直悬浮在内容卡片左侧 */}
       <div className="hidden xl:flex fixed top-1/2 -translate-y-1/2 left-[calc(50%-44rem)] 2xl:left-[calc(50%-46rem)] z-50 flex-col gap-4 transition-all duration-300">
-        <Link href={backUrl}>
+        <Link href={backUrl} prefetch={true}>
           <Button
             variant="secondary"
             size="icon"
@@ -44,7 +44,7 @@ export default function FloatingNav({ backUrl = "/blog" }: FloatingNavProps) {
             <ArrowLeft className="h-8 w-8 group-hover:-translate-x-1 transition-transform duration-300" />
           </Button>
         </Link>
-        <Link href="/">
+        <Link href="/" prefetch={true}>
           <Button
             variant="secondary"
             size="icon"
