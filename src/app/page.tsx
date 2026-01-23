@@ -1,7 +1,8 @@
 import { Button } from "@/components/ui/button";
-import { BookOpen, Feather, Server, User } from "lucide-react";
+import { BookOpen, Feather, Server, User, Rss } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import DynamicGreeting from "@/components/DynamicGreeting";
 
 export default function Home() {
   return (
@@ -28,7 +29,7 @@ export default function Home() {
 
             <div className="space-y-4">
               <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight lg:text-6xl text-zinc-800 dark:text-zinc-100 drop-shadow-sm px-2 font-serif">
-                你好，我是 <span className="bg-gradient-to-r from-blue-600 to-violet-600 bg-clip-text text-transparent whitespace-nowrap">念舒</span>
+                <DynamicGreeting />，我是 <span className="bg-gradient-to-r from-blue-600 to-violet-600 bg-clip-text text-transparent whitespace-nowrap">念舒</span>
               </h1>
 
               <p className="mx-auto max-w-xl text-base sm:text-lg text-zinc-600 dark:text-zinc-300 leading-relaxed font-medium px-4 font-serif">
@@ -83,6 +84,11 @@ export default function Home() {
           <a href="https://nextjs.org" target="_blank" rel="noreferrer" className="hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors">Next.js</a>
           <span>&</span>
           <a href="https://pages.cloudflare.com" target="_blank" rel="noreferrer" className="hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors">Cloudflare</a>
+          <span className="mx-1">•</span>
+          <a href="/feed.xml" target="_blank" rel="noreferrer" className="hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors flex items-center gap-1" title="RSS 订阅">
+            <Rss className="w-3 h-3" />
+            <span>RSS</span>
+          </a>
         </div>
       </footer>
     </main>

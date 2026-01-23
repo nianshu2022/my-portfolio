@@ -1,0 +1,20 @@
+{
+    "name": "念舒的数字花园",
+    "short_name": "念舒 Blog",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#ffffff",
+    "icons": [
+        {
+            "src": "/img/avatar.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/img/avatar.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}

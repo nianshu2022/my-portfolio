@@ -1,8 +1,11 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono } from "next/font/google"; // Restoring fonts
 import Script from "next/script";
 import "./globals.css";
 import ScrollToTop from "@/components/ScrollToTop";
+import ServiceWorkerRegister from "@/components/ServiceWorkerRegister";
+import ThemeToggle from "@/components/ThemeToggle";
+import Image from "next/image";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -22,6 +25,9 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
 };
+
+import CommandMenu from "@/components/CommandMenu";
+import { getAllPostSummaries } from "@/lib/posts";
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://blog.nianshu2022.cn'),
@@ -60,6 +66,7 @@ export const metadata: Metadata = {
     description: "00后产品运营的个人网站，分享运营心得与技术折腾笔记。",
     images: ["/img/avatar.png"],
   },
+  manifest: "/manifest.json",
 };
 
 export default function RootLayout({
@@ -67,6 +74,8 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const posts = getAllPostSummaries();
+
   return (
     <html lang="zh-CN" suppressHydrationWarning className="scroll-smooth">
       <head>
@@ -77,7 +86,12 @@ export default function RootLayout({
       >
         {/* Hidden image for WeChat sharing hack */}
         <div style={{ display: 'none', position: 'absolute', top: 0, left: 0, width: 0, height: 0, overflow: 'hidden' }}>
-          <img src="https://blog.nianshu2022.cn/img/avatar.png" alt="念舒头像" width="300" height="300" />
+          <Image src="https://blog.nianshu2022.cn/img/avatar.png" alt="念舒头像" width={300} height={300} unoptimized />
+        </div>
+
+        {/* Theme Toggle Button - Fixed Position */}
+        <div className="fixed top-4 right-4 z-50">
+          <ThemeToggle />
         </div>
 
         {/* Global Background Decoration */}
@@ -109,10 +123,12 @@ export default function RootLayout({
           <Script
             src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_ID}`}
             crossOrigin="anonymous"
-            strategy="afterInteractive"
           />
         )}
+        <CommandMenu posts={posts} />
+        <ServiceWorkerRegister />
       </body>
     </html>
   );
 }
+

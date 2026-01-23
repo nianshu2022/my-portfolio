@@ -4,6 +4,7 @@ import Markdown from "react-markdown";
 import { BookOpen, Clock, Eye, Shield } from "lucide-react";
 import { notFound } from "next/navigation";
 import remarkGfm from 'remark-gfm';
+import rehypeSlug from 'rehype-slug';
 import BusuanziCounter from "@/components/Busuanzi";
 import ReadingProgress from "@/components/ReadingProgress";
 import SidebarAward from "@/components/SidebarAward";
@@ -130,7 +131,10 @@ export default async function EssayPage(props: { params: Promise<{ slug: string 
                     <div className="essay-content prose prose-lg prose-zinc dark:prose-invert max-w-none prose-p:indent-8 prose-p:text-justify prose-headings:font-serif prose-headings:text-center prose-img:rounded-xl prose-img:shadow-lg prose-a:break-all prose-img:mx-auto">
                         <Markdown
                             remarkPlugins={[remarkGfm]}
-                            rehypePlugins={[[rehypeSanitize, sanitizeSchema]]}
+                            rehypePlugins={[
+                                [rehypeSanitize, sanitizeSchema],
+                                rehypeSlug
+                            ]}
                             components={{
                                 img: (props) => {
                                     const src = props.src as string || '';
@@ -186,9 +190,18 @@ export default async function EssayPage(props: { params: Promise<{ slug: string 
                                     return <img {...props} alt={props.alt || ''} style={style} className={className} referrerPolicy="no-referrer" />;
                                 },
                                 table: (props) => (
-                                    <div className="overflow-x-auto my-8 custom-scrollbar rounded-lg border border-zinc-200 dark:border-zinc-700">
-                                        <table {...props} className="min-w-full divide-y divide-zinc-200 dark:divide-zinc-700" />
+                                    <div className="overflow-x-auto my-8 custom-scrollbar rounded-xl border border-zinc-200 dark:border-zinc-800 shadow-sm">
+                                        <table {...props} className="min-w-full divide-y divide-zinc-200 dark:divide-zinc-800 border-collapse" />
                                     </div>
+                                ),
+                                thead: (props) => (
+                                    <thead {...props} className="bg-zinc-50/50 dark:bg-zinc-800/50" />
+                                ),
+                                th: (props) => (
+                                    <th {...props} className="px-4 py-3 text-left text-xs font-bold text-zinc-600 dark:text-zinc-400 uppercase tracking-wider border-b border-zinc-200 dark:border-zinc-800" />
+                                ),
+                                td: (props) => (
+                                    <td {...props} className="px-4 py-3 text-sm text-zinc-600 dark:text-zinc-300 border-b border-zinc-100 dark:border-zinc-800/50" />
                                 )
                             }}
                         >

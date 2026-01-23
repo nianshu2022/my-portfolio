@@ -1,10 +1,10 @@
-import { getPostBySlug, getAllPosts } from "@/lib/posts";
+import { getPostBySlug, getAllPosts, getRelatedPosts, getAdjacentPosts } from "@/lib/posts";
 import { Metadata } from "next";
 import Markdown from "react-markdown";
 import { Clock, BookOpen, Shield, Eye } from "lucide-react";
 import rehypeSlug from 'rehype-slug';
 import remarkGfm from 'remark-gfm';
-import GithubSlugger from 'github-slugger';
+// import GithubSlugger from 'github-slugger'; // Removed unused import
 import { notFound } from "next/navigation";
 import BusuanziCounter from "@/components/Busuanzi";
 import ReadingProgress from "@/components/ReadingProgress";
@@ -13,7 +13,10 @@ import TableOfContents from "@/components/TableOfContents";
 import FloatingNav from "@/components/FloatingNav";
 import Comments from "@/components/Comments";
 import DonateButton from "@/components/DonateButton";
+import RelatedPosts from "@/components/RelatedPosts";
+import PostNavigation from "@/components/PostNavigation";
 import rehypeSanitize, { defaultSchema } from 'rehype-sanitize';
+
 export async function generateStaticParams() {
     const posts = getAllPosts();
     return posts.map((post) => ({
@@ -56,41 +59,66 @@ export async function generateMetadata(
 export default async function PostPage(props: { params: Promise<{ slug: string }> }) {
     const { slug } = await props.params;
     const post = getPostBySlug(slug);
+    const relatedPosts = getRelatedPosts(slug);
+    const { prev, next } = getAdjacentPosts(slug);
 
     if (!post) {
         notFound();
     }
 
-    const slugger = new GithubSlugger();
-    const regX = /^(#{2,3})\s+(.+)$/gm;
-    const headings = [];
-    let match;
+    // JSON-LD structured data for SEO
+    const jsonLd = {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": post.title,
+        "description": post.description,
+        "datePublished": post.date,
+        "author": {
+            "@type": "Person",
+            "name": "念舒",
+            "url": "https://blog.nianshu2022.cn/about"
+        },
+        "publisher": {
+            "@type": "Person",
+            "name": "念舒"
+        },
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": `https://blog.nianshu2022.cn/blog/${slug}`
+        }
+    };
 
-    // Use raw content for TOC generation, as it is consistent with the rendered output
-    while ((match = regX.exec(post.content)) !== null) {
-        headings.push({
-            level: match[1].length,
-            text: match[2],
-            slug: slugger.slug(match[2])
-        });
-    }
+    // TOC is now handled in posts.ts
 
     // Custom schema for rehype-sanitize to match previous DOMPurify configuration
     const sanitizeSchema = {
         ...defaultSchema,
         tagNames: [
             ...(defaultSchema.tagNames || []),
-            'img', 'table', 'thead', 'tbody', 'tr', 'th', 'td', 'br', 'hr', 'span', 'div'
+            'img', 'table', 'thead', 'tbody', 'tr', 'th', 'td', 'br', 'hr', 'span', 'div',
+            'h1', 'h2', 'h3', 'h4', 'h5', 'h6'
         ],
         attributes: {
             ...defaultSchema.attributes,
             'img': ['src', 'alt', 'title', 'width', 'height', 'style', 'className'],
-            '*': ['className', 'id', 'style']
+            '*': ['className', 'id', 'style'],
+            'h1': ['id', 'className', 'style'],
+            'h2': ['id', 'className', 'style'],
+            'h3': ['id', 'className', 'style'],
+            'h4': ['id', 'className', 'style'],
+            'h5': ['id', 'className', 'style'],
+            'h6': ['id', 'className', 'style']
         }
     };
 
     return (
         <main className="flex min-h-screen flex-col items-center p-4 sm:p-24 relative">
+            {/* JSON-LD Structured Data */}
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+            />
+
             <ReadingProgress />
 
             <FloatingNav backUrl="/blog" />
@@ -147,8 +175,8 @@ export default async function PostPage(props: { params: Promise<{ slug: string }
                                 <Markdown
                                     remarkPlugins={[remarkGfm]}
                                     rehypePlugins={[
-                                        rehypeSlug,
-                                        [rehypeSanitize, sanitizeSchema]
+                                        [rehypeSanitize, sanitizeSchema],
+                                        rehypeSlug
                                     ]}
                                     components={{
                                         img: (props) => {
@@ -210,9 +238,18 @@ export default async function PostPage(props: { params: Promise<{ slug: string }
                                             return <img {...props} alt={props.alt || ''} style={style} className={className} referrerPolicy="no-referrer" />;
                                         },
                                         table: (props) => (
-                                            <div className="overflow-x-auto my-8 custom-scrollbar rounded-lg border border-zinc-200 dark:border-zinc-700">
-                                                <table {...props} className="min-w-full divide-y divide-zinc-200 dark:divide-zinc-700" />
+                                            <div className="overflow-x-auto my-8 custom-scrollbar rounded-xl border border-zinc-200 dark:border-zinc-800 shadow-sm">
+                                                <table {...props} className="min-w-full divide-y divide-zinc-200 dark:divide-zinc-800 border-collapse" />
                                             </div>
+                                        ),
+                                        thead: (props) => (
+                                            <thead {...props} className="bg-zinc-50/50 dark:bg-zinc-800/50" />
+                                        ),
+                                        th: (props) => (
+                                            <th {...props} className="px-4 py-3 text-left text-xs font-bold text-zinc-600 dark:text-zinc-400 uppercase tracking-wider border-b border-zinc-200 dark:border-zinc-800" />
+                                        ),
+                                        td: (props) => (
+                                            <td {...props} className="px-4 py-3 text-sm text-zinc-600 dark:text-zinc-300 border-b border-zinc-100 dark:border-zinc-800/50" />
                                         )
                                     }}
                                 >
@@ -242,6 +279,10 @@ export default async function PostPage(props: { params: Promise<{ slug: string }
                                 </div>
                             </div>
 
+                            <PostNavigation prev={prev} next={next} />
+
+                            <RelatedPosts posts={relatedPosts} />
+
                             {/* Comments Section */}
                             <Comments />
                         </div>
@@ -257,7 +298,7 @@ export default async function PostPage(props: { params: Promise<{ slug: string }
                                 <span className="w-1 h-4 bg-blue-500 rounded-full shadow-sm shadow-blue-500/50"></span>
                                 目录
                             </h4>
-                            <TableOfContents headings={headings} />
+                            <TableOfContents toc={post.toc} />
                         </div>
 
                         {/* Award Card */}

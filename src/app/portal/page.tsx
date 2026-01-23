@@ -16,12 +16,6 @@ const myServices = [
     icon: "https://time.nianshu2022.cn/favicon.ico"
   },
   {
-    name: "Uptime",
-    description: "服务在线状态监控",
-    url: "https://uptime.nianshu2022.cn",
-    icon: "https://uptime.nianshu2022.cn/favicon.png"
-  },
-  {
     name: "MoonTV",
     description: "个人影视媒体库",
     url: "https://mv.nianshu2022.cn",

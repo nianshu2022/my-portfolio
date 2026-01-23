@@ -38,10 +38,10 @@ export default function Comments() {
       {process.env.NEXT_PUBLIC_GISCUS_REPO && process.env.NEXT_PUBLIC_GISCUS_REPO_ID && (
         <Giscus
           id="comments"
-          repo={process.env.NEXT_PUBLIC_GISCUS_REPO}
+          repo={process.env.NEXT_PUBLIC_GISCUS_REPO as `${string}/${string}`}
           repoId={process.env.NEXT_PUBLIC_GISCUS_REPO_ID}
           category="Announcements"
-          categoryId={(process.env.NEXT_PUBLIC_GISCUS_CATEGORY_ID as `${string}/${string}`) || ("" as `${string}/${string}`)}
+          categoryId={process.env.NEXT_PUBLIC_GISCUS_CATEGORY_ID}
           mapping="pathname"
           term="Welcome to @giscus/react component!"
           reactionsEnabled="1"

@@ -2,12 +2,23 @@ import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
 import readingTime from 'reading-time';
+import { cache } from 'react';
 
 const postsDirectory = path.join(process.cwd(), 'src/content/posts');
 const essaysDirectory = path.join(process.cwd(), 'src/content/essays');
 
-// Simple cache to avoid redundant file system scans during build
+// Simple cache to avoid redundant file system scans during build (module level cache)
 const filesCache = new Map<string, string[]>();
+
+import GithubSlugger from 'github-slugger';
+
+// ... (imports)
+
+export type TOCItem = {
+  title: string;
+  slug: string;
+  level: number;
+};
 
 export type Post = {
   slug: string;
@@ -20,6 +31,8 @@ export type Post = {
   readingTime: string;
   cover?: string;
   award?: string;
+  draft?: boolean;
+  toc: TOCItem[];
 };
 
 export type PostSummary = Omit<Post, 'content'>;
@@ -60,7 +73,8 @@ function getAllFiles(dirPath: string, arrayOfFiles: string[] = []) {
 }
 
 // Helper function to get all items (posts/essays)
-function getAllItems(baseDirectory: string): Post[] {
+// Wrapped in cache() for Request Memoization in React Server Components
+const getAllItems = cache((baseDirectory: string): Post[] => {
   const allFilePaths = getAllFiles(baseDirectory);
 
   const allItemsData = allFilePaths.map((fullPath) => {
@@ -68,9 +82,23 @@ function getAllItems(baseDirectory: string): Post[] {
     const matterResult = matter(fileContents);
     const stats = readingTime(matterResult.content);
 
-    // Extract slug from filename, ignoring directory structure for the URL
+    // Extract slug from filename
     const fileName = path.basename(fullPath);
     const slug = fileName.replace(/\.md$/, '');
+
+    // Extract TOC
+    const slugger = new GithubSlugger();
+    const toc: TOCItem[] = [];
+    const headings = matterResult.content.match(/^#{2,3}\s+.+$/gm);
+
+    if (headings) {
+      headings.forEach((heading) => {
+        const level = heading.match(/^#+/)?.[0].length || 2;
+        const title = heading.replace(/^#+\s+/, '');
+        const anchor = slugger.slug(title);
+        toc.push({ title, slug: anchor, level });
+      });
+    }
 
     return {
       slug,
@@ -83,142 +111,140 @@ function getAllItems(baseDirectory: string): Post[] {
       description: matterResult.data.description || '',
       tags: matterResult.data.tags || [],
       date: formatDate(matterResult.data.date),
-    };
+      draft: matterResult.data.draft || false,
+      toc,
+    } as Post;
   });
 
-  return allItemsData.sort((a, b) => {
+  // Filter out drafts in production
+  const filteredItems = allItemsData.filter(item => {
+    if (process.env.NODE_ENV === 'production') {
+      return !item.draft;
+    }
+    return true;
+  });
+
+  return filteredItems.sort((a, b) => {
     if (a.date < b.date) {
       return 1;
     } else {
       return -1;
     }
   });
-}
+});
 
-// Helper function to get summaries to reduce bundle size for list pages
-function getAllSummaries(baseDirectory: string): PostSummary[] {
-  const allFilePaths = getAllFiles(baseDirectory);
-
-  const allItemsData = allFilePaths.map((fullPath) => {
-    const fileContents = fs.readFileSync(fullPath, 'utf8');
-    const matterResult = matter(fileContents);
-    const stats = readingTime(matterResult.content);
-
-    const fileName = path.basename(fullPath);
-    const slug = fileName.replace(/\.md$/, '');
-
-    return {
-      slug,
-      wordCount: matterResult.content.length,
-      readingTime: Math.ceil(stats.minutes) + ' 分钟',
-      cover: matterResult.data.cover || null,
-      award: matterResult.data.award || null,
-      title: matterResult.data.title,
-      description: matterResult.data.description || '',
-      tags: matterResult.data.tags || [],
-      date: formatDate(matterResult.data.date),
-    };
+// Helper function to get summaries
+const getAllSummaries = cache((baseDirectory: string): PostSummary[] => {
+  const items = getAllItems(baseDirectory);
+  return items.map(item => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { content, ...summary } = item;
+    return summary;
   });
+});
 
-  return allItemsData.sort((a, b) => (a.date < b.date ? 1 : -1));
-}
-
-// Helper function to validate slug format (prevent path traversal)
+// Helper function to validate slug format
 function isValidSlug(slug: string): boolean {
-  // Only allow alphanumeric, hyphens, underscores, and Chinese characters
-  // This prevents path traversal attacks like ../../etc/passwd
   const slugPattern = /^[a-zA-Z0-9\u4e00-\u9fa5-_]+$/;
   return slugPattern.test(slug);
 }
 
-// Helper function to get a single item by slug (searches recursively)
-function getItemBySlug(baseDirectory: string, slug: string): Post | null {
+// Helper function to get a single item by slug
+// We don't cache this wrapper heavily, but we rely on getAllItems cache.
+// Note: We scan all items to find by proper slug to support recursive directories accurately if needed,
+// OR we can just scan for the file. The original logic scanned recursive files.
+// To keep it consistent with 'draft' filtering, we should probably use getAllItems to find the post.
+// However, reading one file is faster if we know the path. 
+// BUT, to respect 'draft' mode uniformly, let's use getAllItems().find().
+// This might be slightly slower (O(N)) but N is small (<1000) and it ensures drafts are hidden safely.
+const getItemBySlug = cache((baseDirectory: string, slug: string): Post | null => {
+  if (!isValidSlug(slug)) return null;
+
+  // Use getAllItems to ensure drafts are filtered in production
+  const allItems = getAllItems(baseDirectory);
+  const item = allItems.find(p => p.slug === slug);
+
+  if (item) return item;
+
+  // Fallback: decodeURIComponent check
   try {
-    // Validate slug to prevent path traversal
-    if (!isValidSlug(slug)) {
-      console.error(`Invalid slug format: ${slug}`);
-      return null;
+    const decoded = decodeURIComponent(slug);
+    if (decoded !== slug) {
+      return allItems.find(p => p.slug === decoded) || null;
     }
-
-    const allFilePaths = getAllFiles(baseDirectory);
-
-    // Find the file that matches the slug
-    let targetPath = allFilePaths.find(filePath => {
-      const fileName = path.basename(filePath);
-      return fileName.replace(/\.md$/, '') === slug;
-    });
-
-    // If not found, try decoding (though Next.js usually handles this)
-    if (!targetPath) {
-      try {
-        const decoded = decodeURIComponent(slug);
-        if (decoded !== slug) {
-          targetPath = allFilePaths.find(filePath => {
-            const fileName = path.basename(filePath);
-            return fileName.replace(/\.md$/, '') === decoded;
-          });
-        }
-      } catch {
-        // Ignore decoding errors
-      }
-    }
-
-    if (!targetPath) {
-      console.error(`File not found for slug: ${slug} in ${baseDirectory}`);
-      return null;
-    }
-
-    // Additional security: ensure the target path is within the expected directory
-    const relativePath = path.relative(baseDirectory, targetPath);
-    if (relativePath.startsWith('..') || path.isAbsolute(relativePath)) {
-      console.error(`Security violation: attempted access outside directory`);
-      return null;
-    }
-
-    const fileContents = fs.readFileSync(targetPath, 'utf8');
-    const matterResult = matter(fileContents);
-    const stats = readingTime(matterResult.content);
-
-    return {
-      slug: slug,
-      content: matterResult.content,
-      wordCount: matterResult.content.length,
-      readingTime: Math.ceil(stats.minutes) + ' 分钟',
-      cover: matterResult.data.cover || null,
-      award: matterResult.data.award || null,
-      title: matterResult.data.title,
-      description: matterResult.data.description || '',
-      tags: matterResult.data.tags || [],
-      date: formatDate(matterResult.data.date),
-    };
-  } catch (e) {
-    console.error(`Error reading item ${slug} from ${baseDirectory}:`, e);
-    return null;
+  } catch {
+    // ignore
   }
-}
+
+  return null;
+});
+
 
 // Posts API
-export function getAllPosts(): Post[] {
+export const getAllPosts = cache(() => {
   return getAllItems(postsDirectory);
-}
+});
 
-export function getAllPostSummaries(): PostSummary[] {
+export const getAllPostSummaries = cache(() => {
   return getAllSummaries(postsDirectory);
-}
+});
 
-export function getPostBySlug(slug: string): Post | null {
+export const getPostBySlug = cache((slug: string) => {
   return getItemBySlug(postsDirectory, slug);
-}
+});
 
 // Essays API
-export function getAllEssays(): Post[] {
+export const getAllEssays = cache(() => {
   return getAllItems(essaysDirectory);
-}
+});
 
-export function getAllEssaySummaries(): PostSummary[] {
+export const getAllEssaySummaries = cache(() => {
   return getAllSummaries(essaysDirectory);
-}
+});
 
-export function getEssayBySlug(slug: string): Post | null {
+export const getEssayBySlug = cache((slug: string) => {
   return getItemBySlug(essaysDirectory, slug);
-}
+});
+
+// Related Posts Logic
+export const getRelatedPosts = cache((currentSlug: string): PostSummary[] => {
+  const currentPost = getPostBySlug(currentSlug);
+  if (!currentPost) return [];
+
+  const allPosts = getAllPostSummaries();
+
+  const relatedPosts = allPosts
+    .filter(post => post.slug !== currentSlug)
+    .map(post => {
+      let score = 0;
+      // Tag intersection
+      if (currentPost.tags && post.tags) {
+        const intersection = currentPost.tags.filter(tag => post.tags.includes(tag));
+        score += intersection.length;
+      }
+      return { post, score };
+    })
+    .filter(item => item.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 3) // Return top 3
+    .map(item => item.post);
+
+  return relatedPosts;
+});
+
+// Get adjacent posts for prev/next navigation
+export const getAdjacentPosts = cache((currentSlug: string): { prev: PostSummary | null; next: PostSummary | null } => {
+  const allPosts = getAllPostSummaries();
+  const currentIndex = allPosts.findIndex(post => post.slug === currentSlug);
+
+  if (currentIndex === -1) {
+    return { prev: null, next: null };
+  }
+
+  // Note: Posts are sorted by date descending (newest first)
+  // "next" = older post (higher index), "prev" = newer post (lower index)
+  const prev = currentIndex > 0 ? allPosts[currentIndex - 1] : null;
+  const next = currentIndex < allPosts.length - 1 ? allPosts[currentIndex + 1] : null;
+
+  return { prev, next };
+});

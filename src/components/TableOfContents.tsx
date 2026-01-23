@@ -1,18 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
-type Heading = {
-  level: number;
-  text: string;
-  slug: string;
-};
+import { cn } from "@/lib/utils";
+import { TOCItem } from "@/lib/posts";
 
 interface TableOfContentsProps {
-  headings: Heading[];
+  toc: TOCItem[];
 }
 
-export default function TableOfContents({ headings }: TableOfContentsProps) {
+export default function TableOfContents({ toc }: TableOfContentsProps) {
   const [activeId, setActiveId] = useState<string>("");
 
   useEffect(() => {
@@ -24,59 +20,49 @@ export default function TableOfContents({ headings }: TableOfContentsProps) {
           }
         });
       },
-      {
-        rootMargin: "-10% 0px -80% 0px", // 调整触发区域：顶部留10%，底部留80%（让标题滚动到上方时才激活）
-        threshold: 0.1, // 只要出现10%就算进入
-      }
+      { rootMargin: "0% 0% -80% 0%" }
     );
 
-    headings.forEach((heading) => {
-      const element = document.getElementById(heading.slug);
-      if (element) {
-        observer.observe(element);
-      }
+    toc.forEach((item) => {
+      const element = document.getElementById(item.slug);
+      if (element) observer.observe(element);
     });
 
-    return () => {
-      headings.forEach((heading) => {
-        const element = document.getElementById(heading.slug);
-        if (element) {
-          observer.unobserve(element);
-        }
-      });
-    };
-  }, [headings]);
+    return () => observer.disconnect();
+  }, [toc]);
 
-  if (headings.length === 0) {
-    return <p className="text-zinc-400 text-xs pl-2">暂无目录</p>;
-  }
+  if (!toc || toc.length === 0) return null;
+
+  if (!toc || toc.length === 0) return null;
 
   return (
-    <nav className="space-y-0.5 text-sm relative max-h-[60vh] overflow-y-auto custom-scrollbar pr-2">
-      {headings.map((heading, index) => (
-        <a
-          key={index}
-          href={`#${heading.slug}`}
-          onClick={(e) => {
-            e.preventDefault();
-            document.getElementById(heading.slug)?.scrollIntoView({
-              behavior: "smooth",
-            });
-            setActiveId(heading.slug); // 点击时立即高亮
-          }}
-          className={`block py-2 transition-all duration-300 border-l-4 rounded-r-lg my-1
-            ${heading.level === 3 ? "pl-5 text-xs" : "pl-4 text-sm"}
-            ${
-              activeId === heading.slug
-                ? "text-blue-700 dark:text-blue-300 border-blue-600 bg-blue-100 dark:bg-blue-900/40 font-bold shadow-sm"
-                : "text-zinc-500 dark:text-zinc-400 border-transparent hover:text-zinc-900 dark:hover:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-800/50"
-            }
-          `}
+    <ul className="space-y-2 text-sm pl-2">
+      {toc.map((item) => (
+        <li
+          key={item.slug}
+          className={cn(
+            "transition-colors duration-200 border-l-2 pl-3 py-1",
+            activeId === item.slug
+              ? "border-blue-500 text-blue-600 dark:text-blue-400 font-medium bg-blue-50/50 dark:bg-blue-900/10"
+              : "border-transparent text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200 hover:border-zinc-300 dark:hover:border-zinc-700",
+            item.level === 3 && "ml-4"
+          )}
         >
-          <span className="truncate block">{heading.text}</span>
-        </a>
+          <a
+            href={`#${item.slug}`}
+            className="block"
+            onClick={(e) => {
+              e.preventDefault();
+              document.getElementById(item.slug)?.scrollIntoView({
+                behavior: "smooth",
+              });
+              setActiveId(item.slug);
+            }}
+          >
+            {item.title}
+          </a>
+        </li>
       ))}
-    </nav>
+    </ul>
   );
 }
-

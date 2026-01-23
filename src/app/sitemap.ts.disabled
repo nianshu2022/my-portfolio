@@ -7,19 +7,31 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const posts = getAllPosts();
   const essays = getAllEssays();
 
-  const postsUrls = posts.map((post) => ({
-    url: `${BASE_URL}/blog/${post.slug}`,
-    lastModified: new Date(post.date),
-    changeFrequency: 'monthly' as const,
-    priority: 0.7,
-  }));
+  const postsUrls = posts.map((post) => {
+    let date = new Date(post.date);
+    if (isNaN(date.getTime())) {
+      date = new Date();
+    }
+    return {
+      url: `${BASE_URL}/blog/${post.slug}`,
+      lastModified: date,
+      changeFrequency: 'monthly' as const,
+      priority: 0.7,
+    };
+  });
 
-  const essaysUrls = essays.map((essay) => ({
-    url: `${BASE_URL}/essays/${essay.slug}`,
-    lastModified: new Date(essay.date),
-    changeFrequency: 'monthly' as const,
-    priority: 0.6,
-  }));
+  const essaysUrls = essays.map((essay) => {
+    let date = new Date(essay.date);
+    if (isNaN(date.getTime())) {
+      date = new Date();
+    }
+    return {
+      url: `${BASE_URL}/essays/${essay.slug}`,
+      lastModified: date,
+      changeFrequency: 'monthly' as const,
+      priority: 0.6,
+    };
+  });
 
   return [
     {
