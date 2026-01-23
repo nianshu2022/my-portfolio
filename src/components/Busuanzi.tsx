@@ -14,7 +14,18 @@ export default function BusuanziCounter() {
       return () => cancelAnimationFrame(handle);
     }
 
-    // ... rest of logic
+    const script = document.createElement('script');
+    script.id = 'busuanzi_script';
+    script.src = 'https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js';
+    script.async = true;
+
+    script.onload = () => setLoading(false);
+    script.onerror = () => {
+      setLoading(false);
+      console.warn('Busuanzi script failed to load');
+    };
+
+    document.body.appendChild(script);
   }, []);
 
   // SSR 时返回一个占位或空，避免与客户端初始加载冲突

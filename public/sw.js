@@ -29,40 +29,39 @@ self.addEventListener('fetch', (event) => {
 
     event.respondWith(
         caches.match(event.request).then((cachedResponse) => {
-            const fetchPromise = fetch(event.request).then((networkResponse) => {
-                // 如果后端返回 404，说明文件可能已经因为版本更新而变更了路径
-                if (networkResponse.status === 404) {
-                    if (cachedResponse) {
-                        caches.open(CACHE_NAME).then(cache => cache.delete(event.request));
+            const fetchPromise = fetch(event.request)
+                .then((networkResponse) => {
+                    if (networkResponse.status === 404) {
+                        if (cachedResponse) {
+                            caches.open(CACHE_NAME).then(cache => cache.delete(event.request));
+                        }
+                        return networkResponse;
+                    }
+
+                    if (networkResponse.ok && networkResponse.type === 'basic') {
+                        const responseToCache = networkResponse.clone();
+                        caches.open(CACHE_NAME).then((cache) => {
+                            cache.put(event.request, responseToCache);
+                        });
                     }
                     return networkResponse;
-                }
-
-                // 正常响应则存入缓存
-                if (networkResponse.status === 200 && networkResponse.type === 'basic') {
-                    const responseToCache = networkResponse.clone();
-                    caches.open(CACHE_NAME).then((cache) => {
-                        cache.put(event.request, responseToCache);
-                    });
-                }
-                return networkResponse;
-            }).catch((error) => {
-                console.error('Fetch failed in SW:', error);
-
-                // 重点修复：如果 fetch 失败且没有缓存，必须返回一个 Response 对象，而不是让 Promise Reject
-                if (cachedResponse) {
-                    return cachedResponse;
-                }
-
-                // 返回一个自定义的错误响应，避免 SW 崩溃引发后续 React 错误
-                return new Response('Network or Security Error', {
-                    status: 408,
-                    statusText: 'Network Timeout or Security Block'
+                })
+                .catch((err) => {
+                    console.error('[SW] Fetch Error:', err);
+                    return cachedResponse || new Response('Error', { status: 503 });
                 });
-            });
 
-            // SWR 策略
-            return cachedResponse || fetchPromise;
+            // 如果有缓存，立即返回缓存并在后台更新
+            if (cachedResponse) {
+                // Background update
+                if (event.waitUntil) {
+                    event.waitUntil(fetchPromise);
+                }
+                return cachedResponse;
+            }
+
+            // 没缓存则等待网络结果
+            return fetchPromise;
         })
     );
 });
