@@ -31,7 +31,7 @@ export default function DynamicGreeting() {
         return () => clearInterval(interval);
     }, []);
 
-    if (!mounted) return <span className="opacity-0">你好</span>;
+    if (!mounted) return <span className="opacity-0" suppressHydrationWarning>你好</span>;
 
-    return <span>{greeting}</span>;
+    return <span suppressHydrationWarning>{greeting}</span>;
 }
