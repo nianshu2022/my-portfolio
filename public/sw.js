@@ -38,7 +38,7 @@ self.addEventListener('fetch', (event) => {
                         return networkResponse;
                     }
 
-                    if (networkResponse.ok && networkResponse.type === 'basic') {
+                    if (networkResponse.ok && (networkResponse.type === 'basic' || networkResponse.type === 'cors')) {
                         const responseToCache = networkResponse.clone();
                         caches.open(CACHE_NAME).then((cache) => {
                             cache.put(event.request, responseToCache);
