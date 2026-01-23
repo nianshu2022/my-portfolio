@@ -83,6 +83,7 @@ export default function RootLayout({
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen relative overflow-x-hidden bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100`}
+        suppressHydrationWarning
       >
         {/* Hidden image for WeChat sharing hack */}
         <div style={{ display: 'none', position: 'absolute', top: 0, left: 0, width: 0, height: 0, overflow: 'hidden' }}>

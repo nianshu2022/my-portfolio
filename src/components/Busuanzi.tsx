@@ -42,7 +42,7 @@ export default function BusuanziCounter() {
   // Let's just display the span.
 
   return (
-    <span className="flex items-center gap-1" id="busuanzi_container_page_pv" style={{ display: 'inline-flex' }}>
+    <span className="flex items-center gap-1" id="busuanzi_container_page_pv" style={{ display: 'inline-flex' }} suppressHydrationWarning>
       <span id="busuanzi_value_page_pv" className="font-mono min-w-[1ch] text-center">
         {loading ? '...' : ''}
       </span>

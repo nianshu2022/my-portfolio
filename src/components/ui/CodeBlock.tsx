@@ -50,15 +50,9 @@ export default function CodeBlock({ children, className, ...props }: CodeBlockPr
                 </button>
             </div>
 
-            {/* Code Content */}
             <div className="relative overflow-x-auto custom-scrollbar">
-                {/* 
-          这里使用 pre 标签是为了保持 Markdown 渲染的语义，
-          props 传递也是为了兼容 react-markdown 的 expectations 
-        */}
                 <pre
                     ref={textRef}
-                    {...props}
                     className={`!m-0 !p-6 !bg-transparent text-sm font-mono leading-relaxed text-zinc-100 ${className || ''}`}
                     style={{ fontFamily: "'JetBrains Mono', 'Fira Code', Consolas, monospace" }}
                 >
