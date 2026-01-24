@@ -33,11 +33,16 @@ self.addEventListener('fetch', (event) => {
 
     // 识别静态资源缓存策略：CacheFirst
     // 增加对 wsrv.nl (图片代理) 和 _next/image (Next.js 图片优化) 的缓存支持
+    // 注意：_next/static/ 下的 JS/CSS 文件由浏览器原生缓存管理，Service Worker 不再拦截，
+    // 以避免在弱网环境下与浏览器并发下载机制冲突导致加载变慢。
+    if (url.pathname.startsWith('/_next/static/')) {
+        return;
+    }
+
     const isStaticAsset =
         url.hostname === 'wsrv.nl' ||
         url.pathname.startsWith('/_next/image') ||
         url.pathname.startsWith('/img/') ||
-        url.pathname.startsWith('/_next/static/') ||
         url.pathname.match(/\.(png|jpg|jpeg|gif|svg|ico|css|js|woff2?|json|txt|webp)(\?.*)?$/i);
 
     if (isStaticAsset) {
