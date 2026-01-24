@@ -69,6 +69,10 @@ export const metadata: Metadata = {
   manifest: "/manifest.json",
 };
 
+import NextTopLoader from 'nextjs-toploader';
+
+// ... imports
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -85,6 +89,17 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen relative overflow-x-hidden bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100`}
         suppressHydrationWarning
       >
+        <NextTopLoader
+          color="#9333ea"
+          initialPosition={0.08}
+          crawlSpeed={200}
+          height={3}
+          crawl={true}
+          showSpinner={false}
+          easing="ease"
+          speed={200}
+          shadow="0 0 10px #9333ea,0 0 5px #9333ea"
+        />
         <div className="fixed top-4 right-4 z-50">
           <ThemeToggle />
         </div>
