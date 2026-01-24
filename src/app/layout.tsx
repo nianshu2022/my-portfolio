@@ -119,14 +119,7 @@ export default function RootLayout({
 
         <ScrollToTop />
 
-        {/* Cloudflare Web Analytics */}
-        {process.env.NEXT_PUBLIC_CLOUDFLARE_TOKEN && (
-          <Script
-            strategy="afterInteractive"
-            src='https://static.cloudflareinsights.com/beacon.min.js'
-            data-cf-beacon={`{"token": "${process.env.NEXT_PUBLIC_CLOUDFLARE_TOKEN}"}`}
-          />
-        )}
+
 
         {/* Google AdSense */}
         {process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_ID && (

@@ -3,7 +3,7 @@
 > 一个基于 **Next.js 16** 和 **React 19** 构建的现代化个人博客与数字花园。
 > 融合了技术笔记、生活随笔与个人服务导航，致力于提供优雅、快速且极致的阅读体验。
 
-[![部署状态](https://img.shields.io/badge/Deploy-Cloudflare%20Pages-orange?style=flat-square&logo=cloudflare)](https://pages.cloudflare.com/)
+[![部署状态](https://img.shields.io/badge/Deploy-Docker-2496ED?style=flat-square&logo=docker)](https://hub.docker.com/)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](LICENSE)
 
 🌐 **在线访问**: [https://blog.nianshu2022.cn](https://blog.nianshu2022.cn)
@@ -65,7 +65,7 @@
 | **图标** | [Lucide React](https://lucide.dev/) | 现代化图标库 |
 | **评论** | [@giscus/react](https://giscus.app/) | 评论系统 |
 | **工具** | `clsx` + `tailwind-merge` | 样式类名合并 |
-| **部署** | Cloudflare Pages | 全球边缘网络托管 |
+| **部署** | Docker + Nginx | 容器化部署 |
 
 ---
 
@@ -136,20 +136,27 @@ award: ""                        # [可选] 随笔专属：获奖或特殊标注
 
 ---
 
-## 🌐 部署指南 (Cloudflare Pages)
+## 🌐 部署指南 (Docker)
+ 
+推荐使用 Docker 容器化部署，支持所有云厂商服务器。
 
-本项目针对 Cloudflare Pages 进行了优化。
+### 1. 构建 Docker 镜像
+```bash
+docker build -t my-portfolio .
+```
+ 
+### 2. 运行容器
+```bash
+docker run -d -p 80:80 --name my-portfolio my-portfolio
+```
 
-1. **GitHub 连接**: 将代码推送到 GitHub 仓库。
-2. **创建项目**: 在 Cloudflare Dashboard 中选择 "Pages" -> "Connect to Git"。
-3. **构建配置**:
-   - **Framework Preset**: Next.js (Static HTML Export) 或 None
-   - **Build Command**: `npm run build`
-   - **Output Directory**: `.next` (或 `out`，视 `next.config.ts` 配置而定)
-4. **环境变量** (可选):
-   - `NEXT_PUBLIC_GISCUS_REPO`: `your/repo`
-   - `NEXT_PUBLIC_GISCUS_REPO_ID`: `R_kgD...`
-   - `NEXT_PUBLIC_GISCUS_CATEGORY_ID`: `DIC_...`
+### 3. Nginx 配置 (可选)
+如果需要自定义 Nginx 配置，可以挂载配置文件：
+```bash
+docker run -d -p 80:80 \
+  -v $(pwd)/nginx.conf:/etc/nginx/conf.d/default.conf \
+  --name my-portfolio my-portfolio
+```
 
 ---
 
