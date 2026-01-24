@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { ArrowLeft, Home, ChevronRight } from "lucide-react";
 
 interface FloatingNavProps {
@@ -12,6 +13,7 @@ interface FloatingNavProps {
 export default function FloatingNav({ backUrl = "/blog" }: FloatingNavProps) {
   const [isOpen, setIsOpen] = useState(false);
   const navRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
 
   // 点击外部自动关闭
   useEffect(() => {
@@ -93,27 +95,29 @@ export default function FloatingNav({ backUrl = "/blog" }: FloatingNavProps) {
           `}
         >
           <Button
-            asChild
             variant="secondary"
             size="icon"
             className="rounded-full w-10 h-10 bg-white/90 dark:bg-zinc-800/90 backdrop-blur-md shadow-lg border border-zinc-200/60 dark:border-zinc-700/60"
             title="返回列表"
+            onClick={() => {
+              setIsOpen(false);
+              router.push(backUrl);
+            }}
           >
-            <Link href={backUrl} onClick={() => setIsOpen(false)}>
-              <ArrowLeft className="h-5 w-5 text-zinc-600 dark:text-zinc-300" />
-            </Link>
+            <ArrowLeft className="h-5 w-5 text-zinc-600 dark:text-zinc-300" />
           </Button>
 
           <Button
-            asChild
             variant="secondary"
             size="icon"
             className="rounded-full w-10 h-10 bg-white/90 dark:bg-zinc-800/90 backdrop-blur-md shadow-lg border border-zinc-200/60 dark:border-zinc-700/60"
             title="回到首页"
+            onClick={() => {
+              setIsOpen(false);
+              router.push("/");
+            }}
           >
-            <Link href="/" onClick={() => setIsOpen(false)}>
-              <Home className="h-5 w-5 text-zinc-600 dark:text-zinc-300" />
-            </Link>
+            <Home className="h-5 w-5 text-zinc-600 dark:text-zinc-300" />
           </Button>
         </div>
       </div>

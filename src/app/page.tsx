@@ -82,8 +82,6 @@ export default function Home() {
         <div className="text-xs text-zinc-400 dark:text-zinc-600 flex items-center gap-1.5">
           <span>Powered by</span>
           <a href="https://nextjs.org" target="_blank" rel="noreferrer" className="hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors">Next.js</a>
-          <span>&</span>
-          <a href="https://pages.cloudflare.com" target="_blank" rel="noreferrer" className="hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors">Cloudflare</a>
           <span className="mx-1">•</span>
           <a href="/feed.xml" target="_blank" rel="noreferrer" className="hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors flex items-center gap-1" title="RSS 订阅">
             <Rss className="w-3 h-3" />

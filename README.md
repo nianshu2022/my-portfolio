@@ -140,17 +140,24 @@ award: ""                        # [可选] 随笔专属：获奖或特殊标注
  
 推荐使用 Docker 容器化部署，支持所有云厂商服务器。
 
-### 1. 构建 Docker 镜像
+### 1. 本地构建 (必选)
+由于 Dockerfile 采用静态文件复制模式，请先在本地生成构建产物：
+```bash
+npm run build
+```
+*(构建产物将输出至 `out/` 目录)*
+
+### 2. 构建 Docker 镜像
 ```bash
 docker build -t my-portfolio .
 ```
  
-### 2. 运行容器
+### 3. 运行容器
 ```bash
-docker run -d -p 80:80 --name my-portfolio my-portfolio
+docker run -d -p 80:80 --name my-portfolio --restart always my-portfolio
 ```
 
-### 3. Nginx 配置 (可选)
+### 4. 高级配置 (可选)
 如果需要自定义 Nginx 配置，可以挂载配置文件：
 ```bash
 docker run -d -p 80:80 \
