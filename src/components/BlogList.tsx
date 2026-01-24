@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { BookOpen, X } from "lucide-react";
 import type { PostSummary } from "@/lib/posts";
 
@@ -36,6 +36,11 @@ export default function BlogList({ posts }: BlogListProps) {
   }, [tagCounts]);
 
   const [activeTag, setActiveTag] = useState<string>(ALL_TAG);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const filteredPosts = useMemo(() => {
     if (activeTag === ALL_TAG) {
@@ -46,6 +51,14 @@ export default function BlogList({ posts }: BlogListProps) {
     }
     return posts.filter((post) => post.tags?.includes(activeTag));
   }, [activeTag, posts]);
+
+  if (!mounted) {
+    return (
+      <div className="max-w-6xl w-full flex flex-col xl:flex-row gap-6 opacity-0">
+        <div className="flex-1 min-h-[400px]"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-6xl w-full flex flex-col xl:flex-row gap-6">
@@ -133,8 +146,8 @@ export default function BlogList({ posts }: BlogListProps) {
                   type="button"
                   onClick={() => setActiveTag(tag)}
                   className={`flex items-center gap-2 px-3 py-1.5 rounded-full border text-sm transition-all ${isActive
-                      ? "bg-blue-600 text-white border-blue-600 shadow-md"
-                      : "bg-white/70 dark:bg-zinc-900/40 text-zinc-700 dark:text-zinc-200 border-zinc-100/60 dark:border-zinc-800/60"
+                    ? "bg-blue-600 text-white border-blue-600 shadow-md"
+                    : "bg-white/70 dark:bg-zinc-900/40 text-zinc-700 dark:text-zinc-200 border-zinc-100/60 dark:border-zinc-800/60"
                     }`}
                 >
                   <span className="inline-block w-1.5 h-1.5 rounded-full bg-gradient-to-r from-blue-500 to-violet-500"></span>
