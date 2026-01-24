@@ -1,23 +1,9 @@
-# Base stage for building the app
-FROM node:18-alpine AS builder
-
-WORKDIR /app
-
-# Install dependencies (cache optimized)
-COPY package.json package-lock.json ./
-RUN npm ci
-
-# Copy source code
-COPY . .
-
-# Build the project (output will be in /app/out)
-RUN npm run build
-
 # Production stage
-FROM nginx:alpine AS runner
+FROM nginx:alpine
 
-# Copy built static files from builder
-COPY --from=builder /app/out /usr/share/nginx/html
+# Copy built static files from local 'out' directory
+# (Must run 'npm run build' locally first)
+COPY out /usr/share/nginx/html
 
 # Copy custom Nginx config
 COPY nginx.conf /etc/nginx/conf.d/default.conf
