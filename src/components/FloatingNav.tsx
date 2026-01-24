@@ -34,26 +34,29 @@ export default function FloatingNav({ backUrl = "/blog" }: FloatingNavProps) {
       {/* ================= PC 端 (xl 以上) ================= */}
       {/* 保持原有的设计：垂直悬浮在内容卡片左侧 */}
       <div className="hidden xl:flex fixed top-1/2 -translate-y-1/2 left-[calc(50%-44rem)] 2xl:left-[calc(50%-46rem)] z-50 flex-col gap-4 transition-all duration-300">
-        <Link href={backUrl} prefetch={true}>
-          <Button
-            variant="secondary"
-            size="icon"
-            className="rounded-full w-12 h-12 bg-white/90 dark:bg-zinc-900/90 backdrop-blur-md shadow-xl shadow-zinc-200/20 dark:shadow-black/40 border border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-200 hover:bg-zinc-50 hover:dark:bg-zinc-800 hover:scale-110 hover:border-zinc-300 dark:hover:border-zinc-700 transition-all duration-300 group"
-            title="返回列表"
-          >
+        <Button
+          asChild
+          variant="secondary"
+          size="icon"
+          className="rounded-full w-12 h-12 bg-white/90 dark:bg-zinc-900/90 backdrop-blur-md shadow-xl shadow-zinc-200/20 dark:shadow-black/40 border border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-200 hover:bg-zinc-50 hover:dark:bg-zinc-800 hover:scale-110 hover:border-zinc-300 dark:hover:border-zinc-700 transition-all duration-300 group"
+          title="返回列表"
+        >
+          <Link href={backUrl} prefetch={true}>
             <ArrowLeft className="h-8 w-8 group-hover:-translate-x-1 transition-transform duration-300" />
-          </Button>
-        </Link>
-        <Link href="/" prefetch={true}>
-          <Button
-            variant="secondary"
-            size="icon"
-            className="rounded-full w-12 h-12 bg-white/90 dark:bg-zinc-900/90 backdrop-blur-md shadow-xl shadow-zinc-200/20 dark:shadow-black/40 border border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-200 hover:bg-zinc-50 hover:dark:bg-zinc-800 hover:scale-110 hover:border-zinc-300 dark:hover:border-zinc-700 transition-all duration-300 group"
-            title="回到首页"
-          >
+          </Link>
+        </Button>
+
+        <Button
+          asChild
+          variant="secondary"
+          size="icon"
+          className="rounded-full w-12 h-12 bg-white/90 dark:bg-zinc-900/90 backdrop-blur-md shadow-xl shadow-zinc-200/20 dark:shadow-black/40 border border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-200 hover:bg-zinc-50 hover:dark:bg-zinc-800 hover:scale-110 hover:border-zinc-300 dark:hover:border-zinc-700 transition-all duration-300 group"
+          title="回到首页"
+        >
+          <Link href="/" prefetch={true}>
             <Home className="h-8 w-8" />
-          </Button>
-        </Link>
+          </Link>
+        </Button>
       </div>
 
       {/* ================= 移动端 (xl 以下) ================= */}
@@ -89,27 +92,29 @@ export default function FloatingNav({ backUrl = "/blog" }: FloatingNavProps) {
             ${isOpen ? "translate-x-0 opacity-100" : "-translate-x-8 opacity-0 pointer-events-none"}
           `}
         >
-          <Link href={backUrl} onClick={() => setIsOpen(false)}>
-            <Button
-              variant="secondary"
-              size="icon"
-              className="rounded-full w-10 h-10 bg-white/90 dark:bg-zinc-800/90 backdrop-blur-md shadow-lg border border-zinc-200/60 dark:border-zinc-700/60"
-              title="返回列表"
-            >
+          <Button
+            asChild
+            variant="secondary"
+            size="icon"
+            className="rounded-full w-10 h-10 bg-white/90 dark:bg-zinc-800/90 backdrop-blur-md shadow-lg border border-zinc-200/60 dark:border-zinc-700/60"
+            title="返回列表"
+          >
+            <Link href={backUrl} onClick={() => setIsOpen(false)}>
               <ArrowLeft className="h-5 w-5 text-zinc-600 dark:text-zinc-300" />
-            </Button>
-          </Link>
+            </Link>
+          </Button>
 
-          <Link href="/" onClick={() => setIsOpen(false)}>
-            <Button
-              variant="secondary"
-              size="icon"
-              className="rounded-full w-10 h-10 bg-white/90 dark:bg-zinc-800/90 backdrop-blur-md shadow-lg border border-zinc-200/60 dark:border-zinc-700/60"
-              title="回到首页"
-            >
+          <Button
+            asChild
+            variant="secondary"
+            size="icon"
+            className="rounded-full w-10 h-10 bg-white/90 dark:bg-zinc-800/90 backdrop-blur-md shadow-lg border border-zinc-200/60 dark:border-zinc-700/60"
+            title="回到首页"
+          >
+            <Link href="/" onClick={() => setIsOpen(false)}>
               <Home className="h-5 w-5 text-zinc-600 dark:text-zinc-300" />
-            </Button>
-          </Link>
+            </Link>
+          </Button>
         </div>
       </div>
     </>
