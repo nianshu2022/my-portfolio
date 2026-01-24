@@ -191,7 +191,9 @@ export default async function EssayPage(props: { params: Promise<{ slug: string 
                                         if (src.startsWith('http')) {
                                             try {
                                                 const imageUrl = new URL(src);
-                                                if (!imageUrl.hostname.includes('wsrv.nl')) {
+                                                // Avoid double proxying and skip local images
+                                                if (!imageUrl.hostname.includes('wsrv.nl') &&
+                                                    !imageUrl.hostname.includes('nianshu2022.cn')) {
                                                     imageSrc = `https://wsrv.nl/?url=${encodeURIComponent(src)}&w=1200&q=85&output=webp`;
                                                 }
                                             } catch { }

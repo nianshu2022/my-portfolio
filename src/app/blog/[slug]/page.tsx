@@ -238,8 +238,9 @@ export default async function PostPage(props: { params: Promise<{ slug: string }
                                                 if (src.startsWith('http')) {
                                                     try {
                                                         const imageUrl = new URL(src);
-                                                        // Avoid double proxying
-                                                        if (!imageUrl.hostname.includes('wsrv.nl')) {
+                                                        // Avoid double proxying and skip local images
+                                                        if (!imageUrl.hostname.includes('wsrv.nl') &&
+                                                            !imageUrl.hostname.includes('nianshu2022.cn')) {
                                                             // Optimized parameters: w=1000, q=75 for better balance of quality and speed
                                                             imageSrc = `https://wsrv.nl/?url=${encodeURIComponent(src)}&w=1000&q=75&output=webp`;
                                                         }
