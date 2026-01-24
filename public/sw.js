@@ -1,5 +1,5 @@
 // 使用版本号管理缓存，部署时可手动或自动修改此值
-const CACHE_VERSION = 'v5';
+const CACHE_VERSION = 'v6';
 const CACHE_NAME = `nianshu-blog-${CACHE_VERSION}`;
 
 self.addEventListener('install', (event) => {
@@ -11,7 +11,6 @@ self.addEventListener('activate', (event) => {
         caches.keys().then((cacheNames) => {
             return Promise.all(
                 cacheNames.map((cacheName) => {
-                    // 清理旧版本的缓存
                     if (cacheName.startsWith('nianshu-blog-') && cacheName !== CACHE_NAME) {
                         return caches.delete(cacheName);
                     }
@@ -27,17 +26,19 @@ self.addEventListener('fetch', (event) => {
     const url = new URL(event.request.url);
     if (url.protocol !== 'http:' && url.protocol !== 'https:') return;
 
-    // 识别 Next.js 的 Prefetch 请求
     const isPrefetch =
         event.request.headers.get('Purpose') === 'prefetch' ||
         event.request.headers.get('Sec-Purpose') === 'prefetch' ||
         event.request.headers.get('Next-Router-Prefetch') === '1';
 
-    // 静态资源缓存策略：CacheFirst
+    // 识别静态资源缓存策略：CacheFirst
+    // 增加对 wsrv.nl (图片代理) 和 _next/image (Next.js 图片优化) 的缓存支持
     const isStaticAsset =
+        url.hostname === 'wsrv.nl' ||
+        url.pathname.startsWith('/_next/image') ||
         url.pathname.startsWith('/img/') ||
         url.pathname.startsWith('/_next/static/') ||
-        url.pathname.match(/\.(png|jpg|jpeg|gif|svg|ico|css|js|woff2?|json|txt)(\?.*)?$/i);
+        url.pathname.match(/\.(png|jpg|jpeg|gif|svg|ico|css|js|woff2?|json|txt|webp)(\?.*)?$/i);
 
     if (isStaticAsset) {
         event.respondWith(
