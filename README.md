@@ -147,17 +147,31 @@ npm run build
 ```
 *(构建产物将输出至 `out/` 目录)*
 
-### 2. 构建 Docker 镜像
+### 2. Docker Compose 部署 (推荐)
+
+如果您安装了 Docker Compose，可以使用以下方式一键启动：
+
 ```bash
-docker build -t my-portfolio .
+docker compose up -d
 ```
- 
-### 3. 运行容器
+
+如果需要重新构建镜像（例如修改了代码后）：
 ```bash
+docker compose up -d --build
+```
+
+### 3. 常规 Docker 部署 (可选)
+
+**构建并运行**:
+```bash
+# 构建镜像
+docker build -t my-portfolio .
+
+# 启动容器
 docker run -d -p 80:80 --name my-portfolio --restart always my-portfolio
 ```
 
-### 4. 高级配置 (可选)
+**高级配置 (可选)**:
 如果需要自定义 Nginx 配置，可以挂载配置文件：
 ```bash
 docker run -d -p 80:80 \
