@@ -14,6 +14,7 @@ import FloatingNav from "@/components/FloatingNav";
 import DonateButton from "@/components/DonateButton";
 import CodeBlock from "@/components/ui/CodeBlock";
 import RelatedPosts from "@/components/RelatedPosts";
+import Comments from "@/components/Comments";
 import PostNavigation from "@/components/PostNavigation";
 import rehypeSanitize, { defaultSchema } from 'rehype-sanitize';
 
@@ -112,7 +113,13 @@ export default async function PostPage(props: { params: Promise<{ slug: string }
     };
 
     return (
-        <main className="flex min-h-screen flex-col items-center p-4 sm:p-24 relative">
+        <main className="flex min-h-screen flex-col items-center p-4 sm:p-24 relative overflow-hidden">
+            {/* Background Blobs (Blue/Violet Theme) */}
+            <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none -z-10">
+                <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-blue-200/30 dark:bg-blue-900/20 rounded-full blur-[100px] animate-blob mix-blend-multiply dark:mix-blend-screen opacity-70"></div>
+                <div className="absolute top-[20%] left-[-10%] w-[400px] h-[400px] bg-violet-200/30 dark:bg-violet-900/20 rounded-full blur-[100px] animate-blob animation-delay-2000 mix-blend-multiply dark:mix-blend-screen opacity-70"></div>
+                <div className="absolute bottom-[-10%] right-[20%] w-[600px] h-[600px] bg-indigo-200/30 dark:bg-indigo-900/20 rounded-full blur-[100px] animate-blob animation-delay-4000 mix-blend-multiply dark:mix-blend-screen opacity-70"></div>
+            </div>
             {/* JSON-LD Structured Data */}
             <script
                 type="application/ld+json"
@@ -126,8 +133,8 @@ export default async function PostPage(props: { params: Promise<{ slug: string }
             {/* Main Content Wrapper - Includes Article Card and Sidebar */}
             <div className="max-w-7xl w-full flex flex-col lg:flex-row lg:gap-8 relative">
 
-                {/* Article Card Container */}
-                <div className="flex-1 min-w-0 backdrop-blur-xl bg-white/40 dark:bg-zinc-900/40 rounded-3xl border border-white/20 shadow-2xl relative">
+                {/* Article Content Container */}
+                <div className="flex-1 min-w-0 relative">
 
                     {/* Main Content */}
                     <article className="w-full pt-10 sm:pt-16 pb-10">
@@ -169,6 +176,13 @@ export default async function PostPage(props: { params: Promise<{ slug: string }
                                         ))}
                                     </div>
                                 )}
+
+                                {/* Decorative Separator */}
+                                <div className="flex items-center justify-center gap-4 mt-8">
+                                    <div className="h-px w-24 bg-gradient-to-r from-transparent via-blue-300 to-transparent dark:via-blue-800"></div>
+                                    <div className="w-2 h-2 rounded-full bg-blue-400 dark:bg-blue-600"></div>
+                                    <div className="h-px w-24 bg-gradient-to-r from-transparent via-blue-300 to-transparent dark:via-blue-800"></div>
+                                </div>
                             </header>
 
                             <div className="blog-content prose prose-zinc dark:prose-invert max-w-none prose-headings:scroll-mt-28 sm:pl-4 prose-a:break-all prose-img:mx-auto">
@@ -277,29 +291,26 @@ export default async function PostPage(props: { params: Promise<{ slug: string }
 
                             {/* Copyright Section */}
                             <div className="mt-16 pt-8 border-t border-zinc-200/50 dark:border-zinc-700/50 sm:ml-4">
-                                <div className="bg-zinc-50/50 dark:bg-zinc-800/30 rounded-xl p-6 border border-zinc-100 dark:border-zinc-700/50 flex flex-col gap-2 text-sm text-zinc-500 dark:text-zinc-400 relative overflow-hidden group">
-                                    <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
-                                        <Shield className="w-24 h-24 -rotate-12" />
+                                <div className="flex flex-col sm:flex-row items-center justify-between gap-6 py-4 text-sm text-zinc-400 font-serif">
+                                    <div className="flex flex-col gap-2 text-center sm:text-left">
+                                        <p>
+                                            <span className="font-semibold text-zinc-500 dark:text-zinc-300">© 念舒</span>
+                                            <span className="mx-2">·</span>
+                                            <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer" className="hover:text-blue-600 transition-colors">CC BY-NC-SA 4.0</a>
+                                        </p>
+                                        <p className="text-xs opacity-70">
+                                            转载请注明：blog.nianshu2022.cn/blog/{post.slug}
+                                        </p>
                                     </div>
-                                    <div className="flex items-center gap-2 font-semibold text-zinc-900 dark:text-zinc-200 z-10">
-                                        <Shield className="w-4 h-4" />
-                                        <span>版权声明</span>
-                                    </div>
-                                    <p className="z-10">
-                                        本文由 <span className="font-medium text-zinc-700 dark:text-zinc-300">念舒</span> 原创，采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">CC BY-NC-SA 4.0</a> 协议进行许可。
-                                    </p>
-                                    <p className="z-10">
-                                        转载请注明出处：<span className="select-all bg-white dark:bg-zinc-900 px-1 py-0.5 rounded border border-zinc-200 dark:border-zinc-700">https://blog.nianshu2022.cn/blog/{post.slug}</span>
-                                    </p>
-                                    <div className="z-10 pt-2">
-                                        <DonateButton />
-                                    </div>
+                                    <DonateButton />
                                 </div>
                             </div>
 
                             <PostNavigation prev={prev} next={next} />
 
                             <RelatedPosts posts={relatedPosts} />
+
+                            <Comments />
                         </div>
                     </article>
                 </div>
@@ -307,25 +318,29 @@ export default async function PostPage(props: { params: Promise<{ slug: string }
                 {/* Sidebar - Separated Card */}
                 <aside className="hidden lg:block w-72 shrink-0">
                     <div className="sticky top-6 space-y-6">
-                        {/* TOC Card */}
-                        <div className="p-6 bg-white/40 dark:bg-zinc-900/40 rounded-3xl border border-white/20 dark:border-zinc-800/50 backdrop-blur-xl shadow-xl max-h-[80vh] flex flex-col snap-y snap-mandatory overflow-y-auto custom-scrollbar pr-1">
-                            <h4 className="font-bold mb-4 text-sm text-zinc-900 dark:text-zinc-100 flex items-center gap-2 select-none">
-                                <span className="w-1 h-4 bg-blue-500 rounded-full shadow-sm shadow-blue-500/50"></span>
+                        {/* TOC Card - Transparent */}
+                        <div className="p-6 rounded-3xl max-h-[80vh] flex flex-col snap-y snap-mandatory overflow-y-auto custom-scrollbar pr-1 relative">
+                            {/* Decorative line for TOC */}
+                            <div className="absolute left-0 top-6 bottom-6 w-px bg-zinc-200 dark:bg-zinc-800 ml-3"></div>
+
+                            <h4 className="font-bold mb-4 text-sm text-zinc-900 dark:text-zinc-100 flex items-center gap-2 select-none relative z-10 bg-transparent pl-4">
                                 目录
                             </h4>
-                            <TableOfContents toc={post.toc} />
+                            <div className="pl-4">
+                                <TableOfContents toc={post.toc} />
+                            </div>
                         </div>
 
-                        {/* Award Card */}
+                        {/* Award Card - Transparent */}
                         {post.award && (
-                            <div className="rounded-3xl border border-white/20 dark:border-zinc-800/50 shadow-xl overflow-hidden backdrop-blur-xl bg-white/40 dark:bg-zinc-900/40">
+                            <div className="rounded-3xl border-0 overflow-hidden ml-4">
                                 <SidebarAward src={post.award} />
                             </div>
                         )}
                     </div>
                 </aside>
 
-            </div>
-        </main>
+            </div >
+        </main >
     );
 }

@@ -27,6 +27,7 @@ export const viewport: Viewport = {
 };
 
 import CommandMenu from "@/components/CommandMenu";
+import AIChatButton from "@/components/AIChatButton";
 import { getAllPostSummaries } from "@/lib/posts";
 
 export const metadata: Metadata = {
@@ -39,11 +40,7 @@ export const metadata: Metadata = {
   keywords: ["产品运营", "念舒", "个人博客", "Next.js", "技术折腾", "增长黑客", "00后"],
   authors: [{ name: "念舒", url: process.env.NEXT_PUBLIC_SITE_URL || 'https://blog.nianshu2022.cn' }],
   creator: "念舒",
-  icons: {
-    icon: "/img/avatar.png",
-    shortcut: "/img/avatar.png",
-    apple: "/img/avatar.png",
-  },
+
   openGraph: {
     type: "website",
     locale: "zh_CN",
@@ -130,6 +127,7 @@ export default function RootLayout({
           />
         )}
         <CommandMenu posts={posts} />
+        <AIChatButton />
         <ServiceWorkerRegister />
       </body>
     </html>

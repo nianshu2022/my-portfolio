@@ -1,43 +1,49 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 
 export default function BusuanziCounter() {
-  const [loading, setLoading] = useState(true);
   const [mounted, setMounted] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
     setMounted(true);
-    // Check if script is already loaded
-    if (document.getElementById('busuanzi_script')) {
-      const handle = requestAnimationFrame(() => setLoading(false));
-      return () => cancelAnimationFrame(handle);
-    }
-
-    const script = document.createElement('script');
-    script.id = 'busuanzi_script';
-    script.src = 'https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js';
-    script.async = true;
-
-    script.onload = () => setLoading(false);
-    script.onerror = () => {
-      setLoading(false);
-      console.warn('Busuanzi script failed to load');
-    };
-
-    document.body.appendChild(script);
   }, []);
 
-  // SSR 时返回一个占位或空，避免与客户端初始加载冲突
-  if (!mounted) return <span className="text-zinc-400 opacity-0">...</span>;
+  useEffect(() => {
+    // Function to reload Busuanzi script
+    const loadScript = () => {
+      // Remove existing script if any to force reload
+      let existingScript = document.getElementById("busuanzi-script");
+      if (existingScript) {
+        existingScript.remove();
+      }
 
+      // Check if the global variable exists and maybe reset it if needed (not easily doable without window access hack)
+      // Busuanzi normally binds to window.bsZ, but reloading script usually re-triggers the fetch.
+
+      const script = document.createElement("script");
+      script.src = "//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js";
+      script.id = "busuanzi-script";
+      script.async = true;
+      document.body.appendChild(script);
+    };
+
+    if (mounted) {
+      loadScript();
+    }
+  }, [mounted, pathname]); // Re-run on pathname change
+
+  if (!mounted) return <span className="opacity-0">...</span>;
+
+  // We intentionally use style={{ display: 'inline' }} to override Busuanzi's default hidden behavior until it loads
+  // But actually Busuanzi manages the 'display' of the container. 
+  // We set initial to inline-flex to reserve space or handle layout.
   return (
-    <span className="flex items-center gap-1" id="busuanzi_container_page_pv" style={{ display: 'inline-flex' }} suppressHydrationWarning>
-      <span id="busuanzi_value_page_pv" className="font-mono min-w-[1ch] text-center">
-        {loading ? '...' : ''}
-      </span>
+    <span id="busuanzi_container_page_pv" className="inline-flex items-center gap-1" style={{ display: 'inline-flex' }}>
+      <span id="busuanzi_value_page_pv" className="font-mono">...</span>
       <span>次阅读</span>
     </span>
   );
 }
-

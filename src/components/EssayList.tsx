@@ -22,8 +22,8 @@ export default function EssayList({ posts }: { posts: PostSummary[] }) {
     }
 
     return (
-        <div className="max-w-4xl w-full space-y-8 backdrop-blur-xl bg-white/30 dark:bg-zinc-900/30 p-8 sm:p-12 rounded-3xl border border-white/20 shadow-2xl relative">
-            <div className="space-y-2 text-center sm:text-left pt-8 sm:pt-4 sm:pl-20">
+        <div className="max-w-4xl w-full space-y-8 p-6 sm:p-0 relative">
+            <div className="space-y-2 text-center sm:text-left pt-0 sm:pt-4">
                 <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent inline-flex items-center gap-3 font-serif">
                     {/* Feather icon is managed in parent or can be imported here if needed, keeping it simple */}
                     <svg
@@ -47,15 +47,19 @@ export default function EssayList({ posts }: { posts: PostSummary[] }) {
                 <p className="text-zinc-500 dark:text-zinc-400 font-serif italic">
                     &quot;人生逐梦正当时，且行且歌。&quot;
                 </p>
+                <div className="h-1 w-16 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full mt-4 mx-auto sm:mx-0"></div>
             </div>
 
-            <div className="grid gap-6 py-4">
-                {posts.map((post) => (
+            <div className="grid gap-6 py-4 animate-fade-in-up">
+                {posts.map((post, index) => (
                     <Link key={post.slug} href={`/essays/${post.slug}`} prefetch={false}>
-                        <div className="p-8 bg-white/50 dark:bg-zinc-800/30 rounded-xl border border-white/40 dark:border-zinc-700/30 shadow-sm hover:shadow-md transition-all cursor-pointer group hover:bg-white/80 dark:hover:bg-zinc-800/50">
+                        <div
+                            className="group relative p-8 bg-white/40 dark:bg-zinc-900/40 backdrop-blur-sm rounded-2xl border border-white/50 dark:border-zinc-700/50 shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer hover:-translate-y-1 opacity-0 animate-fade-in-up"
+                            style={{ animationDelay: `${index * 100}ms`, animationFillMode: 'forwards' }}
+                        >
                             <div className="flex flex-col gap-4">
                                 <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 sm:gap-4">
-                                    <h2 className="text-2xl font-serif font-medium text-zinc-800 dark:text-zinc-100 group-hover:text-purple-700 transition-colors">
+                                    <h2 className="text-2xl font-serif font-medium text-zinc-800 dark:text-zinc-100 group-hover:text-purple-700 dark:group-hover:text-purple-400 transition-colors">
                                         {post.title}
                                     </h2>
                                     <span className="text-xs font-mono text-zinc-400 pt-0 sm:pt-2">
@@ -71,7 +75,7 @@ export default function EssayList({ posts }: { posts: PostSummary[] }) {
                                 </div>
 
                                 <div className="flex justify-end items-center mt-2">
-                                    <span className="text-xs text-purple-500 opacity-60 group-hover:opacity-100 transition-opacity flex items-center gap-1 font-serif">
+                                    <span className="text-xs text-purple-500 opacity-100 sm:opacity-60 sm:group-hover:opacity-100 transition-all transform translate-x-0 sm:-translate-x-2 sm:group-hover:translate-x-0 flex items-center gap-1 font-serif">
                                         阅读全文 &rarr;
                                     </span>
                                 </div>

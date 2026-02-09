@@ -12,6 +12,10 @@ const filesCache = new Map<string, string[]>();
 
 import GithubSlugger from 'github-slugger';
 
+// Module-level cache for post content to avoid re-reading files on every request
+// Key: full file path, Value: { mtimeMs: number, post: Post }
+const contentCache = new Map<string, { mtime: number; post: Post }>();
+
 // ... (imports)
 
 export type TOCItem = {
@@ -78,42 +82,76 @@ const getAllItems = cache((baseDirectory: string): Post[] => {
   const allFilePaths = getAllFiles(baseDirectory);
 
   const allItemsData = allFilePaths.map((fullPath) => {
-    const fileContents = fs.readFileSync(fullPath, 'utf8');
-    const matterResult = matter(fileContents);
-    const stats = readingTime(matterResult.content);
+    // Check cache first
+    try {
+      const stats = fs.statSync(fullPath);
+      const mtime = stats.mtimeMs;
+      const cached = contentCache.get(fullPath);
 
-    // Extract slug from filename
-    const fileName = path.basename(fullPath);
-    const slug = fileName.replace(/\.md$/, '');
+      if (cached && cached.mtime === mtime) {
+        return cached.post;
+      }
 
-    // Extract TOC
-    const slugger = new GithubSlugger();
-    const toc: TOCItem[] = [];
-    const headings = matterResult.content.match(/^#{2,3}\s+.+$/gm);
+      // Cache miss or stale: read and process file
+      const fileContents = fs.readFileSync(fullPath, 'utf8');
+      const matterResult = matter(fileContents);
+      const statsReading = readingTime(matterResult.content);
 
-    if (headings) {
-      headings.forEach((heading) => {
-        const level = heading.match(/^#+/)?.[0].length || 2;
-        const title = heading.replace(/^#+\s+/, '');
-        const anchor = slugger.slug(title);
-        toc.push({ title, slug: anchor, level });
-      });
+      // Extract slug from filename
+      const fileName = path.basename(fullPath);
+      const slug = fileName.replace(/\.md$/, '');
+
+      // Extract TOC
+      const slugger = new GithubSlugger();
+      const toc: TOCItem[] = [];
+      const headings = matterResult.content.match(/^#{2,3}\s+.+$/gm);
+
+      if (headings) {
+        headings.forEach((heading) => {
+          const level = heading.match(/^#+/)?.[0].length || 2;
+          const title = heading.replace(/^#+\s+/, '');
+          const anchor = slugger.slug(title);
+          toc.push({ title, slug: anchor, level });
+        });
+      }
+
+      const post: Post = {
+        slug,
+        content: matterResult.content,
+        wordCount: letterCount(matterResult.content), // Use custom counter or fallback
+        readingTime: Math.ceil(statsReading.minutes) + ' 分钟',
+        cover: matterResult.data.cover || null,
+        award: matterResult.data.award || null,
+        title: matterResult.data.title,
+        description: matterResult.data.description || '',
+        tags: matterResult.data.tags || [],
+        date: formatDate(matterResult.data.date),
+        draft: matterResult.data.draft || false,
+        toc,
+      };
+
+      // Update cache
+      contentCache.set(fullPath, { mtime, post });
+      return post;
+
+    } catch (e) {
+      console.error(`Error processing file ${fullPath}:`, e);
+      // Return a dummy or filter it out later. For now, try to return valid structure or throw.
+      // Returning null might break type, so we'll skip this file in the filter/map if possible.
+      // But map expects a return. Let's return a dummy post marked as draft.
+      return {
+        slug: path.basename(fullPath).replace(/\.md$/, ''),
+        title: 'Error Loading Post',
+        date: new Date().toISOString(),
+        description: 'Error processing file',
+        tags: [],
+        content: '',
+        wordCount: 0,
+        readingTime: '0 min',
+        toc: [],
+        draft: true
+      } as Post;
     }
-
-    return {
-      slug,
-      content: matterResult.content,
-      wordCount: matterResult.content.length,
-      readingTime: Math.ceil(stats.minutes) + ' 分钟',
-      cover: matterResult.data.cover || null,
-      award: matterResult.data.award || null,
-      title: matterResult.data.title,
-      description: matterResult.data.description || '',
-      tags: matterResult.data.tags || [],
-      date: formatDate(matterResult.data.date),
-      draft: matterResult.data.draft || false,
-      toc,
-    } as Post;
   });
 
   // Filter out drafts in production
@@ -131,6 +169,11 @@ const getAllItems = cache((baseDirectory: string): Post[] => {
     return a.slug.localeCompare(b.slug);
   });
 });
+
+// Helper to count words (simple approximation for Chinese/English mixed)
+function letterCount(str: string): number {
+  return str.replace(/\s+/g, '').length;
+}
 
 // Helper function to get summaries
 const getAllSummaries = cache((baseDirectory: string): PostSummary[] => {

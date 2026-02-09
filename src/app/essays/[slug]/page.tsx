@@ -11,6 +11,7 @@ import SidebarAward from "@/components/SidebarAward";
 import FloatingNav from "@/components/FloatingNav";
 import DonateButton from "@/components/DonateButton";
 import CodeBlock from "@/components/ui/CodeBlock";
+import Comments from "@/components/Comments";
 import rehypeSanitize, { defaultSchema } from 'rehype-sanitize';
 
 export async function generateStaticParams() {
@@ -77,34 +78,38 @@ export default async function EssayPage(props: { params: Promise<{ slug: string 
     };
 
     return (
-        <main className="flex min-h-screen flex-col items-center p-4 sm:p-24 relative font-serif">
+        <main className="flex min-h-screen flex-col items-center p-4 sm:p-24 relative font-serif overflow-hidden">
+            {/* Background Blobs (Purple/Pink Theme) */}
+            <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none -z-10">
+                <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-purple-200/30 dark:bg-purple-900/20 rounded-full blur-[100px] animate-blob mix-blend-multiply dark:mix-blend-screen opacity-70"></div>
+                <div className="absolute top-[30%] right-[-10%] w-[400px] h-[400px] bg-pink-200/30 dark:bg-pink-900/20 rounded-full blur-[100px] animate-blob animation-delay-2000 mix-blend-multiply dark:mix-blend-screen opacity-70"></div>
+                <div className="absolute bottom-[-10%] left-[20%] w-[600px] h-[600px] bg-fuchsia-200/30 dark:bg-fuchsia-900/20 rounded-full blur-[100px] animate-blob animation-delay-4000 mix-blend-multiply dark:mix-blend-screen opacity-70"></div>
+            </div>
             <ReadingProgress />
 
             <FloatingNav backUrl="/essays" />
 
-            <div className="max-w-3xl w-full flex flex-col backdrop-blur-xl bg-white/40 dark:bg-zinc-900/40 rounded-3xl border border-white/20 shadow-2xl relative overflow-hidden">
+            <div className="max-w-3xl w-full flex flex-col relative overflow-hidden">
 
-                {/* Cover Image */}
+                {/* Cover Image - Floating with shadow */}
                 {post.cover && (
-                    <div className="w-full h-64 sm:h-80 relative">
+                    <div className="w-full h-64 sm:h-96 relative mb-12 rounded-3xl overflow-hidden shadow-2xl">
                         <img
                             src={post.cover}
                             alt={post.title}
-                            className="w-full h-full object-cover"
+                            className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-white/40 dark:to-zinc-900/40"></div>
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
                     </div>
                 )}
 
-                {/* Back Button Removed from here */}
-
-                <article className={`w-full pb-12 px-6 sm:px-16 ${post.cover ? 'pt-10 sm:pt-12' : 'pt-24 sm:pt-28'}`}>
+                <article className="w-full pb-12 px-2 sm:px-0">
                     <header className="mb-12 text-center">
-                        <h1 className="text-3xl sm:text-5xl font-bold mb-6 text-zinc-900 dark:text-zinc-50 leading-tight tracking-tight font-serif">
+                        <h1 className="text-4xl sm:text-6xl font-bold mb-8 text-zinc-900 dark:text-zinc-50 leading-tight tracking-tight font-serif drop-shadow-sm">
                             {post.title}
                         </h1>
 
-                        <div className="flex flex-wrap justify-center items-center gap-4 text-zinc-500 text-sm font-sans">
+                        <div className="flex flex-wrap justify-center items-center gap-4 text-zinc-500 text-sm font-sans mb-8">
                             <div className="flex items-center gap-2">
                                 <span className="font-mono">{post.date}</span>
                             </div>
@@ -112,23 +117,30 @@ export default async function EssayPage(props: { params: Promise<{ slug: string 
                             <span className="text-zinc-300">|</span>
 
                             <div className="flex items-center gap-2">
-                                <BookOpen className="w-3 h-3" />
+                                <BookOpen className="w-4 h-4" />
                                 <span>{post.wordCount} 字</span>
                             </div>
 
                             <div className="flex items-center gap-2">
-                                <Clock className="w-3 h-3" />
+                                <Clock className="w-4 h-4" />
                                 <span>{post.readingTime}</span>
                             </div>
 
                             <div className="flex items-center gap-2">
-                                <Eye className="w-3 h-3" />
+                                <Eye className="w-4 h-4" />
                                 <BusuanziCounter />
                             </div>
                         </div>
+
+                        {/* Decorative Separator */}
+                        <div className="flex items-center justify-center gap-4">
+                            <div className="h-px w-24 bg-gradient-to-r from-transparent via-purple-300 to-transparent dark:via-purple-800"></div>
+                            <div className="w-2 h-2 rounded-full bg-purple-400 dark:bg-purple-600"></div>
+                            <div className="h-px w-24 bg-gradient-to-r from-transparent via-purple-300 to-transparent dark:via-purple-800"></div>
+                        </div>
                     </header>
 
-                    <div className="essay-content prose prose-lg prose-zinc dark:prose-invert max-w-none prose-p:indent-8 prose-p:text-justify prose-headings:font-serif prose-headings:text-center prose-img:rounded-xl prose-img:shadow-lg prose-a:break-all prose-img:mx-auto">
+                    <div className="essay-content prose prose-lg prose-zinc dark:prose-invert max-w-none prose-p:indent-0 prose-p:text-justify prose-headings:font-serif prose-headings:text-center prose-img:rounded-xl prose-img:shadow-lg prose-a:break-all prose-img:mx-auto">
                         <Markdown
                             remarkPlugins={[remarkGfm]}
                             rehypePlugins={[
@@ -225,37 +237,34 @@ export default async function EssayPage(props: { params: Promise<{ slug: string 
 
                     {/* Award Display - Centered for essays */}
                     {post.award && (
-                        <div className="mt-12 flex justify-center">
+                        <div className="mt-16 flex justify-center">
                             <div className="max-w-sm w-full transform hover:scale-105 transition-transform duration-500">
                                 <SidebarAward src={post.award} />
                             </div>
                         </div>
                     )}
 
-                    <div className="mt-16 pt-8 border-t border-zinc-200/50 dark:border-zinc-700/50">
-                        {/* Copyright Section */}
-                        <div className="bg-zinc-50/50 dark:bg-zinc-800/30 rounded-xl p-6 border border-zinc-100 dark:border-zinc-700/50 flex flex-col gap-2 text-sm text-zinc-500 dark:text-zinc-400 relative overflow-hidden group font-sans text-left mb-8">
-                            <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
-                                <Shield className="w-24 h-24 -rotate-12" />
+                    <div className="mt-20 pt-10 border-t border-zinc-200/50 dark:border-zinc-700/50">
+                        {/* Simplified Copyright Section - Minimalist */}
+                        <div className="flex flex-col sm:flex-row items-center justify-between gap-6 py-4 text-sm text-zinc-400 font-serif">
+                            <div className="flex flex-col gap-2 text-center sm:text-left">
+                                <p>
+                                    <span className="font-semibold text-zinc-500 dark:text-zinc-300">© 念舒</span>
+                                    <span className="mx-2">·</span>
+                                    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer" className="hover:text-purple-600 transition-colors">CC BY-NC-SA 4.0</a>
+                                </p>
+                                <p className="text-xs opacity-70">
+                                    转载请注明：blog.nianshu2022.cn/essays/{post.slug}
+                                </p>
                             </div>
-                            <div className="flex items-center gap-2 font-semibold text-zinc-900 dark:text-zinc-200 z-10">
-                                <Shield className="w-4 h-4" />
-                                <span>版权声明</span>
-                            </div>
-                            <p className="z-10">
-                                本文由 <span className="font-medium text-zinc-700 dark:text-zinc-300">念舒</span> 原创，采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">CC BY-NC-SA 4.0</a> 协议进行许可。
-                            </p>
-                            <p className="z-10">
-                                转载请注明出处：<span className="select-all bg-white dark:bg-zinc-900 px-1 py-0.5 rounded border border-zinc-200 dark:border-zinc-700">https://blog.nianshu2022.cn/essays/{post.slug}</span>
-                            </p>
-                            <div className="z-10 pt-2">
-                                <DonateButton />
-                            </div>
+                            <DonateButton />
                         </div>
 
-                        <div className="text-center text-sm text-zinc-400 font-serif italic">
-                            <p>—— 完 ——</p>
+                        <div className="text-center mt-12 mb-8">
+                            <span className="text-3xl text-zinc-200 dark:text-zinc-800 select-none">❦</span>
                         </div>
+
+                        <Comments />
                     </div>
                 </article>
             </div>

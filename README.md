@@ -140,27 +140,22 @@ award: ""                        # [可选] 随笔专属：获奖或特殊标注
  
 推荐使用 Docker 容器化部署，支持所有云厂商服务器。
 
-### 1. 本地构建 (必选)
-由于 Dockerfile 采用静态文件复制模式，请先在本地生成构建产物：
-```bash
-npm run build
-```
-*(构建产物将输出至 `out/` 目录)*
+### 1. 快速部署 (本地构建 + 目录挂载)
 
-### 2. Docker Compose 部署 (推荐)
+这种方式支持“本地构建、上传产物、实时生效”，无需频繁重建 Docker 镜像。
 
-如果您安装了 Docker Compose，可以使用以下方式一键启动：
+**部署流程**:
+1.  **本地构建**: 在本地运行 `npm run build` 生成 `out` 目录。
+2.  **上传产物**: 将 `out` 目录、`docker-compose.yml`、`Dockerfile`、`nginx.conf` 上传至服务器同一目录下。
+3.  **启动容器**:
+    ```bash
+    docker compose up -d
+    ```
 
-```bash
-docker compose up -d
-```
+**更新内容**:
+下次更新时，只需在本地重新 `build` 并将 `out` 目录上传覆盖服务器上的对应目录，Nginx 会实时生效，无需重启容器（除非修改了 Nginx 配置）。
 
-如果需要重新构建镜像（例如修改了代码后）：
-```bash
-docker compose up -d --build
-```
-
-### 3. 常规 Docker 部署 (可选)
+### 2. 常规 Docker 部署 (可选)
 
 **构建并运行**:
 ```bash
