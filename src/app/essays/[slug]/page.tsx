@@ -1,7 +1,7 @@
 import { getEssayBySlug, getAllEssays } from "@/lib/posts";
 import { Metadata } from "next";
 import Markdown from "react-markdown";
-import { BookOpen, Clock, Eye, Shield } from "lucide-react";
+import { BookOpen, Clock, Eye } from "lucide-react";
 import { notFound } from "next/navigation";
 import remarkGfm from 'remark-gfm';
 import rehypeSlug from 'rehype-slug';
@@ -166,7 +166,7 @@ export default async function EssayPage(props: { params: Promise<{ slug: string 
                                         if (protocol === 'data:' && src.length > 10000) {
                                             return <span className="text-red-500">[图片过大]</span>;
                                         }
-                                    } catch (e) {
+                                    } catch {
                                         return <span className="text-red-500">[无效的URL]</span>;
                                     }
 

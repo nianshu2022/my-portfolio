@@ -1,7 +1,8 @@
 import {
-    Laptop, Smartphone, Watch, Headphones, Monitor, Keyboard, Mouse,
-    Camera, Speaker, Wifi, Lightbulb, Plug, Fan, Home, Battery,
-    Tablet, HardDrive, Coffee, Thermometer, Scissors, Shirt,
+    Laptop, Smartphone, Watch, Headphones,
+    Keyboard, Mouse, Camera, Speaker,
+    Fan, Home, Battery,
+    Tablet, Coffee, Shirt, Scissors,
     Cable, Gamepad, Gift
 } from "lucide-react";
 

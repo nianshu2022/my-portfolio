@@ -1,6 +1,6 @@
 import FloatingNav from "@/components/FloatingNav";
 import Image from "next/image";
-import { ArrowLeft, Mail, Github, Music, Copy, User, Code, Server, Cpu, Terminal, Sparkles, Rocket, BookOpen, Coffee, Briefcase } from "lucide-react";
+import { ArrowLeft, Mail, Github, Music, Copy, Code, Server, Cpu, Terminal, Sparkles, Rocket, BookOpen, Coffee, Briefcase } from "lucide-react";
 
 // Custom icon for QQ
 const QQIcon = ({ className }: { className?: string }) => (

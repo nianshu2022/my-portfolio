@@ -1,7 +1,7 @@
 import { getPostBySlug, getAllPosts, getRelatedPosts, getAdjacentPosts } from "@/lib/posts";
 import { Metadata } from "next";
 import Markdown from "react-markdown";
-import { Clock, BookOpen, Shield, Eye } from "lucide-react";
+import { Clock, BookOpen, Eye } from "lucide-react";
 import rehypeSlug from 'rehype-slug';
 import remarkGfm from 'remark-gfm';
 // import GithubSlugger from 'github-slugger'; // Removed unused import

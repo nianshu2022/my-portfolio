@@ -1,5 +1,5 @@
 import { gearData, GearCategory } from "@/lib/gear-data";
-import { Laptop, Smartphone, Home, Zap, Server, Shield, Database, Cpu, Package } from "lucide-react";
+import { Laptop, Server, Cpu, Package } from "lucide-react";
 import React from "react";
 import Image from "next/image";
 import FloatingNav from "@/components/FloatingNav";

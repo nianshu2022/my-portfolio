@@ -1,5 +1,5 @@
 import FloatingNav from "@/components/FloatingNav";
-import { ExternalLink, Server, Globe, Clock, Tv, Activity } from "lucide-react";
+import { ExternalLink, Server, Clock, Tv, Activity } from "lucide-react";
 import Image from "next/image";
 
 const myServices = [
