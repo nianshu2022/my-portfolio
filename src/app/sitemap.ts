@@ -1,6 +1,8 @@
 import { MetadataRoute } from 'next';
 import { getAllPosts, getAllEssays } from '@/lib/posts';
 
+export const dynamic = 'force-static';
+
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://blog.nianshu2022.cn';
 
 export default function sitemap(): MetadataRoute.Sitemap {
