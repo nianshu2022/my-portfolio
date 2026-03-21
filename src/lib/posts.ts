@@ -17,7 +17,6 @@ import GithubSlugger from 'github-slugger';
 const contentCache = new Map<string, { mtime: number; post: Post }>();
 
 // ... (imports)
-
 export type TOCItem = {
   title: string;
   slug: string;
@@ -50,30 +49,31 @@ const formatDate = (date: string | Date): string => {
 };
 
 // Helper function to recursively get all files from a directory
-function getAllFiles(dirPath: string, arrayOfFiles: string[] = []) {
+function getAllFiles(dirPath: string): string[] {
   if (filesCache.has(dirPath)) {
     return filesCache.get(dirPath)!;
   }
 
   if (!fs.existsSync(dirPath)) {
-    return arrayOfFiles;
+    return [];
   }
 
+  const result: string[] = [];
   const files = fs.readdirSync(dirPath);
 
   files.forEach(file => {
     const fullPath = path.join(dirPath, file);
     if (fs.statSync(fullPath).isDirectory()) {
-      arrayOfFiles = getAllFiles(fullPath, arrayOfFiles);
-    } else {
-      if (file.endsWith('.md')) {
-        arrayOfFiles.push(fullPath);
-      }
+      // 递归获取子目录结果并合并，不依赖累积参数
+      result.push(...getAllFiles(fullPath));
+    } else if (file.endsWith('.md')) {
+      result.push(fullPath);
     }
   });
 
-  filesCache.set(dirPath, arrayOfFiles);
-  return arrayOfFiles;
+  // 递归完成后才缓存，确保结果完整
+  filesCache.set(dirPath, result);
+  return result;
 }
 
 // Helper function to get all items (posts/essays)

@@ -20,9 +20,13 @@
 # production
 /build
 
+# generated data (build artifacts, not for version control)
+/data/knowledge.json
+
 # misc
 .DS_Store
 *.pem
+*.zip
 
 # debug
 npm-debug.log*

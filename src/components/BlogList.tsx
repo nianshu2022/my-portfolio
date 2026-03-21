@@ -1,7 +1,4 @@
-"use client";
-
 import Link from "next/link";
-import { useState, useEffect } from "react";
 import { BookOpen } from "lucide-react";
 import type { PostSummary } from "@/lib/posts";
 
@@ -11,21 +8,9 @@ type BlogListProps = {
 
 const FALLBACK_TAG = "未分类";
 
+// 改为 Server Component：消除不必要的 mounted hydration hack
+// 此组件不依赖任何浏览器 API，不需要客户端状态
 export default function BlogList({ posts }: BlogListProps) {
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) {
-    return (
-      <div className="max-w-4xl w-full flex flex-col gap-6 opacity-0">
-        <div className="flex-1 min-h-[400px]"></div>
-      </div>
-    );
-  }
-
   return (
     <div className="max-w-4xl w-full flex flex-col gap-6">
       <div className="flex-1 space-y-8 p-6 sm:p-0 relative">

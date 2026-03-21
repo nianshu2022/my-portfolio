@@ -7,7 +7,7 @@ const contentDirs = [
     path.join(process.cwd(), 'src/content/essays'),
 ];
 
-const outputFile = path.join(process.cwd(), 'public/knowledge.json');
+const outputFile = path.join(process.cwd(), 'data/knowledge.json');
 
 function getAllFiles(dirPath, arrayOfFiles = []) {
     if (!fs.existsSync(dirPath)) return arrayOfFiles;

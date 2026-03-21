@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google"; // Restoring fonts
+import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 import ScrollToTop from "@/components/ScrollToTop";
@@ -28,7 +28,7 @@ export const viewport: Viewport = {
 
 import CommandMenu from "@/components/CommandMenu";
 import AIChatButton from "@/components/AIChatButton";
-import { getAllPostSummaries } from "@/lib/posts";
+import { getAllPostSummaries, getAllEssaySummaries } from "@/lib/posts";
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://blog.nianshu2022.cn'),
@@ -68,7 +68,6 @@ export const metadata: Metadata = {
 
 import NextTopLoader from 'nextjs-toploader';
 
-// ... imports
 
 export default function RootLayout({
   children,
@@ -76,6 +75,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const posts = getAllPostSummaries();
+  const essays = getAllEssaySummaries();
 
   return (
     <html lang="zh-CN" suppressHydrationWarning className="scroll-smooth">
@@ -126,7 +126,7 @@ export default function RootLayout({
             crossOrigin="anonymous"
           />
         )}
-        <CommandMenu posts={posts} />
+        <CommandMenu posts={posts} essays={essays} />
         <AIChatButton />
         <ServiceWorkerRegister />
       </body>

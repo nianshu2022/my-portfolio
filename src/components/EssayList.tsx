@@ -1,47 +1,15 @@
-"use client";
-
 import Link from "next/link";
-import { Quote } from "lucide-react";
+import { Quote, Feather } from "lucide-react";
 import { type PostSummary } from "@/lib/posts";
-import { useState, useEffect } from "react";
 
+// 改为 Server Component：消除不必要的 mounted hydration hack
+// 此组件不依赖任何浏览器 API，不需要客户端状态
 export default function EssayList({ posts }: { posts: PostSummary[] }) {
-    const [mounted, setMounted] = useState(false);
-
-    useEffect(() => {
-        setMounted(true);
-    }, []);
-
-    // Hydration safety: render placeholder until mounted
-    if (!mounted) {
-        return (
-            <div className="max-w-4xl w-full space-y-8 backdrop-blur-xl bg-white/30 dark:bg-zinc-900/30 p-8 sm:p-12 rounded-3xl border border-white/20 shadow-2xl opacity-0">
-                <div className="min-h-[400px]"></div>
-            </div>
-        );
-    }
-
     return (
         <div className="max-w-4xl w-full space-y-8 p-6 sm:p-0 relative">
             <div className="space-y-2 text-center sm:text-left pt-0 sm:pt-4">
                 <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent inline-flex items-center gap-3 font-serif">
-                    {/* Feather icon is managed in parent or can be imported here if needed, keeping it simple */}
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        className="w-8 h-8 text-purple-600 dark:text-purple-400"
-                    >
-                        <path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z" />
-                        <line x1="16" x2="2" y1="8" y2="22" />
-                        <line x1="17.5" x2="9" y1="15" y2="15" />
-                    </svg>
+                    <Feather className="w-8 h-8 text-purple-600 dark:text-purple-400" />
                     生活随笔
                 </h1>
                 <p className="text-zinc-500 dark:text-zinc-400 font-serif italic">

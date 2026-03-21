@@ -18,6 +18,8 @@ export default function AIChatButton() {
     const [input, setInput] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const scrollRef = useRef<HTMLDivElement>(null);
+    // 用于暂存流式内容，避免每个 chunk 都触发 setMessages
+    const streamBufferRef = useRef("");
 
     useEffect(() => {
         if (scrollRef.current) {
@@ -51,22 +53,37 @@ export default function AIChatButton() {
             if (!reader) return;
 
             setMessages(prev => [...prev, { role: "assistant", content: "" }]);
+            streamBufferRef.current = "";
 
-            let assistantMessage = "";
+            let rafId: number | null = null;
+
+            // 用 RAF 批量 flush 缓冲区到 state，减少 re-render 次数
+            const flush = () => {
+                const buffered = streamBufferRef.current;
+                setMessages(prev => {
+                    const newHistory = [...prev];
+                    newHistory[newHistory.length - 1].content = buffered;
+                    return newHistory;
+                });
+                rafId = null;
+            };
+
             while (true) {
                 const { done, value } = await reader.read();
                 if (done) break;
 
                 const chunk = decoder.decode(value, { stream: true });
                 if (chunk) {
-                    assistantMessage += chunk;
-                    setMessages(prev => {
-                        const newHistory = [...prev];
-                        newHistory[newHistory.length - 1].content = assistantMessage;
-                        return newHistory;
-                    });
+                    streamBufferRef.current += chunk;
+                    // 仅在没有待处理的 RAF 时才调度
+                    if (rafId === null) {
+                        rafId = requestAnimationFrame(flush);
+                    }
                 }
             }
+            // 确保最后的内容被 flush
+            if (rafId !== null) cancelAnimationFrame(rafId);
+            flush();
 
         } catch (error) {
             console.error(error);
