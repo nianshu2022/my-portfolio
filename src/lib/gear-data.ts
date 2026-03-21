@@ -5,6 +5,8 @@ import {
     Cable, Gamepad, Gift
 } from "lucide-react";
 
+import type { LucideIcon } from "lucide-react";
+
 export type GearCategory =
     | "Core Tech"
     | "Smart Home"
@@ -19,7 +21,7 @@ export interface GearItem {
     model?: string;
     category: GearCategory;
     description: string;
-    icon: any; // Lucide icon
+    icon: LucideIcon;
     image?: string; // Path to image in public folder (e.g., /gear/phone.png)
     link?: string;
     purchasedDate?: string;
