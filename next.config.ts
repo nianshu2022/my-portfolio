@@ -4,7 +4,8 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true,
   },
-  output: "standalone",
+  // Static export for Cloudflare Pages hosting
+  output: "export",
 };
 
 export default nextConfig;

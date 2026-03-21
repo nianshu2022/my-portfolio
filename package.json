@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "node scripts/generate-knowledge.mjs && node scripts/generate-rss.mjs && next build",
+    "build": "node scripts/generate-rss.mjs && next build",
     "start": "next start",
     "lint": "eslint"
   },

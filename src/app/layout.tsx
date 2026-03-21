@@ -28,7 +28,6 @@ export const viewport: Viewport = {
 
 import CommandMenu from "@/components/CommandMenu";
 import SearchHint from "@/components/SearchHint";
-import AIChatButton from "@/components/AIChatButton";
 import { getAllPostSummaries, getAllEssaySummaries } from "@/lib/posts";
 
 export const metadata: Metadata = {
@@ -129,7 +128,6 @@ export default function RootLayout({
           />
         )}
         <CommandMenu posts={posts} essays={essays} />
-        <AIChatButton />
         <ServiceWorkerRegister />
       </body>
     </html>
