@@ -13,7 +13,7 @@ export default function Home() {
   // Combine and sort by date (newest first)
   const allUpdates = [...posts.map(p => ({ ...p, type: 'post' })), ...essays.map(e => ({ ...e, type: 'essay' }))]
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-    .slice(0, 2); // Get top 2
+    .slice(0, 3); // 最新 3 条
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-6 sm:p-24 relative overflow-x-hidden">
@@ -119,11 +119,14 @@ export default function Home() {
                 <Sparkles className="w-4 h-4 text-amber-500" />
                 最新动态
               </h2>
+              <Link href="/blog" className="text-xs text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors flex items-center gap-1">
+                查看更多 <ArrowRight className="w-3 h-3" />
+              </Link>
             </div>
             <div className="grid grid-cols-1 gap-4">
               {allUpdates.map((item) => (
                 <Link href={item.type === 'post' ? `/blog/${item.slug}` : `/essays/${item.slug}`} key={item.slug}>
-                  <div className="group relative p-5 bg-white/40 dark:bg-zinc-900/40 hover:bg-white/70 dark:hover:bg-zinc-800/60 rounded-2xl border border-white/50 dark:border-zinc-700/50 transition-all duration-300 hover:shadow-lg hover:-translate-x-1 cursor-pointer backdrop-blur-sm">
+                  <div className="group relative p-5 bg-white/40 dark:bg-zinc-900/40 hover:bg-white/70 dark:hover:bg-zinc-800/60 rounded-2xl border border-white/50 dark:border-zinc-700/50 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 cursor-pointer backdrop-blur-sm">
                     <div className="flex justify-between items-start gap-4">
                       <div className="flex-1 min-w-0 space-y-2">
                         <div className="flex items-center gap-2 text-xs text-zinc-500 dark:text-zinc-400">
@@ -160,7 +163,7 @@ export default function Home() {
 
       {/* Footer */}
       <footer className="w-full py-8 mt-8 flex flex-col items-center justify-center gap-3 z-10 text-center px-4 font-sans backdrop-blur-sm">
-        <span className="text-sm font-medium text-zinc-600 dark:text-zinc-400">© 2025 念舒. All Rights Reserved.</span>
+        <span className="text-sm font-medium text-zinc-600 dark:text-zinc-400">© {new Date().getFullYear()} 念舒. All Rights Reserved.</span>
         <div className="text-xs text-zinc-400 dark:text-zinc-600 flex items-center gap-1.5">
           <span>Powered by</span>
           <a href="https://nextjs.org" target="_blank" rel="noreferrer" className="hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors">Next.js</a>

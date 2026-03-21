@@ -27,6 +27,7 @@ export const viewport: Viewport = {
 };
 
 import CommandMenu from "@/components/CommandMenu";
+import SearchHint from "@/components/SearchHint";
 import AIChatButton from "@/components/AIChatButton";
 import { getAllPostSummaries, getAllEssaySummaries } from "@/lib/posts";
 
@@ -97,7 +98,8 @@ export default function RootLayout({
           speed={200}
           shadow="0 0 10px #9333ea,0 0 5px #9333ea"
         />
-        <div className="fixed top-4 right-4 z-50">
+        <div className="fixed top-4 right-4 z-50 flex items-center gap-2">
+          <SearchHint />
           <ThemeToggle />
         </div>
 

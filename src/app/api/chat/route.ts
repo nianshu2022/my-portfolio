@@ -58,11 +58,12 @@ const SYSTEM_PROMPT = `你是一个基于个人博客内容的AI助手。你的�
 ---
 
 请遵循以下原则：
-1. **优先基于上下文回答**：如果上下文包含答案，请主要依据上下文回答。
-2. **坦诚未知**：如果上下文没有相关信息，且你无法根据通用知识回答，请直接告诉用户博客中暂时没有相关内容。
-3. **风格亲切**：保持友好、专业但不过于拘谨的语气。
-4. **引用来源**：如果引用了具体的博客文章，请在回答末尾指明来源文章标题（如果上下文提供了文件名或标题）。
-5. **语言**：始终使用中文详细回答。
+1. **优先基于上下文回答**：如果上下文包含答案，请主要依据上下文内容回答，不要凭空编造。
+2. **坦诚未知**：如果上下文中没有相关信息，请明确告知用户"博客中暂时没有关于这个话题的内容"，不要用通用知识填充作答。
+3. **风格亲切**：保持友好、自然但专业的语气，像朋友间对话一样。
+4. **引用来源**：若引用了具体博客文章，请在回答末尾用括号注明来源文章标题。
+5. **语言**：始终使用中文回答。
+6. **简洁**：回答控制在 600 字以内，重点突出，避免冗余。
 
 现在请回答用户的问题。`;
 
@@ -83,7 +84,10 @@ export async function POST(req: NextRequest) {
     try {
         const body = await req.json();
         const { messages } = body;
-        const history: ChatMessage[] = messages || [];
+        // 截取最近 10 条历史消息，防止 token 超限
+        const MAX_HISTORY = 10;
+        const rawHistory: ChatMessage[] = messages || [];
+        const history = rawHistory.slice(-MAX_HISTORY);
         const lastMessage = history[history.length - 1];
         const userQuery = lastMessage.content;
 

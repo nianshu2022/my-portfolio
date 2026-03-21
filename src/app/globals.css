@@ -249,18 +249,18 @@
     @apply bg-zinc-300 dark:bg-zinc-700;
   }
 
-  /* Indent first line of paragraphs in prose */
-  .prose p {
+  /* Indent first line of paragraphs only in essay (Chinese prose) */
+  .essay-content .prose p {
     text-indent: 2em;
   }
 
   /* But don't indent blockquotes or list items if they contain p */
-  .prose blockquote p {
+  .essay-content .prose blockquote p {
     text-indent: 0;
   }
 
-  .prose ul p,
-  .prose ol p {
+  .essay-content .prose ul p,
+  .essay-content .prose ol p {
     text-indent: 0;
   }
 
