@@ -50,6 +50,8 @@ RUN chown nextjs:nodejs .next
 # https://nextjs.org/docs/advanced-features/output-file-tracing
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+# knowledge.json & feed.xml are generated at build time by pre-build scripts
+COPY --from=builder --chown=nextjs:nodejs /app/data ./data
 
 USER nextjs
 
