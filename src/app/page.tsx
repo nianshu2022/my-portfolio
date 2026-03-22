@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { BookOpen, Feather, Server, User, Rss, ArrowRight, Calendar, Sparkles, Cpu } from "lucide-react";
+import { BookOpen, Feather, Server, User, Rss, ArrowRight, Calendar, Sparkles, Cpu, Tag, Archive, Users } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import DynamicGreeting from "@/components/DynamicGreeting";
@@ -108,6 +108,24 @@ export default function Home() {
               <Button size="lg" variant="secondary" className="w-full h-14 px-4 sm:px-8 min-w-0 sm:min-w-[160px] gap-2 sm:gap-3 text-sm sm:text-base font-medium shadow-md bg-white/60 dark:bg-zinc-800/60 backdrop-blur-xl border border-white/20 dark:border-zinc-700/50 hover:bg-teal-50 dark:hover:bg-teal-900/20 hover:text-teal-600 dark:hover:text-teal-400 hover:border-teal-200/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl rounded-2xl text-zinc-700 dark:text-zinc-200">
                 <User className="h-5 w-5 shrink-0 group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors" />
                 <span>关于我</span>
+              </Button>
+            </Link>
+            <Link href="/tags" className="w-full sm:w-auto hover:w-full sm:hover:w-auto transition-all is-button">
+              <Button size="lg" variant="secondary" className="w-full h-14 px-4 sm:px-8 min-w-0 sm:min-w-[160px] gap-2 sm:gap-3 text-sm sm:text-base font-medium shadow-md bg-white/60 dark:bg-zinc-800/60 backdrop-blur-xl border border-white/20 dark:border-zinc-700/50 hover:bg-violet-50 dark:hover:bg-violet-900/20 hover:text-violet-600 dark:hover:text-violet-400 hover:border-violet-200/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl rounded-2xl text-zinc-700 dark:text-zinc-200">
+                <Tag className="h-5 w-5 shrink-0" />
+                <span>标签</span>
+              </Button>
+            </Link>
+            <Link href="/archive" className="w-full sm:w-auto hover:w-full sm:hover:w-auto transition-all is-button">
+              <Button size="lg" variant="secondary" className="w-full h-14 px-4 sm:px-8 min-w-0 sm:min-w-[160px] gap-2 sm:gap-3 text-sm sm:text-base font-medium shadow-md bg-white/60 dark:bg-zinc-800/60 backdrop-blur-xl border border-white/20 dark:border-zinc-700/50 hover:bg-amber-50 dark:hover:bg-amber-900/20 hover:text-amber-600 dark:hover:text-amber-400 hover:border-amber-200/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl rounded-2xl text-zinc-700 dark:text-zinc-200">
+                <Archive className="h-5 w-5 shrink-0" />
+                <span>归档</span>
+              </Button>
+            </Link>
+            <Link href="/friends" className="w-full sm:w-auto hover:w-full sm:hover:w-auto transition-all is-button">
+              <Button size="lg" variant="secondary" className="w-full h-14 px-4 sm:px-8 min-w-0 sm:min-w-[160px] gap-2 sm:gap-3 text-sm sm:text-base font-medium shadow-md bg-white/60 dark:bg-zinc-800/60 backdrop-blur-xl border border-white/20 dark:border-zinc-700/50 hover:bg-rose-50 dark:hover:bg-rose-900/20 hover:text-rose-600 dark:hover:text-rose-400 hover:border-rose-200/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl rounded-2xl text-zinc-700 dark:text-zinc-200">
+                <Users className="h-5 w-5 shrink-0" />
+                <span>友链</span>
               </Button>
             </Link>
           </div>

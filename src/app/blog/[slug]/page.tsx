@@ -16,6 +16,10 @@ import CodeBlock from "@/components/ui/CodeBlock";
 import RelatedPosts from "@/components/RelatedPosts";
 import Comments from "@/components/Comments";
 import PostNavigation from "@/components/PostNavigation";
+import ScrollMemory from "@/components/ScrollMemory";
+import FontSizeControl from "@/components/FontSizeControl";
+import ShareButton from "@/components/ShareButton";
+import LikeButton from "@/components/LikeButton";
 import rehypeSanitize, { defaultSchema } from 'rehype-sanitize';
 
 export async function generateStaticParams() {
@@ -114,6 +118,7 @@ export default async function PostPage(props: { params: Promise<{ slug: string }
 
     return (
         <main className="flex min-h-screen flex-col items-center p-4 sm:p-24 relative overflow-hidden">
+            <ScrollMemory />
             {/* Background Blobs (Blue/Violet Theme) */}
             <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none -z-10">
                 <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-blue-200/30 dark:bg-blue-900/20 rounded-full blur-[100px] animate-blob mix-blend-multiply dark:mix-blend-screen opacity-70"></div>
@@ -164,6 +169,9 @@ export default async function PostPage(props: { params: Promise<{ slug: string }
                                         <Eye className="w-4 h-4" />
                                         <BusuanziCounter />
                                     </div>
+                                    <div className="ml-auto">
+                                        <FontSizeControl />
+                                    </div>
                                 </div>
 
                                 {/* Tags Row - Optimized for mobile */}
@@ -185,7 +193,7 @@ export default async function PostPage(props: { params: Promise<{ slug: string }
                                 </div>
                             </header>
 
-                            <div className="blog-content prose prose-zinc dark:prose-invert max-w-none prose-headings:scroll-mt-28 sm:pl-4 prose-a:break-all prose-img:mx-auto">
+                            <div className="blog-content prose prose-zinc dark:prose-invert max-w-none prose-headings:scroll-mt-28 sm:pl-4 prose-a:break-all prose-img:mx-auto" style={{ fontSize: 'var(--article-font-size, 16px)' }}>
                                 <Markdown
                                     remarkPlugins={[remarkGfm]}
                                     rehypePlugins={[
@@ -302,7 +310,11 @@ export default async function PostPage(props: { params: Promise<{ slug: string }
                                             转载请注明：blog.nianshu2022.cn/blog/{post.slug}
                                         </p>
                                     </div>
-                                    <DonateButton />
+                                    <div className="flex items-center gap-3 flex-wrap justify-center sm:justify-end">
+                                        <LikeButton slug={post.slug} />
+                                        <ShareButton title={post.title} />
+                                        <DonateButton />
+                                    </div>
                                 </div>
                             </div>
 

@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
-import { BookOpen, Search, Feather, ArrowRight } from "lucide-react";
+import { BookOpen, Search, Feather, ArrowRight, Tag, Archive, Users } from "lucide-react";
 import { PostSummary } from "@/lib/posts";
 
 interface CommandMenuProps {
@@ -194,6 +194,26 @@ export default function CommandMenu({ posts, essays }: CommandMenuProps) {
                             )}
                         </div>
                     )}
+                </div>
+
+                {/* Page shortcuts */}
+                <div className="border-t border-zinc-100 dark:border-zinc-800 p-2">
+                    <div className="px-2 py-1.5 text-[10px] font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+                        快速导航
+                    </div>
+                    <div className="flex flex-wrap gap-1 px-1">
+                        {[{ href: "/tags", icon: Tag, label: "标签" }, { href: "/archive", icon: Archive, label: "归档" }, { href: "/friends", icon: Users, label: "友链" }]
+                            .map(({ href, icon: Icon, label }) => (
+                                <button
+                                    key={href}
+                                    onClick={() => { setOpen(false); router.push(href); }}
+                                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
+                                >
+                                    <Icon className="w-3.5 h-3.5" />
+                                    {label}
+                                </button>
+                            ))}
+                    </div>
                 </div>
 
                 {/* Footer hint */}

@@ -12,6 +12,10 @@ import FloatingNav from "@/components/FloatingNav";
 import DonateButton from "@/components/DonateButton";
 import CodeBlock from "@/components/ui/CodeBlock";
 import Comments from "@/components/Comments";
+import ScrollMemory from "@/components/ScrollMemory";
+import FontSizeControl from "@/components/FontSizeControl";
+import ShareButton from "@/components/ShareButton";
+import LikeButton from "@/components/LikeButton";
 import rehypeSanitize, { defaultSchema } from 'rehype-sanitize';
 
 export async function generateStaticParams() {
@@ -79,6 +83,7 @@ export default async function EssayPage(props: { params: Promise<{ slug: string 
 
     return (
         <main className="flex min-h-screen flex-col items-center p-4 sm:p-24 relative font-serif overflow-hidden">
+            <ScrollMemory />
             {/* Background Blobs (Purple/Pink Theme) */}
             <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none -z-10">
                 <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-purple-200/30 dark:bg-purple-900/20 rounded-full blur-[100px] animate-blob mix-blend-multiply dark:mix-blend-screen opacity-70"></div>
@@ -130,6 +135,8 @@ export default async function EssayPage(props: { params: Promise<{ slug: string 
                                 <Eye className="w-4 h-4" />
                                 <BusuanziCounter />
                             </div>
+
+                            <FontSizeControl />
                         </div>
 
                         {/* Decorative Separator */}
@@ -140,7 +147,7 @@ export default async function EssayPage(props: { params: Promise<{ slug: string 
                         </div>
                     </header>
 
-                    <div className="essay-content prose prose-lg prose-zinc dark:prose-invert max-w-none prose-p:indent-0 prose-p:text-justify prose-headings:font-serif prose-headings:text-center prose-img:rounded-xl prose-img:shadow-lg prose-a:break-all prose-img:mx-auto">
+                    <div className="essay-content prose prose-lg prose-zinc dark:prose-invert max-w-none prose-p:indent-0 prose-p:text-justify prose-headings:font-serif prose-headings:text-center prose-img:rounded-xl prose-img:shadow-lg prose-a:break-all prose-img:mx-auto" style={{ fontSize: 'var(--article-font-size, 17px)' }}>
                         <Markdown
                             remarkPlugins={[remarkGfm]}
                             rehypePlugins={[
@@ -257,7 +264,11 @@ export default async function EssayPage(props: { params: Promise<{ slug: string 
                                     转载请注明：blog.nianshu2022.cn/essays/{post.slug}
                                 </p>
                             </div>
-                            <DonateButton />
+                            <div className="flex items-center gap-3 flex-wrap justify-center sm:justify-end">
+                                <LikeButton slug={post.slug} />
+                                <ShareButton title={post.title} />
+                                <DonateButton />
+                            </div>
                         </div>
 
                         <div className="text-center mt-12 mb-8">

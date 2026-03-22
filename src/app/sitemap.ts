@@ -66,6 +66,24 @@ export default function sitemap(): MetadataRoute.Sitemap {
             changeFrequency: 'monthly',
             priority: 0.5,
         },
+        {
+            url: `${BASE_URL}/tags`,
+            lastModified: new Date(),
+            changeFrequency: 'weekly',
+            priority: 0.6,
+        },
+        {
+            url: `${BASE_URL}/archive`,
+            lastModified: new Date(),
+            changeFrequency: 'weekly',
+            priority: 0.6,
+        },
+        {
+            url: `${BASE_URL}/friends`,
+            lastModified: new Date(),
+            changeFrequency: 'monthly',
+            priority: 0.5,
+        },
         ...postsUrls,
         ...essaysUrls,
     ];
