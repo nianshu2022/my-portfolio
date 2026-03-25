@@ -1,6 +1,6 @@
 ---
 title: "Windows 离线安装 Docker Desktop 完全指南（含常见报错解决）"
-date: "2026-03-23"
+date: "2026-03-20"
 description: "在无法联网的内网环境中，如何一步步完成 Docker Desktop 的安装？本文涵盖完整离线安装流程，并重点解决 WSL 版本过低导致 Docker 无法启动的问题。"
 tags: ["Docker", "Windows", "WSL", "运维", "离线安装"]
 ---
