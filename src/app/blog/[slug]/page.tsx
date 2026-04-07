@@ -10,6 +10,7 @@ import BusuanziCounter from "@/components/Busuanzi";
 import ReadingProgress from "@/components/ReadingProgress";
 import SidebarAward from "@/components/SidebarAward";
 import TableOfContents from "@/components/TableOfContents";
+import FloatingTOC from "@/components/FloatingTOC";
 import FloatingNav from "@/components/FloatingNav";
 import DonateButton from "@/components/DonateButton";
 import CodeBlock from "@/components/ui/CodeBlock";
@@ -117,7 +118,7 @@ export default async function PostPage(props: { params: Promise<{ slug: string }
     };
 
     return (
-        <main className="flex min-h-screen flex-col items-center p-4 sm:p-24 relative overflow-hidden">
+        <main className="flex min-h-screen flex-col items-center p-4 sm:p-24 relative overflow-x-hidden">
             <ScrollMemory />
             {/* Background Blobs (Blue/Violet Theme) */}
             <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none -z-10">
@@ -134,6 +135,9 @@ export default async function PostPage(props: { params: Promise<{ slug: string }
             <ReadingProgress />
 
             <FloatingNav backUrl="/blog" />
+
+            {/* Floating TOC - fixed position, works regardless of overflow */}
+            <FloatingTOC toc={post.toc} />
 
             {/* Main Content Wrapper - Includes Article Card and Sidebar */}
             <div className="max-w-7xl w-full flex flex-col lg:flex-row lg:gap-8 relative">
@@ -328,29 +332,14 @@ export default async function PostPage(props: { params: Promise<{ slug: string }
                 </div>
 
                 {/* Sidebar - Separated Card */}
-                <aside className="hidden lg:block w-72 shrink-0">
-                    <div className="sticky top-6 space-y-6">
-                        {/* TOC Card - Transparent */}
-                        <div className="p-6 rounded-3xl max-h-[80vh] flex flex-col snap-y snap-mandatory overflow-y-auto custom-scrollbar pr-1 relative">
-                            {/* Decorative line for TOC */}
-                            <div className="absolute left-0 top-6 bottom-6 w-px bg-zinc-200 dark:bg-zinc-800 ml-3"></div>
-
-                            <h4 className="font-bold mb-4 text-sm text-zinc-900 dark:text-zinc-100 flex items-center gap-2 select-none relative z-10 bg-transparent pl-4">
-                                目录
-                            </h4>
-                            <div className="pl-4">
-                                <TableOfContents toc={post.toc} />
-                            </div>
+                {/* Award Sidebar (only if post has award) */}
+                {post.award && (
+                    <aside className="hidden xl:block w-72 shrink-0">
+                        <div className="rounded-3xl border-0 overflow-hidden ml-4 mt-16">
+                            <SidebarAward src={post.award} />
                         </div>
-
-                        {/* Award Card - Transparent */}
-                        {post.award && (
-                            <div className="rounded-3xl border-0 overflow-hidden ml-4">
-                                <SidebarAward src={post.award} />
-                            </div>
-                        )}
-                    </div>
-                </aside>
+                    </aside>
+                )}
 
             </div >
         </main >

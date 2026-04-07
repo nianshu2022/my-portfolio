@@ -39,7 +39,7 @@ export default function Home() {
               <div className="relative w-32 h-32 sm:w-40 sm:h-40 rounded-full bg-white dark:bg-zinc-900 p-1.5 shadow-2xl overflow-hidden transition-transform duration-500 ease-in-out group-hover:scale-105">
                 <div className="w-full h-full rounded-full overflow-hidden relative">
                   <Image
-                    src="/img/avatar.png"
+                    src="/img/avatar.gif"
                     alt="念舒 Avatar"
                     width={160}
                     height={160}

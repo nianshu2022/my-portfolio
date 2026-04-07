@@ -107,7 +107,7 @@ export default function PortalPage() {
                   {service.name}
                   <ExternalLink className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity -translate-x-2 group-hover:translate-x-0" />
                 </h3>
-                <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed font-medium">
+                <p className="text-sm text-zinc-600 dark:text-zinc-300 leading-relaxed font-medium">
                   {service.description}
                 </p>
               </div>

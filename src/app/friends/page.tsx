@@ -2,6 +2,7 @@ import { friendLinks } from "@/lib/friends-data";
 import FloatingNav from "@/components/FloatingNav";
 import { Heart, Link2 } from "lucide-react";
 import Image from "next/image";
+import FriendLinkModal from "@/components/FriendLinkModal";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -79,16 +80,9 @@ export default function FriendsPage() {
                 ))}
 
                 {/* Add Friend CTA */}
-                <a
-                    href="mailto:nianshu2022@sina.cn?subject=%E7%94%B3%E8%AF%B7%E5%8F%8B%E9%93%BE"
-                    className="flex flex-col items-center justify-center gap-3 p-6 rounded-3xl border-2 border-dashed border-zinc-200 dark:border-zinc-700 text-zinc-400 dark:text-zinc-600 hover:border-rose-300 dark:hover:border-rose-700 hover:text-rose-400 dark:hover:text-rose-600 transition-all duration-300 cursor-pointer"
-                >
-                    <Heart className="w-8 h-8" />
-                    <div className="text-center">
-                        <p className="font-medium text-sm">申请友链</p>
-                        <p className="text-xs mt-1">欢迎来信交换友链</p>
-                    </div>
-                </a>
+                <div className="flex">
+                    <FriendLinkModal email="nianshu2022@sina.cn" />
+                </div>
             </div>
         </main>
     );
