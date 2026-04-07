@@ -1,6 +1,6 @@
 ---
 title: "监控疯狂报警：我是怎么干掉 /var/lib/docker 几十G垃圾的"
-date: "2026-04-07"
+date: "2026-04-06"
 description: "测试或 CI/CD 节点频发 /var/lib/docker/ 磁盘 100% 爆满告警？千万别手欠用 rm -rf！本文记录了一套基于 Docker 官方命令和系统调用的极客无感排错范式与自动化清理脚本。"
 tags: ["Docker", "Linux", "运维", "故障排查", "Shell"]
 ---
