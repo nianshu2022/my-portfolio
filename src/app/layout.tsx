@@ -81,12 +81,21 @@ export default function RootLayout({
     <html lang="zh-CN" suppressHydrationWarning className="scroll-smooth">
       <head>
         <meta name="google-adsense-account" content="ca-pub-6153369929341681" />
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6153369929341681" crossOrigin="anonymous"></script>
+        {/* P1: 防主题闪烁 - 在 JS 加载前同步设置 dark class，消除 FOUC */}
+        <script dangerouslySetInnerHTML={{
+          __html: `try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme:dark)').matches)){document.documentElement.classList.add('dark')}}catch(e){}`
+        }} />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen relative overflow-x-hidden bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100`}
         suppressHydrationWarning
       >
+        {/* P3: AdSense 改用 lazyOnload 策略，页面完全加载后才下载，不阻塞首屏 */}
+        <Script
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6153369929341681"
+          strategy="lazyOnload"
+          crossOrigin="anonymous"
+        />
         <NextTopLoader
           color="#9333ea"
           initialPosition={0.08}

@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { BookOpen, Feather, Server, User, Rss, ArrowRight, Calendar, Sparkles, Cpu, Tag, Archive, Users } from "lucide-react";
 import Link from "next/link";
-import Image from "next/image";
+
 import DynamicGreeting from "@/components/DynamicGreeting";
 import { getAllPostSummaries, getAllEssaySummaries } from "@/lib/posts";
 
@@ -18,12 +18,7 @@ export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-6 sm:p-24 relative overflow-x-hidden">
 
-      {/* Background Blobs (Same as About Page) */}
-      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none -z-10">
-        <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-purple-200/30 dark:bg-purple-900/20 rounded-full blur-[100px] animate-blob mix-blend-multiply dark:mix-blend-screen opacity-70"></div>
-        <div className="absolute top-[20%] left-[-10%] w-[400px] h-[400px] bg-teal-200/30 dark:bg-teal-900/20 rounded-full blur-[100px] animate-blob animation-delay-2000 mix-blend-multiply dark:mix-blend-screen opacity-70"></div>
-        <div className="absolute bottom-[-10%] right-[20%] w-[600px] h-[600px] bg-indigo-200/30 dark:bg-indigo-900/20 rounded-full blur-[100px] animate-blob animation-delay-4000 mix-blend-multiply dark:mix-blend-screen opacity-70"></div>
-      </div>
+      {/* P2: 已移除重复的 Blob 背景层，全局背景由 layout.tsx 提供 */}
 
       <div className="flex-1 flex flex-col items-center justify-center w-full z-10 animate-fade-in-up">
         <div className="max-w-4xl w-full flex flex-col items-center gap-6 font-sans text-sm">
@@ -38,15 +33,20 @@ export default function Home() {
 
               <div className="relative w-32 h-32 sm:w-40 sm:h-40 rounded-full bg-white dark:bg-zinc-900 p-1.5 shadow-2xl overflow-hidden transition-transform duration-500 ease-in-out group-hover:scale-105">
                 <div className="w-full h-full rounded-full overflow-hidden relative">
-                  <Image
-                    src="/img/avatar.gif"
-                    alt="念舒 Avatar"
+                  {/* P0-1: GIF → 动态 WebP，体积从 5.47MB 降至 1.53MB（节省 72%） */}
+                  <video
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    className="object-cover w-full h-full"
                     width={160}
                     height={160}
-                    className="object-cover w-full h-full"
-                    priority
-                    unoptimized
-                  />
+                  >
+                    <source src="/img/avatar.webp" type="image/webp" />
+                    {/* 降级回静态 PNG */}
+                    <img src="/img/avatar.png" alt="念舒 Avatar" className="object-cover w-full h-full" />
+                  </video>
                 </div>
               </div>
             </div>
