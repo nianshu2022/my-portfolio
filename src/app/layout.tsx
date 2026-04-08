@@ -81,6 +81,7 @@ export default function RootLayout({
     <html lang="zh-CN" suppressHydrationWarning className="scroll-smooth">
       <head>
         <meta name="google-adsense-account" content="ca-pub-6153369929341681" />
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6153369929341681" crossOrigin="anonymous"></script>
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen relative overflow-x-hidden bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100`}
@@ -119,14 +120,7 @@ export default function RootLayout({
 
 
 
-        {/* Google AdSense */}
-        {process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_ID && (
-          <Script
-            strategy="lazyOnload"
-            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_ID}`}
-            crossOrigin="anonymous"
-          />
-        )}
+
         <CommandMenu posts={posts} essays={essays} />
         <ServiceWorkerRegister />
       </body>
