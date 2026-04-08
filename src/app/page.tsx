@@ -33,20 +33,15 @@ export default function Home() {
 
               <div className="relative w-32 h-32 sm:w-40 sm:h-40 rounded-full bg-white dark:bg-zinc-900 p-1.5 shadow-2xl overflow-hidden transition-transform duration-500 ease-in-out group-hover:scale-105">
                 <div className="w-full h-full rounded-full overflow-hidden relative">
-                  {/* P0-1: GIF → 动态 WebP，体积从 5.47MB 降至 1.53MB（节省 72%） */}
-                  <video
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
-                    className="object-cover w-full h-full"
+                  {/* P0-1: GIF → 动态 WebP（img 标签原生支持动态 WebP 播放） */}
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src="/img/avatar.webp"
+                    alt="念舒 Avatar"
                     width={160}
                     height={160}
-                  >
-                    <source src="/img/avatar.webp" type="image/webp" />
-                    {/* 降级回静态 PNG */}
-                    <img src="/img/avatar.png" alt="念舒 Avatar" className="object-cover w-full h-full" />
-                  </video>
+                    className="object-cover w-full h-full"
+                  />
                 </div>
               </div>
             </div>
