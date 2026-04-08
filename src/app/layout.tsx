@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import Script from "next/script";
 import "./globals.css";
 import ScrollToTop from "@/components/ScrollToTop";
 import ServiceWorkerRegister from "@/components/ServiceWorkerRegister";
@@ -85,17 +84,13 @@ export default function RootLayout({
         <script dangerouslySetInnerHTML={{
           __html: `try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme:dark)').matches)){document.documentElement.classList.add('dark')}}catch(e){}`
         }} />
+        {/* AdSense 验证：使用原生 async script，避免 Next.js Script 组件的 data-nscript 属性导致 AdSense 报警 */}
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6153369929341681" crossOrigin="anonymous"></script>
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen relative overflow-x-hidden bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100`}
         suppressHydrationWarning
       >
-        {/* P3: AdSense 改用 lazyOnload 策略，页面完全加载后才下载，不阻塞首屏 */}
-        <Script
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6153369929341681"
-          strategy="lazyOnload"
-          crossOrigin="anonymous"
-        />
         <NextTopLoader
           color="#9333ea"
           initialPosition={0.08}
