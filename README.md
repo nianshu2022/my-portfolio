@@ -16,6 +16,8 @@
 - **Next.js 15 (App Router)** + React Server Components
 - **静态导出 (output: export)**：构建为纯静态 HTML，部署到 Cloudflare Pages 全球 CDN
 - **PWA 支持**：Service Worker 离线缓存，可安装到桌面/手机
+- **页面过渡动画**：`motion` (Framer Motion) 驱动的页面切换与滚动揭示效果
+- **图片优化**：构建时自动压缩 (`optimize-images.mjs`)，运行时 wsrv.nl 代理
 
 ### 📝 内容系统
 - **双内容流**：技术博客（`/blog`）与生活随笔（`/essays`），各有独立风格
@@ -37,8 +39,19 @@
 ### 👤 个人展示
 - **关于我** (`/about`)：个人介绍、技术栈、联系方式
 - **数字装备** (`/gear`)：硬件 & 软件清单
-- **我的传送门** (`/portal`)：私有部署服务入口
-- **友链** (`/friends`)：收录喜爱的网站与博客
+- **我的传送门** (`/portal`)：私有部署服务入口，实时在线状态检测
+- **友链** (`/friends`)：收录喜爱的网站与博客，支持弹窗提交
+
+### 🧩 首页小组件
+- **GitHub 统计**：个人 GitHub 数据展示
+- **GitHub 趋势**：热门开源项目
+- **每日诗词** / **每日一言**：古诗词与随机语句
+- **V2EX 热帖** / **IT 之家**：技术社区动态
+- **音乐榜单**：热门音乐排行
+- **历史上的今天**：历史事件回顾
+- **天气卡片**：实时天气信息
+- **访客地图**：Leaflet 世界地图展示访客分布
+- **贡献热力图**：GitHub 风格的活跃度热力图
 
 ### 🎨 界面与交互
 - **暗黑模式**：手动切换，持久化保存
@@ -47,10 +60,17 @@
 - **阅读进度持久化**：离开文章后返回自动还原滚动位置
 - **点赞按钮**：爱心动画，本地记录喜欢状态
 - **分享按钮**：一键分享（原生 API / 复制链接 / 微博 / Twitter）
+- **图片灯箱**：点击图片全屏预览，支持缩放
+- **视觉特效**：网格背景、鼠标追踪光晕、倾斜卡片、发光边框
+- **滚动动画**：ScrollReveal 滚动揭示、打字机效果
+- **浮动导航**：文章页浮动目录 (TOC) 与导航栏
+- **键盘快捷键**：`Ctrl+K` 命令菜单，键盘导航支持
+- **返回顶部**：悬浮按钮，平滑滚动
+- **赞助按钮**：支持打赏 / 捐赠
 - **SEO**：JSON-LD 结构化数据 + Open Graph + 自动生成 sitemap / robots.txt
 - **RSS 订阅**：自动生成 `feed.xml`
 - **评论系统**：Giscus（基于 GitHub Discussions）
-- **访问统计**：不蒜子 (Busuanzi)
+- **访问统计**：不蒜子 (Busuanzi) + 访客计数器
 
 ---
 
@@ -60,10 +80,13 @@
 |------|------|
 | 框架 | Next.js 15 (App Router) |
 | 语言 | TypeScript |
-| 样式 | Tailwind CSS v4 |
-| 内容 | gray-matter · react-markdown · remark-gfm · rehype-sanitize · rehype-slug |
+| 样式 | Tailwind CSS v4 · class-variance-authority · tailwind-merge |
+| 动画 | motion (Framer Motion) |
+| 内容 | gray-matter · react-markdown · remark-gfm · rehype-sanitize · rehype-slug · reading-time |
+| 地图 | Leaflet · react-leaflet |
 | 图标 | Lucide React |
 | 评论 | Giscus (@giscus/react) |
+| 加载 | nextjs-toploader |
 | 部署 | Cloudflare Pages |
 
 ---
@@ -137,7 +160,12 @@ award: ""                  # 可选，随笔专属标注
 ```
 .
 ├── public/                 # 静态资源 (图片, favicon, sw.js 等)
-├── scripts/                # 构建脚本 (generate-rss.mjs 等)
+├── scripts/                # 构建脚本
+│   ├── dev.mjs             # 开发服务器启动脚本
+│   ├── generate-rss.mjs    # RSS feed 生成
+│   ├── generate-pwa-icons.mjs  # PWA 图标生成
+│   ├── generate-portal-status.mjs  # 传送门状态检测
+│   └── optimize-images.mjs # 图片压缩优化
 ├── src/
 │   ├── app/                # Next.js 页面路由
 │   │   ├── about/          # 关于我
@@ -147,12 +175,21 @@ award: ""                  # 可选，随笔专属标注
 │   │   ├── friends/        # 友链
 │   │   ├── gear/           # 数字装备
 │   │   ├── portal/         # 服务导航
+│   │   ├── search/         # 搜索结果页
 │   │   ├── tags/           # 标签聚合
 │   │   ├── layout.tsx      # 根布局
 │   │   └── page.tsx        # 首页
 │   ├── components/         # React 组件
+│   │   ├── ui/             # 基础 UI 组件 (Button, CodeBlock)
+│   │   └── widgets/        # 首页小组件 (GitHub 统计, 天气, 诗词等)
 │   ├── content/            # Markdown 内容
-│   └── lib/                # 工具函数与数据 (posts.ts, gear-data.ts, friends-data.ts)
+│   └── lib/                # 工具函数与数据
+│       ├── api/            # API 请求封装 (fetch-wrapper, types)
+│       ├── hooks/          # 自定义 Hooks (useApi, useGeolocation, useKeyboardNav)
+│       ├── posts.ts        # 文章数据处理
+│       ├── gear-data.ts    # 装备数据
+│       ├── friends-data.ts # 友链数据
+│       └── site-stats.ts   # 站点统计
 ├── next.config.ts
 └── package.json
 ```
@@ -164,4 +201,4 @@ award: ""                  # 可选，随笔专属标注
 内容采用 [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/) 协议。
 源代码采用 MIT 协议开源。
 
-Copyright © 2025 念舒.
+Copyright © 2026 念舒.
