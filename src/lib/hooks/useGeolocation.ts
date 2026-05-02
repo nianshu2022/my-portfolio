@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { fetchApi } from "@/lib/api/fetch-wrapper";
 import { useApi } from "@/lib/hooks/useApi";
-import type { GeoLocationData, WeatherData } from "@/lib/api/types";
+import type { ApiState, GeoLocationData, WeatherData } from "@/lib/api/types";
 
 const WMO_MAP: Record<number, { description: string; iconName: string }> = {
   0: { description: "晴天", iconName: "Sun" },
@@ -78,21 +78,104 @@ function formatTimezone(tz: string): string {
   }
 }
 
+async function fetchIpLocation(): Promise<GeoLocationData> {
+  return fetchApi<GeoLocationData>("https://ipapi.co/json/", {
+    cacheKey: GEO_CACHE_KEY,
+    cacheTTL: GEO_CACHE_TTL,
+  });
+}
+
+function fetchBrowserGeolocation(): Promise<GeoLocationData> {
+  return new Promise((resolve, reject) => {
+    if (typeof navigator === "undefined" || !navigator.geolocation) {
+      reject(new Error("Geolocation not available"));
+      return;
+    }
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const { latitude, longitude } = pos.coords;
+        resolve({
+          ip: "",
+          city: "",
+          region: "",
+          country_name: "",
+          latitude,
+          longitude,
+          timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+        });
+      },
+      (err) => reject(err),
+      { timeout: 5000, maximumAge: GEO_CACHE_TTL },
+    );
+  });
+}
+
 export function useGeolocation() {
-  const location = useApi<GeoLocationData>(
-    () =>
-      fetchApi<GeoLocationData>("https://ipapi.co/json/", {
-        cacheKey: GEO_CACHE_KEY,
-        cacheTTL: GEO_CACHE_TTL,
-      }),
-    [],
-  );
+  const [locationState, setLocationState] = useState<ApiState<GeoLocationData>>({
+    data: null,
+    loading: true,
+    error: null,
+  });
+  const [retryCount, setRetryCount] = useState(0);
+
+  useEffect(() => {
+    let cancelled = false;
+    const cacheKey = GEO_CACHE_KEY;
+
+    const fetchLocation = () => {
+      setLocationState((prev) => ({ ...prev, loading: true, error: null }));
+      fetchBrowserGeolocation()
+        .then((data) => {
+          if (!cancelled) {
+            localStorage.setItem(cacheKey, JSON.stringify({ data, ts: Date.now() }));
+            setLocationState({ data, loading: false, error: null });
+          }
+        })
+        .catch(() => {
+          fetchIpLocation()
+            .then((data) => {
+              if (!cancelled) {
+                localStorage.setItem(cacheKey, JSON.stringify({ data, ts: Date.now() }));
+                setLocationState({ data, loading: false, error: null });
+              }
+            })
+            .catch((err: Error) => {
+              if (!cancelled) setLocationState({ data: null, loading: false, error: err.message });
+            });
+        });
+    };
+
+    // Try cache first (skip on retry)
+    if (retryCount === 0) {
+      try {
+        const cached = localStorage.getItem(cacheKey);
+        if (cached) {
+          const { data, ts } = JSON.parse(cached);
+          if (Date.now() - ts < GEO_CACHE_TTL && data.latitude && data.longitude) {
+            if (!cancelled) setLocationState({ data, loading: false, error: null });
+            return;
+          }
+        }
+      } catch {}
+    }
+
+    // Try browser geolocation first, fall back to IP
+    fetchLocation();
+
+    return () => { cancelled = true; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [retryCount]);
+
+  const retry = useCallback(() => {
+    localStorage.removeItem(GEO_CACHE_KEY);
+    setRetryCount((c) => c + 1);
+  }, []);
 
   const [zhNames, setZhNames] = useState<{ cityZh?: string; countryZh?: string; timezoneZh?: string }>({});
 
   useEffect(() => {
-    if (!location.data) return;
-    const { latitude, longitude, timezone } = location.data;
+    if (!locationState.data) return;
+    const { latitude, longitude, timezone } = locationState.data;
     const cacheKey = `geo-zh2-${latitude.toFixed(2)}-${longitude.toFixed(2)}`;
     const cached = localStorage.getItem(cacheKey);
     if (cached) {
@@ -113,10 +196,10 @@ export function useGeolocation() {
         localStorage.setItem(cacheKey, JSON.stringify(names));
       })
       .catch(() => {});
-  }, [location.data]);
+  }, [locationState.data]);
 
-  const lat = location.data?.latitude;
-  const lon = location.data?.longitude;
+  const lat = locationState.data?.latitude;
+  const lon = locationState.data?.longitude;
 
   const weather = useApi<WeatherData>(
     () =>
@@ -136,9 +219,9 @@ export function useGeolocation() {
     { enabled: lat != null && lon != null },
   );
 
-  const mergedLocation = location.data
-    ? { ...location, data: { ...location.data, ...zhNames } }
-    : location;
+  const location = locationState.data
+    ? { ...locationState, data: { ...locationState.data, ...zhNames }, retry }
+    : { ...locationState, retry };
 
-  return { location: mergedLocation, weather };
+  return { location, weather };
 }
