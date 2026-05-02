@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import Script from "next/script";
 import "./globals.css";
 import ScrollToTop from "@/components/ScrollToTop";
 import KeyboardHint from "@/components/KeyboardHint";
@@ -87,6 +86,12 @@ export default function RootLayout({
     <html lang="zh-CN" suppressHydrationWarning className="scroll-smooth">
       <head>
         <meta name="google-adsense-account" content="ca-pub-6153369929341681" />
+        {/* P1: 防主题闪烁 - 在 JS 加载前同步设置 dark class，消除 FOUC */}
+        <script dangerouslySetInnerHTML={{
+          __html: `try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme:dark)').matches)){document.documentElement.classList.add('dark')}}catch(e){}`
+        }} />
+        {/* AdSense 验证：使用原生 async script，避免 Next.js Script 组件的 data-nscript 属性导致 AdSense 报警 */}
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6153369929341681" crossOrigin="anonymous"></script>
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen relative overflow-x-hidden bg-background text-foreground`}
@@ -142,14 +147,7 @@ export default function RootLayout({
 
 
 
-        {/* Google AdSense */}
-        {process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_ID && (
-          <Script
-            strategy="lazyOnload"
-            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_ID}`}
-            crossOrigin="anonymous"
-          />
-        )}
+
         <CommandMenu posts={posts} essays={essays} />
         <ServiceWorkerRegister />
       </body>

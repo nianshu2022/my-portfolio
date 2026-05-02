@@ -339,7 +339,13 @@
   }
 
   .prose blockquote {
-    @apply not-italic border-none bg-transparent px-0 py-2 my-8 text-center;
+    @apply not-italic border-l-4 border-indigo-400/70 bg-indigo-50/50 dark:bg-indigo-950/30 dark:border-indigo-500/50 px-6 py-4 my-8 rounded-r-xl text-left text-zinc-700 dark:text-zinc-300 shadow-sm leading-relaxed;
+  }
+
+  /* Remove default quotes from typography plugin */
+  .prose blockquote p:first-of-type::before,
+  .prose blockquote p:last-of-type::after {
+    content: none !important;
   }
 
   .prose blockquote img {

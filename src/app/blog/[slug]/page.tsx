@@ -9,6 +9,7 @@ import BusuanziCounter from "@/components/Busuanzi";
 import ReadingProgress from "@/components/ReadingProgress";
 import SidebarAward from "@/components/SidebarAward";
 import TableOfContents from "@/components/TableOfContents";
+import FloatingTOC from "@/components/FloatingTOC";
 import FloatingNav from "@/components/FloatingNav";
 import DonateButton from "@/components/DonateButton";
 import RelatedPosts from "@/components/RelatedPosts";
@@ -107,6 +108,9 @@ export default async function PostPage(props: { params: Promise<{ slug: string }
             <ReadingProgress />
 
             <FloatingNav backUrl="/blog" />
+
+            {/* Floating TOC - fixed position, works regardless of overflow */}
+            <FloatingTOC toc={post.toc} />
 
             {/* Main Content Wrapper - Includes Article Card and Sidebar */}
             <div className="max-w-7xl w-full flex flex-col lg:flex-row lg:gap-8 relative">
