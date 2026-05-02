@@ -34,7 +34,7 @@ export default function Comments() {
     if (!mounted) return null;
 
     return (
-        <div className="w-full mt-10 pt-10 border-t border-zinc-200/50 dark:border-zinc-700/50">
+        <div id="comments-section" className="w-full mt-10 pt-10 border-t border-zinc-200/50 dark:border-zinc-700/50">
             <h2 className="text-xl font-bold mb-8 text-zinc-900 dark:text-zinc-100 font-serif flex items-center gap-2">
                 <span>💬 评论</span>
             </h2>

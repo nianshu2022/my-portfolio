@@ -45,6 +45,32 @@ export default function CommandMenu({ posts, essays }: CommandMenuProps) {
         }
     }, [open]);
 
+    // Focus trap
+    const containerRef = React.useRef<HTMLDivElement>(null);
+    React.useEffect(() => {
+        if (!open) return;
+        const container = containerRef.current;
+        if (!container) return;
+        const handleTab = (e: KeyboardEvent) => {
+            if (e.key !== "Tab") return;
+            const focusable = container.querySelectorAll<HTMLElement>(
+                'input, button, [tabindex]:not([tabindex="-1"])'
+            );
+            if (focusable.length === 0) return;
+            const first = focusable[0];
+            const last = focusable[focusable.length - 1];
+            if (e.shiftKey && document.activeElement === first) {
+                e.preventDefault();
+                last.focus();
+            } else if (!e.shiftKey && document.activeElement === last) {
+                e.preventDefault();
+                first.focus();
+            }
+        };
+        document.addEventListener("keydown", handleTab);
+        return () => document.removeEventListener("keydown", handleTab);
+    }, [open]);
+
     const lowerQuery = query.toLowerCase();
 
     const filteredPosts = posts.filter(
@@ -73,6 +99,12 @@ export default function CommandMenu({ posts, essays }: CommandMenuProps) {
         router.push(entry.type === "post" ? `/blog/${entry.item.slug}` : `/essays/${entry.item.slug}`);
     };
 
+    const navigateToSearchPage = () => {
+        const q = query.trim();
+        setOpen(false);
+        router.push(q ? `/search?q=${encodeURIComponent(q)}` : "/search");
+    };
+
     const handleKeyDown = (e: React.KeyboardEvent) => {
         if (e.key === "ArrowDown") {
             e.preventDefault();
@@ -80,8 +112,12 @@ export default function CommandMenu({ posts, essays }: CommandMenuProps) {
         } else if (e.key === "ArrowUp") {
             e.preventDefault();
             setActiveIndex((i) => (i - 1 + Math.max(totalResults, 1)) % Math.max(totalResults, 1));
-        } else if (e.key === "Enter" && allResults[activeIndex]) {
-            navigate(allResults[activeIndex]);
+        } else if (e.key === "Enter") {
+            if (allResults[activeIndex]) {
+                navigate(allResults[activeIndex]);
+                return;
+            }
+            navigateToSearchPage();
         }
     };
 
@@ -100,11 +136,15 @@ export default function CommandMenu({ posts, essays }: CommandMenuProps) {
             onClick={() => setOpen(false)}
         >
             <div
-                className="relative w-full max-w-lg bg-white dark:bg-zinc-900 rounded-2xl shadow-2xl border border-zinc-200 dark:border-zinc-800 overflow-hidden flex flex-col max-h-[65vh]"
+                ref={containerRef}
+                role="dialog"
+                aria-modal="true"
+                aria-label="命令面板"
+                className="relative w-full max-w-lg bg-card/90 backdrop-blur-xl rounded-2xl shadow-2xl border border-border/30 overflow-hidden flex flex-col max-h-[65vh]"
                 onClick={(e) => e.stopPropagation()}
             >
                 {/* Search Input */}
-                <div className="flex items-center border-b border-zinc-100 dark:border-zinc-800 px-4">
+                <div className="flex items-center border-b border-border/30 px-4">
                     <Search className="mr-3 h-4 w-4 opacity-40 shrink-0" />
                     <input
                         ref={inputRef}
@@ -114,7 +154,7 @@ export default function CommandMenu({ posts, essays }: CommandMenuProps) {
                         onChange={(e) => setQuery(e.target.value)}
                         onKeyDown={handleKeyDown}
                     />
-                    <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-zinc-100 dark:bg-zinc-800 px-1.5 font-mono text-[10px] font-medium text-zinc-400 shrink-0">
+                    <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-secondary px-1.5 font-mono text-[10px] font-medium text-muted-foreground shrink-0">
                         ESC
                     </kbd>
                 </div>
@@ -142,18 +182,18 @@ export default function CommandMenu({ posts, essays }: CommandMenuProps) {
                                                 onClick={() => navigate({ item: post, type: "post" })}
                                                 onMouseEnter={() => setActiveIndex(idx)}
                                                 className={`flex cursor-pointer select-none items-center rounded-lg px-3 py-2.5 text-sm outline-none transition-colors ${isActive
-                                                    ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300"
-                                                    : "hover:bg-zinc-100 dark:hover:bg-zinc-800"
+                                                    ? "bg-indigo-500/10 text-primary border border-indigo-500/20"
+                                                    : "hover:bg-secondary"
                                                     }`}
                                             >
-                                                <BookOpen className={`mr-2.5 h-4 w-4 shrink-0 ${isActive ? "text-blue-500" : "opacity-40"}`} />
+                                                <BookOpen className={`mr-2.5 h-4 w-4 shrink-0 ${isActive ? "text-primary" : "opacity-40"}`} />
                                                 <span className="flex-1 truncate">{post.title}</span>
                                                 {post.tags[0] && (
                                                     <span className="ml-2 text-xs text-zinc-400 bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded shrink-0">
                                                         {post.tags[0]}
                                                     </span>
                                                 )}
-                                                {isActive && <ArrowRight className="ml-2 h-3.5 w-3.5 text-blue-400 shrink-0" />}
+                                                {isActive && <ArrowRight className="ml-2 h-3.5 w-3.5 text-primary shrink-0" />}
                                             </div>
                                         );
                                     })}
@@ -175,18 +215,18 @@ export default function CommandMenu({ posts, essays }: CommandMenuProps) {
                                                 onClick={() => navigate({ item: essay, type: "essay" })}
                                                 onMouseEnter={() => setActiveIndex(idx)}
                                                 className={`flex cursor-pointer select-none items-center rounded-lg px-3 py-2.5 text-sm outline-none transition-colors ${isActive
-                                                    ? "bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-300"
-                                                    : "hover:bg-zinc-100 dark:hover:bg-zinc-800"
+                                                    ? "bg-indigo-500/10 text-primary border border-indigo-500/20"
+                                                    : "hover:bg-secondary"
                                                     }`}
                                             >
-                                                <Feather className={`mr-2.5 h-4 w-4 shrink-0 ${isActive ? "text-purple-500" : "opacity-40"}`} />
+                                                <Feather className={`mr-2.5 h-4 w-4 shrink-0 ${isActive ? "text-primary" : "opacity-40"}`} />
                                                 <span className="flex-1 truncate">{essay.title}</span>
                                                 {essay.tags[0] && (
                                                     <span className="ml-2 text-xs text-zinc-400 bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded shrink-0">
                                                         {essay.tags[0]}
                                                     </span>
                                                 )}
-                                                {isActive && <ArrowRight className="ml-2 h-3.5 w-3.5 text-purple-400 shrink-0" />}
+                                                {isActive && <ArrowRight className="ml-2 h-3.5 w-3.5 text-primary shrink-0" />}
                                             </div>
                                         );
                                     })}
@@ -196,8 +236,17 @@ export default function CommandMenu({ posts, essays }: CommandMenuProps) {
                     )}
                 </div>
 
+                <div className="border-t border-border/30 px-3 py-2">
+                    <button
+                        onClick={navigateToSearchPage}
+                        className="w-full rounded-lg px-3 py-2 text-left text-xs text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+                    >
+                        {query ? `查看"${query}"的全部搜索结果` : "进入完整搜索页"}
+                    </button>
+                </div>
+
                 {/* Page shortcuts */}
-                <div className="border-t border-zinc-100 dark:border-zinc-800 p-2">
+                <div className="border-t border-border/30 p-2">
                     <div className="px-2 py-1.5 text-[10px] font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
                         快速导航
                     </div>
@@ -207,7 +256,7 @@ export default function CommandMenu({ posts, essays }: CommandMenuProps) {
                                 <button
                                     key={href}
                                     onClick={() => { setOpen(false); router.push(href); }}
-                                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
+                                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors"
                                 >
                                     <Icon className="w-3.5 h-3.5" />
                                     {label}
@@ -217,18 +266,18 @@ export default function CommandMenu({ posts, essays }: CommandMenuProps) {
                 </div>
 
                 {/* Footer hint */}
-                <div className="border-t border-zinc-100 dark:border-zinc-800 px-4 py-2 flex items-center gap-3 text-[11px] text-zinc-400">
+                <div className="border-t border-border/30 px-4 py-2 flex items-center gap-3 text-[11px] text-muted-foreground">
                     <span className="flex items-center gap-1">
-                        <kbd className="px-1 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 font-mono">↑</kbd>
-                        <kbd className="px-1 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 font-mono">↓</kbd>
+                        <kbd className="px-1 py-0.5 rounded bg-secondary font-mono">↑</kbd>
+                        <kbd className="px-1 py-0.5 rounded bg-secondary font-mono">↓</kbd>
                         导航
                     </span>
                     <span className="flex items-center gap-1">
-                        <kbd className="px-1 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 font-mono">↵</kbd>
+                        <kbd className="px-1 py-0.5 rounded bg-secondary font-mono">↵</kbd>
                         打开
                     </span>
                     <span className="flex items-center gap-1">
-                        <kbd className="px-1 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 font-mono">ESC</kbd>
+                        <kbd className="px-1 py-0.5 rounded bg-secondary font-mono">ESC</kbd>
                         关闭
                     </span>
                 </div>

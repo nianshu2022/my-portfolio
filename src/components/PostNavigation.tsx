@@ -7,24 +7,28 @@ import { PostSummary } from "@/lib/posts";
 interface PostNavigationProps {
     prev: PostSummary | null;
     next: PostSummary | null;
+    basePath?: string;
 }
 
-export default function PostNavigation({ prev, next }: PostNavigationProps) {
+export default function PostNavigation({ prev, next, basePath = "/blog" }: PostNavigationProps) {
     if (!prev && !next) return null;
 
     return (
-        <nav className="mt-12 pt-8 border-t border-zinc-200/50 dark:border-zinc-700/50">
+        <nav className="mt-12 border-t border-border pt-8">
+            <div className="mb-4 text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">
+                Continue Reading
+            </div>
             <div className="flex flex-col sm:flex-row justify-between gap-4">
                 {/* Previous (Newer) */}
                 {prev ? (
                     <Link
-                        href={`/blog/${prev.slug}`}
-                        className="group flex-1 flex items-center gap-3 p-4 rounded-xl bg-zinc-50 dark:bg-zinc-800/50 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors border border-zinc-200/50 dark:border-zinc-700/50"
+                        href={`${basePath}/${prev.slug}`}
+                        className="garden-panel group flex flex-1 items-center gap-3 p-4 transition-colors hover:bg-secondary"
                     >
-                        <ChevronLeft className="w-5 h-5 text-zinc-400 group-hover:text-zinc-600 dark:group-hover:text-zinc-300 transition-colors shrink-0" />
+                        <ChevronLeft className="h-5 w-5 shrink-0 text-muted-foreground transition-colors group-hover:text-foreground" />
                         <div className="min-w-0">
-                            <div className="text-xs text-zinc-400 mb-1">上一篇</div>
-                            <div className="text-sm font-medium text-zinc-700 dark:text-zinc-200 truncate group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                            <div className="mb-1 text-xs text-muted-foreground">上一篇</div>
+                            <div className="truncate text-sm font-medium text-foreground transition-colors group-hover:text-primary">
                                 {prev.title}
                             </div>
                         </div>
@@ -36,16 +40,16 @@ export default function PostNavigation({ prev, next }: PostNavigationProps) {
                 {/* Next (Older) */}
                 {next ? (
                     <Link
-                        href={`/blog/${next.slug}`}
-                        className="group flex-1 flex items-center justify-end gap-3 p-4 rounded-xl bg-zinc-50 dark:bg-zinc-800/50 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors border border-zinc-200/50 dark:border-zinc-700/50 text-right"
+                        href={`${basePath}/${next.slug}`}
+                        className="garden-panel group flex flex-1 items-center justify-end gap-3 p-4 text-right transition-colors hover:bg-secondary"
                     >
                         <div className="min-w-0">
-                            <div className="text-xs text-zinc-400 mb-1">下一篇</div>
-                            <div className="text-sm font-medium text-zinc-700 dark:text-zinc-200 truncate group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                            <div className="mb-1 text-xs text-muted-foreground">下一篇</div>
+                            <div className="truncate text-sm font-medium text-foreground transition-colors group-hover:text-primary">
                                 {next.title}
                             </div>
                         </div>
-                        <ChevronRight className="w-5 h-5 text-zinc-400 group-hover:text-zinc-600 dark:group-hover:text-zinc-300 transition-colors shrink-0" />
+                        <ChevronRight className="h-5 w-5 shrink-0 text-muted-foreground transition-colors group-hover:text-foreground" />
                     </Link>
                 ) : (
                     <div className="flex-1" />

@@ -248,6 +248,42 @@ export const getEssayBySlug = cache((slug: string) => {
   return getItemBySlug(essaysDirectory, slug);
 });
 
+// Related Essays Logic
+export const getRelatedEssays = cache((currentSlug: string): PostSummary[] => {
+  const currentEssay = getEssayBySlug(currentSlug);
+  if (!currentEssay) return [];
+
+  const allEssays = getAllEssaySummaries();
+
+  return allEssays
+    .filter(e => e.slug !== currentSlug)
+    .map(essay => {
+      let score = 0;
+      if (currentEssay.tags && essay.tags) {
+        const intersection = currentEssay.tags.filter(tag => essay.tags.includes(tag));
+        score += intersection.length;
+      }
+      return { essay, score };
+    })
+    .filter(item => item.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 3)
+    .map(item => item.essay);
+});
+
+// Get adjacent essays for prev/next navigation
+export const getAdjacentEssays = cache((currentSlug: string): { prev: PostSummary | null; next: PostSummary | null } => {
+  const allEssays = getAllEssaySummaries();
+  const currentIndex = allEssays.findIndex(e => e.slug === currentSlug);
+
+  if (currentIndex === -1) return { prev: null, next: null };
+
+  const prev = currentIndex > 0 ? allEssays[currentIndex - 1] : null;
+  const next = currentIndex < allEssays.length - 1 ? allEssays[currentIndex + 1] : null;
+
+  return { prev, next };
+});
+
 // Related Posts Logic
 export const getRelatedPosts = cache((currentSlug: string): PostSummary[] => {
   const currentPost = getPostBySlug(currentSlug);

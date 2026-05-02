@@ -33,36 +33,42 @@ export default function TableOfContents({ toc }: TableOfContentsProps) {
 
   if (!toc || toc.length === 0) return null;
 
-  if (!toc || toc.length === 0) return null;
-
   return (
-    <ul className="space-y-2 text-sm pl-2">
-      {toc.map((item) => (
-        <li
-          key={item.slug}
-          className={cn(
-            "transition-colors duration-200 border-l-2 pl-3 py-1",
-            activeId === item.slug
-              ? "border-blue-500 text-blue-600 dark:text-blue-400 font-medium bg-blue-50/50 dark:bg-blue-900/10"
-              : "border-transparent text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200 hover:border-zinc-300 dark:hover:border-zinc-700",
-            item.level === 3 && "ml-4"
-          )}
-        >
-          <a
-            href={`#${item.slug}`}
-            className="block"
-            onClick={(e) => {
-              e.preventDefault();
-              document.getElementById(item.slug)?.scrollIntoView({
-                behavior: "smooth",
-              });
-              setActiveId(item.slug);
-            }}
-          >
-            {item.title}
-          </a>
-        </li>
-      ))}
-    </ul>
+    <nav aria-label="文章目录">
+      <ul className="space-y-0.5">
+        {toc.map((item) => {
+          const isActive = activeId === item.slug;
+          return (
+            <li key={item.slug}>
+              <a
+                href={`#${item.slug}`}
+                onClick={(e) => {
+                  e.preventDefault();
+                  document.getElementById(item.slug)?.scrollIntoView({
+                    behavior: "smooth",
+                  });
+                  setActiveId(item.slug);
+                }}
+                className={cn(
+                  "flex items-center gap-2 rounded-md px-3 py-1.5 text-[13px] leading-snug transition-all duration-200",
+                  item.level === 3 && "ml-3",
+                  isActive
+                    ? "bg-primary/10 text-primary font-medium"
+                    : "text-muted-foreground hover:text-foreground hover:bg-secondary/60"
+                )}
+              >
+                <span
+                  className={cn(
+                    "inline-block h-1.5 w-1.5 shrink-0 rounded-full transition-colors duration-200",
+                    isActive ? "bg-primary" : "bg-border"
+                  )}
+                />
+                <span className="truncate">{item.title}</span>
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    </nav>
   );
 }

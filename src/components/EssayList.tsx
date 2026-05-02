@@ -1,121 +1,112 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useMemo } from "react";
-import { Quote, Feather, Tag } from "lucide-react";
-import { type PostSummary } from "@/lib/posts";
+import { useMemo, useState } from "react";
+import { ArrowRight, Feather, Search, Tag, X } from "lucide-react";
+import type { PostSummary } from "@/lib/posts";
+import ScrollReveal from "@/components/ScrollReveal";
 
 const FALLBACK_TAG = "未分类";
 
 export default function EssayList({ posts }: { posts: PostSummary[] }) {
-    const [activeTag, setActiveTag] = useState<string | null>(null);
+  const [activeTag, setActiveTag] = useState<string | null>(null);
+  const [query, setQuery] = useState("");
 
-    // 收集所有 tag，去重排序
-    const allTags = useMemo(() => {
-        const set = new Set<string>();
-        posts.forEach((p) => {
-            if (p.tags && p.tags.length > 0) {
-                p.tags.forEach((t) => set.add(t));
-            } else {
-                set.add(FALLBACK_TAG);
-            }
-        });
-        return Array.from(set).sort();
-    }, [posts]);
+  const allTags = useMemo(() => {
+    const tags = new Set<string>();
+    posts.forEach((post) => {
+      if (post.tags?.length) post.tags.forEach((tag) => tags.add(tag));
+      else tags.add(FALLBACK_TAG);
+    });
+    return Array.from(tags).sort();
+  }, [posts]);
 
-    const filtered = activeTag
-        ? posts.filter((p) =>
-            activeTag === FALLBACK_TAG
-                ? !p.tags || p.tags.length === 0
-                : p.tags?.includes(activeTag)
-        )
-        : posts;
+  const filteredByTag = activeTag
+    ? posts.filter((post) => (activeTag === FALLBACK_TAG ? !post.tags?.length : post.tags?.includes(activeTag)))
+    : posts;
 
-    return (
-        <div className="max-w-4xl w-full space-y-8 p-6 sm:p-0 relative">
-            {/* Header */}
-            <div className="space-y-2 text-center sm:text-left pt-0 sm:pt-4">
-                <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent inline-flex items-center gap-3 font-serif">
-                    <Feather className="w-8 h-8 text-purple-600 dark:text-purple-400" />
-                    生活随笔
-                    <span className="text-base font-normal text-zinc-400 dark:text-zinc-500 font-sans bg-zinc-100 dark:bg-zinc-800 px-2 py-0.5 rounded-full">
-                        {posts.length} 篇
-                    </span>
-                </h1>
-                <p className="text-zinc-500 dark:text-zinc-400 font-serif italic">
-                    &quot;人生逐梦正当时，且行且歌。&quot;
-                </p>
-                <div className="h-1 w-16 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full mt-4 mx-auto sm:mx-0"></div>
-            </div>
+  const normalizedQuery = query.trim().toLowerCase();
+  const filtered = normalizedQuery
+    ? filteredByTag.filter(
+        (post) =>
+          post.title.toLowerCase().includes(normalizedQuery) ||
+          post.description.toLowerCase().includes(normalizedQuery) ||
+          post.tags?.some((tag) => tag.toLowerCase().includes(normalizedQuery))
+      )
+    : filteredByTag;
 
-            {/* Tag Filter */}
-            {allTags.length > 1 && (
-                <div className="flex flex-wrap gap-2 items-center">
-                    <Tag className="w-4 h-4 text-zinc-400 shrink-0" />
-                    <button
-                        onClick={() => setActiveTag(null)}
-                        className={`text-xs px-3 py-1.5 rounded-full font-medium transition-all duration-200 border ${activeTag === null
-                                ? "bg-purple-600 text-white border-purple-600 shadow-sm shadow-purple-500/20"
-                                : "bg-transparent text-zinc-500 dark:text-zinc-400 border-zinc-200 dark:border-zinc-700 hover:border-purple-300 dark:hover:border-purple-700 hover:text-purple-600 dark:hover:text-purple-400"
-                            }`}
-                    >
-                        全部
-                    </button>
-                    {allTags.map((tag) => (
-                        <button
-                            key={tag}
-                            onClick={() => setActiveTag(activeTag === tag ? null : tag)}
-                            className={`text-xs px-3 py-1.5 rounded-full font-medium transition-all duration-200 border ${activeTag === tag
-                                    ? "bg-purple-600 text-white border-purple-600 shadow-sm shadow-purple-500/20"
-                                    : "bg-transparent text-zinc-500 dark:text-zinc-400 border-zinc-200 dark:border-zinc-700 hover:border-purple-300 dark:hover:border-purple-700 hover:text-purple-600 dark:hover:text-purple-400"
-                                }`}
-                        >
-                            #{tag}
-                        </button>
-                    ))}
-                </div>
-            )}
-
-            <div className="grid gap-6 py-4 animate-fade-in-up">
-                {filtered.length === 0 && (
-                    <div className="p-8 text-center text-sm text-zinc-500 dark:text-zinc-400 border border-dashed border-zinc-200 dark:border-zinc-800 rounded-2xl">
-                        该分类下暂无随笔
-                    </div>
-                )}
-
-                {filtered.map((post, index) => (
-                    <Link key={post.slug} href={`/essays/${post.slug}`} prefetch={true}>
-                        <div
-                            className="group relative p-8 bg-white/40 dark:bg-zinc-900/40 backdrop-blur-sm rounded-2xl border border-white/50 dark:border-zinc-700/50 shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer hover:-translate-y-1 opacity-0 animate-fade-in-up"
-                            style={{ animationDelay: `${index * 80}ms`, animationFillMode: "forwards" }}
-                        >
-                            <div className="flex flex-col gap-4">
-                                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 sm:gap-4">
-                                    <h2 className="text-2xl font-serif font-medium text-zinc-800 dark:text-zinc-100 group-hover:text-purple-700 dark:group-hover:text-purple-400 transition-colors">
-                                        {post.title}
-                                    </h2>
-                                    <span className="text-xs font-mono text-zinc-400 pt-0 sm:pt-2">
-                                        {post.date}
-                                    </span>
-                                </div>
-
-                                <div className="relative pl-6 border-l-2 border-purple-200 dark:border-purple-900/50">
-                                    <Quote className="absolute -top-1 left-0 -ml-[9px] w-4 h-4 text-purple-300 dark:text-purple-800 fill-purple-100 dark:fill-purple-900/20 bg-white dark:bg-zinc-900" />
-                                    <p className="text-zinc-600 dark:text-zinc-400 text-sm leading-relaxed font-serif italic line-clamp-3">
-                                        {post.description}
-                                    </p>
-                                </div>
-
-                                <div className="flex justify-end items-center mt-2">
-                                    <span className="text-xs text-purple-500 opacity-100 sm:opacity-60 sm:group-hover:opacity-100 transition-all transform translate-x-0 sm:-translate-x-2 sm:group-hover:translate-x-0 flex items-center gap-1 font-serif">
-                                        阅读全文 &rarr;
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </Link>
-                ))}
-            </div>
+  return (
+    <section className="w-full">
+      <header className="mb-8 border-b border-border pb-8">
+        <p className="garden-kicker">生活随笔</p>
+        <div className="mt-3 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <h1 className="garden-title inline-flex items-center gap-3">
+              <Feather className="h-8 w-8 text-primary" />
+              生活随笔
+            </h1>
+            <p className="garden-subtitle mt-3">记录成长、选择和变化，也记录那些值得反复回看的时刻。</p>
+          </div>
+          <span className="text-sm text-muted-foreground">{posts.length} 篇</span>
         </div>
-    );
+      </header>
+
+      {allTags.length > 1 && (
+        <div className="mb-8 flex flex-wrap items-center gap-2">
+          <Tag className="h-4 w-4 text-muted-foreground" />
+          <button onClick={() => setActiveTag(null)} className={`rounded-md border px-3 py-1.5 text-sm ${activeTag === null ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card text-muted-foreground hover:bg-secondary"}`}>
+            全部
+          </button>
+          {allTags.map((tag) => (
+            <button key={tag} onClick={() => setActiveTag(activeTag === tag ? null : tag)} className={`rounded-md border px-3 py-1.5 text-sm ${activeTag === tag ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card text-muted-foreground hover:bg-secondary"}`}>
+              #{tag}
+            </button>
+          ))}
+        </div>
+      )}
+
+      <div className="mb-8">
+        <label className="group flex items-center gap-2 rounded-md border border-border bg-card px-3 py-2">
+          <Search className="h-4 w-4 text-muted-foreground" />
+          <input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="搜索标题、摘要或标签"
+            className="w-full bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground"
+          />
+          {query && (
+            <button
+              onClick={() => setQuery("")}
+              className="inline-flex h-6 w-6 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+              aria-label="清空搜索"
+            >
+              <X className="h-3.5 w-3.5" />
+            </button>
+          )}
+        </label>
+      </div>
+
+      <div className="grid gap-3">
+        {filtered.length === 0 && (
+          <div className="garden-panel px-5 py-10 text-center text-sm text-muted-foreground">
+            没有匹配到内容，试试更短的关键词或清空筛选条件。
+          </div>
+        )}
+        {filtered.map((post, i) => (
+          <ScrollReveal key={`${post.slug}-${i}`} delay={i * 0.06}>
+            <Link href={`/essays/${post.slug}`} className="garden-panel group grid gap-3 p-5 transition-all hover:border-primary/30 hover:shadow-[0_0_20px_rgba(99,102,241,0.1)]">
+              <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+                <h2 className="text-xl font-semibold tracking-normal transition-colors group-hover:text-primary">{post.title}</h2>
+                <span className="text-sm text-muted-foreground">{post.date}</span>
+              </div>
+              <p className="line-clamp-2 text-sm leading-6 text-muted-foreground">{post.description}</p>
+              <span className="inline-flex items-center gap-1 justify-self-end text-sm font-medium text-primary">
+                阅读 <ArrowRight className="h-4 w-4" />
+              </span>
+            </Link>
+          </ScrollReveal>
+        ))}
+      </div>
+    </section>
+  );
 }

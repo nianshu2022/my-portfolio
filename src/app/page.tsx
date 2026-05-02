@@ -1,195 +1,258 @@
-import { Button } from "@/components/ui/button";
-import { BookOpen, Feather, Server, User, Rss, ArrowRight, Calendar, Sparkles, Cpu, Tag, Archive, Users } from "lucide-react";
-import Link from "next/link";
+import fs from "fs";
+import path from "path";
+import { ArrowRight, BookOpen, BriefcaseBusiness, ExternalLink, Feather, Github, HeartHandshake, Mail, Rss, Sparkles, UserRound } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import DynamicGreeting from "@/components/DynamicGreeting";
-import { getAllPostSummaries, getAllEssaySummaries } from "@/lib/posts";
+import TypeWriter from "@/components/TypeWriter";
+import GlowBorder from "@/components/GlowBorder";
+import ScrollReveal from "@/components/ScrollReveal";
+import TiltCard from "@/components/TiltCard";
+import LazyLoad from "@/components/LazyLoad";
+import VisitorCounter from "@/components/VisitorCounter";
+import DailyQuote from "@/components/widgets/DailyQuote";
+import DailyPoem from "@/components/widgets/DailyPoem";
+import ITHomeList from "@/components/widgets/ITHomeList";
+import GitHubTrending from "@/components/widgets/GitHubTrending";
+import WeatherCard from "@/components/widgets/WeatherCard";
+import { getAllEssaySummaries, getAllPostSummaries } from "@/lib/posts";
+
+function getPublicServiceCount(): number {
+  try {
+    const statusPath = path.join(process.cwd(), "public", "portal-status.json");
+    const raw = fs.readFileSync(statusPath, "utf8");
+    const data = JSON.parse(raw);
+    return data.services?.filter((s: { visibility: string }) => s.visibility === "public").length ?? 0;
+  } catch {
+    return 0;
+  }
+}
+
 
 export default function Home() {
-  // Fetch latest posts and essays
   const posts = getAllPostSummaries();
   const essays = getAllEssaySummaries();
-
-  // Combine and sort by date (newest first)
-  const allUpdates = [...posts.map(p => ({ ...p, type: 'post' })), ...essays.map(e => ({ ...e, type: 'essay' }))]
+  const publicServiceCount = getPublicServiceCount();
+  const updates = [
+    ...posts.map((post) => ({ ...post, type: "post" as const })),
+    ...essays.map((essay) => ({ ...essay, type: "essay" as const })),
+  ]
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-    .slice(0, 3); // 最新 3 条
+    .slice(0, 4);
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-6 sm:p-24 relative overflow-x-hidden">
+    <main className="garden-shell snap-y snap-proximity">
+      <section className="grid min-h-[calc(100vh-8rem)] snap-start gap-8 pb-16 pt-6 lg:grid-cols-[1.08fr_0.92fr] lg:items-center">
+        <div className="space-y-8">
+          <ScrollReveal>
+            <GlowBorder className="inline-block">
+              <div className="inline-flex items-center gap-3 rounded-md border border-border bg-card/80 px-3 py-2 text-sm text-muted-foreground">
+                <Sparkles className="h-4 w-4 text-primary" />
+                <span><DynamicGreeting />，欢迎来到念舒的数字花园</span>
+              </div>
+            </GlowBorder>
+          </ScrollReveal>
 
-      {/* Background Blobs (Same as About Page) */}
-      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none -z-10">
-        <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-purple-200/30 dark:bg-purple-900/20 rounded-full blur-[100px] animate-blob mix-blend-multiply dark:mix-blend-screen opacity-70"></div>
-        <div className="absolute top-[20%] left-[-10%] w-[400px] h-[400px] bg-teal-200/30 dark:bg-teal-900/20 rounded-full blur-[100px] animate-blob animation-delay-2000 mix-blend-multiply dark:mix-blend-screen opacity-70"></div>
-        <div className="absolute bottom-[-10%] right-[20%] w-[600px] h-[600px] bg-indigo-200/30 dark:bg-indigo-900/20 rounded-full blur-[100px] animate-blob animation-delay-4000 mix-blend-multiply dark:mix-blend-screen opacity-70"></div>
-      </div>
+          <div className="space-y-6">
+            <TypeWriter
+              text="在产品和技术之间，认真记录每一次抵达。"
+              className="max-w-3xl text-4xl font-semibold leading-[1.08] tracking-normal text-foreground sm:text-5xl lg:text-7xl"
+            />
+            <ScrollReveal delay={1.2}>
+              <p className="garden-subtitle max-w-2xl">
+                技术实践、产品思考与生活记录，每篇解决一个真实问题。
+              </p>
+            </ScrollReveal>
+            <ScrollReveal delay={1.8}>
+              <DailyQuote />
+            </ScrollReveal>
+            <ScrollReveal delay={2.0}>
+              <DailyPoem />
+            </ScrollReveal>
+          </div>
 
-      <div className="flex-1 flex flex-col items-center justify-center w-full z-10 animate-fade-in-up">
-        <div className="max-w-4xl w-full flex flex-col items-center gap-6 font-sans text-sm">
+          <ScrollReveal delay={1.5}>
+            <div className="flex flex-wrap gap-3">
+              <GlowBorder className="inline-block">
+                <Link href="/blog" className="inline-flex items-center gap-2 rounded-md bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:opacity-90">
+                  <BookOpen className="h-4 w-4" />
+                  阅读技术博客
+                </Link>
+              </GlowBorder>
+              <GlowBorder className="inline-block">
+                <Link href="/essays" className="inline-flex items-center gap-2 rounded-md border border-border bg-card px-5 py-3 text-sm font-semibold text-foreground transition-colors hover:bg-secondary">
+                  <Feather className="h-4 w-4" />
+                  翻生活随笔
+                </Link>
+              </GlowBorder>
+            </div>
+          </ScrollReveal>
+        </div>
 
-          {/* Hero Section */}
-          <div className="text-center space-y-8 py-8 px-4 sm:p-8 relative">
-
-            {/* Avatar with Ring Animation */}
-            <div className="relative inline-block group cursor-pointer mb-10">
-              {/* Outer Spinning Ring */}
-              <div className="absolute -inset-4 bg-gradient-to-tr from-teal-500 via-purple-500 to-indigo-500 rounded-full opacity-70 blur-md animate-spin-slow group-hover:opacity-100 transition duration-500"></div>
-
-              <div className="relative w-32 h-32 sm:w-40 sm:h-40 rounded-full bg-white dark:bg-zinc-900 p-1.5 shadow-2xl overflow-hidden transition-transform duration-500 ease-in-out group-hover:scale-105">
-                <div className="w-full h-full rounded-full overflow-hidden relative">
+        <ScrollReveal delay={0.3} direction="right">
+          <TiltCard>
+            <aside className="brand-panel overflow-hidden">
+              <div className="grid gap-0 sm:grid-cols-[0.92fr_1.08fr] lg:grid-cols-1">
+                <div className="relative min-h-[260px]">
                   <Image
-                    src="/img/avatar.png"
-                    alt="念舒 Avatar"
-                    width={160}
-                    height={160}
-                    className="object-cover w-full h-full"
+                    src="/img/graduation-profile-2024.jpg"
+                    alt="念舒的个人照片"
+                    fill
+                    className="object-cover"
                     priority
                     unoptimized
                   />
                 </div>
-              </div>
-            </div>
-
-            <div className="space-y-6">
-              <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-zinc-800 dark:text-zinc-100 drop-shadow-sm px-2 font-serif flex flex-wrap justify-center items-center gap-2 sm:gap-4">
-                <DynamicGreeting />
-                <span>，我是</span>
-                <span className="bg-gradient-to-r from-teal-500 via-blue-500 to-purple-500 bg-clip-text text-transparent whitespace-nowrap animate-gradient-x">念舒。</span>
-              </h1>
-
-              <p className="mx-auto max-w-2xl text-lg sm:text-xl text-zinc-600 dark:text-zinc-300 leading-relaxed font-medium px-4 font-serif">
-                <span className="inline-flex items-center gap-2 font-bold text-zinc-900 dark:text-zinc-50 bg-zinc-100 dark:bg-zinc-800 px-3 py-1 rounded-full text-base sm:text-lg">
-                  <Sparkles className="w-4 h-4 text-yellow-500" /> 产品运营
-                </span>
-                <span className="mx-2 opacity-50">/</span>
-                00后
-                <span className="mx-2 opacity-50">/</span>
-                技术折腾家
-                <br />
-                <span className="text-base sm:text-lg mt-4 block opacity-90">
-                  致力于构建连接 <span className="text-teal-600 dark:text-teal-400 font-semibold border-b-2 border-teal-500/20">用户价值</span> 与 <span className="text-purple-600 dark:text-purple-400 font-semibold border-b-2 border-purple-500/20">技术实现</span> 的桥梁
-                </span>
-              </p>
-            </div>
-          </div>
-
-          {/* Action Buttons - Premium Glass Style */}
-          <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center justify-center gap-4 w-full px-4">
-            <Link href="/blog" className="w-full sm:w-auto hover:w-full sm:hover:w-auto transition-all is-button">
-              <Button size="lg" className="w-full h-14 px-4 sm:px-8 min-w-0 sm:min-w-[160px] gap-2 sm:gap-3 text-sm sm:text-base font-semibold shadow-lg shadow-blue-500/20 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 border-0 text-white transition-all duration-300 hover:scale-105 hover:-translate-y-1 hover:shadow-blue-500/40 rounded-2xl">
-                <BookOpen className="h-5 w-5 shrink-0" />
-                <span>技术博客</span>
-              </Button>
-            </Link>
-
-            <Link href="/essays" className="w-full sm:w-auto hover:w-full sm:hover:w-auto transition-all is-button">
-              <Button size="lg" variant="secondary" className="w-full h-14 px-4 sm:px-8 min-w-0 sm:min-w-[160px] gap-2 sm:gap-3 text-sm sm:text-base font-medium shadow-md bg-white/60 dark:bg-zinc-800/60 backdrop-blur-xl border border-white/20 dark:border-zinc-700/50 hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:text-purple-600 dark:hover:text-purple-400 hover:border-purple-200/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl rounded-2xl text-zinc-700 dark:text-zinc-200">
-                <Feather className="h-5 w-5 shrink-0 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors" />
-                <span>生活随笔</span>
-              </Button>
-            </Link>
-
-            <Link href="/portal" className="w-full sm:w-auto hover:w-full sm:hover:w-auto transition-all is-button">
-              <Button size="lg" variant="secondary" className="w-full h-14 px-4 sm:px-8 min-w-0 sm:min-w-[160px] gap-2 sm:gap-3 text-sm sm:text-base font-medium shadow-md bg-white/60 dark:bg-zinc-800/60 backdrop-blur-xl border border-white/20 dark:border-zinc-700/50 hover:bg-cyan-50 dark:hover:bg-cyan-900/20 hover:text-cyan-600 dark:hover:text-cyan-400 hover:border-cyan-200/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl rounded-2xl text-zinc-700 dark:text-zinc-200">
-                <Server className="h-5 w-5 shrink-0 group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors" />
-                <span>我的传送门</span>
-              </Button>
-            </Link>
-
-            <Link href="/gear" className="w-full sm:w-auto hover:w-full sm:hover:w-auto transition-all is-button">
-              <Button size="lg" variant="secondary" className="w-full h-14 px-4 sm:px-8 min-w-0 sm:min-w-[160px] gap-2 sm:gap-3 text-sm sm:text-base font-medium shadow-md bg-white/60 dark:bg-zinc-800/60 backdrop-blur-xl border border-white/20 dark:border-zinc-700/50 hover:bg-orange-50 dark:hover:bg-orange-900/20 hover:text-orange-600 dark:hover:text-orange-400 hover:border-orange-200/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl rounded-2xl text-zinc-700 dark:text-zinc-200">
-                <Cpu className="h-5 w-5 shrink-0 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors" />
-                <span>数字装备</span>
-              </Button>
-            </Link>
-
-            <Link href="/about" className="w-full sm:w-auto hover:w-full sm:hover:w-auto transition-all is-button">
-              <Button size="lg" variant="secondary" className="w-full h-14 px-4 sm:px-8 min-w-0 sm:min-w-[160px] gap-2 sm:gap-3 text-sm sm:text-base font-medium shadow-md bg-white/60 dark:bg-zinc-800/60 backdrop-blur-xl border border-white/20 dark:border-zinc-700/50 hover:bg-teal-50 dark:hover:bg-teal-900/20 hover:text-teal-600 dark:hover:text-teal-400 hover:border-teal-200/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl rounded-2xl text-zinc-700 dark:text-zinc-200">
-                <User className="h-5 w-5 shrink-0 group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors" />
-                <span>关于我</span>
-              </Button>
-            </Link>
-            <Link href="/tags" className="w-full sm:w-auto hover:w-full sm:hover:w-auto transition-all is-button">
-              <Button size="lg" variant="secondary" className="w-full h-14 px-4 sm:px-8 min-w-0 sm:min-w-[160px] gap-2 sm:gap-3 text-sm sm:text-base font-medium shadow-md bg-white/60 dark:bg-zinc-800/60 backdrop-blur-xl border border-white/20 dark:border-zinc-700/50 hover:bg-violet-50 dark:hover:bg-violet-900/20 hover:text-violet-600 dark:hover:text-violet-400 hover:border-violet-200/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl rounded-2xl text-zinc-700 dark:text-zinc-200">
-                <Tag className="h-5 w-5 shrink-0" />
-                <span>标签</span>
-              </Button>
-            </Link>
-            <Link href="/archive" className="w-full sm:w-auto hover:w-full sm:hover:w-auto transition-all is-button">
-              <Button size="lg" variant="secondary" className="w-full h-14 px-4 sm:px-8 min-w-0 sm:min-w-[160px] gap-2 sm:gap-3 text-sm sm:text-base font-medium shadow-md bg-white/60 dark:bg-zinc-800/60 backdrop-blur-xl border border-white/20 dark:border-zinc-700/50 hover:bg-amber-50 dark:hover:bg-amber-900/20 hover:text-amber-600 dark:hover:text-amber-400 hover:border-amber-200/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl rounded-2xl text-zinc-700 dark:text-zinc-200">
-                <Archive className="h-5 w-5 shrink-0" />
-                <span>归档</span>
-              </Button>
-            </Link>
-            <Link href="/friends" className="w-full sm:w-auto hover:w-full sm:hover:w-auto transition-all is-button">
-              <Button size="lg" variant="secondary" className="w-full h-14 px-4 sm:px-8 min-w-0 sm:min-w-[160px] gap-2 sm:gap-3 text-sm sm:text-base font-medium shadow-md bg-white/60 dark:bg-zinc-800/60 backdrop-blur-xl border border-white/20 dark:border-zinc-700/50 hover:bg-rose-50 dark:hover:bg-rose-900/20 hover:text-rose-600 dark:hover:text-rose-400 hover:border-rose-200/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl rounded-2xl text-zinc-700 dark:text-zinc-200">
-                <Users className="h-5 w-5 shrink-0" />
-                <span>友链</span>
-              </Button>
-            </Link>
-          </div>
-
-          {/* Latest Updates Section */}
-          <div className="w-full max-w-2xl mt-10 px-4 sm:px-0 opacity-0 animate-[fadeInUp_1s_ease-out_0.5s_forwards]">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-bold text-zinc-800 dark:text-zinc-200 flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-amber-500" />
-                最新动态
-              </h2>
-              <Link href="/blog" className="text-xs text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors flex items-center gap-1">
-                查看更多 <ArrowRight className="w-3 h-3" />
-              </Link>
-            </div>
-            <div className="grid grid-cols-1 gap-4">
-              {allUpdates.map((item) => (
-                <Link href={item.type === 'post' ? `/blog/${item.slug}` : `/essays/${item.slug}`} key={item.slug}>
-                  <div className="group relative p-5 bg-white/40 dark:bg-zinc-900/40 hover:bg-white/70 dark:hover:bg-zinc-800/60 rounded-2xl border border-white/50 dark:border-zinc-700/50 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 cursor-pointer backdrop-blur-sm">
-                    <div className="flex justify-between items-start gap-4">
-                      <div className="flex-1 min-w-0 space-y-2">
-                        <div className="flex items-center gap-2 text-xs text-zinc-500 dark:text-zinc-400">
-                          <span className={`px-2 py-0.5 rounded-full text-[10px] uppercase font-bold tracking-wider ${item.type === 'post'
-                            ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300'
-                            : 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300'
-                            }`}>
-                            {item.type === 'post' ? '技术' : '随笔'}
-                          </span>
-                          <span className="flex items-center gap-1">
-                            <Calendar className="w-3 h-3" />
-                            {item.date}
-                          </span>
-                        </div>
-                        <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-1">
-                          {item.title}
-                        </h3>
-                        <p className="text-sm text-zinc-600 dark:text-zinc-400 line-clamp-2">
-                          {item.description}
-                        </p>
-                      </div>
-                      <div className="self-center opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all duration-300">
-                        <ArrowRight className="w-5 h-5 text-zinc-400 dark:text-zinc-500" />
-                      </div>
+                <div className="space-y-6 p-6">
+                  <div>
+                    <p className="garden-kicker">念舒 / 产品运营</p>
+                    <h2 className="mt-3 text-3xl font-semibold">关心体验，也关心落地。</h2>
+                  </div>
+                  <p className="text-sm leading-7 text-muted-foreground">
+                    从用户场景出发，追到系统实现细节。这里记录这些视角互相补充的过程。
+                  </p>
+                  <div className="grid grid-cols-3 gap-3 border-t border-border pt-5 text-center">
+                    <div>
+                      <div className="text-2xl font-semibold">{posts.length}</div>
+                      <div className="mt-1 text-xs text-muted-foreground">技术文章</div>
+                    </div>
+                    <div>
+                      <div className="text-2xl font-semibold">{essays.length}</div>
+                      <div className="mt-1 text-xs text-muted-foreground">生活随笔</div>
+                    </div>
+                    <div>
+                      <div className="text-2xl font-semibold">{publicServiceCount}</div>
+                      <div className="mt-1 text-xs text-muted-foreground">在线服务</div>
                     </div>
                   </div>
-                </Link>
+                  <div className="border-t border-border pt-4">
+                    <WeatherCard />
+                  </div>
+                </div>
+              </div>
+            </aside>
+          </TiltCard>
+        </ScrollReveal>
+      </section>
+
+      <section className="grid min-h-[50vh] snap-start items-center gap-8 border-t border-border py-14 lg:grid-cols-[1.1fr_0.9fr]">
+        <ScrollReveal>
+          <div>
+            <div className="mb-6 flex items-end justify-between gap-4">
+              <div>
+                <p className="garden-kicker">最新动态</p>
+                <h2 className="mt-3 text-3xl font-semibold">最近更新</h2>
+              </div>
+              <Link href="/archive" className="garden-link shrink-0">
+                全部归档 <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+            <div className="divide-y divide-border brand-panel px-5">
+              {updates.map((item, i) => (
+                <ScrollReveal key={`${item.type}-${item.slug}`} delay={i * 0.08}>
+                  <Link
+                    href={item.type === "post" ? `/blog/${item.slug}` : `/essays/${item.slug}`}
+                    className="group grid gap-2 py-5"
+                  >
+                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                      <span className="rounded-md bg-secondary px-2 py-1">{item.type === "post" ? "技术博客" : "生活随笔"}</span>
+                      <span>{item.date}</span>
+                    </div>
+                    <h3 className="line-clamp-1 text-lg font-semibold transition-colors group-hover:text-primary">{item.title}</h3>
+                    <p className="line-clamp-2 text-sm leading-6 text-muted-foreground">{item.description}</p>
+                  </Link>
+                </ScrollReveal>
               ))}
             </div>
           </div>
+        </ScrollReveal>
 
+        <ScrollReveal delay={0.2}>
+          <TiltCard>
+            <div className="brand-panel flex flex-col justify-between p-6">
+              <div>
+                <BriefcaseBusiness className="mb-6 h-6 w-6 text-primary" />
+                <p className="garden-kicker">我在意的事</p>
+                <h2 className="mt-3 text-3xl font-semibold">把想法落到真实可用的地方。</h2>
+                <p className="mt-4 text-sm leading-7 text-muted-foreground">
+                  产品思维让我先问&ldquo;对谁有用&rdquo;，技术实践让我追问&ldquo;怎么跑起来&rdquo;。写作把这些过程留下来。
+                </p>
+              </div>
+              <div className="mt-8 flex flex-wrap gap-3">
+                <Link href="/about" className="garden-link">
+                  <UserRound className="h-4 w-4" />
+                  关于我
+                </Link>
+                <Link href="/friends" className="garden-link">
+                  <HeartHandshake className="h-4 w-4" />
+                  友链
+                </Link>
+                <a href="/feed.xml" target="_blank" rel="noreferrer" className="garden-link">
+                  <Rss className="h-4 w-4" />
+                  RSS
+                </a>
+              </div>
+            </div>
+          </TiltCard>
+        </ScrollReveal>
+      </section>
+
+      <LazyLoad>
+        <section className="grid min-h-[50vh] snap-start items-start gap-8 border-t border-border py-14 lg:grid-cols-[1.1fr_0.9fr]">
+          <ScrollReveal>
+            <div>
+              <p className="garden-kicker">开源风向</p>
+              <h2 className="mt-3 text-3xl font-semibold">GitHub 热门</h2>
+              <div className="mt-6">
+                <TiltCard>
+                  <GitHubTrending />
+                </TiltCard>
+              </div>
+            </div>
+          </ScrollReveal>
+
+          <ScrollReveal delay={0.2} direction="right">
+            <div>
+              <div className="mb-6 flex items-end justify-between gap-4">
+                <div>
+                  <p className="garden-kicker">技术脉搏</p>
+                  <h2 className="mt-3 text-3xl font-semibold">技术脉搏</h2>
+                </div>
+                <a
+                  href="https://www.ithome.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="garden-link shrink-0"
+                >
+                  IT之家 <ExternalLink className="inline h-4 w-4" />
+                </a>
+              </div>
+              <TiltCard>
+                <ITHomeList />
+              </TiltCard>
+            </div>
+          </ScrollReveal>
+        </section>
+      </LazyLoad>
+
+      <footer className="border-t border-border pt-8 pb-6 text-sm text-muted-foreground">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <span>© {new Date().getFullYear()} 念舒. All Rights Reserved.</span>
+          <div className="flex items-center gap-4">
+            <a href="https://github.com/nianshu2022" target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-foreground" aria-label="GitHub">
+              <Github className="h-4 w-4" />
+            </a>
+            <a href="mailto:nianshu2022@sina.cn" className="transition-colors hover:text-foreground" aria-label="Email">
+              <Mail className="h-4 w-4" />
+            </a>
+            <a href="/feed.xml" target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-foreground" aria-label="RSS">
+              <Rss className="h-4 w-4" />
+            </a>
+          </div>
         </div>
-      </div>
-
-      {/* Footer */}
-      <footer className="w-full py-8 mt-8 flex flex-col items-center justify-center gap-3 z-10 text-center px-4 font-sans backdrop-blur-sm">
-        <span className="text-sm font-medium text-zinc-600 dark:text-zinc-400">© {new Date().getFullYear()} 念舒. All Rights Reserved.</span>
-        <div className="text-xs text-zinc-400 dark:text-zinc-600 flex items-center gap-1.5">
-          <span>Powered by</span>
-          <a href="https://nextjs.org" target="_blank" rel="noreferrer" className="hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors">Next.js</a>
-          <span className="mx-1">•</span>
-          <a href="/feed.xml" target="_blank" rel="noreferrer" className="hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors flex items-center gap-1" title="RSS 订阅">
-            <Rss className="w-3 h-3" />
-            <span>RSS</span>
-          </a>
+        <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+          <VisitorCounter />
+          <span className="text-xs opacity-60">用 Next.js 搭建，也用来保存长期记忆。</span>
         </div>
       </footer>
     </main>

@@ -42,7 +42,7 @@ export default function ScrollToTop() {
       <Button
         onClick={scrollToTop}
         size="icon"
-        className="rounded-full w-12 h-12 bg-white/90 dark:bg-zinc-900/90 backdrop-blur-md text-zinc-700 dark:text-zinc-200 shadow-xl shadow-zinc-200/20 dark:shadow-black/40 border border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 hover:dark:bg-zinc-800 hover:scale-110 hover:border-zinc-300 dark:hover:border-zinc-700 transition-all duration-300"
+        className="rounded-full w-12 h-12 bg-card/60 backdrop-blur-xl text-foreground shadow-xl shadow-black/20 border border-border/30 hover:bg-secondary hover:scale-110 hover:border-primary/30 hover:shadow-[0_0_20px_rgba(99,102,241,0.15)] transition-all duration-300"
         aria-label="Scroll to top"
       >
         <ArrowUp className="h-8 w-8" />

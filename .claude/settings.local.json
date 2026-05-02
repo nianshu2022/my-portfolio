@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -sI \"https://api.mymemory.translated.net/get?q=hello&langpair=en|zh-CN\")"
+    ]
+  }
+}

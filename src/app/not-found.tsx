@@ -1,43 +1,53 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Ghost } from "lucide-react";
+import { Compass, Home, Search } from "lucide-react";
+import { getAllPostSummaries, getAllEssaySummaries } from "@/lib/posts";
 
 export default function NotFound() {
+  const posts = getAllPostSummaries();
+  const essays = getAllEssaySummaries();
+  const allItems = [...posts, ...essays];
+  const randomItem = allItems.length > 0
+    ? allItems[Math.floor(Math.random() * allItems.length)]
+    : null;
+  const randomHref = randomItem
+    ? posts.includes(randomItem)
+      ? `/blog/${randomItem.slug}`
+      : `/essays/${randomItem.slug}`
+    : null;
+
   return (
-    <div className="flex h-screen flex-col items-center justify-center gap-6 bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 p-4 overflow-hidden relative">
-      {/* Background decoration */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-purple-200/20 dark:bg-purple-900/10 rounded-full blur-[80px] animate-blob"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-blue-200/20 dark:bg-blue-900/10 rounded-full blur-[80px] animate-blob animation-delay-2000"></div>
-      </div>
-
-      <div className="text-center space-y-6 z-10 flex flex-col items-center">
-        {/* Animated Ghost Icon */}
-        <div className="relative">
-          <div className="absolute -inset-4 bg-zinc-200/50 dark:bg-zinc-800/50 rounded-full blur-xl animate-pulse"></div>
-          <Ghost className="w-24 h-24 text-zinc-300 dark:text-zinc-600 animate-bounce" />
+    <main className="garden-shell flex min-h-screen items-center justify-center">
+      <section className="garden-panel max-w-xl p-8 text-center">
+        <Compass className="mx-auto mb-6 h-10 w-10 text-primary animate-float" />
+        <p className="garden-kicker">404</p>
+        <h1 className="mt-3 text-3xl font-bold">信号未到达</h1>
+        <p className="mt-4 text-sm leading-6 text-muted-foreground">
+          你访问的页面不存在，可能是链接变更、内容迁移，或者这个节点还没有上线。
+        </p>
+        <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
+          <Button asChild className="rounded-md bg-primary text-primary-foreground hover:opacity-90">
+            <Link href="/">
+              <Home className="h-4 w-4" />
+              回到首页
+            </Link>
+          </Button>
+          <Button asChild variant="outline" className="rounded-md">
+            <Link href="/search">
+              <Search className="h-4 w-4" />
+              搜索内容
+            </Link>
+          </Button>
         </div>
-
-        <div className="space-y-2">
-          <h1 className="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-zinc-300 to-zinc-500 dark:from-zinc-700 dark:to-zinc-500 select-none font-serif">
-            404
-          </h1>
-          <h2 className="text-2xl font-bold text-zinc-700 dark:text-zinc-200">
-            哎呀，这里是荒原
-          </h2>
-          <p className="text-zinc-500 max-w-md mx-auto leading-relaxed">
-            看来这个页面已经去流浪了。<br />
-            它可能被外星人抓走了，或者从来就没有存在过。
+        {randomItem && randomHref && (
+          <p className="mt-6 text-sm text-muted-foreground">
+            或者看看这篇：
+            <Link href={randomHref} className="ml-1 text-primary hover:underline">
+              {randomItem.title}
+            </Link>
           </p>
-        </div>
-      </div>
-
-      <Button asChild className="rounded-full px-8 py-6 h-auto text-base shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 z-10 bg-zinc-900 dark:bg-zinc-100 text-zinc-50 dark:text-zinc-900 hover:bg-zinc-800 dark:hover:bg-zinc-200">
-        <Link href="/">
-          带我回家
-        </Link>
-      </Button>
-    </div>
+        )}
+      </section>
+    </main>
   );
 }
-

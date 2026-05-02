@@ -3,9 +3,12 @@ import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 import ScrollToTop from "@/components/ScrollToTop";
+import KeyboardHint from "@/components/KeyboardHint";
 import ServiceWorkerRegister from "@/components/ServiceWorkerRegister";
 import ThemeToggle from "@/components/ThemeToggle";
-import Image from "next/image";
+import MouseGlow from "@/components/MouseGlow";
+import GridBackground from "@/components/GridBackground";
+import PageTransition from "@/components/PageTransition";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,7 +31,10 @@ export const viewport: Viewport = {
 
 import CommandMenu from "@/components/CommandMenu";
 import SearchHint from "@/components/SearchHint";
+import MobileNav from "@/components/MobileNav";
+import BottomNav from "@/components/BottomNav";
 import { getAllPostSummaries, getAllEssaySummaries } from "@/lib/posts";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://blog.nianshu2022.cn'),
@@ -83,11 +89,11 @@ export default function RootLayout({
         <meta name="google-adsense-account" content="ca-pub-6153369929341681" />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen relative overflow-x-hidden bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen relative overflow-x-hidden bg-background text-foreground`}
         suppressHydrationWarning
       >
         <NextTopLoader
-          color="#9333ea"
+          color="#818cf8"
           initialPosition={0.08}
           crawlSpeed={200}
           height={3}
@@ -95,27 +101,44 @@ export default function RootLayout({
           showSpinner={false}
           easing="ease"
           speed={200}
-          shadow="0 0 10px #9333ea,0 0 5px #9333ea"
+          shadow="0 0 10px #818cf8,0 0 5px #818cf8"
         />
-        <div className="fixed top-4 right-4 z-50 flex items-center gap-2">
+        <GridBackground />
+        <MouseGlow />
+        <header className="fixed left-0 right-0 top-0 z-40 border-b border-border/30 bg-background/60 backdrop-blur-xl">
+          <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
+            <Link href="/" className="group inline-flex items-center gap-3 text-foreground">
+              <span className="flex h-8 w-8 items-center justify-center rounded-md bg-primary text-sm font-semibold text-primary-foreground">念</span>
+              <span className="hidden font-semibold tracking-normal sm:inline">念舒的数字花园</span>
+            </Link>
+            <nav className="hidden items-center gap-1 text-sm text-muted-foreground md:flex">
+              {[
+                ["博客", "/blog"],
+                ["随笔", "/essays"],
+                ["搜索", "/search"],
+                ["归档", "/archive"],
+                ["装备", "/gear"],
+                ["传送门", "/portal"],
+                ["关于", "/about"],
+              ].map(([label, href]) => (
+                <Link key={href} href={href} className="rounded-md px-3 py-2 transition-colors hover:bg-secondary hover:text-foreground">
+                  {label}
+                </Link>
+              ))}
+            </nav>
+            <MobileNav />
+          </div>
+        </header>
+        <div className="fixed top-3.5 right-4 z-50 flex items-center gap-2">
           <SearchHint />
           <ThemeToggle />
         </div>
 
-        {/* Global Background Decoration */}
-        <div className="fixed inset-0 z-[-1] pointer-events-none">
-          {/* Animated Blobs */}
-          <div className="absolute top-[-10%] left-[-10%] w-96 h-96 bg-purple-400/20 rounded-full blur-[100px] mix-blend-multiply dark:mix-blend-screen dark:bg-purple-900/30 animate-blob"></div>
-          <div className="absolute top-[20%] right-[-10%] w-96 h-96 bg-blue-400/20 rounded-full blur-[100px] mix-blend-multiply dark:mix-blend-screen dark:bg-blue-900/30 animate-blob animation-delay-2000"></div>
-          <div className="absolute bottom-[-10%] left-[20%] w-96 h-96 bg-pink-400/20 rounded-full blur-[100px] mix-blend-multiply dark:mix-blend-screen dark:bg-pink-900/30 animate-blob animation-delay-4000"></div>
+        <PageTransition>{children}</PageTransition>
 
-          {/* Grid Pattern Overlay */}
-          <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))] opacity-10"></div>
-        </div>
-
-        {children}
-
+        <BottomNav />
         <ScrollToTop />
+        <KeyboardHint />
 
 
 
@@ -133,4 +156,3 @@ export default function RootLayout({
     </html>
   );
 }
-

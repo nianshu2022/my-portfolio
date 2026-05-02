@@ -7,7 +7,7 @@ interface CodeBlockProps extends React.HTMLAttributes<HTMLPreElement> {
     children?: React.ReactNode;
 }
 
-export default function CodeBlock({ children, className, ...props }: CodeBlockProps) {
+export default function CodeBlock({ children, className }: CodeBlockProps) {
     const [isCopied, setIsCopied] = useState(false);
     const textRef = React.useRef<HTMLPreElement>(null);
 
@@ -28,7 +28,7 @@ export default function CodeBlock({ children, className, ...props }: CodeBlockPr
     return (
         <div className="group relative my-6 rounded-xl overflow-hidden bg-[#1e1e1e] dark:bg-[#0d1117] border border-zinc-200/20 dark:border-zinc-700/50 shadow-2xl">
             {/* Mac-style Window Header */}
-            <div className="flex items-center justify-between px-4 py-3 bg-[#2d2d2d] dark:bg-[#161b22] border-b border-zinc-700/50">
+            <div className="flex items-center justify-between px-4 py-3 bg-[#1a1a2e] dark:bg-[#0d0d1a] border-b border-indigo-500/10">
                 <div className="flex gap-2">
                     <div className="w-3 h-3 rounded-full bg-[#ff5f56] hover:bg-[#ff5f56]/80 transition-colors shadow-inner" />
                     <div className="w-3 h-3 rounded-full bg-[#ffbd2e] hover:bg-[#ffbd2e]/80 transition-colors shadow-inner" />

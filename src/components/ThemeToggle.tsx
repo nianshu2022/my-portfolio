@@ -89,7 +89,7 @@ export default function ThemeToggle() {
     return (
         <button
             onClick={toggle}
-            className="p-2 rounded-full bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors shadow-sm border border-zinc-200 dark:border-zinc-700 relative overflow-hidden"
+            className="p-2 rounded-full bg-card/60 backdrop-blur-md hover:bg-secondary transition-colors shadow-sm border border-border/30 relative overflow-hidden"
             aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
         >
             {theme === "dark" ? (

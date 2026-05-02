@@ -1,0 +1,49 @@
+{
+  "generatedAt": "2026-05-02T05:22:56.478Z",
+  "source": "build script probe",
+  "timeoutMs": 8000,
+  "services": [
+    {
+      "name": "With You",
+      "description": "记录时间的流逝，珍惜当下的每一刻。",
+      "url": "https://zc.nianshu2022.cn",
+      "icon": "https://zc.nianshu2022.cn/favicon.ico",
+      "iconKey": "clock",
+      "visibility": "public",
+      "check": {
+        "status": "online",
+        "statusCode": 200,
+        "latencyMs": 1229,
+        "message": "reachable"
+      }
+    },
+    {
+      "name": "MoonTV",
+      "description": "私人影视媒体库，存储我喜爱的电影与剧集。",
+      "url": "https://mv.nianshu2022.cn",
+      "icon": "https://mv.nianshu2022.cn/favicon.ico",
+      "iconKey": "tv",
+      "visibility": "protected",
+      "check": {
+        "status": "protected",
+        "statusCode": 200,
+        "latencyMs": 3743,
+        "message": "reachable"
+      }
+    },
+    {
+      "name": "Nginx",
+      "description": "Nginx 管理面板，反向代理与负载均衡控制台。",
+      "url": "https://nginx.nianshu2022.cn",
+      "icon": "https://nginx.nianshu2022.cn/images/favicons/favicon.ico",
+      "iconKey": "server",
+      "visibility": "protected",
+      "check": {
+        "status": "protected",
+        "statusCode": 200,
+        "latencyMs": 1020,
+        "message": "reachable"
+      }
+    }
+  ]
+}

@@ -15,7 +15,7 @@ export default function BusuanziCounter() {
     // Function to reload Busuanzi script
     const loadScript = () => {
       // Remove existing script if any to force reload
-      let existingScript = document.getElementById("busuanzi-script");
+      const existingScript = document.getElementById("busuanzi-script");
       if (existingScript) {
         existingScript.remove();
       }

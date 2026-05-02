@@ -1,10 +1,9 @@
 import { getPostBySlug, getAllPosts, getRelatedPosts, getAdjacentPosts } from "@/lib/posts";
 import { Metadata } from "next";
 import Markdown from "react-markdown";
-import { Clock, BookOpen, Eye } from "lucide-react";
+import { Clock, BookOpen, Eye, ListTree } from "lucide-react";
 import rehypeSlug from 'rehype-slug';
 import remarkGfm from 'remark-gfm';
-// import GithubSlugger from 'github-slugger'; // Removed unused import
 import { notFound } from "next/navigation";
 import BusuanziCounter from "@/components/Busuanzi";
 import ReadingProgress from "@/components/ReadingProgress";
@@ -12,7 +11,6 @@ import SidebarAward from "@/components/SidebarAward";
 import TableOfContents from "@/components/TableOfContents";
 import FloatingNav from "@/components/FloatingNav";
 import DonateButton from "@/components/DonateButton";
-import CodeBlock from "@/components/ui/CodeBlock";
 import RelatedPosts from "@/components/RelatedPosts";
 import Comments from "@/components/Comments";
 import PostNavigation from "@/components/PostNavigation";
@@ -20,7 +18,8 @@ import ScrollMemory from "@/components/ScrollMemory";
 import FontSizeControl from "@/components/FontSizeControl";
 import ShareButton from "@/components/ShareButton";
 import LikeButton from "@/components/LikeButton";
-import rehypeSanitize, { defaultSchema } from 'rehype-sanitize';
+import rehypeSanitize from 'rehype-sanitize';
+import { getSanitizeSchema, getMarkdownComponents } from "@/lib/markdown-components";
 
 export async function generateStaticParams() {
     const posts = getAllPosts();
@@ -93,38 +92,12 @@ export default async function PostPage(props: { params: Promise<{ slug: string }
         }
     };
 
-    // TOC is now handled in posts.ts
-
-    // Custom schema for rehype-sanitize to match previous DOMPurify configuration
-    const sanitizeSchema = {
-        ...defaultSchema,
-        tagNames: [
-            ...(defaultSchema.tagNames || []),
-            'img', 'table', 'thead', 'tbody', 'tr', 'th', 'td', 'br', 'hr', 'span', 'div',
-            'h1', 'h2', 'h3', 'h4', 'h5', 'h6'
-        ],
-        attributes: {
-            ...defaultSchema.attributes,
-            'img': ['src', 'alt', 'title', 'width', 'height', 'style', 'className'],
-            '*': ['className', 'id', 'style'],
-            'h1': ['id', 'className', 'style'],
-            'h2': ['id', 'className', 'style'],
-            'h3': ['id', 'className', 'style'],
-            'h4': ['id', 'className', 'style'],
-            'h5': ['id', 'className', 'style'],
-            'h6': ['id', 'className', 'style']
-        }
-    };
+    const sanitizeSchema = getSanitizeSchema();
+    const mdComponents = getMarkdownComponents({ imageWidth: 1000, imageQuality: 75 });
 
     return (
-        <main className="flex min-h-screen flex-col items-center p-4 sm:p-24 relative overflow-hidden">
+        <main className="flex min-h-screen flex-col items-center px-4 py-24 sm:px-8 relative overflow-hidden">
             <ScrollMemory />
-            {/* Background Blobs (Blue/Violet Theme) */}
-            <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none -z-10">
-                <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-blue-200/30 dark:bg-blue-900/20 rounded-full blur-[100px] animate-blob mix-blend-multiply dark:mix-blend-screen opacity-70"></div>
-                <div className="absolute top-[20%] left-[-10%] w-[400px] h-[400px] bg-violet-200/30 dark:bg-violet-900/20 rounded-full blur-[100px] animate-blob animation-delay-2000 mix-blend-multiply dark:mix-blend-screen opacity-70"></div>
-                <div className="absolute bottom-[-10%] right-[20%] w-[600px] h-[600px] bg-indigo-200/30 dark:bg-indigo-900/20 rounded-full blur-[100px] animate-blob animation-delay-4000 mix-blend-multiply dark:mix-blend-screen opacity-70"></div>
-            </div>
             {/* JSON-LD Structured Data */}
             <script
                 type="application/ld+json"
@@ -140,33 +113,33 @@ export default async function PostPage(props: { params: Promise<{ slug: string }
 
                 {/* Article Content Container */}
                 <div className="flex-1 min-w-0 relative">
+                    <div id="top" />
 
                     {/* Main Content */}
-                    <article className="w-full pt-10 sm:pt-16 pb-10">
+                    <article className="w-full pb-10 pt-10 sm:pt-16">
 
                         <div className="px-6 sm:px-12">
-                            <header className="mb-10 pb-10 border-b border-zinc-200/50 dark:border-zinc-700/50 sm:pl-4">
-                                <h1 className="text-3xl sm:text-4xl font-bold mb-6 text-zinc-900 dark:text-zinc-50 leading-tight tracking-tight mt-8 sm:mt-0 font-sans">{post.title}</h1>
+                            <header className="mb-10 border-b border-border pb-10 sm:pl-4">
+                                <h1 className="mb-6 font-sans text-3xl font-bold leading-tight tracking-tight text-foreground sm:text-4xl">{post.title}</h1>
 
                                 {/* Meta Info Row */}
-                                <div className="flex flex-wrap items-center gap-y-3 gap-x-6 text-zinc-500 text-sm mb-4">
-                                    <div className="flex items-center gap-2">
-                                        <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                                <div className="mb-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted-foreground">
+                                    <div className="inline-flex items-center gap-2 rounded-md border border-border bg-secondary px-2.5 py-1.5">
                                         <span className="font-mono">{post.date}</span>
                                     </div>
 
                                     <div className="flex items-center gap-2" title="字数统计">
-                                        <BookOpen className="w-4 h-4" />
+                                        <BookOpen className="h-4 w-4" />
                                         <span>{post.wordCount} 字</span>
                                     </div>
 
                                     <div className="flex items-center gap-2" title="预估阅读时间">
-                                        <Clock className="w-4 h-4" />
+                                        <Clock className="h-4 w-4" />
                                         <span>{post.readingTime}</span>
                                     </div>
 
                                     <div className="flex items-center gap-2" title="阅读量">
-                                        <Eye className="w-4 h-4" />
+                                        <Eye className="h-4 w-4" />
                                         <BusuanziCounter />
                                     </div>
                                     <div className="ml-auto">
@@ -178,18 +151,30 @@ export default async function PostPage(props: { params: Promise<{ slug: string }
                                 {post.tags?.length > 0 && (
                                     <div className="flex gap-2 overflow-x-auto pb-2 custom-scrollbar -ml-1 pl-1">
                                         {post.tags.map(tag => (
-                                            <span key={tag} className="whitespace-nowrap bg-blue-50 dark:bg-blue-900/20 px-2.5 py-1 rounded-md text-xs font-medium text-blue-600 dark:text-blue-300 border border-blue-100 dark:border-blue-800/30">
+                                            <span key={tag} className="whitespace-nowrap rounded-md border border-border bg-secondary px-2.5 py-1 text-xs font-medium text-primary">
                                                 #{tag}
                                             </span>
                                         ))}
                                     </div>
                                 )}
 
+                                {post.toc.length > 0 && (
+                                    <details className="mt-5 rounded-md border border-border bg-card/70 p-3 lg:hidden">
+                                        <summary className="flex cursor-pointer list-none items-center gap-2 text-sm font-medium text-foreground">
+                                            <ListTree className="h-4 w-4 text-primary" />
+                                            文章目录
+                                        </summary>
+                                        <div className="mt-3 border-t border-border pt-3">
+                                            <TableOfContents toc={post.toc} />
+                                        </div>
+                                    </details>
+                                )}
+
                                 {/* Decorative Separator */}
                                 <div className="flex items-center justify-center gap-4 mt-8">
-                                    <div className="h-px w-24 bg-gradient-to-r from-transparent via-blue-300 to-transparent dark:via-blue-800"></div>
-                                    <div className="w-2 h-2 rounded-full bg-blue-400 dark:bg-blue-600"></div>
-                                    <div className="h-px w-24 bg-gradient-to-r from-transparent via-blue-300 to-transparent dark:via-blue-800"></div>
+                                    <div className="h-px w-24 bg-gradient-to-r from-transparent via-indigo-300 to-transparent dark:via-indigo-800"></div>
+                                    <div className="w-2 h-2 rounded-full bg-primary"></div>
+                                    <div className="h-px w-24 bg-gradient-to-r from-transparent via-indigo-300 to-transparent dark:via-indigo-800"></div>
                                 </div>
                             </header>
 
@@ -200,111 +185,20 @@ export default async function PostPage(props: { params: Promise<{ slug: string }
                                         [rehypeSanitize, sanitizeSchema],
                                         rehypeSlug
                                     ]}
-                                    components={{
-                                        img: (props) => {
-                                            const src = props.src as string || '';
-                                            let imageSrc = src;
-
-                                            // 验证图片URL安全性
-                                            try {
-                                                const url = new URL(src, 'http://dummy.com');
-                                                const protocol = url.protocol;
-
-                                                // 只允许安全协议
-                                                if (!['http:', 'https:', 'data:'].includes(protocol)) {
-                                                    return <span className="text-red-500">[无效的图片链接]</span>;
-                                                }
-
-                                                // 防止data URI过长攻击
-                                                if (protocol === 'data:' && src.length > 10000) {
-                                                    return <span className="text-red-500">[图片过大]</span>;
-                                                }
-                                            } catch {
-                                                return <span className="text-red-500">[无效的URL]</span>;
-                                            }
-
-                                            const style: React.CSSProperties = {
-                                                height: 'auto',
-                                                borderRadius: '8px',
-                                                backgroundColor: 'transparent',
-                                                verticalAlign: 'top'
-                                            };
-                                            let className = "rounded-lg";
-
-                                            try {
-                                                const url = new URL(src, 'http://dummy.com');
-                                                const width = url.searchParams.get('width') || url.searchParams.get('w');
-                                                const shadow = url.searchParams.get('shadow');
-
-                                                if (width) {
-                                                    // 验证宽度参数
-                                                    const widthValue = parseInt(width);
-                                                    if (isNaN(widthValue) || widthValue < 1 || widthValue > 2000) {
-                                                        style.width = '100%';
-                                                    } else {
-                                                        style.width = width;
-                                                    }
-                                                    style.maxWidth = '100%';
-                                                    className += " block mx-auto mb-6 sm:inline-block sm:mx-0 sm:mb-4 sm:mr-8";
-                                                } else {
-                                                    style.maxWidth = '100%';
-                                                    className += " block mx-auto";
-                                                }
-
-                                                if (shadow === 'true' || shadow === '1') {
-                                                    style.filter = 'drop-shadow(0 4px 12px rgba(0, 0, 0, 0.1))';
-                                                }
-
-                                                // Image Proxy Logic (wsrv.nl)
-                                                // Only proxy absolute external http/https URLs
-                                                if (src.startsWith('http')) {
-                                                    try {
-                                                        const imageUrl = new URL(src);
-                                                        // Avoid double proxying and skip local images
-                                                        if (!imageUrl.hostname.includes('wsrv.nl') &&
-                                                            !imageUrl.hostname.includes('nianshu2022.cn')) {
-                                                            // Optimized parameters: w=1000, q=75 for better balance of quality and speed
-                                                            imageSrc = `https://wsrv.nl/?url=${encodeURIComponent(src)}&w=1000&q=75&output=webp`;
-                                                        }
-                                                    } catch {
-                                                        // Fallback for invalid URLs
-                                                    }
-                                                }
-                                            } catch {
-                                                // Ignore URL parsing errors
-                                            }
-
-                                            return <img {...props} src={imageSrc} alt={props.alt || ''} style={style} className={className} referrerPolicy="no-referrer" loading="lazy" />;
-                                        },
-                                        table: (props) => (
-                                            <div className="overflow-x-auto my-8 custom-scrollbar rounded-xl border border-zinc-200 dark:border-zinc-800 shadow-sm">
-                                                <table {...props} className="min-w-full divide-y divide-zinc-200 dark:divide-zinc-800 border-collapse" />
-                                            </div>
-                                        ),
-                                        thead: (props) => (
-                                            <thead {...props} className="bg-zinc-50/50 dark:bg-zinc-800/50" />
-                                        ),
-                                        th: (props) => (
-                                            <th {...props} className="px-4 py-3 text-left text-xs font-bold text-zinc-600 dark:text-zinc-400 uppercase tracking-wider border-b border-zinc-200 dark:border-zinc-800" />
-                                        ),
-                                        td: (props) => (
-                                            <td {...props} className="px-4 py-3 text-sm text-zinc-600 dark:text-zinc-300 border-b border-zinc-100 dark:border-zinc-800/50" />
-                                        ),
-                                        pre: (props) => <CodeBlock {...props} />
-                                    }}
+                                    components={mdComponents}
                                 >
                                     {post.content}
                                 </Markdown>
                             </div>
 
                             {/* Copyright Section */}
-                            <div className="mt-16 pt-8 border-t border-zinc-200/50 dark:border-zinc-700/50 sm:ml-4">
-                                <div className="flex flex-col sm:flex-row items-center justify-between gap-6 py-4 text-sm text-zinc-400 font-serif">
+                            <div className="mt-16 pt-8 border-t border-border/50">
+                                <div className="flex flex-col sm:flex-row items-center justify-between gap-6 py-4 text-sm text-muted-foreground font-sans">
                                     <div className="flex flex-col gap-2 text-center sm:text-left">
                                         <p>
-                                            <span className="font-semibold text-zinc-500 dark:text-zinc-300">© 念舒</span>
+                                            <span className="font-semibold text-foreground">© 念舒</span>
                                             <span className="mx-2">·</span>
-                                            <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer" className="hover:text-blue-600 transition-colors">CC BY-NC-SA 4.0</a>
+                                            <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">CC BY-NC-SA 4.0</a>
                                         </p>
                                         <p className="text-xs opacity-70">
                                             转载请注明：blog.nianshu2022.cn/blog/{post.slug}
@@ -327,32 +221,36 @@ export default async function PostPage(props: { params: Promise<{ slug: string }
                     </article>
                 </div>
 
-                {/* Sidebar - Separated Card */}
-                <aside className="hidden lg:block w-72 shrink-0">
-                    <div className="sticky top-6 space-y-6">
-                        {/* TOC Card - Transparent */}
-                        <div className="p-6 rounded-3xl max-h-[80vh] flex flex-col snap-y snap-mandatory overflow-y-auto custom-scrollbar pr-1 relative">
-                            {/* Decorative line for TOC */}
-                            <div className="absolute left-0 top-6 bottom-6 w-px bg-zinc-200 dark:bg-zinc-800 ml-3"></div>
-
-                            <h4 className="font-bold mb-4 text-sm text-zinc-900 dark:text-zinc-100 flex items-center gap-2 select-none relative z-10 bg-transparent pl-4">
+                {/* Sidebar */}
+                <aside className="hidden w-64 shrink-0 lg:block">
+                    <div className="sticky top-24 space-y-6">
+                        {/* TOC Card */}
+                        <div className="garden-panel p-5 max-h-[80vh] overflow-y-auto custom-scrollbar">
+                            <h4 className="mb-3 text-xs font-semibold uppercase tracking-widest text-muted-foreground select-none">
                                 目录
                             </h4>
-                            <div className="pl-4">
-                                <TableOfContents toc={post.toc} />
-                            </div>
+                            <TableOfContents toc={post.toc} />
                         </div>
 
-                        {/* Award Card - Transparent */}
+                        {/* Award Card */}
                         {post.award && (
-                            <div className="rounded-3xl border-0 overflow-hidden ml-4">
-                                <SidebarAward src={post.award} />
-                            </div>
+                            <SidebarAward src={post.award} />
                         )}
                     </div>
                 </aside>
 
             </div >
+
+            <div className="fixed inset-x-0 bottom-16 z-30 px-4 md:hidden">
+                <div className="mx-auto flex max-w-sm items-center gap-2 rounded-md border border-border/30 bg-background/60 p-2 shadow-lg backdrop-blur-xl">
+                    <a href="#top" className="flex-1 rounded-md bg-secondary px-3 py-2 text-center text-sm font-medium text-foreground transition-colors hover:bg-secondary/80">
+                        回到顶部
+                    </a>
+                    <a href="#comments-section" className="flex-1 rounded-md bg-primary px-3 py-2 text-center text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90">
+                        去评论
+                    </a>
+                </div>
+            </div>
         </main >
     );
 }

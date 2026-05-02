@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @plugin "@tailwindcss/typography";
+@import "leaflet/dist/leaflet.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -104,6 +105,53 @@
       background-position: -200% -200%;
     }
   }
+
+  --animate-glow-pulse: glow-pulse 3s ease-in-out infinite;
+
+  @keyframes glow-pulse {
+    0%, 100% {
+      opacity: 0.4;
+    }
+    50% {
+      opacity: 0.8;
+    }
+  }
+
+  --animate-float: float 6s ease-in-out infinite;
+
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  --animate-gradient-shift: gradient-shift 4s linear infinite;
+
+  @keyframes gradient-shift {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+  --animate-cursor-blink: cursor-blink 1s step-end infinite;
+
+  @keyframes cursor-blink {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0;
+    }
+  }
 }
 
 @utility animation-delay-2000 {
@@ -115,29 +163,27 @@
 }
 
 :root {
-  --radius: 0.625rem;
-  --background: oklch(0.985 0.01 250);
-  /* Slightly tinted background */
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
+  --radius: 0.5rem;
+  --background: #f8f9fc;
+  --foreground: #0f172a;
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+  --popover: #ffffff;
+  --popover-foreground: #0f172a;
 
-  /* Indigo / Purple Theme */
-  --primary: oklch(0.491 0.241 270.267);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.491 0.241 270.267);
+  --primary: #6366f1;
+  --primary-foreground: #ffffff;
+  --secondary: #f1f5f9;
+  --secondary-foreground: #0f172a;
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
+  --accent: #eef2ff;
+  --accent-foreground: #4338ca;
 
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.491 0.241 270.267);
+  --border: #e2e8f0;
+  --input: #e2e8f0;
+  --ring: #6366f1;
 
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
@@ -147,7 +193,7 @@
 
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary: oklch(0.505 0.222 265.755);
   --sidebar-primary-foreground: oklch(0.985 0 0);
   --sidebar-accent: oklch(0.97 0 0);
   --sidebar-accent-foreground: oklch(0.205 0 0);
@@ -156,29 +202,27 @@
 }
 
 .dark {
-  --background: oklch(0.05 0.01 250);
-  /* Very dark blue-ish black */
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.1 0.02 250);
-  /* Slightly lighter card */
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.1 0.02 250);
-  --popover-foreground: oklch(0.985 0 0);
+  --background: #0a0a0f;
+  --foreground: #e2e8f0;
+  --card: #12121a;
+  --card-foreground: #e2e8f0;
+  --popover: #12121a;
+  --popover-foreground: #e2e8f0;
 
-  --primary: oklch(0.627 0.265 303.9);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
+  --primary: #818cf8;
+  --primary-foreground: #0a0a0f;
+  --secondary: #1e1e2e;
+  --secondary-foreground: #e2e8f0;
 
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
+  --muted: #1e1e2e;
+  --muted-foreground: #94a3b8;
+  --accent: #1e1b4b;
+  --accent-foreground: #a5b4fc;
 
   --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
+  --border: #1e293b;
+  --input: #1e293b;
+  --ring: #818cf8;
 
   --chart-1: oklch(0.488 0.243 264.376);
   --chart-2: oklch(0.696 0.17 162.48);
@@ -186,11 +230,11 @@
   --chart-4: oklch(0.627 0.265 303.9);
   --chart-5: oklch(0.645 0.246 16.439);
 
-  --sidebar: oklch(0.205 0 0);
+  --sidebar: oklch(0.145 0 0);
   --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary: oklch(0.585 0.233 277.117);
   --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent: oklch(0.185 0 0);
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
@@ -203,13 +247,19 @@
 
   body {
     @apply bg-background text-foreground;
-    /* Smooth scrolling for anchor links */
     scroll-behavior: smooth;
+  }
+
+  .dark body {
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% -20%, rgba(99, 102, 241, 0.08), transparent),
+      radial-gradient(ellipse 60% 40% at 80% 100%, rgba(34, 211, 238, 0.04), transparent);
   }
 
   /* Global smooth scrolling override */
   html {
     scroll-behavior: smooth;
+    overflow-x: hidden;
   }
 }
 
@@ -227,103 +277,103 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply bg-zinc-300 dark:bg-zinc-700 rounded-full;
+    @apply bg-slate-300 dark:bg-slate-700 rounded-full;
     border: 2px solid transparent;
     background-clip: content-box;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    @apply bg-zinc-400 dark:bg-zinc-600;
+    @apply bg-slate-400 dark:bg-slate-600;
   }
 
-  /* Custom Thin Scrollbar for specific containers (like TOC) */
   .custom-scrollbar::-webkit-scrollbar {
     width: 4px;
   }
 
   .custom-scrollbar::-webkit-scrollbar-thumb {
-    @apply bg-zinc-200 dark:bg-zinc-800 rounded-full;
+    @apply bg-slate-200 dark:bg-slate-800 rounded-full;
   }
 
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    @apply bg-zinc-300 dark:bg-zinc-700;
-  }
-
-  /* Indent first line of paragraphs only in essay (Chinese prose) */
-  .essay-content .prose p {
-    text-indent: 2em;
-  }
-
-  /* But don't indent blockquotes or list items if they contain p */
-  .essay-content .prose blockquote p {
-    text-indent: 0;
-  }
-
-  .essay-content .prose ul p,
-  .essay-content .prose ol p {
-    text-indent: 0;
-  }
-
-  /* 
-   * Add CSS feature settings for lining figures (lnum) and tabular figures (tnum)
-   * This makes numbers look more standard and less "old-style" (variable height)
-   */
-  .font-serif {
-    font-feature-settings: "lnum", "tnum";
-    font-variant-numeric: lining-nums tabular-nums;
+    @apply bg-slate-300 dark:bg-slate-700;
   }
 }
 
 /* Typography Enhancements */
+.garden-shell {
+  @apply mx-auto w-full max-w-6xl px-4 py-20 sm:px-6 sm:py-24 lg:px-8;
+}
+
 @layer components {
+
+  .garden-panel {
+    @apply border border-border bg-card/80 text-card-foreground shadow-[0_18px_45px_rgba(0,0,0,0.08)] dark:shadow-[0_18px_45px_rgba(0,0,0,0.3)] backdrop-blur-sm rounded-lg;
+  }
+
+  .dark .garden-panel {
+    border-color: rgba(99, 102, 241, 0.08);
+  }
+
+  .brand-panel {
+    @apply border border-border bg-card/85 text-card-foreground shadow-[0_24px_70px_rgba(0,0,0,0.12)] dark:shadow-[0_24px_70px_rgba(0,0,0,0.4)] backdrop-blur-sm rounded-lg;
+  }
+
+  .dark .brand-panel {
+    border-color: rgba(99, 102, 241, 0.1);
+  }
+
+  .garden-link {
+    @apply inline-flex items-center gap-2 text-sm font-medium text-primary transition-colors hover:text-accent-foreground;
+  }
+
+  .garden-kicker {
+    @apply text-xs font-semibold uppercase tracking-[0.18em] text-primary;
+  }
+
+  .garden-title {
+    @apply text-4xl font-semibold leading-tight tracking-normal text-foreground sm:text-5xl;
+  }
+
+  .garden-subtitle {
+    @apply text-base leading-8 text-muted-foreground sm:text-lg;
+  }
+
   .prose blockquote {
     @apply not-italic border-none bg-transparent px-0 py-2 my-8 text-center;
   }
 
-  /* Limit image size inside blockquotes */
   .prose blockquote img {
     @apply max-h-[200px] w-auto mx-auto rounded-lg shadow-md my-4 hover:scale-105 transition-transform duration-300;
   }
 
-  /* Special style for mobile screenshots in markdown */
   .prose img[alt*="mobile-screenshot"] {
-    @apply w-[300px] max-w-full mx-auto rounded-xl shadow-lg my-6 border border-zinc-200 dark:border-zinc-700;
+    @apply w-[300px] max-w-full mx-auto rounded-xl shadow-lg my-6 border border-slate-200 dark:border-slate-700;
   }
 
   .prose a {
-    @apply no-underline relative font-medium text-blue-600 dark:text-blue-400 transition-colors;
+    @apply no-underline relative font-medium text-primary transition-colors;
   }
 
   .prose a::after {
     content: '';
-    @apply absolute bottom-0 left-0 w-full h-[1px] bg-blue-600/40 dark:bg-blue-400/40 transition-transform duration-300 scale-x-0 origin-right;
+    @apply absolute bottom-0 left-0 w-full h-[1px] bg-primary/40 transition-transform duration-300 scale-x-0 origin-right;
   }
 
   .prose a:hover::after {
     @apply scale-x-100 origin-left;
   }
 
-  /* For Essays (Life) - Use Serif Headings */
+  .blog-content .prose h2,
+  .blog-content .prose h3,
+  .blog-content .prose h4,
   .essay-content .prose h2,
   .essay-content .prose h3,
   .essay-content .prose h4 {
-    @apply font-serif;
-  }
-
-  /* Essay Drop Cap */
-  .essay-content>p:first-of-type::first-letter {
-    @apply float-left text-5xl font-bold font-serif mr-3 mt-2 text-purple-600 dark:text-purple-400 leading-none;
-  }
-
-  /* For Blog (Technical) - Use Sans-Serif Headings */
-  .blog-content .prose h2,
-  .blog-content .prose h3,
-  .blog-content .prose h4 {
     @apply font-sans tracking-tight;
   }
 
   .prose h2 {
-    @apply relative pl-4 border-l-4 border-purple-500;
+    @apply relative pl-4 border-l-4 border-primary;
   }
 
   .prose h3 {
@@ -332,10 +382,35 @@
 
   .prose h3::before {
     content: '#';
-    @apply text-purple-400/60 font-light;
+    @apply text-primary/60 font-light;
   }
 
   .prose code {
-    @apply bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded border border-zinc-200 dark:border-zinc-700/50 font-mono text-sm font-normal text-pink-600 dark:text-pink-400 before:content-none after:content-none;
+    @apply bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded border border-slate-200 dark:border-slate-700/50 font-mono text-sm font-normal text-cyan-600 dark:text-cyan-400 before:content-none after:content-none;
+  }
+}
+
+/* Glassmorphism utility */
+@utility glass {
+  background: var(--card);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  opacity: 0.85;
+}
+
+.dark .glass {
+  background: rgba(18, 18, 26, 0.6);
+  border: 1px solid rgba(99, 102, 241, 0.1);
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
