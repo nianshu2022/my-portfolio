@@ -1,0 +1,65 @@
+{
+  "id": "post:openstack-deployment-guide",
+  "slug": "openstack-deployment-guide",
+  "type": "post",
+  "collection": "posts",
+  "title": "部署 OpenStack 云平台",
+  "description": "基于 CentOS 7.5 环境，详细记录从系统镜像准备、网络架构规划到各个核心组件（Keystone, Glance, Nova, Neutron, Dashboard）的安装与配置过程。",
+  "date": "2022-10-25",
+  "tags": [
+    "OpenStack",
+    "运维",
+    "云计算",
+    "CentOS"
+  ],
+  "cover": null,
+  "award": null,
+  "draft": false,
+  "url": "https://blog.nianshu2022.cn/blog/openstack-deployment-guide",
+  "path": "/blog/openstack-deployment-guide",
+  "wordCount": 7635,
+  "readingTime": "8 分钟",
+  "toc": [
+    {
+      "title": "1. 系统镜像",
+      "slug": "1-系统镜像",
+      "level": 2
+    },
+    {
+      "title": "2. 网络架构及硬件配置",
+      "slug": "2-网络架构及硬件配置",
+      "level": 2
+    },
+    {
+      "title": "3. 基础环境部署",
+      "slug": "3-基础环境部署",
+      "level": 2
+    },
+    {
+      "title": "3.1 配置映射、主机名、网络、关闭防火墙",
+      "slug": "31-配置映射主机名网络关闭防火墙",
+      "level": 3
+    },
+    {
+      "title": "3.2 挂载镜像、配置 yum 源",
+      "slug": "32-挂载镜像配置-yum-源",
+      "level": 3
+    },
+    {
+      "title": "3.3 计算节点分区",
+      "slug": "33-计算节点分区",
+      "level": 3
+    },
+    {
+      "title": "3.4 编辑环境变量",
+      "slug": "34-编辑环境变量",
+      "level": 3
+    },
+    {
+      "title": "3.5 通过脚本安装服务",
+      "slug": "35-通过脚本安装服务",
+      "level": 3
+    }
+  ],
+  "content": "\n## 1. 系统镜像\n\n安装运行环境系统要求为 CentOS 7.5，内核版本不低于 3.10。\n\n- CentOS-7.5-x86_64-DVD-1804.iso\n- Chinaskill_Cloud_iaas.iso\n\n## 2. 网络架构及硬件配置\n\n| 主机名 | 内存 | 硬盘 1 | 硬盘 2 | IP 地址 (VMnet1) | IP 地址 (VMnet8) |\n| :--- | :--- | :--- | :--- | :--- | :--- |\n| controller | 4G | 100G | 无 | 192.168.100.10 | 192.168.200.10 |\n| compute | 4G | 100G | 200G | 192.168.100.20 | 192.168.200.20 |\n\n## 3. 基础环境部署\n\n### 3.1 配置映射、主机名、网络、关闭防火墙\n\n**controller 节点和 compute 节点：**\n\n修改 `/etc/hosts` 文件添加映射：\n\n```bash\n192.168.100.10 controller\n192.168.100.20 compute\n```\n\n![](https://img-blog.csdnimg.cn/989138c544b243fbb69dd79b23ce40be.png?shadow=true)\n\n#### 3.1.1 controller 节点\n\n**修改主机名：**\n\n```bash\nhostnamectl set-hostname controller\n```\n\n**配置网络：**\n\n修改 `BOOTPROTO=dhcp` （改为 `static`），`ONBOOT=no` （改为 `yes`）。\n\n**ens33 添加：**\n\n```ini\nIPADDR=192.168.100.10\nPREFIX=24\nGATEWAY=192.168.100.1\n```\n\n**ens34 添加：**\n\n```ini\nIPADDR=192.168.200.10\nPREFIX=24\n```\n\n![](https://img-blog.csdnimg.cn/eab5a78fd5a14c498ed7a0a07cef8a62.png?shadow=true)\n![](https://img-blog.csdnimg.cn/e18d1bbd52464b258c94fd8a8612ec32.png?shadow=true)\n\n**关闭防火墙及修改配置文件：**\n\n```bash\n[root@controller ~]# systemctl stop firewalld     # 关闭防火墙\n[root@controller ~]# systemctl disable firewalld\n[root@controller ~]# vi /etc/selinux/config\n# SELINUX=enforcing 改为 disabled\n[root@controller ~]# setenforce 0    # 立即生效\n[root@controller ~]# getenforce\n```\n\n![](https://img-blog.csdnimg.cn/14b099d8efae4e5d99b9b916aa2248c0.png?shadow=true)\n\n#### 3.1.2 compute 节点\n\n**修改主机名：**\n\n```bash\nhostnamectl set-hostname compute\n```\n\n**配置网络：**\n\n修改 `BOOTPROTO=dhcp` （改为 `static`），`ONBOOT=no` （改为 `yes`）。\n\n**ens33 添加：**\n\n```ini\nIPADDR=192.168.100.20\nPREFIX=24\nGATEWAY=192.168.100.1\n```\n\n**ens34 添加：**\n\n```ini\nIPADDR=192.168.200.20\nPREFIX=24\n```\n\n![](https://img-blog.csdnimg.cn/44e3c2e0a8c94949b47e257bd4c4a58f.png?shadow=true)\n![](https://img-blog.csdnimg.cn/ba0ed1900cfe45f6a3fd1770c618c3ad.png?shadow=true)\n\n**关闭防火墙及修改配置文件：**\n\n```bash\n[root@compute ~]# systemctl stop firewalld     # 关闭防火墙\n[root@compute ~]# systemctl disable firewalld\n[root@compute ~]# vi /etc/selinux/config\n# SELINUX=enforcing 改为 disabled\n[root@compute ~]# setenforce 0     # 立即生效\n[root@compute ~]# getenforce\n```\n\n### 3.2 挂载镜像、配置 yum 源\n\n#### 3.2.1 controller 节点\n\n**上传 CentOS 7.5 镜像和 Chinaskills_Cloud_iaas.iso 镜像至 controller 节点。**\n\n![](https://img-blog.csdnimg.cn/47d012e4734d4884a31fa0d590252be4.png?shadow=true)\n![](https://img-blog.csdnimg.cn/f60d8ef478e84456b7e71e267fd0a49e.png?shadow=true)\n\n**查看镜像是否已上传：**\n\n![](https://img-blog.csdnimg.cn/f8c9ec47084049509569ed7addf5a967.png?shadow=true)\n\n```bash\n[root@controller ~]# mkdir /opt/{iaas,centos}       # 创建两个挂载镜像的文件夹\n[root@controller ~]# mv /etc/yum.repos.d/CentOS-* /home       # 备份原 yum 源配置文件\n[root@controller ~]# vi /etc/yum.repos.d/local.repo       # 创建本地 yum 源配置文件\n```\n\n`local.repo` 内容：\n\n```ini\n[iaas]\nname=iaas\nbaseurl=file:///opt/iaas/iaas-repo\ngpgcheck=0\nenabled=1\n[centos]\nname=centos\nbaseurl=file:///opt/centos\ngpgcheck=0\nenabled=1\n```\n\n挂载镜像并更新 yum 源：\n\n```bash\n[root@controller ~]# mount -o loop /CentOS-7.5-x86_64-DVD-1804.iso /opt/centos\n[root@controller ~]# mount -o loop /Chinaskill_Cloud_iaas.iso /opt/iaas\n\n[root@controller ~]# yum clean all    # 清除 yum 缓存\n[root@controller ~]# yum repolist     # 显示仓库\n```\n\n![](https://img-blog.csdnimg.cn/3348a313242c41dab685c8efe9b92303.png?shadow=true)\n\n**搭建 FTP 服务器：**\n\n```bash\n[root@controller ~]# yum -y install vsftpd\n[root@controller ~]# vi /etc/vsftpd/vsftpd.conf\n# 添加 anon_root=/opt/\n[root@controller ~]# systemctl restart vsftpd\n[root@controller ~]# systemctl enable vsftpd\n```\n\n#### 3.2.2 compute 节点\n\n```bash\n[root@compute ~]# mv /etc/yum.repos.d/CentOS-* /home       # 备份原 yum 源配置文件\n[root@compute ~]# vi /etc/yum.repos.d/local.repo       # 创建本地 yum 源配置文件\n```\n\n`local.repo` 内容：\n\n```ini\n[centos]\nname=centos\nbaseurl=ftp://192.168.100.10/centos\ngpgcheck=0\nenabled=1\n[iaas]\nname=iaas\nbaseurl=ftp://192.168.100.10/iaas-repo\ngpgcheck=0\nenabled=1\n```\n\n更新 yum 源：\n\n```bash\n[root@compute ~]# yum clean all    # 清除 yum 缓存\n[root@compute ~]# yum repolist     # 显示仓库\n```\n\n![](https://img-blog.csdnimg.cn/79d9774bfd094aa1a0ee2eee4c358823.png?shadow=true)\n![](https://img-blog.csdnimg.cn/e450303ade1f4d6eb4f891f4b111580c.png?shadow=true)\n\n### 3.3 计算节点分区\n\n在 compute 节点上利用空白分区划分 2 个 100G 分区。\n\n```bash\n[root@compute ~]# fdisk /dev/sdb\n欢迎使用 fdisk (util-linux 2.23.2)。\n\n更改将停留在内存中，直到您决定将更改写入磁盘。\n使用写入命令前请三思。\n\nDevice does not contain a recognized partition table\n使用磁盘标识符 0x34bc5373 创建新的 DOS 磁盘标签。\n\n命令(输入 m 获取帮助)：n\nPartition type:\n   p   primary (0 primary, 0 extended, 4 free)\n   e   extended\nSelect (default p): \nUsing default response p\n分区号 (1-4，默认 1)：\n起始 扇区 (2048-209715199，默认为 2048)：\n将使用默认值 2048\nLast 扇区, +扇区 or +size{K,M,G} (2048-209715199，默认为 209715199)：+25G\n分区 1 已设置为 Linux 类型，大小设为 25 GiB\n\n命令(输入 m 获取帮助)：n\nPartition type:\n   p   primary (1 primary, 0 extended, 3 free)\n   e   extended\nSelect (default p): \nUsing default response p\n分区号 (2-4，默认 2)：\n起始 扇区 (52430848-209715199，默认为 52430848)：\n将使用默认值 52430848\nLast 扇区, +扇区 or +size{K,M,G} (52430848-209715199，默认为 209715199)：+25G\n分区 2 已设置为 Linux 类型，大小设为 25 GiB\n\n命令(输入 m 获取帮助)：w\nThe partition table has been altered!\n\nCalling ioctl() to re-read partition table.\n正在同步磁盘。\n[root@compute ~]# lsblk \nNAME            MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT\nsda               8:0    0  200G  0 disk \n├─sda1            8:1    0    1G  0 part /boot\n└─sda2            8:2    0  199G  0 part \n  ├─centos-root 253:0    0   50G  0 lvm  /\n  ├─centos-swap 253:1    0    2G  0 lvm  [SWAP]\n  └─centos-home 253:2    0  147G  0 lvm  /home\nsdb               8:16   0  100G  0 disk \n├─sdb1            8:17   0   25G  0 part \n└─sdb2            8:18   0   25G  0 part \nsr0              11:0    1  4.2G  0 rom  \n```\n\n![](https://img-blog.csdnimg.cn/f0162da1fcb34378ab44643f38734b7d.png?shadow=true)\n\n### 3.4 编辑环境变量\n\n**controller 和 compute 节点都要操作。**\n\n编辑文件 `/etc/xiandian/openrc.sh`，此文件是安装过程中的各项参数，根据每项参数上一行的说明及服务器实际情况进行配置。\n\n```bash\n[root@controller ~]# yum -y install iaas-xiandian\n[root@controller ~]# vi /etc/xiandian/openrc.sh\n\n[root@compute ~]# yum -y install iaas-xiandian\n[root@compute ~]# vi /etc/xiandian/openrc.sh\n```\n\n配置文件内容示例：\n\n```bash\nHOST_IP=192.168.100.10  # 控制节点IP地址\nHOST_PASS=000000\nHOST_NAME=controller    # 控制节点主机名\nHOST_IP_NODE=192.168.100.20 # 计算节点IP地址\nHOST_PASS_NODE=000000\nHOST_NAME_NODE=compute  # 计算节点主机名\nnetwork_segment_IP=192.168.100.0/24\nRABBIT_USER=openstack\nRABBIT_PASS=000000\nDB_PASS=000000\nDOMAIN_NAME=demo\nADMIN_PASS=000000\nDEMO_PASS=000000\nKEYSTONE_DBPASS=000000\nGLANCE_DBPASS=000000\nGLANCE_PASS=000000\nNOVA_DBPASS=000000\nNOVA_PASS=000000\nNEUTRON_DBPASS=000000\nNEUTRON_PASS=000000\nMETADATA_SECRET=000000\nINTERFACE_IP=192.168.100.x # 当前节点IP地址\nINTERFACE_NAME=ens34    # 外部网络网卡名称\nPhysical_NAME=provider  # 外部网络适配器名称\nminvlan=1               # vlan网络范围的第一个vlanID\nmaxvlan=1000            # vlan网络范围的最后一个vlanID\nCINDER_DBPASS=000000\nCINDER_PASS=000000\nBLOCK_DISK=sdb1         # 计算节点第一块磁盘分区名\nSWIFT_PASS=000000\nOBJECT_DISK=sdb2        # 计算节点第二块磁盘分区名\nSTORAGE_LOCAL_NET_IP=192.168.100.20 # 计算节点IP地址\nHEAT_DBPASS=000000\nHEAT_PASS=000000\nZUN_DBPASS=000000\nZUN_PASS=000000\nKURYR_DBPASS=000000\nKURYR_PASS=000000\nCEILOMETER_DBPASS=000000\nCEILOMETER_PASS=000000\nAODH_DBPASS=000000\nAODH_PASS=000000\n```\n\n### 3.5 通过脚本安装服务\n\n#### 3.5.1 执行脚本 iaas-pre-host.sh 进行安装\n\n**controller 节点：**\n\n安装完成后同时重启，重启后需重新挂载 iso 镜像。\n\n```bash\n[root@controller ~]# iaas-pre-host.sh\n[root@controller ~]# reboot  # 重启\n[root@controller ~]# mount -o loop CentOS-7-x86_64-DVD-1804.iso /opt/centos/\n[root@controller ~]# mount -o loop chinaskills_cloud_iaas.iso /opt/iaas/\n```\n\n**compute 节点：**\n\n```bash\n[root@compute ~]# iaas-pre-host.sh\n[root@compute ~]# reboot  # 重启\n```\n\n#### 3.5.2 MySQL 数据库服务\n\n**controller 节点：**\n\n```bash\n[root@controller ~]# iaas-install-mysql.sh\n```\n\n#### 3.5.3 Keystone 认证服务\n\n**controller 节点：**\n\n```bash\n[root@controller ~]# iaas-install-keystone.sh\n```\n\n#### 3.5.4 Glance 镜像服务\n\n**controller 节点：**\n\n```bash\n[root@controller ~]# iaas-install-glance.sh\n```\n\n#### 3.5.5 Nova 计算服务\n\n**controller 节点：**\n\n```bash\n[root@controller ~]# iaas-install-nova-controller.sh\n```\n\n**compute 节点：**\n\n```bash\n[root@compute ~]# iaas-install-nova-compute.sh \n```\n\n#### 3.5.6 Neutron 网络服务\n\n**controller 节点：**\n\n```bash\n[root@controller ~]# iaas-install-neutron-controller.sh\n```\n\n**compute 节点：**\n\n```bash\n[root@compute ~]# iaas-install-neutron-compute.sh\n```\n\n#### 3.5.7 Dashboard 服务\n\n**controller 节点：**\n\n```bash\n[root@controller ~]# iaas-install-dashboard.sh\n```\n\n在浏览器中输入 `http://192.168.100.10/dashboard`\n\n**注：检查防火墙规则，确保允许 HTTP 服务相关端口通行，或者关闭防火墙。**\n\n- Domain：demo\n- 用户名：admin\n- 密码：000000\n\n![](https://img-blog.csdnimg.cn/856c695ec52b442fb544229e6ae21851.png?shadow=true)\n\n出现以下图示表示云平台搭建成功。\n\n![](https://img-blog.csdnimg.cn/107733ea6750470e9f064fc3c1b7d7f0.png?shadow=true)\n\n---\n\n**附录：常用命令**\n\n加载 admin 环境变量：\n\n```bash\nsource /etc/keystone/admin-openrc.sh\n```\n\n上传镜像到 OpenStack 平台：\n\n```bash\nopenstack image create --disk-format qcow2 --file /opt/cirros-0.3.4-x86_64-disk.img cirros\n```\n"
+}

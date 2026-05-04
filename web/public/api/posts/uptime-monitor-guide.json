@@ -1,0 +1,91 @@
+{
+  "id": "post:uptime-monitor-guide",
+  "slug": "uptime-monitor-guide",
+  "type": "post",
+  "collection": "posts",
+  "title": "我用 Cloudflare 免费撸了一个高颜值的网站监控系统",
+  "description": "利用 Cloudflare Workers + D1 + Pages 全家桶，手搓了一个零成本、高颜值、功能全的监控系统 —— Uptime Monitor。支持 SSL 证书/域名过期提醒 + 钉钉告警。",
+  "date": "2025-11-23",
+  "tags": [
+    "Cloudflare",
+    "Workers",
+    "Vue3",
+    "监控",
+    "开源"
+  ],
+  "cover": null,
+  "award": null,
+  "draft": false,
+  "url": "https://blog.nianshu2022.cn/blog/uptime-monitor-guide",
+  "path": "/blog/uptime-monitor-guide",
+  "wordCount": 2390,
+  "readingTime": "5 分钟",
+  "toc": [
+    {
+      "title": "✨ 预览效果",
+      "slug": "-预览效果",
+      "level": 2
+    },
+    {
+      "title": "📱 移动端 & 桌面端 (深色模式)",
+      "slug": "-移动端--桌面端-深色模式",
+      "level": 3
+    },
+    {
+      "title": "🔔 钉钉告警 (Markdown 格式)",
+      "slug": "-钉钉告警-markdown-格式",
+      "level": 3
+    },
+    {
+      "title": "💻 管理后台 (Dashboard)",
+      "slug": "-管理后台-dashboard",
+      "level": 3
+    },
+    {
+      "title": "🛠️ 为什么选择这个方案？",
+      "slug": "️-为什么选择这个方案",
+      "level": 2
+    },
+    {
+      "title": "⚙️ 技术栈一览",
+      "slug": "️-技术栈一览",
+      "level": 2
+    },
+    {
+      "title": "🚀 怎么部署？(保姆级教程)",
+      "slug": "-怎么部署保姆级教程",
+      "level": 2
+    },
+    {
+      "title": "第一步：准备工作",
+      "slug": "第一步准备工作",
+      "level": 3
+    },
+    {
+      "title": "第二步：克隆代码 & 初始化数据库",
+      "slug": "第二步克隆代码--初始化数据库",
+      "level": 3
+    },
+    {
+      "title": "第三步：配置后端",
+      "slug": "第三步配置后端",
+      "level": 3
+    },
+    {
+      "title": "第四步：部署后端",
+      "slug": "第四步部署后端",
+      "level": 3
+    },
+    {
+      "title": "第五步：部署前端",
+      "slug": "第五步部署前端",
+      "level": 3
+    },
+    {
+      "title": "📝 写在最后",
+      "slug": "-写在最后",
+      "level": 2
+    }
+  ],
+  "content": "\r\n> **前言**：作为一个“松鼠党”站长，手里总有一堆域名和吃灰的小鸡（服务器）。经常是网站挂了几天才发现，或者 SSL 证书过期了被浏览器拦截，甚至域名忘记续费被抢注…… 😭\r\n> 市面上的 Uptime Robot 等服务，免费版限制多，频率低，而且 SSL/域名监控通常是收费功能。\r\n>\r\n> 于是，我利用 **Cloudflare Workers + D1 + Pages** 全家桶，手搓了一个 **零成本、高颜值、功能全** 的监控系统 —— **Uptime Monitor**。\r\n\r\n---\r\n\r\n## ✨ 预览效果\r\n\r\n先看成品，颜值即正义！😎\r\n\r\n### 📱 移动端 & 桌面端 (深色模式)\r\n\r\n![](/img/Uptime-Monitor-pc.png?width=520px&shadow=true) ![](/img/Uptime-Monitor-app.png?width=150px&shadow=true)\r\n\r\n*演示地址：[https://uptime.nianshu2022.cn](https://uptime.nianshu2022.cn)*\r\n\r\n### 🔔 钉钉告警 (Markdown 格式)\r\n\r\n![](/img/Uptime-Monitor-down.png?width=200px&shadow=true)\r\n\r\n*告警信息包含：状态码、耗时、失败原因，一目了然。*\r\n\r\n### 💻 管理后台 (Dashboard)\r\n\r\n![](/img/Uptime-Monitor-admin.png?width=700px&shadow=true)\r\n\r\n*安全、简洁、好用。*\r\n\r\n---\r\n\r\n## 🛠️ 为什么选择这个方案？\r\n\r\n1.  **💰 完全免费**：利用 Cloudflare 强大的免费额度（Workers 每天 10万次请求，D1 数据库免费读写），对于个人监控几十个网站绰绰有余。\r\n2.  **🌍 全球节点**：Cloudflare 的边缘网络天然适合做监控，网络连通性好。\r\n3.  **🔒 全能监控**：\r\n    *   **HTTP/HTTPS 通断检测** (支持自定义 Status Code 判断)\r\n    *   **SSL 证书有效期检测** (每日自动检查，支持泛域名证书！)\r\n    *   **域名注册过期检测** (防止域名由于健忘被回收)\r\n4.  **🤖 灵活告警**：目前接入了 **钉钉群机器人**，支持 **Markdown** 格式，不仅告诉你挂了，还告诉你为什么挂了（超时/500/证书过期）。\r\n5.  **🎨 现代化 UI**：Vue 3 + TailwindCSS 打造，支持 **Dark Mode**，手机端适配完美，这不比 Uptime Robot 的默认页好看？\r\n\r\n---\r\n\r\n## ⚙️ 技术栈一览\r\n\r\n*   **后端 Runtime**: Cloudflare Workers (基于 Hono 框架，轻量极速)\r\n*   **数据库**: Cloudflare D1 (基于 SQLite 的边缘数据库，存储监控配置和日志)\r\n*   **前端托管**: Cloudflare Pages (极速静态资源分发)\r\n*   **前端框架**: Vue 3 (CDN 引入，无构建烦恼) + TailwindCSS\r\n\r\n---\r\n\r\n## 🚀 怎么部署？(保姆级教程)\r\n\r\n项目已开源，欢迎 Star ⭐：\r\n👉 **GitHub**: [https://github.com/nianshu2022/Uptime-Monitor](https://github.com/nianshu2022/Uptime-Monitor)\r\n\r\n### 第一步：准备工作\r\n你需要一个 Cloudflare 账号，并在本地安装好 `Node.js` 和 `Wrangler CLI`。\r\n\r\n### 第二步：克隆代码 & 初始化数据库\r\n```bash\r\ngit clone https://github.com/nianshu2022/Uptime-Monitor.git\r\ncd uptime\r\n\r\n# 登录 Cloudflare\r\nnpx wrangler login\r\n\r\n# 创建数据库\r\nnpx wrangler d1 create uptime-db\r\n# (记下控制台返回的 database_id)\r\n```\r\n\r\n### 第三步：配置后端\r\n修改 `worker/wrangler.toml`，填入你的 `database_id`。\r\n\r\n然后初始化表结构：\r\n```bash\r\ncd worker\r\nnpx wrangler d1 execute uptime-db --remote --file=schema.sql\r\n# 执行迁移脚本\r\nnpx wrangler d1 execute uptime-db --remote --file=migration_add_expiry.sql\r\nnpx wrangler d1 execute uptime-db --remote --file=migration_add_ua.sql\r\n```\r\n\r\n### 第四步：部署后端\r\n你需要先去钉钉群设置一个机器人，获取 `Access Token` 和 `Secret`。\r\n```bash\r\n# 部署到 Cloudflare\r\nnpx wrangler deploy\r\n```\r\n*(建议在 Cloudflare Dashboard 后台配置钉钉 Token 环境变量，更安全)*\r\n\r\n### 第五步：部署前端\r\n修改 `frontend/index.html` 里的 `API_BASE` 为你的 Worker 地址（强烈建议绑定自定义域名，防墙）。\r\n\r\n```bash\r\ncd frontend\r\nnpx wrangler pages deploy . --project-name uptime-monitor\r\n```\r\n\r\n**搞定！🎉**\r\n\r\n---\r\n\r\n## 📝 写在最后\r\n\r\n这个项目最初只是为了解决我自己的痛点，没想到做着做着功能越来越全。\r\n如果你也有服务器、域名需要监控，或者想学习 Cloudflare Workers 开发，欢迎来玩！\r\n\r\n如果有任何问题或建议，欢迎提 Issue 或 PR。\r\n**别忘了给个 Star ⭐️ 鼓励一下作者哦！**\r\n\r\n> **GitHub**: https://github.com/nianshu2022/Uptime-Monitor\r\n> \r\n> **Blog**: https://blog.nianshu2022.cn\r\n\r\n"
+}

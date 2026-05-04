@@ -1,0 +1,45 @@
+{
+  "id": "post:wecom-daily-push-guide-2024",
+  "slug": "wecom-daily-push-guide-2024",
+  "type": "post",
+  "collection": "posts",
+  "title": "企业微信实现情侣每日定时推送全攻略！",
+  "description": "教你如何利用企业微信API和Python脚本，搭建一个专属的情侣每日定时推送服务，包含天气、纪念日等功能。",
+  "date": "2024-03-04",
+  "tags": [
+    "Python",
+    "企业微信",
+    "自动化",
+    "教程"
+  ],
+  "cover": null,
+  "award": null,
+  "draft": false,
+  "url": "https://blog.nianshu2022.cn/blog/wecom-daily-push-guide-2024",
+  "path": "/blog/wecom-daily-push-guide-2024",
+  "wordCount": 2894,
+  "readingTime": "4 分钟",
+  "toc": [
+    {
+      "title": "注册企业微信",
+      "slug": "注册企业微信",
+      "level": 2
+    },
+    {
+      "title": "申请和风天气Key",
+      "slug": "申请和风天气key",
+      "level": 2
+    },
+    {
+      "title": "部署程序",
+      "slug": "部署程序",
+      "level": 2
+    },
+    {
+      "title": "运行程序",
+      "slug": "运行程序",
+      "level": 2
+    }
+  ],
+  "content": "\n## 注册企业微信\n\n```\nhttps://open.work.weixin.qq.com/wwopen/login\n```\n1.  注册  \n    ![jJVPySQxv8kFesq.png](https://s2.loli.net/2024/03/04/jJVPySQxv8kFesq.png)\n    \n2.  填写相关信息，点击“注册”  \n    ![je1fkNg6OXPx3iI.png](https://s2.loli.net/2024/03/04/je1fkNg6OXPx3iI.png)\n    \n3.  登录企业微信后台，点击“创建应用”  \n    ![wmRJGBiE2jLzpeP.png](https://s2.loli.net/2024/03/04/wmRJGBiE2jLzpeP.png)\n    \n4.  填写应用的头像、应用名称和选择可见范围，点击“创建应用”  \n    ![tISfraBupkh3TAW.png](https://s2.loli.net/2024/03/04/tISfraBupkh3TAW.png)\n    \n\n5.点击查看，企业微信收到消息，查看agentld  \n![1DNz3fEkjTR2QXy.png](https://s2.loli.net/2024/03/04/1DNz3fEkjTR2QXy.png)\n\n6.  填写企业可信IP\n\n- 比如使用我自己的电脑运行推送程序，那么就要直接填写百度里面IP的结果即可，或者直接点击查询IP的链接（点此查询IP）\n- 比如用云服务器运行推送程序，那么就需要填写服务器的IP地址  \n    ![TqX2MsWFmNlwajH.png](https://s2.loli.net/2024/03/04/TqX2MsWFmNlwajH.png)\n\n7.  点击“我的企业”，获取企业ID  \n    ![vXsUhQJDPEFbRCW.png](https://s2.loli.net/2024/03/04/vXsUhQJDPEFbRCW.png)\n    \n8.  点击“微信插件”，微信扫码关注，接收消息  \n    ![JOpe6i2cdXHbl9q.png](https://s2.loli.net/2024/03/04/JOpe6i2cdXHbl9q.png)\n    \n\n## 申请和风天气Key\n\n1.  注册  \n```\nhttps://id.qweather.com/#/login\n```\n    \n2.  点击“开发服务控制台”  \n    ![vAFWCm8Kyp3Igrj.png](https://s2.loli.net/2024/03/04/vAFWCm8Kyp3Igrj.png)\n    \n3.  点击“项目管理”，创建项目  \n    ![gfVzM7lDIRyPhe4.png](https://s2.loli.net/2024/03/04/gfVzM7lDIRyPhe4.png)\n    \n4.  输入应用名称 -> Web API -> 输入KEY名称 -> 完成创建，保存好KEY，后面会用到  \n    ![MpNPARyXQ1HelUt.png](https://s2.loli.net/2024/03/04/MpNPARyXQ1HelUt.png)\n    \n\n## 部署程序\n\n1. 源文件  \n```\nhttps://download.csdn.net/download/qq_52716296/88906655\n```\n\n2. 修好配置文件config.py\n\n```py\nimport os\nSYS_CONFIG = {\n    # 企业微信企业ID,必填 申请地址：https://work.weixin.qq.com/\n    \"wxid\": \"wxxxxxxxd\",\n    # 企业微信AgentId,必填\n    \"agentid\": 1000002,\n    # 企业微信应用Secret,必填\n    \"secret\": \"MaqsxxxxxxxxxxxxxOxLWKlgt8\",\n    # 和风天气Key，非必填 申请地址： https://id.qweather.com/#/login\n    \"qweather\": \"6c5d655xxxxxxxxxxxxx66bb1305\",\n    # 天气预报地址，非必填\n    # 格式：市-市/县/区，多地址以&&分隔\n    # 如：兰州-城关&&兰州-榆中\n    \"city\": \"兰州-城关\",\n    # 纪念日名称，非必填\n    # 周期性日子，每年都有的日子，多个日期以&&分隔\n    # 如：女朋友的生日&&我的的生日\n    \"targetname\": \"xxx的生日&&xxx的生日\",\n    # 纪念日日期，非必填\n    # 公历格式20XX-XX-XX，农历年份前加n\n    # 多日期以&&分隔，注意与targetname名称对应\n    # 如：2022-08-10&&n2021-08-15\n    \"targetday\": \"2001-04-19&&n2001-02-05\",\n    # 单日项目名称，非必填\n    # 只发生一次的日子，只有某一年有的日子，多日期以&&分隔\n    # 如：在一起&&见面\n    \"beginname\": \"我们在一起\",\n    # 单日日期，非必填\n    # 公历格式20XX-XX-XX，农历年份前加n\n    # 多日期以&&分隔，注意与beginname名称对应\n    # 如：2022-08-15&&n2022-12-10\n    \"beginday\": \"2022-06-16\",\n    # 图文类型，非必填\n    # 1为单图文，2为多图文，默认单图文\n    \"msgtype\": \"1\"\n}\n```\n\n3.修改图片地址，打开index.py\n\n```py\n#第37行\ndef get_pic():\n    try:\n        # 选择输出分类[meizi|dongman|fengjing|suiji]，为空随机输出\n        pic_url = \"https://s2.loli.net/2024/02/03/a4IfCODiPo9UhNM.jpg\"\n        r = requests.get(pic_url).json()\n        return r[\"imgurl\"]\n    except Exception as e:\n        print(\"获取随机图片数据出错,请稍后重试，若多次重试不行请关注微信公众号【偶尔栖息】聊天反馈\", e)\n        return None\n```\n\n```py\n#第86行\ndef get_bing():\n    bing_pic = \"https://s2.loli.net/2024/02/03/a4IfCODiPo9UhNM.jpg\"\n    bing_title = \"⏰起床啦！\"\n    bing_content = \"This is a custom wallpaper provided by the user.\"\n    bing_tip = bing_title + \" — \" + bing_content\n    return {\n        \"bing_pic\": bing_pic,\n        \"bing_title\": bing_title,\n        \"bing_content\": bing_content,\n        \"bing_tip\": bing_tip\n    }\n```\n\n## 运行程序\n\n1.  将程序上传服务器\n- 手动执行测试  \n    ![E1PtRSmHXO2shzb.png](https://s2.loli.net/2024/03/04/E1PtRSmHXO2shzb.png)\n\n2.  添加定时任务,每天7点执行\n```shell\n0 7 * * * python3 /root/project/zaoan/src/index.py\n```\n\n3.  微信收到推送消息  \n    ![mobile-screenshot](https://s2.loli.net/2025/11/22/qU2JovZltTed6An.png)\n"
+}

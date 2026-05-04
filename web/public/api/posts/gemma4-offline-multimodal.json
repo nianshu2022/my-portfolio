@@ -1,0 +1,61 @@
+{
+  "id": "post:gemma4-offline-multimodal",
+  "slug": "gemma4-offline-multimodal",
+  "type": "post",
+  "collection": "posts",
+  "title": "实录：手机跑通 Gemma 4 离线多模态大模型的踩坑笔记",
+  "description": "尝试在骁龙 8 Gen 2 手机上本地跑通 Gemma 4 多模态模型时遭遇 OOM 报错？本文记录了如何绕过官方解法的坑，利用 Termux 与 llama.cpp 在安卓端通过 4-bit 量化完美实现离线多模态推理的完整实录。",
+  "date": "2026-04-07",
+  "tags": [
+    "大模型",
+    "多模态",
+    "Gemma",
+    "折腾实录",
+    "Termux"
+  ],
+  "cover": null,
+  "award": null,
+  "draft": false,
+  "url": "https://blog.nianshu2022.cn/blog/gemma4-offline-multimodal",
+  "path": "/blog/gemma4-offline-multimodal",
+  "wordCount": 2937,
+  "readingTime": "8 分钟",
+  "toc": [
+    {
+      "title": "💥 阶段一：尝试官方解法，光速翻车",
+      "slug": "-阶段一尝试官方解法光速翻车",
+      "level": 2
+    },
+    {
+      "title": "🛠️ 阶段二：保姆级重构，手把手带你在手机端补全环境",
+      "slug": "️-阶段二保姆级重构手把手带你在手机端补全环境",
+      "level": 2
+    },
+    {
+      "title": "🧱 步骤 1：安装 Termux 并配置基础环境",
+      "slug": "-步骤-1安装-termux-并配置基础环境",
+      "level": 3
+    },
+    {
+      "title": "🔨 步骤 2：拉取最新 llama.cpp 源码并现场编译",
+      "slug": "-步骤-2拉取最新-llamacpp-源码并现场编译",
+      "level": 3
+    },
+    {
+      "title": "📉 阶段三：扼杀 OOM 问题，准备 4-bit 量化模型",
+      "slug": "-阶段三扼杀-oom-问题准备-4-bit-量化模型",
+      "level": 2
+    },
+    {
+      "title": "🚀 阶段四：见证奇迹，启动本地多模态推理！",
+      "slug": "-阶段四见证奇迹启动本地多模态推理",
+      "level": 2
+    },
+    {
+      "title": "📝 总结",
+      "slug": "-总结",
+      "level": 2
+    }
+  ],
+  "content": "\r\n> **前言**：我是念舒。这周末我基本没干别的事，全耗在刚发布的 Gemma 4 身上了。谁能抵挡住“最强开源本地多模态大模型”的诱惑呢？特别是谷歌这次强调它的低参数组（E2B / E4B）在手机设备上的极高可用性，这直接戳中了我这种喜欢把服务器往手机里塞的折腾党的心巴。\r\n>\r\n> 本以为是一场轻松的降维打击，没想到差点在安卓环境的内存墙面前撞得头破血流。本文记录了我是如何在一台骁龙 8 Gen 2 的安卓机上，从 `OUT_OF_MEMORY` 到最终完美跑通 Gemma 4 多模态推理的完整实录。\r\n\r\n---\r\n\r\n## 💥 阶段一：尝试官方解法，光速翻车\r\n\r\n我使用的环境：\r\n- **设备**：骁龙 8 Gen 2 备用机，8GB RAM\r\n- **OS**：Android 14 (没有 Root)，利用 Termux 搭环境\r\n- **模型目标**：Gemma 4 E2B Instruct (带 Vision 支持)\r\n\r\n起初我过于相信 Google AI Edge Gallery 的傻瓜式部署。当我把官方的 `.tflite` (或者通用包) 拽进去尝试使能 Vision Adapter 时，终端直接爆炸：\r\n\r\n> **`[Fatal Error] failed to allocate tensor buffer for Vision Encoder: OUT_OF_MEMORY system killed process...`**\r\n\r\n这可真棒。Gemma 4 这次的原生多模态是非常深度的参数融合，但视觉编码器的启动瞬间会拉起一个超大内存池（大概 3.2GB+）。安卓系统有一个严苛的单应用内存限制（即使开了大内存分配），很容易在峰值阶段被 LMK (Low Memory Killer) 无情狙杀。\r\n\r\n---\r\n\r\n## 🛠️ 阶段二：保姆级重构，手把手带你在手机端补全环境\r\n\r\n走傻瓜路线不行，那就回到底层逻辑。我要利用 `llama.cpp` 直接把模型量化版跑在手机上。下面是供大家直接复制的“无脑实操指南”。\r\n\r\n### 🧱 步骤 1：安装 Termux 并配置基础环境\r\n\r\n由于安卓各大应用商店的 Termux 基本都已停更，**强烈建议去 F-Droid 官网下载最新版 Termux**（否则会遇到无数 SSL 证书报错）。\r\n\r\n打开 Termux，第一步先换源和更新系统包：\r\n\r\n```bash\r\ntermux-change-repo # 选择清华源或中科大源即可\r\npkg update && pkg upgrade -y\r\n```\r\n\r\n接着，把我们编译需要的“全家桶”工具全装上：\r\n\r\n```bash\r\npkg install clang cmake make git wget ndk-sysroot python -y\r\n# 给 Termux 申请存储权限（执行后手机会弹窗，必须点“允许”）\r\ntermux-setup-storage\r\n```\r\n\r\n### 🔨 步骤 2：拉取最新 llama.cpp 源码并现场编译\r\n\r\nGemma 4 刚刚发布，相应的支持代码最近才合入主干，所以必须拉取最新版的仓库：\r\n\r\n```bash\r\ngit clone https://github.com/ggerganov/llama.cpp\r\ncd llama.cpp\r\nmkdir build && cd build\r\n```\r\n\r\n在安卓环境编译，不建议搞花里胡哨的复杂参数，直接用基础版命令进行稳定编译：\r\n\r\n```bash\r\n# 注意针对安卓 ARM 的专属参数优化\r\ncmake .. -DCMAKE_BUILD_TYPE=Release -DLLAMA_STATIC=ON \r\n# 如果你的手机性能还行，可以开四线程加速编译\r\nmake -j4\r\n```\r\n\r\n> **🚨 踩坑提示**：编译到这里是最容易翻车的。手机内部存储至少要预留 3GB 以上空间，如果编译到 80% 突然断掉，大概率是因为空间满了！\r\n\r\n---\r\n\r\n## 📉 阶段三：扼杀 OOM 问题，准备 4-bit 量化模型\r\n\r\n环境就绪，下一步是准备能跑在手机上的特制模型文件。\r\n\r\n我们需要分别下载**主模型（被压缩为 4-bit 的 gguf 版）**和**视觉投影仪（mmproj 文件，负责多模态图像识别）**。在 Termux 里，我们直接通过 Python 的 HuggingFace 工具包拉取：\r\n\r\n```bash\r\n# 退回 llama.cpp 根目录，建一个 models 文件夹专门放权重\r\ncd ../\r\nmkdir models && cd models\r\n\r\n# 安装 HuggingFace 官方拉取工具\r\npip install -U \"huggingface_hub[cli]\"\r\n\r\n# 下载核心大模型（约 1.6 GB）\r\nhuggingface-cli download ggerganov/gemma4-e2b-it-gguf gemma4-e2b-it-q4_k_m.gguf --local-dir .\r\n\r\n# 下载独立视觉模块文件（极其关键，没有它手机绝对不认识图）\r\nhuggingface-cli download ggerganov/gemma4-e2b-it-mmproj gemma4-mmproj-f16.gguf --local-dir .\r\n```\r\n\r\n---\r\n\r\n## 🚀 阶段四：见证奇迹，启动本地多模态推理！\r\n\r\n经过上述折腾，你的核心文件结构应该长这样：\r\n\r\n```text\r\n/llama.cpp\r\n  ├── build/bin/llama-cli  (刚才手搓编译出来的引擎)\r\n  ├── models/\r\n      ├── gemma4-e2b-it-q4_k_m.gguf\r\n      └── gemma4-mmproj-f16.gguf\r\n```\r\n\r\n接下来，我们去手机相册里随便拔一张图，拷贝到项目主目录下用来测试：\r\n\r\n```bash\r\n# 将相册里的一张照片拷贝过来，并重命名为 test.jpg 方便输入\r\ncp ~/storage/shared/DCIM/Camera/IMG_test.jpg ../test.jpg\r\n```\r\n\r\n**深吸一口气，退回到 `build` 文件夹输入终极启动命令：**\r\n\r\n```bash\r\ncd ../build\r\n\r\n./bin/llama-cli \\\r\n  -m ../models/gemma4-e2b-it-q4_k_m.gguf \\\r\n  --mmproj ../models/gemma4-mmproj-f16.gguf \\\r\n  --image ../test.jpg \\\r\n  -p \"What's in this image? Explain carefully.\" \\\r\n  -c 2048 \\\r\n  -ngl 33\r\n```\r\n\r\n**参数白话解说：**\r\n- `-m`：挂载千辛万苦弄到的主模型。\r\n- `--mmproj`：必须挂载这玩意儿。视觉编码单独挂载不压榨主内存，是避开 OOM 的关键。\r\n- `-c 2048`：强行限制上下文窗口大小。手机内存寸土寸金，写成 2048 或 4096 最稳，千万别贪心开 8K 甚至无限制，秒崩。\r\n- `-ngl 33`：尽可能把神经网的运算丢给手机 GPU 卸载。\r\n\r\n---\r\n\r\n## 📝 总结\r\n\r\n命令行短暂卡顿后，风扇没转，但后盖能感觉到发热。等待了大概 8 秒，这台离线的手机给了我回答：\r\n\r\n> `\"Based on the image provided, there is a mechanical keyboard on a wooden desk. The keycaps feature...\"`\r\n\r\n成了。真·手机本地多模态解析，没连一丁点网，全靠这块小板子硬算出来了。\r\n\r\n这次折腾再次证明了一点：永远不要低估一块现代 SoC 的潜力，也不要高估大厂给的“官方新手指南”。这就是这次跑通 Gemma 4 离线版本的全记录。后续我会研究如何把这套逻辑打包在一个 Docker 容器或者独立 APP 里运行，敬请期待。\r\n\r\n> **— 念舒的数字花园，极客手记 —**\r\n"
+}

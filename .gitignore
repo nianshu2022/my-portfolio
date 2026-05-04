@@ -2,6 +2,7 @@
 
 # dependencies
 /node_modules
+**/node_modules
 /.pnp
 .pnp.*
 .yarn/*
@@ -12,16 +13,21 @@
 
 # testing
 /coverage
+**/coverage
 
 # next.js
 /.next/
 /out/
+**/.next/
+**/out/
 
 # production
 /build
+**/build
 
 # generated data (build artifacts, not for version control)
 /data/knowledge.json
+**/data/knowledge.json
 
 # misc
 .DS_Store
@@ -36,9 +42,11 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+**/.env*
 
 # vercel
 .vercel
+**/.vercel
 
 # typescript
 *.tsbuildinfo

@@ -1,0 +1,66 @@
+{
+  "id": "post:wecom-daily-push-guide",
+  "slug": "wecom-daily-push-guide",
+  "type": "post",
+  "collection": "posts",
+  "title": "告别查岗与遗忘！企业微信 + Python 零感打造专属情侣推送管家",
+  "description": "教你如何利用企业微信与 Python 结合，采用 Serverless 架构部署，零代码侵入搭载专属情侣每日定时推送服务，彻底终结直男健忘症。",
+  "date": "2026-04-07 14:05",
+  "tags": [
+    "Python",
+    "企业微信开发",
+    "自动化部署",
+    "Serverless",
+    "极客教程"
+  ],
+  "cover": null,
+  "award": null,
+  "draft": false,
+  "url": "https://blog.nianshu2022.cn/blog/wecom-daily-push-guide",
+  "path": "/blog/wecom-daily-push-guide",
+  "wordCount": 4516,
+  "readingTime": "13 分钟",
+  "toc": [
+    {
+      "title": "🧱 阶段一：扫清障碍，获取企微 API 凭证",
+      "slug": "-阶段一扫清障碍获取企微-api-凭证",
+      "level": 2
+    },
+    {
+      "title": "🌤️ 阶段二：打通气象数据源（和风天气）",
+      "slug": "️-阶段二打通气象数据源和风天气",
+      "level": 2
+    },
+    {
+      "title": "🛠️ 阶段三：环境重构与源码解耦配置",
+      "slug": "️-阶段三环境重构与源码解耦配置",
+      "level": 2
+    },
+    {
+      "title": "🚀 阶段四：自动化极客部署闭环",
+      "slug": "-阶段四自动化极客部署闭环",
+      "level": 2
+    },
+    {
+      "title": "方案 A：Linux 本机 Crontab（守旧稳健派）",
+      "slug": "方案-alinux-本机-crontab守旧稳健派",
+      "level": 3
+    },
+    {
+      "title": "方案 B：Serverless 云函数方案（降本免维护派）",
+      "slug": "方案-bserverless-云函数方案降本免维护派",
+      "level": 3
+    },
+    {
+      "title": "方案 C：基于 PythonAnywhere 的免费池方案（无缝白嫖版）",
+      "slug": "方案-c基于-pythonanywhere-的免费池方案无缝白嫖版",
+      "level": 3
+    },
+    {
+      "title": "📝 总结",
+      "slug": "-总结",
+      "level": 2
+    }
+  ],
+  "content": "\r\n> **前言**：\r\n> 谈恋爱最怕什么？怕忘了纪念日，怕忘记提醒她带伞。身为极客，我绝不容许每天手动去查天气查日子再发微信这种低效操作。由于企业微信的推送通道**不需要用户主动扫码确认**，刚好成了我们构建“无感触达”服务的绝佳跳板。今天，我把这个饱受好评的私家小项目 [Cloud_Letter](https://github.com/nianshu2022/Cloud_Letter) 进行了底层配置级别的重构，带你用最优雅、纯粹的姿势，给对象准备一份赛博朋克式的硬核浪漫。\r\n> \r\n> 🔗 **开源仓库地址**：[nianshu2022/Cloud_Letter](https://github.com/nianshu2022/Cloud_Letter)\r\n\r\n---\r\n\r\n## 🧱 阶段一：扫清障碍，获取企微 API 凭证\r\n\r\n获取推送权限是我们迈出的第一步。我们需要在企微的生态里构建出一个属于我们自己的应用沙盒，并提取通信所需的鉴权密钥。\r\n\r\n1. **注册企业微信**  \r\n   直接前往 [企业微信官网](https://open.work.weixin.qq.com/wwopen/login) 正常注册。\r\n   ![jJVPySQxv8kFesq.png](https://s2.loli.net/2024/03/04/jJVPySQxv8kFesq.png)\r\n\r\n2. **创建内部应用**  \r\n   登录后台，在「应用管理」下方点击“创建应用”。上传头像，填写应用名称，点击“创建应用”。  \r\n   ![tISfraBupkh3TAW.png](https://s2.loli.net/2024/03/04/tISfraBupkh3TAW.png)\r\n\r\n3. **提取三核心：AgentId 与 Secret**  \r\n   应用创建后，点击进入应用详情页，保存好 **AgentId** （应用ID）和 **Secret**（应用秘钥）。这是之后与企微服务器握手的安全根基。  \r\n   ![1DNz3fEkjTR2QXy.png](https://s2.loli.net/2024/03/04/1DNz3fEkjTR2QXy.png)\r\n\r\n4. **配置企业可信 IP（核心网络放行）**  \r\n   页面底部点击“企业可信IP”。\r\n\r\n   > **🚨 踩坑提示**：\r\n   > 此配置是企微接口放行的一道硬围栏！不论你是在家里的软路由上跑、还是扔上了云服务器、Serverless 云函数，**必须严格查明你程序的公网出口 IP 并填入此处**。否则，企微安全网关会直接以 `IP not allowed` 的报错踢掉你的推送请求。\r\n\r\n   ![TqX2MsWFmNlwajH.png](https://s2.loli.net/2024/03/04/TqX2MsWFmNlwajH.png)\r\n\r\n5. **提取企业 ID (CORPID)**  \r\n   点击控制台底部“我的企业”，在“企业信息”最底部找到 **企业ID**。  \r\n   ![vXsUhQJDPEFbRCW.png](https://s2.loli.net/2024/03/04/vXsUhQJDPEFbRCW.png)\r\n\r\n6. **扫码接收消息**  \r\n   点击“微信插件”，使用私人日常用的微信扫码关注微工作台！这样，后续应用发出的所有载荷，都会直接透传到个人微信的消息列表，免除了额外下载企微 APP 的累赘。  \r\n   ![JOpe6i2cdXHbl9q.png](https://s2.loli.net/2024/03/04/JOpe6i2cdXHbl9q.png)\r\n\r\n---\r\n\r\n## 🌤️ 阶段二：打通气象数据源（和风天气）\r\n\r\n我们要推送气象预报等数据，通过和风天气的开发者 API 获取是最稳妥的方式，其免费额度对于个人极客而言简直绰绰有余。\r\n\r\n1. 注册并登录 [和风天气控制台](https://id.qweather.com/#/login)，进入“开发服务控制台”。  \r\n   ![vAFWCm8Kyp3Igrj.png](https://s2.loli.net/2024/03/04/vAFWCm8Kyp3Igrj.png)\r\n\r\n2. 点击“项目管理”，进入后创建项目，类型务必选择 `Web API`，把生成的 `KEY` 字符串复制保存下来，待会儿配置环境变量时要用。  \r\n   ![MpNPARyXQ1HelUt.png](https://s2.loli.net/2024/03/04/MpNPARyXQ1HelUt.png)\r\n\r\n---\r\n\r\n## 🛠️ 阶段三：环境重构与源码解耦配置\r\n\r\n之前老粗犷版本的代码，需要去各种 python 脚本里进行全局替换，一旦拉取代码直接爆炸，极其不利于 Git 迭代维护。在此次重构中，我完整剥离了业务逻辑，引入了统一的 `.env` 环境变量挂载机制，实现了**代码与隐私配置的绝对分离**。\r\n\r\n首先，克隆我们的工程内核并安装运行底座：\r\n\r\n```bash\r\n# 获取源码镜像\r\ngit clone https://github.com/nianshu2022/Cloud_Letter.git\r\ncd Cloud_Letter\r\n\r\n# 解析并安装运行所需的三方依赖库包（建议基于 virtualenv 等虚拟环境进行）\r\npip install -r requirements.txt\r\n```\r\n\r\n接下来，我们生成并投喂配置文件。使用这个一行命令快速提取母本文本：\r\n\r\n```bash\r\n# Windows 环境下的拷贝\r\ncopy .env.example .env\r\n\r\n# Linux / MacOS 等类 Unix 环境下的拷贝\r\ncp .env.example .env\r\n```\r\n\r\n现在打开这个新生成的隐身文件 `.env` 配置文件，把上述我们搜括来的系统参数准确填好。不再需要在源码里飞线：\r\n\r\n```ini\r\n# --- 企业微信核心鉴权凭证 ---\r\n# 【阶段一步骤5】企业级ID\r\nCORPID=ww1a2b3c4d5e6f7g8h\r\n# 【阶段一步骤3】当前应用私密密钥（极其关键，切勿上传 Github！）\r\nCORPSECRET=XyZ_1234567890abcdefghijklmnopqrstuvw\r\n# 【阶段一步骤3】当前应用的节点门牌号\r\nAGENTID=1000002\r\n\r\n# --- 和风天气数据挂载 ---\r\n# 【阶段二生成的和风天气鉴权 KEY】\r\nQWEATHER=a1b2c3d4e5f6g7h8i9j0k\r\n# 要求解析的定位系（多个目标区域用 && 进行级联处理）\r\nCITY=北京-丰台区&&上海-浦东新区\r\n\r\n# --- 日期溯源计算引擎引擎 ---\r\n# 所需盯梢的目标大日子序列名称\r\nTARGETNAME=宝宝生日&&相识纪念日\r\n# 与上面名称绑定的匹配时间戳（对于国人数学习惯，加一个前缀n代表进入农历模式测算）\r\nTARGETDAY=1999-01-01&&n1999-01-01 \r\n# 起始恋爱日界定模块\r\nBEGINNAME=我们相爱的日子\r\nBEGINDAY=2021-05-20\r\n\r\n# --- 自定义渲染装潢板 ---\r\n# 数据装载协议：是否携带图片渲染？(1为包含图文流式混合)\r\nMSGTYPE=1\r\n# 提供一张图片做顶图外链\r\nPIC=https://你喜欢的头图直链.jpg\r\n# CSS/UI底板的预置底包\r\nPICTYPE=fengjing\r\nTITLE=专属早安早报\r\nCONTENT=新的一天也要充满极客精神与快乐！~\r\nCALL=宝贝\r\n```\r\n\r\n---\r\n\r\n## 🚀 阶段四：自动化极客部署闭环\r\n\r\n底座的配置完成以后，首先请在本地开终端执行一遍主测逻辑 `python main.py`！只要你的微信号“叮”地一声吃到了推送并显示无损，再考虑直接将其挂载上云端。为了满足极客的多样化需求，我准备了这几套云部署打法：\r\n\r\n### 方案 A：Linux 本机 Crontab（守旧稳健派）\r\n\r\n如果你拥有一台一直跑着后台服务的便宜云机（切记：服务器出口 IP 必须要塞到企微的管理白名单里头去！）：\r\n\r\n```bash\r\n# 唤出系统原生定时器调度表\r\ncrontab -e\r\n\r\n# 在尾行写死该命令（举例定义成清晨 7:00 通过绝对路径精确拉起）\r\n0 7 * * * /usr/bin/python3 /root/Cloud_Letter/main.py\r\n```\r\n\r\n### 方案 B：Serverless 云函数方案（降本免维护派）\r\n\r\n不论是腾讯云的 SCF 还是阿里云的 FC，非常适合去跑这种一击即走的轻型执行脚本，连这只用一瞬间的 CPU 的使用费都是完全白给的水平，真正的低开销极客思路。\r\n\r\n1. **构建主线容器**：选择开建，配置运行底层跑设环境，选 `Python 3.10+` 以上的版本。\r\n2. **源码打包推送云盘**：把我们配好的 `Cloud_Letter` 一级根目录封包，zip 后传上去。如果你有云原生强迫症，嫌弃本地存放明文 `.env` 的安全问题，大可放心：你同样可以直接打散参数，挨个全塞到 Serverless 侧板原生的「环境变量」里面去保存。程序自身自带智能嗅探抓取功能！\r\n3. **捆绑静态 NAT 网关**：\r\n\r\n   > **⚠️ 危险操作**：\r\n   > 千万不要漏了这一步！！Serverless 每一次拉起执行时，它向外网抛出请求的源 IP **全是随机动态变化的**！这在上一阶段提到的“企微可信IP”过滤门槛面前等于直接撞防火墙送死。必须要花几块钱，在此服务外侧绑定专属的 VPC 并搭建固定出口 NAT 系统，拿一个死守的内向公网 IP，之后再去企业微信后方完成填写白名单步骤。\r\n\r\n4. **对齐主函数钩子入口**：不同云厂商唤醒主函数的方法略有差异。针对腾讯云，要把启动目标定位到 `main.main_handler`；如果是阿里云，必须将入口方法设置为 `main.handler` 否则会找不到主路径。\r\n5. **挂载 Cron 轮询规则**：利用定时触发器组件，设置一则如同 `0 0 7 * * * *` 这样的规则参数（意为每天七点）。\r\n\r\n### 方案 C：基于 PythonAnywhere 的免费池方案（无缝白嫖版）\r\n\r\n作为良心的免费极客跳板，这老牌站点有个极为可喜的特质 —— 那里有自带极其固定的默认免费 IP 池流，刚好能非常巧妙地跨过企微那套烦死人的IP审查限制。\r\n\r\n1. 进行常规免费账号配置登记之后，顺势唤入一个免费配额的 Bash 外壳终端。\r\n2. 通过 clone 命令接通主干道源库代码拉出，进入子文件夹创建 `.env`，把配置文本注入。\r\n3. 转切到这网站的网页前端：点选挂入 `Tasks`（任务流）版块。直接塞入跑设入口行段脚本 `/usr/bin/python3 /home/你的云端用户名/Cloud_Letter/main.py`。\r\n4. 去配置每日几点几分运行。至于白名单的填写，自己随便拉起执行跑通一次报错日志，它日志控制台里抛出来的受阻阻截 IP，正是你要顺藤摸瓜回抄给“企微内定IP白名单”内的最终出口地址！\r\n\r\n---\r\n\r\n## 📝 总结\r\n\r\n对于极客而言，真正的赛博朋克浪漫，从来都不是那些堆砌着价格的礼盒；而是凭借代码与自动化的掌控感，把冰冷的字符化作有温度的每日守护。在此套逻辑闭环里，借助企微高层级的透传通道不仅让我们能越过复杂的企业账号主体认证大坑；同时也依托极客范儿的 `.env` 配置抽离以及云函数的微服务玩法使得整包项目的代码干净又可以随时异地起调复现。\r\n\r\n既然有这空，别再每天设七点的闹钟爬起来粘贴天气预报了，赶紧抽空把你这心上人的定时关怀脚本通过终端自动推上去吧！Enjoy Coding!\r\n\r\n![mobile-screenshot](https://s2.loli.net/2025/11/22/qU2JovZltTed6An.png)\r\n"
+}

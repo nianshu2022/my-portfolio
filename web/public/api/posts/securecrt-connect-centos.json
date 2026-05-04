@@ -1,0 +1,51 @@
+{
+  "id": "post:securecrt-connect-centos",
+  "slug": "securecrt-connect-centos",
+  "type": "post",
+  "collection": "posts",
+  "title": "使用 SecureCRT 远程连接 CentOS 虚拟机",
+  "description": "配置 CentOS 7 网络适配器，设置静态 IP，关闭防火墙，并使用 SecureCRT 工具进行 SSH 远程连接。",
+  "date": "2022-09-22",
+  "tags": [
+    "SecureCRT",
+    "SSH",
+    "Linux",
+    "运维",
+    "工具"
+  ],
+  "cover": null,
+  "award": null,
+  "draft": false,
+  "url": "https://blog.nianshu2022.cn/blog/securecrt-connect-centos",
+  "path": "/blog/securecrt-connect-centos",
+  "wordCount": 1908,
+  "readingTime": "2 分钟",
+  "toc": [
+    {
+      "title": "1. 安装 SecureCRT",
+      "slug": "1-安装-securecrt",
+      "level": 2
+    },
+    {
+      "title": "2. CentOS 设置",
+      "slug": "2-centos-设置",
+      "level": 2
+    },
+    {
+      "title": "2.1 配置网卡",
+      "slug": "21-配置网卡",
+      "level": 3
+    },
+    {
+      "title": "2.2 设置 VM 网络编辑器",
+      "slug": "22-设置-vm-网络编辑器",
+      "level": 3
+    },
+    {
+      "title": "3. 使用 SecureCRT",
+      "slug": "3-使用-securecrt",
+      "level": 2
+    }
+  ],
+  "content": "\n## 1. 安装 SecureCRT\n\nSecureCRT 是一款支持 SSH 等协议的终端仿真软件，可以在 Windows 下登录 Linux 服务器，这样大大方便了开发工作。安装 SecureCRT 可以通过网上的各种教程安装。\n\n## 2. CentOS 设置\n\n### 2.1 配置网卡\n\n**controller 节点：**\n\n配置网络：\n修改 `BOOTPROTO=dhcp` （改为 `static`），`ONBOOT=no` （改为 `yes`）。\n\n**ens33 添加：**\n\n```ini\nIPADDR=192.168.100.10\nPREFIX=24\nGATEWAY=192.168.100.1\n```\n\n**ens34 添加：**\n\n```ini\nIPADDR=192.168.200.10\nPREFIX=24\n```\n\n![](https://img-blog.csdnimg.cn/cf17c9ec1f30472d9111fccd6b494ac2.png?shadow=true)\n![](https://img-blog.csdnimg.cn/24ac11c2b7804408856fe3d8df14a25b.png?shadow=true)\n\n**compute 节点：**\n\n配置网络：\n修改 `BOOTPROTO=dhcp` （改为 `static`），`ONBOOT=no` （改为 `yes`）。\n\n**ens33 添加：**\n\n```ini\nIPADDR=192.168.100.20\nPREFIX=24\nGATEWAY=192.168.100.1\n```\n\n**ens34 添加：**\n\n```ini\nIPADDR=192.168.200.20\nPREFIX=24\n```\n\n![](https://img-blog.csdnimg.cn/c62fe0edaa274b13a52ed71d4c101e9d.png?shadow=true)\n![](https://img-blog.csdnimg.cn/c439722dd34b4170a85178fc9f182cfd.png?shadow=true)\n\n为了之后方便使用工具远程连接 Linux 系统，这边我们把防火墙关了，也可以禁止防火墙，永久关闭这样重启虚拟机也可以直接用工具远程连接了。\n\n**关闭防火墙及修改配置文件 ：controller 和 compute 都要做**\n\n```bash\n[root@controller ~]# systemctl stop firewalld\n[root@controller ~]# systemctl disable firewalld\n[root@controller ~]# vi /etc/selinux/config      \n# SELINUX=enforcing 改为 disabled\n[root@controller ~]# setenforce 0\n[root@controller ~]# getenforce\n```\n\n![](https://img-blog.csdnimg.cn/9d9ff86652af45dc993153b99a60db30.png?shadow=true)\n\n### 2.2 设置 VM 网络编辑器\n\n![](https://img-blog.csdnimg.cn/301bac0bdd8942039132743080ea80be.png?shadow=true)\n![](https://img-blog.csdnimg.cn/aadac14ca3734070a7abacc01ab554cd.png?shadow=true)\n\n**注意：VMnet8 必须跟 controller 节点和 compute 节点在同一个网段才能连接上 SecureCRT。**\n\n![](https://img-blog.csdnimg.cn/d37274f5dc524c24b94f76d415a3db52.png?shadow=true)\n\n## 3. 使用 SecureCRT\n\n使用 SecureCRT 连上 controller 节点。（注：连接 SecureCRT 是为了方便）\n\n![](https://img-blog.csdnimg.cn/f270fb93469f4745ac9995ae795063f2.png?shadow=true)\n\n输入密码后，点击“确定”即可连接上 SecureCRT。\n\n![](https://img-blog.csdnimg.cn/dbb9965aacb848cc9726249132501a6e.png?shadow=true)\n\n出现以下图示表示连接成功。\n\n![](https://img-blog.csdnimg.cn/33273e439eab42e5bced6a4b5765f60b.png?shadow=true)\n"
+}

@@ -1,0 +1,25 @@
+{
+  "name": "念舒的数字花园",
+  "baseUrl": "https://blog.nianshu2022.cn",
+  "generatedAt": "2026-05-04T04:10:02.432Z",
+  "collections": [
+    {
+      "name": "posts",
+      "title": "技术博客",
+      "listUrl": "https://blog.nianshu2022.cn/api/posts.json",
+      "routePrefix": "/blog"
+    },
+    {
+      "name": "essays",
+      "title": "生活随笔",
+      "listUrl": "https://blog.nianshu2022.cn/api/essays.json",
+      "routePrefix": "/essays"
+    }
+  ],
+  "counts": {
+    "items": 17,
+    "posts": 12,
+    "essays": 5,
+    "tags": 56
+  }
+}

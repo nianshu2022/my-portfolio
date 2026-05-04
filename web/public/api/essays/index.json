@@ -1,0 +1,112 @@
+[
+  {
+    "id": "essay:graduation-profile-2024",
+    "slug": "graduation-profile-2024",
+    "type": "essay",
+    "collection": "essays",
+    "title": "筑梦青春，从兰职启航",
+    "description": "作为20级计算机网络技术专业的毕业生，回首在兰职的三年，是奋斗，是成长，也是我职业生涯的起点。",
+    "date": "2024-07-08",
+    "tags": [
+      "毕业季",
+      "职业规划",
+      "感恩母校",
+      "成长"
+    ],
+    "cover": "https://blog.nianshu2022.cn/img/graduation-profile-2024.jpg",
+    "award": null,
+    "url": "https://blog.nianshu2022.cn/essays/graduation-profile-2024",
+    "path": "/essays/graduation-profile-2024",
+    "wordCount": 708,
+    "readingTime": "3 分钟",
+    "tocCount": 3
+  },
+  {
+    "id": "essay:ict-2023-finals",
+    "slug": "ict-2023-finals",
+    "type": "essay",
+    "collection": "essays",
+    "title": "没什么比并肩作战更值得铭记——记华为ICT国赛二等奖",
+    "description": "2023年4月13日，华为ICT大赛全国总决赛颁奖典礼落下帷幕。虽然因实习未能亲临现场，但那份沉甸甸的奖杯和奖状，见证了我们团队的拼搏岁月。",
+    "date": "2023-04-18",
+    "tags": [
+      "华为ICT",
+      "团队",
+      "荣耀",
+      "成长"
+    ],
+    "cover": null,
+    "award": "https://blog.nianshu2022.cn/img/ict-award-2023-jz.jpg, /img/ict-award-2023-jb.png",
+    "url": "https://blog.nianshu2022.cn/essays/ict-2023-finals",
+    "path": "/essays/ict-2023-finals",
+    "wordCount": 991,
+    "readingTime": "5 分钟",
+    "tocCount": 4
+  },
+  {
+    "id": "essay:dream-chasing",
+    "slug": "dream-chasing",
+    "type": "essay",
+    "collection": "essays",
+    "title": "人生逐梦正当时",
+    "description": "我的征文作品《人生逐梦正当时》在甘肃省第三届高校毕业生就业创业故事征文大赛中荣获二等奖。",
+    "date": "2023-03-01",
+    "tags": [
+      "成长",
+      "实习",
+      "感悟",
+      "获奖作品"
+    ],
+    "cover": null,
+    "award": "https://blog.nianshu2022.cn/img/dream-chasing.jpg",
+    "url": "https://blog.nianshu2022.cn/essays/dream-chasing",
+    "path": "/essays/dream-chasing",
+    "wordCount": 2813,
+    "readingTime": "13 分钟",
+    "tocCount": 4
+  },
+  {
+    "id": "essay:ict-2022-provincial",
+    "slug": "ict-2022-provincial",
+    "type": "essay",
+    "collection": "essays",
+    "title": "再战ICT：从省赛一等奖到国赛的约定",
+    "description": "2022年的冬天，疫情依旧反复。但我们在屏幕这端，用代码和指令，再次为自己赢得了通往国赛的门票。",
+    "date": "2022-12-25",
+    "tags": [
+      "华为ICT",
+      "省赛",
+      "连胜",
+      "坚持"
+    ],
+    "cover": null,
+    "award": null,
+    "url": "https://blog.nianshu2022.cn/essays/ict-2022-provincial",
+    "path": "/essays/ict-2022-provincial",
+    "wordCount": 775,
+    "readingTime": "4 分钟",
+    "tocCount": 4
+  },
+  {
+    "id": "essay:ict-2021-provincial",
+    "slug": "ict-2021-provincial",
+    "type": "essay",
+    "collection": "essays",
+    "title": "那个冬天，我们拿到了通往国赛的入场券",
+    "description": "2021年的冬天格外寒冷，但当我们得知获得华为ICT大赛省赛一等奖的那一刻，内心却燃起了一团火。",
+    "date": "2021-12-05",
+    "tags": [
+      "华为ICT",
+      "省赛",
+      "一等奖",
+      "奋斗"
+    ],
+    "cover": null,
+    "award": null,
+    "url": "https://blog.nianshu2022.cn/essays/ict-2021-provincial",
+    "path": "/essays/ict-2021-provincial",
+    "wordCount": 811,
+    "readingTime": "4 分钟",
+    "tocCount": 3
+  }
+]

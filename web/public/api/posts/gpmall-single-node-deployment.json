@@ -1,0 +1,126 @@
+{
+  "id": "post:gpmall-single-node-deployment",
+  "slug": "gpmall-single-node-deployment",
+  "type": "post",
+  "collection": "posts",
+  "title": "GPMall 商城单节点部署实战",
+  "description": "基于 CentOS 7 环境，从零开始部署 GPMall 商城系统。涵盖 Java、Redis、Elasticsearch、Nginx、MariaDB、ZooKeeper、Kafka 等组件的安装与配置。",
+  "date": "2022-08-02",
+  "tags": [
+    "GPMall",
+    "运维",
+    "部署",
+    "CentOS",
+    "中间件"
+  ],
+  "cover": null,
+  "award": null,
+  "draft": false,
+  "url": "https://blog.nianshu2022.cn/blog/gpmall-single-node-deployment",
+  "path": "/blog/gpmall-single-node-deployment",
+  "wordCount": 4960,
+  "readingTime": "6 分钟",
+  "toc": [
+    {
+      "title": "1. 修改主机名",
+      "slug": "1-修改主机名",
+      "level": 2
+    },
+    {
+      "title": "2. 修改 /etc/hosts 配置文件",
+      "slug": "2-修改-etchosts-配置文件",
+      "level": 2
+    },
+    {
+      "title": "3. 配置本地 yum 源",
+      "slug": "3-配置本地-yum-源",
+      "level": 2
+    },
+    {
+      "title": "4. 安装基础服务",
+      "slug": "4-安装基础服务",
+      "level": 2
+    },
+    {
+      "title": "4.1 安装 Java 环境",
+      "slug": "41-安装-java-环境",
+      "level": 3
+    },
+    {
+      "title": "4.2 安装 Redis 缓存服务",
+      "slug": "42-安装-redis-缓存服务",
+      "level": 3
+    },
+    {
+      "title": "4.3 安装 Elasticsearch 服务",
+      "slug": "43-安装-elasticsearch-服务",
+      "level": 3
+    },
+    {
+      "title": "4.4 安装 Nginx 服务",
+      "slug": "44-安装-nginx-服务",
+      "level": 3
+    },
+    {
+      "title": "4.5 安装 Mariadb 服务",
+      "slug": "45-安装-mariadb-服务",
+      "level": 3
+    },
+    {
+      "title": "4.6 安装 ZooKeeper 服务",
+      "slug": "46-安装-zookeeper-服务",
+      "level": 3
+    },
+    {
+      "title": "4.7 安装 Kafka 服务",
+      "slug": "47-安装-kafka-服务",
+      "level": 3
+    },
+    {
+      "title": "5. 启动服务",
+      "slug": "5-启动服务",
+      "level": 2
+    },
+    {
+      "title": "5.1 启动数据库并配置",
+      "slug": "51-启动数据库并配置",
+      "level": 3
+    },
+    {
+      "title": "5.2 初始化数据库",
+      "slug": "52-初始化数据库",
+      "level": 3
+    },
+    {
+      "title": "5.3 启动 Redis 服务",
+      "slug": "53-启动-redis-服务",
+      "level": 3
+    },
+    {
+      "title": "5.4 启动 Nginx 服务",
+      "slug": "54-启动-nginx-服务",
+      "level": 3
+    },
+    {
+      "title": "6. 全局变量配置",
+      "slug": "6-全局变量配置",
+      "level": 2
+    },
+    {
+      "title": "7. 部署前端",
+      "slug": "7-部署前端",
+      "level": 2
+    },
+    {
+      "title": "8. 部署后端",
+      "slug": "8-部署后端",
+      "level": 2
+    },
+    {
+      "title": "9. 网站访问",
+      "slug": "9-网站访问",
+      "level": 2
+    }
+  ],
+  "content": "\n## 1. 修改主机名\n\n```bash\n[root@localhost ~]# hostnamectl set-hostname mall\n```\n\n## 2. 修改 /etc/hosts 配置文件\n\n```bash\n[root@mall ~]# vi /etc/hosts\n192.168.100.10 mall\n```\n\n## 3. 配置本地 yum 源\n\n将 `gpmall-repo` 上传到服务器的 `/opt` 目录下，并配置本地 `local.repo` 文件。\n\n```bash\nmkdir -p /opt/centos\nmount /dev/cdrom /opt/centos\n[root@mall ~]# vi /etc/yum.repos.d/local.repo\n```\n\n```ini\n[centos]\nname=centos\nbaseurl=file:///opt/centos\ngpgcheck=0\nenabled=1\n[mall]\nname=mall\nbaseurl=file:///opt/gpmall-repo\ngpgcheck=0\nenabled=1\n```\n\n## 4. 安装基础服务\n\n### 4.1 安装 Java 环境\n\n```bash\n[root@mall ~]# yum install -y java-1.8.0-openjdk java-1.8.0-openjdk-devel\n[root@mall ~]# java -version\n```\n\n### 4.2 安装 Redis 缓存服务\n\n```bash\n[root@mall ~]# yum install redis -y\n```\n\n### 4.3 安装 Elasticsearch 服务\n\n```bash\n[root@mall ~]# yum install elasticsearch -y\n```\n\n### 4.4 安装 Nginx 服务\n\n```bash\n[root@mall ~]# yum install nginx -y\n```\n\n### 4.5 安装 Mariadb 服务\n\n```bash\n[root@mall ~]# yum install mariadb mariadb-server -y\n```\n\n### 4.6 安装 ZooKeeper 服务\n\n将 `zookeeper-3.4.14.tar.gz` 上传至云主机的 `/opt` 内，解压压缩包命令如下：\n\n```bash\n[root@mall ~]# tar -zxvf zookeeper-3.4.14.tar.gz\n```\n\n进入到 `zookeeper-3.4.14/conf` 目录下，将 `zoo_sample.cfg` 文件重命名为 `zoo.cfg`，命令如下：\n\n```bash\n[root@mall conf]# mv zoo_sample.cfg zoo.cfg\n```\n\n进入到 `zookeeper-3.4.14/bin` 目录下，启动 ZooKeeper 服务，命令如下：\n\n```bash\n ./zkServer.sh start\n```\n\n查看 ZooKeeper 状态，命令如下：\n\n```bash\n./zkServer.sh status\n```\n\n### 4.7 安装 Kafka 服务\n\n将提供的 `kafka_2.11-1.1.1.tgz` 包上传到云主机的 `/opt` 目录下，解压该压缩包，命令如下：\n\n```bash\ntar -zxvf kafka_2.11-1.1.1.tgz\n```\n\n进入到 `kafka_2.11-1.1.1/bin` 目录下，启动 Kafka 服务。\n\n使用 `jps` 命令查看 Kafka 是否成功启动，命令如下：\n\n```bash\n[root@mall bin]# jps\n6039 Kafka\n1722 QuorumPeerMain\n6126 Jps\n```\n\n## 5. 启动服务\n\n### 5.1 启动数据库并配置\n\n修改数据库配置文件并启动 MariaDB 数据库，设置 root 用户密码为 `123456`，并创建 `gpmall` 数据库，将提供的 `gpmall.sql` 导入。\n\n修改 `/etc/my.cnf` 文件，添加字段如下所示：\n\n```ini\n[mysqld]\ninit_connect='SET collation_connection = utf8_unicode_ci'\ninit_connect='SET NAMES utf8'\ncharacter-set-server=utf8\ncollation-server=utf8_unicode_ci\nskip-character-set-client-handshake\n```\n\n启动数据库：\n\n```bash\n[root@mall ~]# systemctl start mariadb\n```\n\n### 5.2 初始化数据库\n\n设置 root 用户的密码为 `123456` 并登录：\n\n```bash\n[root@mall ~]# mysql_secure_installation\n# ... (省略部分输出)\nEnter current password for root (enter for none):    # 默认按回车\nOK, successfully used password, moving on...\nSet root password? [Y/n] y\nNew password:              # 输入数据库root密码123456\nRe-enter new password:     # 重复输入密码123456\nPassword updated successfully!\n# ... (一路按 y)\nThanks for using MariaDB!\n\n[root@mall ~]# mysql -uroot –p123456\n```\n\n设置 root 用户的权限，命令如下：\n\n```sql\nMariaDB [(none)]> grant all privileges on *.* to root@localhost identified by '123456' with grant option;\nQuery OK, 0 rows affected (0.001 sec)\nMariaDB [(none)]> grant all privileges on *.* to root@\"%\" identified by '123456' with grant option;\nQuery OK, 0 rows affected (0.001 sec)\n```\n\n将 `gpmall.sql` 文件上传至云主机的 `/root` 目录下。创建数据库 `gpmall` 并导入 `gpmall.sql` 文件：\n\n```sql\nMariaDB [(none)]> create database gpmall;\nMariaDB [(none)]> use gpmall;\nMariaDB [mall]> source /root/gpmall.sql\n```\n\n退出数据库并设置开机自启：\n\n```sql\nMariaDB [mall]> exit;\n```\n\n```bash\n[root@mall ~]# systemctl enable mariadb\n```\n\n### 5.3 启动 Redis 服务\n\n修改 Redis 配置文件，编辑 `/etc/redis.conf` 文件。\n将 `bind 127.0.0.1` 这一行注释掉。\n将 `protected-mode yes` 改为 `protected-mode no`。\n\n启动 Redis 服务命令如下：\n\n```bash\n[root@mall ~]# systemctl start redis\n[root@mall ~]# systemctl enable redis\n```\n\n配置 Elasticsearch 服务并启动：\n\n```bash\n[root@mall ~]# vi /etc/elasticsearch/elasticsearch.yml\n```\n\n在文件最上面加入 3 条语句如下：\n\n```yaml\nhttp.cors.enabled: true\nhttp.cors.allow-origin: \"*\"\nhttp.cors.allow-credentials: true\n```\n\n将如下 4 条语句前的注释符去掉，并修改 `network.host` 的 IP 为本机 IP：\n\n```yaml\ncluster.name: my-application\nnode.name: node-1\nnetwork.host: 192.168.94.1\nhttp.port: 9200\n```\n\n最后修改完之后保存退出。然后启动 Elasticsearch 并设置开机自启，命令如下：\n\n```bash\n[root@mall ~]# systemctl start elasticsearch\n[root@mall ~]# systemctl enable elasticsearch\n```\n\n### 5.4 启动 Nginx 服务\n\n```bash\n[root@mall ~]# systemctl start nginx\n[root@mall ~]# systemctl enable nginx\n```\n\n## 6. 全局变量配置\n\n修改 `/etc/hosts` 文件：\n\n```bash\n[root@mall ~]# vi /etc/hosts\n192.168.100.10 kafka.mall\n192.168.100.10 mysql.mall\n192.168.100.10 redis.mall\n192.168.100.10 zookeeper.mall\n```\n\n## 7. 部署前端\n\n将 `dist` 目录上传至服务器的 `/root` 目录下。接着 `dist` 目录下的文件，复制到 Nginx 默认项目路径（首先清空默认路径下的文件）：\n\n```bash\n[root@mall ~]# rm -rf /usr/share/nginx/html/*\n[root@mall ~]# cp -rvf dist/* /usr/share/nginx/html/\n```\n\n修改 Nginx 配置文件 `/etc/nginx/conf.d/default.conf`，添加映射如下所示：\n\n```nginx\n[root@mall ~]# vi /etc/nginx/conf.d/default.conf\nserver {\n    listen       80;\n    server_name  localhost;\n\n    #charset koi8-r;\n    #access_log  /var/log/nginx/host.access.log  main;\n\n    location / {\n        root   /usr/share/nginx/html;\n        index  index.html index.htm;\n    }\n    location /user {\n            proxy_pass http://127.0.0.1:8082;\n        }\n\n    location /shopping {\n            proxy_pass http://127.0.0.1:8081;\n        }\n\n    location /cashier {\n            proxy_pass http://127.0.0.1:8083;\n        }\n    #error_page  404              /404.html;\n}\n```\n\n重启 Nginx 服务，命令如下：\n\n```bash\n[root@mall ~]# systemctl restart nginx\n```\n\n## 8. 部署后端\n\n将提供的 4 个 jar 包上传到服务器的 `/root` 目录下，并启动，启动命令如下：\n\n```bash\n[root@mall gpmall]# nohup java -jar shopping-provider-0.0.1-SNAPSHOT.jar &\n# 按回车\n[1] 6432\n[root@mall gpmall]# nohup: ignoring input and appending output to ‘nohup.out’\n# 按回车\n[root@mall gpmall]# nohup java -jar user-provider-0.0.1-SNAPSHOT.jar &\n[2] 6475\n[root@mall gpmall]# nohup: ignoring input and appending output to ‘nohup.out’\n# 按回车\n[root@mall gpmall]# nohup java -jar gpmall-shopping-0.0.1-SNAPSHOT.jar &\n[3] 6523\n[root@mall gpmall]# nohup: ignoring input and appending output to ‘nohup.out’\n# 按回车\n[root@mall gpmall]# nohup java -jar gpmall-user-0.0.1-SNAPSHOT.jar &\n[4] 6563\n[root@mall gpmall]# nohup: ignoring input and appending output to ‘nohup.out’\n# 按回车\n```\n\n按照顺序运行 4 个 jar 包之后，后端部署完成。\n\n## 9. 网站访问\n\n打开浏览器，在地址栏输入 `http://192.168.100.10`，访问界面。\n"
+}
