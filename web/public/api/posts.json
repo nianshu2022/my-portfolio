@@ -1,5 +1,74 @@
 [
   {
+    "id": "post:deepseek-r1-ollama-local-deployment",
+    "slug": "deepseek-r1-ollama-local-deployment",
+    "type": "post",
+    "collection": "posts",
+    "title": "从零开始：用 Ollama + Open WebUI 本地部署 DeepSeek-R1 满血版/蒸馏版实战指南",
+    "description": "如何根据自己电脑的显存配置选择合适的 DeepSeek-R1 蒸馏版本（从 1.5B 到 671B）？本文完整覆盖基于 Ollama 的本地拉取、Open WebUI 极客交互配置、以及显存与上下文优化指南。",
+    "date": "2026-05-15",
+    "tags": [
+      "AI",
+      "DeepSeek",
+      "Ollama",
+      "大模型",
+      "本地部署"
+    ],
+    "cover": null,
+    "award": null,
+    "url": "https://blog.nianshu2022.cn/blog/deepseek-r1-ollama-local-deployment",
+    "path": "/blog/deepseek-r1-ollama-local-deployment",
+    "wordCount": 2673,
+    "readingTime": "7 分钟",
+    "tocCount": 11
+  },
+  {
+    "id": "post:nextjs15-react19-tailwindv4-migration",
+    "slug": "nextjs15-react19-tailwindv4-migration",
+    "type": "post",
+    "collection": "posts",
+    "title": "踩坑实录：Next.js 15 + React 19 + Tailwind CSS v4 升级爬坑全过程",
+    "description": "将数字花园升级到 Next.js 15 和 React 19 时被各种 Hydration 闪烁、Tailwind CSS v4 依赖锁死和 Server Action 的严格模式折磨？本文为你沉淀一份避坑踩雷的实操升级路线图。",
+    "date": "2026-05-12",
+    "tags": [
+      "Next.js",
+      "React",
+      "TailwindCSS",
+      "前端开发",
+      "架构升级"
+    ],
+    "cover": null,
+    "award": null,
+    "url": "https://blog.nianshu2022.cn/blog/nextjs15-react19-tailwindv4-migration",
+    "path": "/blog/nextjs15-react19-tailwindv4-migration",
+    "wordCount": 3244,
+    "readingTime": "7 分钟",
+    "tocCount": 10
+  },
+  {
+    "id": "post:cloudflare-tunnel-homelab-zerotrust",
+    "slug": "cloudflare-tunnel-homelab-zerotrust",
+    "type": "post",
+    "collection": "posts",
+    "title": "抛弃内网穿透与动态域名！用 Cloudflare Tunnel + Zero Trust 优雅且安全地接入 Homelab 边缘设备",
+    "description": "没有公网 IP，也不想在路由器暴露危险端口？本文手把手教你利用 Cloudflare Tunnel 穿透 NAT，配合 Cloudflare Zero Trust 构建单点登录（SSO）防护墙，优雅无感地接入内网监控及 NAS 设备。",
+    "date": "2026-05-10",
+    "tags": [
+      "Cloudflare",
+      "ZeroTrust",
+      "Homelab",
+      "内网穿透",
+      "网络安全"
+    ],
+    "cover": null,
+    "award": null,
+    "url": "https://blog.nianshu2022.cn/blog/cloudflare-tunnel-homelab-zerotrust",
+    "path": "/blog/cloudflare-tunnel-homelab-zerotrust",
+    "wordCount": 3140,
+    "readingTime": "8 分钟",
+    "tocCount": 11
+  },
+  {
     "id": "post:wecom-daily-push-guide",
     "slug": "wecom-daily-push-guide",
     "type": "post",

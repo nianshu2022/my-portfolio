@@ -8,6 +8,7 @@ import ThemeToggle from "@/components/ThemeToggle";
 import MouseGlow from "@/components/MouseGlow";
 import GridBackground from "@/components/GridBackground";
 import PageTransition from "@/components/PageTransition";
+import ConditionalLayout from "@/components/ConditionalLayout";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -110,40 +111,51 @@ export default function RootLayout({
         />
         <GridBackground />
         <MouseGlow />
-        <header className="fixed left-0 right-0 top-0 z-40 border-b border-border/30 bg-background/60 backdrop-blur-xl">
-          <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
-            <Link href="/" className="group inline-flex items-center gap-3 text-foreground">
-              <span className="flex h-8 w-8 items-center justify-center rounded-md bg-primary text-sm font-semibold text-primary-foreground">念</span>
-              <span className="hidden font-semibold tracking-normal sm:inline">念舒的数字花园</span>
-            </Link>
-            <nav className="hidden items-center gap-1 text-sm text-muted-foreground md:flex">
-              {[
-                ["博客", "/blog"],
-                ["随笔", "/essays"],
-                ["搜索", "/search"],
-                ["归档", "/archive"],
-                ["装备", "/gear"],
-                ["传送门", "/portal"],
-                ["关于", "/about"],
-              ].map(([label, href]) => (
-                <Link key={href} href={href} className="rounded-md px-3 py-2 transition-colors hover:bg-secondary hover:text-foreground">
-                  {label}
-                </Link>
-              ))}
-            </nav>
-            <MobileNav />
+        
+        <ConditionalLayout>
+          <header className="fixed left-0 right-0 top-0 z-40 border-b border-border/30 bg-background/60 backdrop-blur-xl">
+            <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
+              <Link href="/" className="group inline-flex items-center gap-3 text-foreground">
+                <span className="flex h-8 w-8 items-center justify-center rounded-md bg-primary text-sm font-semibold text-primary-foreground">念</span>
+                <span className="hidden font-semibold tracking-normal sm:inline">念舒的数字花园</span>
+              </Link>
+              <nav className="hidden items-center gap-1 text-sm text-muted-foreground md:flex">
+                {[
+                  ["博客", "/blog"],
+                  ["随笔", "/essays"],
+                  ["搜索", "/search"],
+                  ["归档", "/archive"],
+                  ["装备", "/gear"],
+                  ["传送门", "/portal"],
+                  ["关于", "/about"],
+                ].map(([label, href]) => (
+                  <Link key={href} href={href} className="rounded-md px-3 py-2 transition-colors hover:bg-secondary hover:text-foreground">
+                    {label}
+                  </Link>
+                ))}
+              </nav>
+              <MobileNav />
+            </div>
+          </header>
+
+          <div className="fixed top-3.5 right-4 z-50 flex items-center gap-2">
+            <SearchHint />
           </div>
-        </header>
-        <div className="fixed top-3.5 right-4 z-50 flex items-center gap-2">
-          <SearchHint />
-          <ThemeToggle />
+        </ConditionalLayout>
+
+        <div className="fixed top-3.5 right-4 z-50 flex items-center gap-2 pointer-events-none">
+           <div className="pointer-events-auto">
+             <ThemeToggle />
+           </div>
         </div>
 
         <PageTransition>{children}</PageTransition>
 
-        <BottomNav />
-        <ScrollToTop />
-        <KeyboardHint />
+        <ConditionalLayout>
+          <BottomNav />
+          <ScrollToTop />
+          <KeyboardHint />
+        </ConditionalLayout>
 
 
 

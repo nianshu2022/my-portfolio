@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-04T04:09:58.681Z",
+  "generatedAt": "2026-05-17T03:46:12.902Z",
   "source": "build script probe",
   "timeoutMs": 8000,
   "services": [
@@ -13,7 +13,7 @@
       "check": {
         "status": "online",
         "statusCode": 200,
-        "latencyMs": 1165,
+        "latencyMs": 1045,
         "message": "reachable"
       }
     },
@@ -27,7 +27,7 @@
       "check": {
         "status": "protected",
         "statusCode": 200,
-        "latencyMs": 4448,
+        "latencyMs": 2989,
         "message": "reachable"
       }
     },
@@ -41,7 +41,7 @@
       "check": {
         "status": "protected",
         "statusCode": 200,
-        "latencyMs": 1046,
+        "latencyMs": 996,
         "message": "reachable"
       }
     }

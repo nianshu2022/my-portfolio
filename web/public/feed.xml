@@ -5,7 +5,112 @@
     <link>https://blog.nianshu2022.cn</link>
     <description>00后产品运营的个人网站，分享运营心得、增长策略与技术折腾笔记。</description>
     <language>zh-CN</language>
-    <lastBuildDate>Mon, 04 May 2026 04:10:02 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 17 May 2026 03:46:18 GMT</lastBuildDate>
     
+    <item>
+      <title>从零开始：用 Ollama + Open WebUI 本地部署 DeepSeek-R1 满血版/蒸馏版实战指南</title>
+      <link>https://blog.nianshu2022.cn/blog/deepseek-r1-ollama-local-deployment</link>
+      <description>如何根据自己电脑的显存配置选择合适的 DeepSeek-R1 蒸馏版本（从 1.5B 到 671B）？本文完整覆盖基于 Ollama 的本地拉取、Open WebUI 极客交互配置、以及显存与上下文优化指南。</description>
+      <pubDate>Fri, 15 May 2026 00:00:00 GMT</pubDate>
+      <guid>https://blog.nianshu2022.cn/blog/deepseek-r1-ollama-local-deployment</guid>
+    </item>
+    <item>
+      <title>踩坑实录：Next.js 15 + React 19 + Tailwind CSS v4 升级爬坑全过程</title>
+      <link>https://blog.nianshu2022.cn/blog/nextjs15-react19-tailwindv4-migration</link>
+      <description>将数字花园升级到 Next.js 15 和 React 19 时被各种 Hydration 闪烁、Tailwind CSS v4 依赖锁死和 Server Action 的严格模式折磨？本文为你沉淀一份避坑踩雷的实操升级路线图。</description>
+      <pubDate>Tue, 12 May 2026 00:00:00 GMT</pubDate>
+      <guid>https://blog.nianshu2022.cn/blog/nextjs15-react19-tailwindv4-migration</guid>
+    </item>
+    <item>
+      <title>抛弃内网穿透与动态域名！用 Cloudflare Tunnel + Zero Trust 优雅且安全地接入 Homelab 边缘设备</title>
+      <link>https://blog.nianshu2022.cn/blog/cloudflare-tunnel-homelab-zerotrust</link>
+      <description>没有公网 IP，也不想在路由器暴露危险端口？本文手把手教你利用 Cloudflare Tunnel 穿透 NAT，配合 Cloudflare Zero Trust 构建单点登录（SSO）防护墙，优雅无感地接入内网监控及 NAS 设备。</description>
+      <pubDate>Sun, 10 May 2026 00:00:00 GMT</pubDate>
+      <guid>https://blog.nianshu2022.cn/blog/cloudflare-tunnel-homelab-zerotrust</guid>
+    </item>
+    <item>
+      <title>告别查岗与遗忘！企业微信 + Python 零感打造专属情侣推送管家</title>
+      <link>https://blog.nianshu2022.cn/blog/wecom-daily-push-guide</link>
+      <description>教你如何利用企业微信与 Python 结合，采用 Serverless 架构部署，零代码侵入搭载专属情侣每日定时推送服务，彻底终结直男健忘症。</description>
+      <pubDate>Tue, 07 Apr 2026 06:05:00 GMT</pubDate>
+      <guid>https://blog.nianshu2022.cn/blog/wecom-daily-push-guide</guid>
+    </item>
+    <item>
+      <title>实录：手机跑通 Gemma 4 离线多模态大模型的踩坑笔记</title>
+      <link>https://blog.nianshu2022.cn/blog/gemma4-offline-multimodal</link>
+      <description>尝试在骁龙 8 Gen 2 手机上本地跑通 Gemma 4 多模态模型时遭遇 OOM 报错？本文记录了如何绕过官方解法的坑，利用 Termux 与 llama.cpp 在安卓端通过 4-bit 量化完美实现离线多模态推理的完整实录。</description>
+      <pubDate>Tue, 07 Apr 2026 00:00:00 GMT</pubDate>
+      <guid>https://blog.nianshu2022.cn/blog/gemma4-offline-multimodal</guid>
+    </item>
+    <item>
+      <title>监控疯狂报警：我是怎么干掉 /var/lib/docker 几十G垃圾的</title>
+      <link>https://blog.nianshu2022.cn/blog/docker-cleanup</link>
+      <description>测试或 CI/CD 节点频发 /var/lib/docker/ 磁盘 100% 爆满告警？千万别手欠用 rm -rf！本文记录了一套基于 Docker 官方命令和系统调用的极客无感排错范式与自动化清理脚本。</description>
+      <pubDate>Mon, 06 Apr 2026 00:00:00 GMT</pubDate>
+      <guid>https://blog.nianshu2022.cn/blog/docker-cleanup</guid>
+    </item>
+    <item>
+      <title>内网 Nexus 离线 PyPI 镜像搭建全攻略（含 PyTorch CUDA 版）</title>
+      <link>https://blog.nianshu2022.cn/blog/nexus-pypi-offline-mirror</link>
+      <description>物理隔离内网、无法访问外网？本文手把手教你用 Sonatype Nexus 搭建私有 PyPI 镜像，完整覆盖仓库创建、离线包下载、twine 批量推送与 pip 配置，并附常见报错排查表。</description>
+      <pubDate>Wed, 25 Mar 2026 00:00:00 GMT</pubDate>
+      <guid>https://blog.nianshu2022.cn/blog/nexus-pypi-offline-mirror</guid>
+    </item>
+    <item>
+      <title>白嫖 Cloudflare：零成本网站监控 Uptime Monitor 迎来史诗级 V2.0 重构！</title>
+      <link>https://blog.nianshu2022.cn/blog/uptime-monitor-v2-guide</link>
+      <description>纯白嫖 Cloudflare 全家桶（Workers + D1 + Pages）的零成本网站监控系统 Uptime Monitor V2 重磅更新！现在支持飞书/TG/企业微信/Webhook 多渠道告警、高级请求配置、标签分类、事件公告栏以及导入导出功能。</description>
+      <pubDate>Mon, 23 Mar 2026 00:00:00 GMT</pubDate>
+      <guid>https://blog.nianshu2022.cn/blog/uptime-monitor-v2-guide</guid>
+    </item>
+    <item>
+      <title>Windows 离线安装 Docker Desktop 完全指南（含常见报错解决）</title>
+      <link>https://blog.nianshu2022.cn/blog/docker-offline-install-windows</link>
+      <description>在无法联网的内网环境中，如何一步步完成 Docker Desktop 的安装？本文涵盖完整离线安装流程，并重点解决 WSL 版本过低导致 Docker 无法启动的问题。</description>
+      <pubDate>Fri, 20 Mar 2026 00:00:00 GMT</pubDate>
+      <guid>https://blog.nianshu2022.cn/blog/docker-offline-install-windows</guid>
+    </item>
+    <item>
+      <title>我用 Cloudflare 免费撸了一个高颜值的网站监控系统</title>
+      <link>https://blog.nianshu2022.cn/blog/uptime-monitor-guide</link>
+      <description>利用 Cloudflare Workers + D1 + Pages 全家桶，手搓了一个零成本、高颜值、功能全的监控系统 —— Uptime Monitor。支持 SSL 证书/域名过期提醒 + 钉钉告警。</description>
+      <pubDate>Sun, 23 Nov 2025 00:00:00 GMT</pubDate>
+      <guid>https://blog.nianshu2022.cn/blog/uptime-monitor-guide</guid>
+    </item>
+    <item>
+      <title>企业微信实现情侣每日定时推送全攻略！</title>
+      <link>https://blog.nianshu2022.cn/blog/wecom-daily-push-guide-2024</link>
+      <description>教你如何利用企业微信API和Python脚本，搭建一个专属的情侣每日定时推送服务，包含天气、纪念日等功能。</description>
+      <pubDate>Mon, 04 Mar 2024 00:00:00 GMT</pubDate>
+      <guid>https://blog.nianshu2022.cn/blog/wecom-daily-push-guide-2024</guid>
+    </item>
+    <item>
+      <title>VMware 安装 CentOS 7.5 操作系统</title>
+      <link>https://blog.nianshu2022.cn/blog/centos-installation-guide</link>
+      <description>详细图文教程，手把手教你在 VMware Workstation 中安装 CentOS 7.5 操作系统，包含网络配置与分区设置。</description>
+      <pubDate>Mon, 20 Nov 2023 00:00:00 GMT</pubDate>
+      <guid>https://blog.nianshu2022.cn/blog/centos-installation-guide</guid>
+    </item>
+    <item>
+      <title>部署 OpenStack 云平台</title>
+      <link>https://blog.nianshu2022.cn/blog/openstack-deployment-guide</link>
+      <description>基于 CentOS 7.5 环境，详细记录从系统镜像准备、网络架构规划到各个核心组件（Keystone, Glance, Nova, Neutron, Dashboard）的安装与配置过程。</description>
+      <pubDate>Tue, 25 Oct 2022 00:00:00 GMT</pubDate>
+      <guid>https://blog.nianshu2022.cn/blog/openstack-deployment-guide</guid>
+    </item>
+    <item>
+      <title>使用 SecureCRT 远程连接 CentOS 虚拟机</title>
+      <link>https://blog.nianshu2022.cn/blog/securecrt-connect-centos</link>
+      <description>配置 CentOS 7 网络适配器，设置静态 IP，关闭防火墙，并使用 SecureCRT 工具进行 SSH 远程连接。</description>
+      <pubDate>Thu, 22 Sep 2022 00:00:00 GMT</pubDate>
+      <guid>https://blog.nianshu2022.cn/blog/securecrt-connect-centos</guid>
+    </item>
+    <item>
+      <title>GPMall 商城单节点部署实战</title>
+      <link>https://blog.nianshu2022.cn/blog/gpmall-single-node-deployment</link>
+      <description>基于 CentOS 7 环境，从零开始部署 GPMall 商城系统。涵盖 Java、Redis、Elasticsearch、Nginx、MariaDB、ZooKeeper、Kafka 等组件的安装与配置。</description>
+      <pubDate>Tue, 02 Aug 2022 00:00:00 GMT</pubDate>
+      <guid>https://blog.nianshu2022.cn/blog/gpmall-single-node-deployment</guid>
+    </item>
   </channel>
 </rss>

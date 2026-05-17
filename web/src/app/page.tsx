@@ -55,12 +55,12 @@ export default function Home() {
 
           <div className="space-y-6">
             <TypeWriter
-              text="在产品和技术之间，认真记录每一次抵达。"
+              text="把技术、生活和灵感种成一座发光的小花园。"
               className="max-w-3xl text-4xl font-semibold leading-[1.08] tracking-normal text-foreground sm:text-5xl lg:text-7xl"
             />
             <ScrollReveal delay={1.2}>
               <p className="garden-subtitle max-w-2xl">
-                技术实践、产品思考与生活记录，每篇解决一个真实问题。
+                短路径发现、轻量互动、随时回来继续看。
               </p>
             </ScrollReveal>
             <ScrollReveal delay={1.8}>
@@ -106,11 +106,8 @@ export default function Home() {
                 <div className="space-y-6 p-6">
                   <div>
                     <p className="garden-kicker">念舒 / 产品运营</p>
-                    <h2 className="mt-3 text-3xl font-semibold">关心体验，也关心落地。</h2>
+                    <h2 className="mt-3 text-3xl font-semibold">作者正在把一些散落的经历慢慢整理成自己的系统。</h2>
                   </div>
-                  <p className="text-sm leading-7 text-muted-foreground">
-                    从用户场景出发，追到系统实现细节。这里记录这些视角互相补充的过程。
-                  </p>
                   <div className="grid grid-cols-3 gap-3 border-t border-border pt-5 text-center">
                     <div>
                       <div className="text-2xl font-semibold">{posts.length}</div>
@@ -237,7 +234,13 @@ export default function Home() {
 
       <footer className="border-t border-border pt-8 pb-6 text-sm text-muted-foreground">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <span>© {new Date().getFullYear()} 念舒. All Rights Reserved.</span>
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+            <span>© {new Date().getFullYear()} 念舒. All Rights Reserved.</span>
+            <span className="hidden sm:inline opacity-30">|</span>
+            <Link href="/privacy" className="transition-colors hover:text-foreground underline decoration-transparent hover:decoration-current underline-offset-4">
+              隐私政策
+            </Link>
+          </div>
           <div className="flex items-center gap-4">
             <a href="https://github.com/nianshu2022" target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-foreground" aria-label="GitHub">
               <Github className="h-4 w-4" />

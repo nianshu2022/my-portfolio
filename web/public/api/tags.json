@@ -24,6 +24,12 @@
     "essays": 0
   },
   {
+    "name": "Cloudflare",
+    "count": 3,
+    "posts": 3,
+    "essays": 0
+  },
+  {
     "name": "Linux",
     "count": 3,
     "posts": 3,
@@ -33,6 +39,12 @@
     "name": "Python",
     "count": 3,
     "posts": 3,
+    "essays": 0
+  },
+  {
+    "name": "大模型",
+    "count": 2,
+    "posts": 2,
     "essays": 0
   },
   {
@@ -54,12 +66,6 @@
     "essays": 2
   },
   {
-    "name": "Cloudflare",
-    "count": 2,
-    "posts": 2,
-    "essays": 0
-  },
-  {
     "name": "Docker",
     "count": 2,
     "posts": 2,
@@ -78,6 +84,12 @@
     "essays": 0
   },
   {
+    "name": "本地部署",
+    "count": 1,
+    "posts": 1,
+    "essays": 0
+  },
+  {
     "name": "毕业季",
     "count": 1,
     "posts": 0,
@@ -85,12 +97,6 @@
   },
   {
     "name": "部署",
-    "count": 1,
-    "posts": 1,
-    "essays": 0
-  },
-  {
-    "name": "大模型",
     "count": 1,
     "posts": 1,
     "essays": 0
@@ -144,6 +150,12 @@
     "essays": 0
   },
   {
+    "name": "架构升级",
+    "count": 1,
+    "posts": 1,
+    "essays": 0
+  },
+  {
     "name": "坚持",
     "count": 1,
     "posts": 0,
@@ -180,6 +192,12 @@
     "essays": 0
   },
   {
+    "name": "内网穿透",
+    "count": 1,
+    "posts": 1,
+    "essays": 0
+  },
+  {
     "name": "企业微信",
     "count": 1,
     "posts": 1,
@@ -187,6 +205,12 @@
   },
   {
     "name": "企业微信开发",
+    "count": 1,
+    "posts": 1,
+    "essays": 0
+  },
+  {
+    "name": "前端开发",
     "count": 1,
     "posts": 1,
     "essays": 0
@@ -208,6 +232,12 @@
     "count": 1,
     "posts": 0,
     "essays": 1
+  },
+  {
+    "name": "网络安全",
+    "count": 1,
+    "posts": 1,
+    "essays": 0
   },
   {
     "name": "一等奖",
@@ -252,6 +282,18 @@
     "essays": 0
   },
   {
+    "name": "AI",
+    "count": 1,
+    "posts": 1,
+    "essays": 0
+  },
+  {
+    "name": "DeepSeek",
+    "count": 1,
+    "posts": 1,
+    "essays": 0
+  },
+  {
     "name": "Gemma",
     "count": 1,
     "posts": 1,
@@ -264,7 +306,25 @@
     "essays": 0
   },
   {
+    "name": "Homelab",
+    "count": 1,
+    "posts": 1,
+    "essays": 0
+  },
+  {
+    "name": "Next.js",
+    "count": 1,
+    "posts": 1,
+    "essays": 0
+  },
+  {
     "name": "Nexus",
+    "count": 1,
+    "posts": 1,
+    "essays": 0
+  },
+  {
+    "name": "Ollama",
     "count": 1,
     "posts": 1,
     "essays": 0
@@ -277,6 +337,12 @@
   },
   {
     "name": "PyPI",
+    "count": 1,
+    "posts": 1,
+    "essays": 0
+  },
+  {
+    "name": "React",
     "count": 1,
     "posts": 1,
     "essays": 0
@@ -301,6 +367,12 @@
   },
   {
     "name": "SSH",
+    "count": 1,
+    "posts": 1,
+    "essays": 0
+  },
+  {
+    "name": "TailwindCSS",
     "count": 1,
     "posts": 1,
     "essays": 0
@@ -331,6 +403,12 @@
   },
   {
     "name": "WSL",
+    "count": 1,
+    "posts": 1,
+    "essays": 0
+  },
+  {
+    "name": "ZeroTrust",
     "count": 1,
     "posts": 1,
     "essays": 0

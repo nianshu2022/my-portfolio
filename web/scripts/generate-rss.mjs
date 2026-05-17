@@ -7,9 +7,20 @@ const POSTS_DIR = path.join(process.cwd(), 'src/content/posts');
 const ESSAYS_DIR = path.join(process.cwd(), 'src/content/essays');
 const PUBLIC_DIR = path.join(process.cwd(), 'public');
 
-function getFiles(dir) {
+function getMarkdownFiles(dir) {
     if (!fs.existsSync(dir)) return [];
-    return fs.readdirSync(dir).filter(file => file.endsWith('.md'));
+    const files = [];
+    const items = fs.readdirSync(dir);
+    for (const item of items) {
+        const fullPath = path.join(dir, item);
+        const stat = fs.statSync(fullPath);
+        if (stat.isDirectory()) {
+            files.push(...getMarkdownFiles(fullPath));
+        } else if (item.endsWith('.md')) {
+            files.push(fullPath);
+        }
+    }
+    return files;
 }
 
 function escapeXml(unsafe) {
@@ -25,11 +36,11 @@ function escapeXml(unsafe) {
 }
 
 function generateRss() {
-    const posts = getFiles(POSTS_DIR).map(file => {
-        const content = fs.readFileSync(path.join(POSTS_DIR, file), 'utf8');
+    const posts = getMarkdownFiles(POSTS_DIR).map(filePath => {
+        const content = fs.readFileSync(filePath, 'utf8');
         const { data } = matter(content);
         return {
-            slug: file.replace('.md', ''),
+            slug: path.basename(filePath, '.md'),
             title: data.title || 'Untitled',
             description: data.description || '',
             date: data.date,
