@@ -1,10 +1,11 @@
 {
   "name": "nianshu-archive-bureau-web",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "private": true,
   "scripts": {
     "dev": "node scripts/dev.mjs",
     "generate:miniapp-api": "node scripts/generate-miniapp-api.mjs",
+    "generate:brand-icons": "node scripts/generate-brand-icons.mjs",
     "generate:portal-status": "node scripts/generate-portal-status.mjs",
     "build": "node scripts/generate-portal-status.mjs && node scripts/generate-rss.mjs && node scripts/generate-miniapp-api.mjs && next build",
     "start": "next start",

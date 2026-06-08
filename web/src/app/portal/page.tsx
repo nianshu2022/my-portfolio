@@ -8,8 +8,8 @@ import type { LucideIcon } from "lucide-react";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "我的传送门",
-  description: "私有部署服务与站点入口。",
+  title: "公开服务",
+  description: "念舒档案局公开服务登记表与运行状态。",
 };
 
 type ServiceStatus = "online" | "protected" | "degraded" | "offline";
@@ -64,25 +64,41 @@ export default function PortalPage() {
   const statusSource = payload?.source ?? "未生成状态文件";
 
   return (
-    <main className="garden-shell">
+    <main className="archive-shell max-w-6xl">
       <FloatingNav backUrl="/" />
 
-      <header className="mb-10 border-b border-border pb-8">
-        <p className="garden-kicker inline-flex items-center gap-2">
-          <Server className="h-4 w-4" /> 服务状态
-        </p>
-        <h1 className="garden-title mt-3">我的传送门</h1>
-        <p className="garden-subtitle mt-3 max-w-2xl">我自托管服务的统一入口。部分服务仅对授权用户开放。</p>
-        <details className="mt-4 rounded-md border border-border bg-card px-4 py-3 text-xs text-muted-foreground">
-          <summary className="cursor-pointer select-none text-sm font-medium text-foreground">状态检查信息</summary>
-          <div className="mt-2 space-y-1">
-            <p>状态来源：{statusSource}</p>
-            <p>最近检查：{lastCheckedAt}</p>
+      <header className="mb-10 border-y border-foreground/80 py-8">
+        <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+          <div>
+            <p className="inline-flex items-center gap-2 border border-primary px-2 py-1 font-mono text-sm font-bold text-primary">
+              <Server className="h-4 w-4" />
+              SERVICE REGISTRY
+            </p>
+            <h1 className="mt-5 text-[clamp(3rem,8vw,5.8rem)] font-black leading-none tracking-normal text-foreground">
+              公开服务
+            </h1>
+            <p className="mt-5 max-w-2xl text-base leading-8 text-muted-foreground sm:text-lg">
+              这里记录我长期维护的公开入口和自托管服务。能访问的不一定复杂，但都是真实运行过的东西。
+            </p>
           </div>
-        </details>
+          <dl className="grid min-w-72 border border-foreground/50 bg-card/80 font-mono text-xs">
+            <div className="grid grid-cols-[5rem_1fr] border-b border-border px-4 py-2">
+              <dt className="text-muted-foreground">服务</dt>
+              <dd className="font-bold text-foreground">{services.length} 项</dd>
+            </div>
+            <div className="grid grid-cols-[5rem_1fr] border-b border-border px-4 py-2">
+              <dt className="text-muted-foreground">来源</dt>
+              <dd className="truncate">{statusSource}</dd>
+            </div>
+            <div className="grid grid-cols-[5rem_1fr] px-4 py-2">
+              <dt className="text-muted-foreground">检查</dt>
+              <dd className="truncate">{lastCheckedAt}</dd>
+            </div>
+          </dl>
+        </div>
       </header>
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="border-y border-foreground/70">
         {services.map((service, i) => {
           const CategoryIcon = iconMap[service.iconKey] || Server;
           const statusMap: Record<ServiceStatus, string> = {
@@ -94,37 +110,47 @@ export default function PortalPage() {
           const statusClass = statusMap[service.check.status] || statusMap.offline;
           return (
             <ScrollReveal key={service.name} delay={i * 0.08}>
-              <a href={service.url} target="_blank" rel="noopener noreferrer" className="garden-panel group block p-5 transition-all hover:border-primary/30 hover:shadow-[0_0_20px_rgba(99,102,241,0.1)]">
-                <div className="mb-6 flex items-start justify-between gap-4">
-                  <div className="flex items-center gap-3">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-md border border-border bg-background p-2">
+              <a
+                href={service.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group grid gap-4 border-b border-border px-4 py-5 transition-colors last:border-b-0 hover:bg-secondary/70 lg:grid-cols-[4rem_1fr_8rem_8rem_7rem] lg:items-center"
+              >
+                <span className="font-mono text-lg font-black text-primary">
+                  {String(i + 1).padStart(3, "0")}
+                </span>
+                <span className="flex min-w-0 items-center gap-4">
+                  <span className="flex h-12 w-12 shrink-0 items-center justify-center border border-border bg-background p-2">
                       <Image src={service.icon} alt={service.name} width={32} height={32} className="h-8 w-8 object-contain" unoptimized />
-                    </div>
-                    <CategoryIcon className="h-5 w-5 text-primary" />
-                  </div>
-                  <span className={`inline-flex items-center gap-1 rounded-md border px-2 py-1 text-xs ${statusClass}`}>
-                    {service.check.status === "online" || service.check.status === "protected" ? <Activity className="h-3 w-3" /> : <WifiOff className="h-3 w-3" />}
-                    {formatStatus(service.check.status)}
                   </span>
-                </div>
-                <h2 className="flex items-center gap-2 text-xl font-semibold group-hover:text-primary">
-                  {service.name}
-                  <ExternalLink className="h-4 w-4" />
-                </h2>
-                <p className="mt-3 text-sm leading-6 text-muted-foreground">{service.description}</p>
-                <div className="mt-4 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+                  <span className="min-w-0">
+                    <span className="flex items-center gap-2 text-xl font-black group-hover:text-primary">
+                      {service.name}
+                      <ExternalLink className="h-4 w-4" />
+                    </span>
+                    <span className="mt-1 block line-clamp-2 text-sm leading-6 text-muted-foreground">{service.description}</span>
+                  </span>
+                </span>
+                <span className={`inline-flex w-fit items-center gap-1 border px-2 py-1 text-xs ${statusClass}`}>
+                  {service.check.status === "online" || service.check.status === "protected" ? <Activity className="h-3 w-3" /> : <WifiOff className="h-3 w-3" />}
+                  {formatStatus(service.check.status)}
+                </span>
+                <span className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
                   {typeof service.check.statusCode === "number" && (
-                    <span className="rounded-md border border-border bg-background px-2 py-1">HTTP {service.check.statusCode}</span>
+                    <span className="border border-border bg-background px-2 py-1">HTTP {service.check.statusCode}</span>
                   )}
                   {typeof service.check.latencyMs === "number" && (
-                    <span className="rounded-md border border-border bg-background px-2 py-1">{service.check.latencyMs} ms</span>
+                    <span className="border border-border bg-background px-2 py-1">{service.check.latencyMs} ms</span>
                   )}
                   {service.visibility === "protected" && (
-                    <span className="inline-flex items-center gap-1 rounded-md border border-border bg-background px-2 py-1">
+                    <span className="inline-flex items-center gap-1 border border-border bg-background px-2 py-1">
                       <LockKeyhole className="h-3 w-3" /> 私有服务
                     </span>
                   )}
-                </div>
+                </span>
+                <span className="hidden items-center justify-end text-primary lg:flex">
+                  <CategoryIcon className="h-5 w-5" />
+                </span>
               </a>
             </ScrollReveal>
           );

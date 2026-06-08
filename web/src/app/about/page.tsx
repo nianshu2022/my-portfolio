@@ -21,6 +21,27 @@ const timeline = [
 
 const stack = ["Next.js", "Tailwind CSS", "Cloudflare Pages", "Linux / CentOS", "Docker", "AI Tools"];
 
+const principles = [
+  {
+    title: "先把问题跑通",
+    desc: "不急着讲概念，先把服务部署起来、把报错复现出来、把路径摸清楚。",
+  },
+  {
+    title: "记录真实过程",
+    desc: "保留踩坑、取舍和修复原因，少写漂亮空话，多写下一次还能用的经验。",
+  },
+  {
+    title: "把技术放回人身上",
+    desc: "工具最终要服务使用者：能不能更省事、更稳定、更容易理解，是我判断价值的方式。",
+  },
+];
+
+const proofFiles = [
+  { label: "技术案卷", value: "部署 / 排障 / AI 本地化" },
+  { label: "成长样本", value: "比赛 / 毕业 / 阶段复盘" },
+  { label: "公开服务", value: "长期运行 / 持续维护" },
+];
+
 export default function AboutPage() {
   return (
     <main className="archive-shell">
@@ -40,24 +61,32 @@ export default function AboutPage() {
           </div>
         </ScrollReveal>
 
-        <ScrollReveal delay={0.15} direction="right" className="min-w-0">
+        <ScrollReveal delay={0.15} className="min-w-0">
           <div className="flex h-full flex-col justify-between gap-8">
             <div>
               <div className="mb-5 inline-flex border border-primary px-2 py-1 font-mono text-sm font-bold text-primary">
-                主理人档案
+                CURATOR FILE
               </div>
               <h1 className="max-w-4xl text-[clamp(3rem,7vw,5.8rem)] font-black leading-none tracking-normal">
-                念舒
+                念舒档案
               </h1>
               <p className="mt-6 max-w-3xl text-xl leading-9 text-muted-foreground">
-                我想做的，是把真实的问题看明白，再把它变成可用的体验。
+                一个 00 后技术折腾者的公开样本：从网络技术、服务部署到产品理解，把真实问题拆开、跑通，再记录下来。
               </p>
             </div>
 
             <dl className="archive-id-card max-w-2xl">
               <div>
+                <dt>编号</dt>
+                <dd>NIANSHU-2001</dd>
+              </div>
+              <div>
                 <dt>身份</dt>
                 <dd>00 后技术折腾者 / 产品实践者</dd>
+              </div>
+              <div>
+                <dt>坐标</dt>
+                <dd>中国 / 兰州</dd>
               </div>
               <div>
                 <dt>关注</dt>
@@ -88,11 +117,30 @@ export default function AboutPage() {
         </ScrollReveal>
       </section>
 
+      <section className="border-b border-foreground/75 py-10">
+        <div className="archive-section-heading">
+          <span>01</span>
+          <div>
+            <h2>可信线索</h2>
+            <p>这个站不靠一句简介建立人设，而是用可追溯的文章、样本和服务说明我在持续做什么。</p>
+          </div>
+        </div>
+
+        <div className="mt-8 grid gap-4 lg:grid-cols-3">
+          {proofFiles.map((item) => (
+            <div key={item.label} className="border border-foreground/50 bg-card/80 p-5">
+              <span className="font-mono text-xs font-bold text-primary">{item.label}</span>
+              <p className="mt-3 text-xl font-black text-foreground">{item.value}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
       <section className="grid gap-8 border-b border-foreground/75 py-10 lg:grid-cols-[1fr_360px]">
         <ScrollReveal className="min-w-0">
           <div>
             <div className="archive-section-heading archive-section-heading-compact">
-              <span>01</span>
+              <span>02</span>
               <div>
                 <h2>成长线索</h2>
                 <p>不是完成态简历，而是一个人如何从问题、实践和复盘里慢慢长出自己的系统。</p>
@@ -129,6 +177,26 @@ export default function AboutPage() {
             </div>
           </aside>
         </ScrollReveal>
+      </section>
+
+      <section className="border-b border-foreground/75 py-10">
+        <div className="archive-section-heading">
+          <span>03</span>
+          <div>
+            <h2>做事方法</h2>
+            <p>我更相信可验证的手感：少一点口号，多一点能被复用的现场记录。</p>
+          </div>
+        </div>
+
+        <div className="mt-8 grid gap-4 lg:grid-cols-3">
+          {principles.map((item, index) => (
+            <div key={item.title} className="border border-foreground/50 bg-card/80 p-5">
+              <span className="font-mono text-xl font-black text-primary">{String(index + 1).padStart(2, "0")}</span>
+              <h3 className="mt-4 text-2xl font-black">{item.title}</h3>
+              <p className="mt-3 text-sm leading-7 text-muted-foreground">{item.desc}</p>
+            </div>
+          ))}
+        </div>
       </section>
 
       <section className="grid gap-6 py-10 lg:grid-cols-2">

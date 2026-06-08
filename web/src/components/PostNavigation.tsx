@@ -12,22 +12,23 @@ interface PostNavigationProps {
 
 export default function PostNavigation({ prev, next, basePath = "/blog" }: PostNavigationProps) {
     if (!prev && !next) return null;
+    const noun = basePath === "/essays" ? "样本" : "案卷";
 
     return (
         <nav className="mt-12 border-t border-border pt-8">
-            <div className="mb-4 text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">
-                Continue Reading
+            <div className="mb-4 flex items-center gap-3 font-mono text-xs text-muted-foreground">
+                <span className="border border-foreground/40 px-2 py-1">邻近{noun}</span>
+                <span className="h-px flex-1 bg-border" />
             </div>
             <div className="flex flex-col sm:flex-row justify-between gap-4">
-                {/* Previous (Newer) */}
                 {prev ? (
                     <Link
                         href={`${basePath}/${prev.slug}`}
-                        className="garden-panel group flex flex-1 items-center gap-3 p-4 transition-colors hover:bg-secondary"
+                        className="group flex flex-1 items-center gap-3 border border-foreground/40 bg-card/80 p-4 transition-colors hover:bg-secondary"
                     >
                         <ChevronLeft className="h-5 w-5 shrink-0 text-muted-foreground transition-colors group-hover:text-foreground" />
                         <div className="min-w-0">
-                            <div className="mb-1 text-xs text-muted-foreground">上一篇</div>
+                            <div className="mb-1 font-mono text-xs text-muted-foreground">上一份{noun}</div>
                             <div className="truncate text-sm font-medium text-foreground transition-colors group-hover:text-primary">
                                 {prev.title}
                             </div>
@@ -41,10 +42,10 @@ export default function PostNavigation({ prev, next, basePath = "/blog" }: PostN
                 {next ? (
                     <Link
                         href={`${basePath}/${next.slug}`}
-                        className="garden-panel group flex flex-1 items-center justify-end gap-3 p-4 text-right transition-colors hover:bg-secondary"
+                        className="group flex flex-1 items-center justify-end gap-3 border border-foreground/40 bg-card/80 p-4 text-right transition-colors hover:bg-secondary"
                     >
                         <div className="min-w-0">
-                            <div className="mb-1 text-xs text-muted-foreground">下一篇</div>
+                            <div className="mb-1 font-mono text-xs text-muted-foreground">下一份{noun}</div>
                             <div className="truncate text-sm font-medium text-foreground transition-colors group-hover:text-primary">
                                 {next.title}
                             </div>

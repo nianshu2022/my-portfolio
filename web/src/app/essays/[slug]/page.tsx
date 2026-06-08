@@ -1,7 +1,7 @@
 import { getEssayBySlug, getAllEssays, getRelatedEssays, getAdjacentEssays } from "@/lib/posts";
 import { Metadata } from "next";
 import Markdown from "react-markdown";
-import { BookOpen, Clock, Eye, ListTree } from "lucide-react";
+import { Clock, Eye, ListTree } from "lucide-react";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import remarkGfm from 'remark-gfm';
@@ -75,6 +75,15 @@ export default async function EssayPage(props: { params: Promise<{ slug: string 
     const { prev, next } = getAdjacentEssays(slug);
     const sanitizeSchema = getSanitizeSchema();
     const mdComponents = getMarkdownComponents({ imageWidth: 1200, imageQuality: 85 });
+    const sampleYear = post.date.slice(0, 4) || "0000";
+    const sameYearEssays = getAllEssays()
+        .filter(item => item.date.slice(0, 4) === sampleYear)
+        .sort((a, b) => {
+            if (a.date !== b.date) return a.date.localeCompare(b.date);
+            return a.slug.localeCompare(b.slug);
+        });
+    const sampleIndex = Math.max(0, sameYearEssays.findIndex(item => item.slug === post.slug)) + 1;
+    const sampleNo = `NS-GS-${sampleYear}-${String(sampleIndex).padStart(3, "0")}`;
 
     // JSON-LD structured data for SEO
     const jsonLd = {
@@ -99,7 +108,7 @@ export default async function EssayPage(props: { params: Promise<{ slug: string 
     };
 
     return (
-        <main className="flex min-h-screen flex-col items-center px-4 py-24 sm:px-8 relative font-sans overflow-hidden">
+        <main className="relative flex min-h-screen flex-col items-center overflow-hidden px-4 pb-24 pt-28 font-sans sm:px-8">
             <ScrollMemory />
             <ReadingProgress />
             <script
@@ -110,61 +119,57 @@ export default async function EssayPage(props: { params: Promise<{ slug: string 
             <FloatingNav backUrl="/essays" />
             <div id="top" />
 
-            <div className="max-w-7xl w-full flex flex-col lg:flex-row lg:gap-8 relative overflow-hidden">
+            <div className="relative flex w-full max-w-7xl flex-col overflow-hidden lg:flex-row lg:gap-10">
 
                 {/* Article Content */}
-                <div className="flex-1 min-w-0 max-w-3xl mx-auto lg:mx-0">
-
-                    {/* Cover Image */}
-                    {post.cover && (
-                        <div className="w-full h-64 sm:h-[28rem] relative mb-12 overflow-hidden rounded-lg border border-border shadow-sm">
-                            <Image
-                                src={post.cover}
-                                alt={post.title}
-                                fill
-                                unoptimized
-                                className="object-cover hover:scale-105 transition-transform duration-700"
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
-                        </div>
-                    )}
-
-                    <article className="w-full pb-12 px-2 sm:px-0">
-                        <header className="mb-12 text-center">
-                            <h1 className="text-4xl sm:text-5xl font-bold mb-8 text-foreground leading-tight tracking-tight font-sans">
-                                {post.title}
-                            </h1>
-
-                            <div className="flex flex-wrap justify-center items-center gap-4 text-muted-foreground text-sm font-sans mb-8">
-                                <div className="flex items-center gap-2">
-                                    <span className="font-mono">{post.date}</span>
+                <div className="mx-auto min-w-0 flex-1 lg:mx-0">
+                    <article className="w-full px-0 pb-12 sm:px-4">
+                        <header className="mb-12 border-y border-foreground/75 py-8">
+                            <div>
+                                <div className="mb-6 flex flex-wrap items-center gap-3 font-mono text-xs text-muted-foreground">
+                                    <span className="border border-primary px-2 py-1 font-bold text-primary">成长样本</span>
+                                    <span>个人阶段档案</span>
+                                    <span>{sampleNo}</span>
                                 </div>
+                                <h1 className="max-w-4xl text-[clamp(2.15rem,3.7vw,3.2rem)] font-black leading-[1.14] tracking-normal text-foreground">
+                                    {post.title}
+                                </h1>
+                                {post.description && (
+                                    <p className="mt-5 max-w-3xl border-l-4 border-primary pl-4 text-base leading-8 text-muted-foreground">
+                                        {post.description}
+                                    </p>
+                                )}
 
-                                <span className="text-border">|</span>
-
-                                <div className="flex items-center gap-2">
-                                    <BookOpen className="w-4 h-4" />
-                                    <span>{post.wordCount} 字</span>
+                                <div className="mt-6 flex flex-wrap border-y border-foreground/45 bg-card/50 font-mono text-xs">
+                                    <span className="border-b border-border px-3 py-2 font-bold text-foreground sm:border-b-0 sm:border-r">样本登记</span>
+                                    <span className="border-b border-border px-3 py-2 sm:border-b-0 sm:border-r">编号 {sampleNo}</span>
+                                    <span className="border-b border-border px-3 py-2 sm:border-b-0 sm:border-r">日期 {post.date}</span>
+                                    <span className="border-b border-border px-3 py-2 sm:border-b-0 sm:border-r">字数 {post.wordCount}</span>
+                                    <span className="px-3 py-2 text-primary">已归档</span>
                                 </div>
+                            </div>
 
+                            <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-3 text-sm text-muted-foreground">
                                 <div className="flex items-center gap-2">
-                                    <Clock className="w-4 h-4" />
+                                    <Clock className="h-4 w-4" />
                                     <span>{post.readingTime}</span>
                                 </div>
 
                                 <div className="flex items-center gap-2">
-                                    <Eye className="w-4 h-4" />
+                                    <Eye className="h-4 w-4" />
                                     <BusuanziCounter />
                                 </div>
 
                                 <FontSizeControl />
                             </div>
 
-                            {/* Tags */}
                             {post.tags?.length > 0 && (
-                                <div className="flex flex-wrap justify-center gap-2 mb-6">
+                                <div className="mt-5 flex flex-wrap gap-2">
+                                    <span className="whitespace-nowrap border border-foreground/40 bg-foreground px-2.5 py-1 font-mono text-xs font-bold text-background">
+                                        样本标记
+                                    </span>
                                     {post.tags.map(tag => (
-                                        <span key={tag} className="whitespace-nowrap rounded-md border border-border bg-secondary px-2.5 py-1 text-xs font-medium text-primary">
+                                        <span key={tag} className="whitespace-nowrap border border-border bg-card px-2.5 py-1 font-mono text-xs font-medium text-primary">
                                             #{tag}
                                         </span>
                                     ))}
@@ -184,15 +189,32 @@ export default async function EssayPage(props: { params: Promise<{ slug: string 
                                 </details>
                             )}
 
-                            {/* Decorative Separator */}
-                            <div className="flex items-center justify-center gap-4 mt-8">
-                                <div className="h-px w-24 bg-gradient-to-r from-transparent via-primary/30 to-transparent"></div>
-                                <div className="w-2 h-2 rounded-full bg-primary"></div>
-                                <div className="h-px w-24 bg-gradient-to-r from-transparent via-primary/30 to-transparent"></div>
-                            </div>
                         </header>
 
-                        <div className="essay-content prose prose-lg prose-zinc dark:prose-invert max-w-none prose-headings:font-sans prose-headings:tracking-tight prose-img:rounded-xl prose-img:shadow-lg prose-a:break-all prose-img:mx-auto" style={{ fontSize: 'var(--article-font-size, 17px)' }}>
+                        {post.cover && (
+                            <figure className="mb-10 border border-foreground/50 bg-card/80">
+                                <div className="relative aspect-[16/9] overflow-hidden bg-secondary sm:aspect-[21/9]">
+                                    <Image
+                                        src={post.cover}
+                                        alt={post.title}
+                                        fill
+                                        unoptimized
+                                        className="object-cover"
+                                    />
+                                </div>
+                                <figcaption className="border-t border-border px-4 py-2 font-mono text-xs text-muted-foreground">
+                                    EVIDENCE PHOTO · {sampleNo}
+                                </figcaption>
+                            </figure>
+                        )}
+
+                        <div className="mb-6 flex items-center gap-3 border-b border-foreground/55 pb-3 font-mono text-xs text-muted-foreground">
+                            <span className="border border-foreground/40 px-2 py-1">样本正文</span>
+                            <span className="h-px flex-1 bg-border" />
+                            <span>{sampleNo}</span>
+                        </div>
+
+                        <div className="essay-content prose prose-lg prose-zinc dark:prose-invert max-w-none border-l border-foreground/20 pl-4 prose-headings:font-sans prose-headings:tracking-tight prose-a:break-all prose-img:mx-auto prose-img:rounded-none sm:pl-6" style={{ fontSize: 'var(--article-font-size, 17px)' }}>
                             <Markdown
                                 remarkPlugins={[remarkGfm]}
                                 rehypePlugins={[
@@ -215,7 +237,7 @@ export default async function EssayPage(props: { params: Promise<{ slug: string 
                         )}
 
                         {/* Copyright Section */}
-                        <div className="mt-20 pt-10 border-t border-border/50">
+                        <div className="mt-20 border-t border-foreground/60 pt-10">
                             <div className="flex flex-col sm:flex-row items-center justify-between gap-6 py-4 text-sm text-muted-foreground font-sans">
                                 <div className="flex flex-col gap-2 text-center sm:text-left">
                                     <p>
@@ -247,7 +269,7 @@ export default async function EssayPage(props: { params: Promise<{ slug: string 
                     <div className="sticky top-24 space-y-6">
                         <div className="garden-panel p-5 max-h-[80vh] overflow-y-auto custom-scrollbar">
                             <h4 className="mb-3 text-xs font-semibold uppercase tracking-widest text-muted-foreground select-none">
-                                目录
+                                样本目录
                             </h4>
                             <TableOfContents toc={post.toc} />
                         </div>
@@ -261,11 +283,11 @@ export default async function EssayPage(props: { params: Promise<{ slug: string 
 
             {/* Mobile bottom bar */}
             <div className="fixed inset-x-0 bottom-16 z-30 px-4 md:hidden">
-                <div className="mx-auto flex max-w-sm items-center gap-2 rounded-md border border-border/30 bg-background/60 p-2 shadow-lg backdrop-blur-xl">
-                    <a href="#top" className="flex-1 rounded-md bg-secondary px-3 py-2 text-center text-sm font-medium text-foreground transition-colors hover:bg-secondary/80">
+                <div className="mx-auto flex max-w-sm items-center gap-2 border border-border bg-background/90 p-2 backdrop-blur-md">
+                    <a href="#top" className="flex-1 bg-secondary px-3 py-2 text-center text-sm font-medium text-foreground transition-colors hover:bg-secondary/80">
                         回到顶部
                     </a>
-                    <a href="#comments-section" className="flex-1 rounded-md bg-primary px-3 py-2 text-center text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90">
+                    <a href="#comments-section" className="flex-1 bg-primary px-3 py-2 text-center text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90">
                         去评论
                     </a>
                 </div>

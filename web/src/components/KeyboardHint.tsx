@@ -43,12 +43,12 @@ export default function KeyboardHint() {
     >
       <div className="relative">
         {open && (
-          <div className="absolute bottom-10 right-0 w-48 rounded-lg border border-border bg-card/95 p-3 shadow-lg backdrop-blur-sm">
-            <p className="mb-2 text-xs font-semibold text-muted-foreground">快捷键</p>
+          <div className="absolute bottom-10 right-0 w-48 border border-foreground/50 bg-card/95 p-3 shadow-lg backdrop-blur-sm">
+            <p className="mb-2 font-mono text-xs font-semibold text-muted-foreground">快捷键</p>
             <div className="space-y-1.5">
               {SHORTCUTS.map((s) => (
                 <div key={s.key} className="flex items-center justify-between text-xs">
-                  <span className="rounded bg-secondary px-1.5 py-0.5 font-mono text-[10px]">{s.key}</span>
+                  <span className="border border-border bg-secondary px-1.5 py-0.5 font-mono text-[10px]">{s.key}</span>
                   <span className="text-muted-foreground">{s.desc}</span>
                 </div>
               ))}
@@ -59,7 +59,7 @@ export default function KeyboardHint() {
           onClick={() => setOpen(!open)}
           onMouseEnter={() => setOpen(true)}
           onMouseLeave={() => setOpen(false)}
-          className="rounded-full border border-border bg-card/80 p-2 text-muted-foreground shadow-sm backdrop-blur-sm transition-colors hover:text-foreground"
+          className="border border-border bg-card/80 p-2 text-muted-foreground shadow-sm backdrop-blur-sm transition-colors hover:border-primary hover:text-foreground"
           aria-label="快捷键提示"
         >
           <Keyboard className="h-4 w-4" />

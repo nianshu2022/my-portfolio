@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-17T03:46:12.902Z",
+  "generatedAt": "2026-06-08T15:45:08.500Z",
   "source": "build script probe",
   "timeoutMs": 8000,
   "services": [
@@ -11,10 +11,10 @@
       "iconKey": "clock",
       "visibility": "public",
       "check": {
-        "status": "online",
-        "statusCode": 200,
-        "latencyMs": 1045,
-        "message": "reachable"
+        "status": "offline",
+        "statusCode": null,
+        "latencyMs": null,
+        "message": "fetch failed"
       }
     },
     {
@@ -27,7 +27,7 @@
       "check": {
         "status": "protected",
         "statusCode": 200,
-        "latencyMs": 2989,
+        "latencyMs": 3693,
         "message": "reachable"
       }
     },
@@ -39,10 +39,10 @@
       "iconKey": "server",
       "visibility": "protected",
       "check": {
-        "status": "protected",
-        "statusCode": 200,
-        "latencyMs": 996,
-        "message": "reachable"
+        "status": "offline",
+        "statusCode": null,
+        "latencyMs": null,
+        "message": "fetch failed"
       }
     }
   ]

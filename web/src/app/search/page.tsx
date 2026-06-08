@@ -5,8 +5,8 @@ import { getAllEssaySummaries, getAllPostSummaries } from "@/lib/posts";
 import { Search } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "搜索",
-  description: "在技术博客与生活随笔中搜索你关心的内容。",
+  title: "档案检索",
+  description: "在念舒档案局中检索技术案卷与成长样本。",
 };
 
 export default function SearchPage() {
@@ -14,15 +14,20 @@ export default function SearchPage() {
   const essays = getAllEssaySummaries();
 
   return (
-    <main className="garden-shell">
+    <main className="archive-shell max-w-6xl">
       <FloatingNav backUrl="/" />
 
-      <header className="mb-10 border-b border-border pb-8">
-        <p className="garden-kicker inline-flex items-center gap-2">
-          <Search className="h-4 w-4" /> 站内搜索
+      <header className="mb-10 border-y border-foreground/80 py-8">
+        <p className="inline-flex items-center gap-2 border border-primary px-2 py-1 font-mono text-sm font-bold text-primary">
+          <Search className="h-4 w-4" />
+          SEARCH DESK
         </p>
-        <h1 className="garden-title mt-3">搜索内容</h1>
-        <p className="garden-subtitle mt-3 max-w-2xl">在技术博客与生活随笔中，快速找到可复用经验与关键记录。</p>
+        <h1 className="mt-5 text-[clamp(3rem,8vw,5.8rem)] font-black leading-none tracking-normal text-foreground">
+          档案检索台
+        </h1>
+        <p className="mt-5 max-w-2xl text-base leading-8 text-muted-foreground sm:text-lg">
+          输入技术栈、问题关键词或成长阶段，快速定位技术案卷和成长样本。
+        </p>
       </header>
 
       <SearchResults posts={posts} essays={essays} />

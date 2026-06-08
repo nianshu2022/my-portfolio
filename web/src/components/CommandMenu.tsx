@@ -132,29 +132,29 @@ export default function CommandMenu({ posts, essays }: CommandMenuProps) {
 
     return (
         <div
-            className="fixed inset-0 z-50 flex items-start justify-center pt-[18vh] bg-black/50 backdrop-blur-sm p-4"
+            className="fixed inset-0 z-50 flex items-start justify-center bg-black/45 p-4 pt-[16vh] backdrop-blur-sm"
             onClick={() => setOpen(false)}
         >
             <div
                 ref={containerRef}
                 role="dialog"
                 aria-modal="true"
-                aria-label="命令面板"
-                className="relative w-full max-w-lg bg-card/90 backdrop-blur-xl rounded-2xl shadow-2xl border border-border/30 overflow-hidden flex flex-col max-h-[65vh]"
+                aria-label="档案检索面板"
+                className="relative flex max-h-[68vh] w-full max-w-2xl flex-col overflow-hidden border border-foreground/60 bg-card/95 shadow-2xl backdrop-blur-xl"
                 onClick={(e) => e.stopPropagation()}
             >
                 {/* Search Input */}
-                <div className="flex items-center border-b border-border/30 px-4">
-                    <Search className="mr-3 h-4 w-4 opacity-40 shrink-0" />
+                <div className="flex items-center border-b border-foreground/40 px-4">
+                    <Search className="mr-3 h-4 w-4 shrink-0 text-primary" />
                     <input
                         ref={inputRef}
-                        className="flex h-12 w-full rounded-md bg-transparent py-3 text-sm outline-none placeholder:text-zinc-400 dark:text-zinc-50"
-                        placeholder="搜索文章和随笔..."
+                        className="flex h-12 w-full bg-transparent py-3 font-mono text-sm outline-none placeholder:text-muted-foreground"
+                        placeholder="检索案卷、样本或标签..."
                         value={query}
                         onChange={(e) => setQuery(e.target.value)}
                         onKeyDown={handleKeyDown}
                     />
-                    <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-secondary px-1.5 font-mono text-[10px] font-medium text-muted-foreground shrink-0">
+                    <kbd className="pointer-events-none inline-flex h-5 shrink-0 select-none items-center gap-1 border border-border bg-secondary px-1.5 font-mono text-[10px] font-medium text-muted-foreground">
                         ESC
                     </kbd>
                 </div>
@@ -162,16 +162,16 @@ export default function CommandMenu({ posts, essays }: CommandMenuProps) {
                 {/* Results */}
                 <div className="overflow-y-auto p-2">
                     {totalResults === 0 ? (
-                        <div className="py-8 text-center text-sm text-zinc-400">
-                            {query ? `未找到"${query}"相关内容` : "输入关键词搜索…"}
+                        <div className="py-8 text-center text-sm text-muted-foreground">
+                            {query ? `未找到「${query}」相关档案` : "输入关键词开始检索"}
                         </div>
                     ) : (
                         <div className="space-y-1">
                             {/* 技术博客 */}
                             {filteredPosts.length > 0 && (
                                 <>
-                                    <div className="px-2 py-1.5 text-[10px] font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
-                                        技术博客
+                                    <div className="px-2 py-1.5 font-mono text-[10px] font-semibold text-muted-foreground">
+                                        技术案卷
                                     </div>
                                     {filteredPosts.slice(0, 5).map((post) => {
                                         const idx = globalIdx++;
@@ -181,15 +181,15 @@ export default function CommandMenu({ posts, essays }: CommandMenuProps) {
                                                 key={post.slug}
                                                 onClick={() => navigate({ item: post, type: "post" })}
                                                 onMouseEnter={() => setActiveIndex(idx)}
-                                                className={`flex cursor-pointer select-none items-center rounded-lg px-3 py-2.5 text-sm outline-none transition-colors ${isActive
-                                                    ? "bg-indigo-500/10 text-primary border border-indigo-500/20"
-                                                    : "hover:bg-secondary"
+                                                className={`flex cursor-pointer select-none items-center border px-3 py-2.5 text-sm outline-none transition-colors ${isActive
+                                                    ? "border-primary bg-accent text-primary"
+                                                    : "border-transparent hover:border-border hover:bg-secondary"
                                                     }`}
                                             >
                                                 <BookOpen className={`mr-2.5 h-4 w-4 shrink-0 ${isActive ? "text-primary" : "opacity-40"}`} />
                                                 <span className="flex-1 truncate">{post.title}</span>
                                                 {post.tags[0] && (
-                                                    <span className="ml-2 text-xs text-zinc-400 bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded shrink-0">
+                                                    <span className="ml-2 shrink-0 border border-border bg-background px-1.5 py-0.5 font-mono text-xs text-muted-foreground">
                                                         {post.tags[0]}
                                                     </span>
                                                 )}
@@ -203,8 +203,8 @@ export default function CommandMenu({ posts, essays }: CommandMenuProps) {
                             {/* 生活随笔 */}
                             {filteredEssays.length > 0 && (
                                 <>
-                                    <div className="px-2 py-1.5 text-[10px] font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 mt-1">
-                                        生活随笔
+                                    <div className="mt-1 px-2 py-1.5 font-mono text-[10px] font-semibold text-muted-foreground">
+                                        成长样本
                                     </div>
                                     {filteredEssays.slice(0, 5).map((essay) => {
                                         const idx = globalIdx++;
@@ -214,15 +214,15 @@ export default function CommandMenu({ posts, essays }: CommandMenuProps) {
                                                 key={essay.slug}
                                                 onClick={() => navigate({ item: essay, type: "essay" })}
                                                 onMouseEnter={() => setActiveIndex(idx)}
-                                                className={`flex cursor-pointer select-none items-center rounded-lg px-3 py-2.5 text-sm outline-none transition-colors ${isActive
-                                                    ? "bg-indigo-500/10 text-primary border border-indigo-500/20"
-                                                    : "hover:bg-secondary"
+                                                className={`flex cursor-pointer select-none items-center border px-3 py-2.5 text-sm outline-none transition-colors ${isActive
+                                                    ? "border-primary bg-accent text-primary"
+                                                    : "border-transparent hover:border-border hover:bg-secondary"
                                                     }`}
                                             >
                                                 <Feather className={`mr-2.5 h-4 w-4 shrink-0 ${isActive ? "text-primary" : "opacity-40"}`} />
                                                 <span className="flex-1 truncate">{essay.title}</span>
                                                 {essay.tags[0] && (
-                                                    <span className="ml-2 text-xs text-zinc-400 bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded shrink-0">
+                                                    <span className="ml-2 shrink-0 border border-border bg-background px-1.5 py-0.5 font-mono text-xs text-muted-foreground">
                                                         {essay.tags[0]}
                                                     </span>
                                                 )}
@@ -236,18 +236,18 @@ export default function CommandMenu({ posts, essays }: CommandMenuProps) {
                     )}
                 </div>
 
-                <div className="border-t border-border/30 px-3 py-2">
+                <div className="border-t border-border px-3 py-2">
                     <button
                         onClick={navigateToSearchPage}
-                        className="w-full rounded-lg px-3 py-2 text-left text-xs text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+                        className="w-full border border-transparent px-3 py-2 text-left text-xs text-muted-foreground transition-colors hover:border-border hover:bg-secondary hover:text-foreground"
                     >
-                        {query ? `查看"${query}"的全部搜索结果` : "进入完整搜索页"}
+                        {query ? `查看「${query}」的全部检索结果` : "进入完整检索台"}
                     </button>
                 </div>
 
                 {/* Page shortcuts */}
-                <div className="border-t border-border/30 p-2">
-                    <div className="px-2 py-1.5 text-[10px] font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+                <div className="border-t border-border p-2">
+                    <div className="px-2 py-1.5 font-mono text-[10px] font-semibold text-muted-foreground">
                         快速导航
                     </div>
                     <div className="flex flex-wrap gap-1 px-1">
@@ -256,7 +256,7 @@ export default function CommandMenu({ posts, essays }: CommandMenuProps) {
                                 <button
                                     key={href}
                                     onClick={() => { setOpen(false); router.push(href); }}
-                                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors"
+                                    className="flex items-center gap-1.5 border border-transparent px-3 py-1.5 text-xs text-muted-foreground transition-colors hover:border-border hover:bg-secondary hover:text-foreground"
                                 >
                                     <Icon className="w-3.5 h-3.5" />
                                     {label}
@@ -266,18 +266,18 @@ export default function CommandMenu({ posts, essays }: CommandMenuProps) {
                 </div>
 
                 {/* Footer hint */}
-                <div className="border-t border-border/30 px-4 py-2 flex items-center gap-3 text-[11px] text-muted-foreground">
+                <div className="flex items-center gap-3 border-t border-border px-4 py-2 text-[11px] text-muted-foreground">
                     <span className="flex items-center gap-1">
-                        <kbd className="px-1 py-0.5 rounded bg-secondary font-mono">↑</kbd>
-                        <kbd className="px-1 py-0.5 rounded bg-secondary font-mono">↓</kbd>
+                        <kbd className="border border-border bg-secondary px-1 py-0.5 font-mono">↑</kbd>
+                        <kbd className="border border-border bg-secondary px-1 py-0.5 font-mono">↓</kbd>
                         导航
                     </span>
                     <span className="flex items-center gap-1">
-                        <kbd className="px-1 py-0.5 rounded bg-secondary font-mono">↵</kbd>
+                        <kbd className="border border-border bg-secondary px-1 py-0.5 font-mono">↵</kbd>
                         打开
                     </span>
                     <span className="flex items-center gap-1">
-                        <kbd className="px-1 py-0.5 rounded bg-secondary font-mono">ESC</kbd>
+                        <kbd className="border border-border bg-secondary px-1 py-0.5 font-mono">ESC</kbd>
                         关闭
                     </span>
                 </div>

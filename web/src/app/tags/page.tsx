@@ -5,8 +5,8 @@ import { Tag, Hash } from "lucide-react";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: "标签",
-    description: "按标签浏览所有博客文章和生活随笔。",
+    title: "标签索引",
+    description: "按标签检索念舒档案局的技术案卷和成长样本。",
 };
 
 export default function TagsPage() {
@@ -37,19 +37,25 @@ export default function TagsPage() {
     const maxCount = tags[0]?.total ?? 1;
 
     return (
-        <main className="garden-shell">
+        <main className="archive-shell max-w-6xl">
             <FloatingNav backUrl="/" />
 
-            <header className="mb-10 border-b border-border pb-8">
-                <p className="garden-kicker inline-flex items-center gap-2"><Tag className="h-4 w-4" /> 标签索引</p>
-                <h1 className="garden-title mt-3">所有标签</h1>
-                <p className="garden-subtitle mt-3">
-                    共 <span className="font-bold text-zinc-700 dark:text-zinc-200">{tags.length}</span> 个标签，
-                    <span className="font-bold text-zinc-700 dark:text-zinc-200">{posts.length + essays.length}</span> 篇内容
+            <header className="mb-10 border-y border-foreground/80 py-8">
+                <p className="inline-flex items-center gap-2 border border-primary px-2 py-1 font-mono text-sm font-bold text-primary">
+                    <Tag className="h-4 w-4" />
+                    TAG INDEX
+                </p>
+                <h1 className="mt-5 text-[clamp(3rem,8vw,5.8rem)] font-black leading-none tracking-normal text-foreground">
+                    标签索引
+                </h1>
+                <p className="mt-5 max-w-2xl text-base leading-8 text-muted-foreground sm:text-lg">
+                    共 <span className="font-bold text-foreground">{tags.length}</span> 个标签，
+                    关联 <span className="font-bold text-foreground">{posts.length + essays.length}</span> 份记录。
+                    用主题词快速进入案卷或样本。
                 </p>
             </header>
 
-            <section className="garden-panel mb-10 p-5" style={{ animationDelay: "100ms" }}>
+            <section className="mb-10 border border-foreground/50 bg-card/80 p-5" style={{ animationDelay: "100ms" }}>
                 <div className="flex flex-wrap gap-2">
                     {tags.map((tag, idx) => {
                         const ratio = tag.total / maxCount;
@@ -59,12 +65,12 @@ export default function TagsPage() {
                             <Link
                                 key={tag.name}
                                 href={`/search?q=${encodeURIComponent(tag.name)}`}
-                                className={`group inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-3 py-2 text-zinc-700 transition-colors hover:bg-secondary dark:text-zinc-300 ${size} ${opacity}`}
+                                className={`group inline-flex items-center gap-1.5 border border-border bg-background px-3 py-2 text-foreground transition-colors hover:border-primary hover:text-primary ${size} ${opacity}`}
                                 style={{ animationDelay: `${idx * 30}ms` }}
                             >
-                                <Hash className="w-3 h-3 opacity-50 group-hover:opacity-100" />
+                                <Hash className="h-3 w-3 opacity-50 group-hover:opacity-100" />
                                 {tag.name}
-                                <span className="ml-1 text-xs font-normal px-1.5 py-0.5 rounded-full bg-zinc-200/70 dark:bg-zinc-700/70 text-zinc-500 dark:text-zinc-400">
+                                <span className="ml-1 border border-border bg-card px-1.5 py-0.5 font-mono text-xs font-normal text-muted-foreground">
                                     {tag.total}
                                 </span>
                             </Link>
@@ -74,35 +80,38 @@ export default function TagsPage() {
             </section>
 
             <section className="animate-fade-in-up" style={{ animationDelay: "200ms" }}>
-                <h2 className="mb-4 text-xl font-bold text-zinc-800 dark:text-zinc-200">
-                    标签详情
-                </h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="archive-section-heading mb-8">
+                    <span>01</span>
+                    <div>
+                        <h2>标签登记</h2>
+                        <p>每个标签都可以跳转到对应主题的案卷或样本。</p>
+                    </div>
+                </div>
+                <div className="border-y border-foreground/70">
                     {tags.map((tag, idx) => (
                         <Link
                             key={tag.name}
                             href={`/blog?tag=${encodeURIComponent(tag.name)}`}
-                            className="garden-panel group flex items-center justify-between p-4 transition-colors hover:bg-secondary"
+                            className="group grid gap-3 border-b border-border px-4 py-4 transition-colors last:border-b-0 hover:bg-secondary/70 sm:grid-cols-[4rem_1fr_11rem]"
                             style={{ animationDelay: `${200 + idx * 20}ms` }}
                         >
-                            <div className="flex items-center gap-2">
-                                <Hash className="w-4 h-4 text-indigo-500 opacity-70 group-hover:opacity-100" />
-                                <span className="font-medium text-zinc-800 dark:text-zinc-200 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
-                                    {tag.name}
-                                </span>
-                            </div>
-                            <div className="flex items-center gap-2 text-xs text-zinc-400">
+                            <span className="font-mono text-lg font-black text-primary">{String(idx + 1).padStart(3, "0")}</span>
+                            <span className="flex min-w-0 items-center gap-2">
+                                <Hash className="h-4 w-4 text-primary opacity-70 group-hover:opacity-100" />
+                                <span className="truncate text-lg font-black transition-colors group-hover:text-primary">{tag.name}</span>
+                            </span>
+                            <span className="flex items-center gap-2 font-mono text-xs text-muted-foreground">
                                 {tag.posts > 0 && (
-                                    <span className="px-2 py-0.5 rounded-full bg-secondary text-primary">
-                                        博客 {tag.posts}
+                                    <span className="border border-border bg-card px-2 py-1">
+                                        案卷 {tag.posts}
                                     </span>
                                 )}
                                 {tag.essays > 0 && (
-                                    <span className="px-2 py-0.5 rounded-full bg-secondary text-primary">
-                                        随笔 {tag.essays}
+                                    <span className="border border-border bg-card px-2 py-1">
+                                        样本 {tag.essays}
                                     </span>
                                 )}
-                            </div>
+                            </span>
                         </Link>
                     ))}
                 </div>

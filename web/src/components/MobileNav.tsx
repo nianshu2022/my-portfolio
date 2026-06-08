@@ -48,8 +48,9 @@ export default function MobileNav() {
     <div className="md:hidden">
       <button
         onClick={() => setOpen(true)}
-        className="flex h-9 w-9 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+        className="flex h-9 w-9 items-center justify-center border border-border text-muted-foreground transition-colors hover:border-foreground hover:bg-secondary hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         aria-label="打开导航菜单"
+        aria-expanded={open}
       >
         <Menu className="h-5 w-5" />
       </button>
@@ -62,38 +63,43 @@ export default function MobileNav() {
           />
           <div
             ref={panelRef}
-            className="absolute right-0 top-0 flex h-full w-72 flex-col border-l border-border bg-card shadow-2xl animate-in slide-in-from-right duration-200"
+            className="absolute right-0 top-0 flex h-full w-80 max-w-[86vw] flex-col border-l border-foreground/40 bg-card shadow-2xl animate-in slide-in-from-right duration-200"
           >
-            <div className="flex items-center justify-between px-5 h-16 border-b border-border">
-              <span className="text-sm font-semibold text-foreground">导航</span>
+            <div className="flex h-16 items-center justify-between border-b border-foreground/30 px-5">
+              <div className="grid">
+                <span className="font-mono text-[10px] text-primary">PUBLIC ARCHIVE 001</span>
+                <span className="text-sm font-black text-foreground">案卷目录</span>
+              </div>
               <button
                 onClick={() => setOpen(false)}
-                className="flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+                className="flex h-8 w-8 items-center justify-center border border-border text-muted-foreground transition-colors hover:border-foreground hover:bg-secondary hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                 aria-label="关闭导航菜单"
               >
                 <X className="h-5 w-5" />
               </button>
             </div>
             <nav className="flex-1 overflow-y-auto p-3">
-              {navLinks.map(([label, href]) => {
+              {navLinks.map(([label, href], index) => {
                 const isActive = pathname === href || pathname.startsWith(href + "/");
                 return (
                   <Link
                     key={href}
                     href={href}
-                    className={`flex items-center gap-3 rounded-md px-4 py-3 text-sm font-medium transition-colors ${
+                    aria-current={isActive ? "page" : undefined}
+                    className={`grid grid-cols-[2.5rem_1fr] items-center border-b border-border px-3 py-4 text-sm font-semibold transition-colors ${
                       isActive
-                        ? "bg-accent text-primary"
+                        ? "bg-accent text-foreground"
                         : "text-muted-foreground hover:bg-secondary hover:text-foreground"
                     }`}
                   >
-                    {label}
+                    <span className="font-mono text-primary">{String(index + 1).padStart(2, "0")}</span>
+                    <span>{label}</span>
                   </Link>
                 );
               })}
             </nav>
-            <div className="border-t border-border p-4 text-xs text-muted-foreground">
-              念舒档案局
+            <div className="border-t border-foreground/30 p-4 font-mono text-xs text-muted-foreground">
+              NIANSHU ARCHIVES · 中国 / 兰州
             </div>
           </div>
         </div>

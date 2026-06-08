@@ -85,16 +85,16 @@ export default function TableOfContents({ toc }: TableOfContentsProps) {
                   setActiveId(item.slug);
                 }}
                 className={cn(
-                  "flex items-center gap-2 rounded-md px-3 py-1.5 text-[13px] leading-snug transition-all duration-200",
+                  "flex items-center gap-2 border-l-2 border-transparent px-3 py-1.5 text-[13px] leading-snug transition-all duration-200",
                   item.level === 3 && "ml-3",
                   isActive
-                    ? "bg-primary/10 text-primary font-medium"
-                    : "text-muted-foreground hover:text-foreground hover:bg-secondary/60"
+                    ? "border-primary bg-primary/10 text-primary font-medium"
+                    : "text-muted-foreground hover:border-border hover:bg-secondary/60 hover:text-foreground"
                 )}
               >
                 <span
                   className={cn(
-                    "inline-block h-1.5 w-1.5 shrink-0 rounded-full transition-colors duration-200",
+                    "inline-block h-1.5 w-1.5 shrink-0 transition-colors duration-200",
                     isActive ? "bg-primary" : "bg-border"
                   )}
                 />

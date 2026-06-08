@@ -25,7 +25,7 @@ export default function SearchHint() {
         <button
             onClick={open}
             title="搜索 (Ctrl+K)"
-            className="hidden h-9 items-center gap-2 border border-border bg-card/80 px-3 text-xs text-muted-foreground backdrop-blur-md transition-colors hover:border-primary hover:text-foreground"
+            className="hidden h-9 items-center gap-2 border border-border bg-card/80 px-3 text-xs text-muted-foreground backdrop-blur-md transition-colors hover:border-primary hover:text-foreground md:flex"
         >
             <Search className="w-3.5 h-3.5" />
             <span>搜索</span>

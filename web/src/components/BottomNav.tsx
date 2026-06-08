@@ -27,12 +27,18 @@ export default function BottomNav() {
             <Link
               key={href}
               href={href}
-              className={`flex flex-1 flex-col items-center gap-0.5 py-1 text-xs transition-colors ${
+              aria-current={isActive ? "page" : undefined}
+              className={`relative flex flex-1 flex-col items-center gap-0.5 py-1 text-xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
                 isActive
                   ? "text-primary"
-                  : "text-muted-foreground"
+                  : "text-muted-foreground hover:text-foreground"
               }`}
             >
+              <span
+                className={`absolute top-0 h-0.5 w-8 bg-primary transition-transform ${
+                  isActive ? "scale-x-100" : "scale-x-0"
+                }`}
+              />
               <Icon className="h-5 w-5" />
               <span>{label}</span>
             </Link>
