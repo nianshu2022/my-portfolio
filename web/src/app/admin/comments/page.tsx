@@ -1,8 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { 
-  MessageSquare, 
+import {
   Trash2, 
   Reply, 
   User, 
@@ -68,7 +67,7 @@ export default function AdminCommentsPage() {
         setComments(comments.filter(c => c.id !== id));
         showMsg("success", "评论已删除");
       }
-    } catch (err) {
+    } catch {
       showMsg("error", "删除失败");
     }
   };
@@ -92,7 +91,7 @@ export default function AdminCommentsPage() {
         setReplyText("");
         showMsg("success", "已回复评论");
       }
-    } catch (err) {
+    } catch {
       showMsg("error", "回复失败");
     }
   };

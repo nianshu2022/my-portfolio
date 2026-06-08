@@ -12,8 +12,6 @@ import {
   Loader2,
   CheckCircle2,
   Clock,
-  MoreVertical,
-  ArrowUpDown
 } from "lucide-react";
 import Link from "next/link";
 
@@ -97,7 +95,7 @@ export default function AdminPostsPage() {
       <header className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-3xl font-bold text-white tracking-tight">文章管理</h1>
-          <p className="mt-1 text-slate-400">管理你的数字花园内容，控制发布状态与查看统计。</p>
+          <p className="mt-1 text-slate-400">管理档案局内容，控制发布状态与查看统计。</p>
         </div>
         <div className="flex h-10 items-center gap-2 rounded-lg bg-white/5 px-3 py-1.5 text-xs font-bold text-slate-400 border border-white/5">
           <FileText className="h-4 w-4" />

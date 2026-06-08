@@ -74,7 +74,7 @@ export default function FriendLinkModal({ email }: { email: string }) {
                         </div>
 
                         <p className="text-zinc-600 dark:text-zinc-400 text-sm leading-relaxed mb-6">
-                            很高兴能与你的数字花园互相连接！为了方便添加到列表中，请参考以下格式准备你的站点信息：
+                            很高兴能与你的站点互相连接！为了方便添加到列表中，请参考以下格式准备你的站点信息：
                         </p>
 
                         <div className="bg-zinc-50 dark:bg-zinc-800/50 rounded-2xl p-4 mb-6 border border-zinc-100 dark:border-zinc-800/50">

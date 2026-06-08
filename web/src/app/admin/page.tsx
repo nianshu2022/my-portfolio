@@ -84,7 +84,7 @@ export default function AdminDashboard() {
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
       <header>
-        <h1 className="text-3xl font-bold text-white tracking-tight">数字花园指挥中心</h1>
+        <h1 className="text-3xl font-bold text-white tracking-tight">档案局指挥中心</h1>
         <p className="mt-2 text-slate-400">欢迎回来，这是你全站运行的实时状态。</p>
       </header>
 

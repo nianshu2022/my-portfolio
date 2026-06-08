@@ -1,10 +1,10 @@
 {
-    "name": "念舒的数字花园",
-    "short_name": "念舒 Blog",
+    "name": "念舒档案局",
+    "short_name": "念舒档案局",
     "start_url": "/",
     "display": "standalone",
-    "background_color": "#ffffff",
-    "theme_color": "#ffffff",
+    "background_color": "#f5f6f2",
+    "theme_color": "#b4232a",
     "icons": [
         {
             "src": "/icon-192.png",

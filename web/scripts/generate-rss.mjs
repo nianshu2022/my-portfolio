@@ -4,7 +4,6 @@ import matter from 'gray-matter';
 
 const BASE_URL = 'https://blog.nianshu2022.cn';
 const POSTS_DIR = path.join(process.cwd(), 'src/content/posts');
-const ESSAYS_DIR = path.join(process.cwd(), 'src/content/essays');
 const PUBLIC_DIR = path.join(process.cwd(), 'public');
 
 function getMarkdownFiles(dir) {
@@ -54,9 +53,9 @@ function generateRss() {
     const rss = `<?xml version="1.0" encoding="UTF-8" ?>
 <rss version="2.0">
   <channel>
-    <title>念舒的数字花园</title>
+    <title>念舒档案局</title>
     <link>${BASE_URL}</link>
-    <description>00后产品运营的个人网站，分享运营心得、增长策略与技术折腾笔记。</description>
+    <description>一个 00 后技术折腾者的成长样本库，记录技术案卷、成长样本和在线服务。</description>
     <language>zh-CN</language>
     <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
     ${posts.map(post => {

@@ -1,8 +1,6 @@
 import { FileText, Feather, Tag, BarChart3, TrendingUp } from "lucide-react";
 import { getSiteStats } from "@/lib/site-stats";
 
-const statIcons = [FileText, Feather, Tag, BarChart3];
-
 export default function SiteStats() {
   const stats = getSiteStats();
 

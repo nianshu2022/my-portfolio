@@ -118,10 +118,15 @@ function buildItem(filePath, collection) {
 }
 
 function toSummary(item) {
-  const { content, toc, draft, ...summary } = item;
+  const summary = { ...item };
+  const tocCount = summary.toc.length;
+  delete summary.content;
+  delete summary.toc;
+  delete summary.draft;
+
   return {
     ...summary,
-    tocCount: toc.length,
+    tocCount,
   };
 }
 
@@ -163,7 +168,7 @@ function generateMiniappApi() {
   ensureDir(PUBLIC_API_DIR);
 
   const manifest = {
-    name: '念舒的数字花园',
+    name: '念舒档案局',
     baseUrl: BASE_URL,
     generatedAt: new Date().toISOString(),
     collections: collections.map(({ listName, title, routePrefix }) => ({

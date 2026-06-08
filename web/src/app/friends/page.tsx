@@ -4,7 +4,6 @@ import ScrollReveal from "@/components/ScrollReveal";
 import TiltCard from "@/components/TiltCard";
 import { Heart, Link2, Mail } from "lucide-react";
 import Image from "next/image";
-import FriendLinkModal from "@/components/FriendLinkModal";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {

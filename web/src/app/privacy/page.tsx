@@ -6,19 +6,19 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "隐私政策",
-  description: "念舒的数字花园隐私政策与 Cookie 政策说明，符合 Google AdSense 合作伙伴政策指南。",
+  description: "念舒档案局隐私政策与 Cookie 政策说明，符合 Google AdSense 合作伙伴政策指南。",
 };
 
 const sections = [
   {
     title: "1. 隐私声明概述",
-    desc: "本数字花园（以下简称“本站”）致力于保障各位读者的隐私安全。本页面旨在公开、透明地向您说明本站在提供内容阅读与交互功能时，所涉及的数据收集、使用目的及安全保障措施。",
+    desc: "念舒档案局（以下简称“本站”）致力于保障各位读者的隐私安全。本页面旨在公开、透明地向您说明本站在提供内容阅读与交互功能时，所涉及的数据收集、使用目的及安全保障措施。",
     icon: ShieldAlert,
     details: "我们不主动收集、不需要也不强制任何读者注册账号，亦不会向任何第三方转售用户的个人隐私信息。"
   },
   {
     title: "2. 第三方广告与 Cookie 政策 (重要)",
-    desc: "为了维持数字花园的长期服务器带宽与持续创作成本，本站接入了 Google AdSense 广告联盟服务。",
+    desc: "为了维持本站的长期服务器带宽与持续创作成本，本站接入了 Google AdSense 广告联盟服务。",
     icon: Cookie,
     details: "根据 Google 合作伙伴政策，我们在此说明：\n1. 第三方广告商（包括 Google）会根据用户此前访问本站或其他网站的记录，使用 Cookie 来投放个性化广告。\n2. Google 对广告 Cookie 的使用，使得它及其合作伙伴可以根据用户对本站和/或互联网上其他网站的访问记录，向用户投放精准且相关的广告。\n3. 您可以随时通过访问【Google 广告设置】（https://www.google.com/settings/ads）来停用个性化广告推送。您亦可访问 www.aboutads.info 拒绝第三方广告商对 Cookie 的追踪投放。"
   },
@@ -91,7 +91,7 @@ export default function PrivacyPage() {
                   我们尊重并保护您的数字权利
                 </h3>
                 <p className="text-sm text-muted-foreground max-w-2xl leading-6">
-                  本数字花园完全建立在透明、开放、极客的静态 Serverless 架构之上。如果您对本隐私声明有任何疑问，或发现任何不合规之处，欢迎随时与作者取得联系。
+                  念舒档案局完全建立在透明、开放、可追溯的静态 Serverless 架构之上。如果您对本隐私声明有任何疑问，或发现任何不合规之处，欢迎随时与作者取得联系。
                 </p>
               </div>
               <a

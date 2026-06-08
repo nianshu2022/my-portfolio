@@ -39,7 +39,7 @@ export default function AdminLoginPage() {
       } else {
         setError(data.error || "认证失败，请检查密码");
       }
-    } catch (err) {
+    } catch {
       setError("网络连接异常");
     } finally {
       setIsLoading(false);
@@ -60,7 +60,7 @@ export default function AdminLoginPage() {
               <ShieldCheck className="h-8 w-8" />
             </div>
             <h1 className="text-2xl font-bold tracking-tight text-white">管理员认证</h1>
-            <p className="mt-2 text-sm text-slate-400">请输入访问令牌进入数字花园指挥中心</p>
+            <p className="mt-2 text-sm text-slate-400">请输入访问令牌进入档案局指挥中心</p>
           </div>
 
           <form onSubmit={handleLogin} className="space-y-6">

@@ -2,7 +2,7 @@
 const CACHE_VERSION = 'v6';
 const CACHE_NAME = `nianshu-blog-${CACHE_VERSION}`;
 
-self.addEventListener('install', (event) => {
+self.addEventListener('install', () => {
     self.skipWaiting();
 });
 

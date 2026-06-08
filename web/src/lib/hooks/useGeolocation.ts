@@ -163,7 +163,6 @@ export function useGeolocation() {
     fetchLocation();
 
     return () => { cancelled = true; };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [retryCount]);
 
   const retry = useCallback(() => {

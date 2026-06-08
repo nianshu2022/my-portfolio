@@ -5,7 +5,6 @@ import {
   Settings, 
   Shield, 
   Database, 
-  Globe, 
   RefreshCcw, 
   CheckCircle2, 
   AlertTriangle,
@@ -15,7 +14,7 @@ import {
 } from "lucide-react";
 
 type SystemInfo = {
-  database: any;
+  database: Record<string, number>;
   platform: string;
   runtime: string;
   location: string;
@@ -60,7 +59,7 @@ export default function AdminSettingsPage() {
         setFeedback("清理成功！");
         setTimeout(() => setFeedback(""), 3000);
       }
-    } catch (err) {
+    } catch {
       setFeedback("清理失败，请检查网络。");
     } finally {
       setIsCleaning(false);
@@ -80,7 +79,7 @@ export default function AdminSettingsPage() {
     <div className="max-w-4xl space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
       <header>
         <h1 className="text-3xl font-bold text-white tracking-tight">系统设置</h1>
-        <p className="mt-2 text-slate-400">监控你的数字花园底层运行状况与安全配置。</p>
+        <p className="mt-2 text-slate-400">监控档案局底层运行状况与安全配置。</p>
       </header>
 
       {/* 状态看板 */}
@@ -119,7 +118,7 @@ export default function AdminSettingsPage() {
             <div className="flex justify-between text-sm">
               <span className="text-slate-500">总记录数</span>
               <span className="text-slate-200">{(
-                Object.values(info?.database || {}).reduce((a: any, b: any) => a + b, 0) as number
+                Object.values(info?.database || {}).reduce((total, count) => total + count, 0)
               )} 条</span>
             </div>
           </div>
@@ -177,7 +176,7 @@ export default function AdminSettingsPage() {
       </section>
 
       <footer className="pt-10 text-center">
-        <p className="text-xs text-slate-600">念舒的数字花园 · Admin Console v1.0.0</p>
+        <p className="text-xs text-slate-600">念舒档案局 · Admin Console v1.0.1</p>
       </footer>
     </div>
   );
