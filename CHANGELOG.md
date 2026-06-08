@@ -1,5 +1,15 @@
 # Changelog
 
+## V1.0.3
+
+### Changed
+
+- 完善 PWA manifest：补充描述、语言、应用范围、图标用途和分类。
+- 更新 Service Worker 缓存前缀为档案局语义，并兼容清理旧博客缓存。
+- robots 屏蔽后台路径，sitemap 补充装备页。
+- 更新后台侧边栏品牌文案，移除旧 Garden Admin 表达。
+- 统一根布局标题模板为「念舒档案局」。
+
 ## V1.0.2
 
 ### Changed

@@ -53,8 +53,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               <Activity className="h-6 w-6" />
             </div>
             <div>
-              <h2 className="text-lg font-bold text-white tracking-tight">Garden Admin</h2>
-              <p className="text-[10px] uppercase tracking-widest text-slate-500 font-medium">Digital Command</p>
+              <h2 className="text-lg font-bold text-white tracking-tight">档案局后台</h2>
+              <p className="text-[10px] uppercase tracking-widest text-slate-500 font-medium">Archive Command</p>
             </div>
           </div>
 

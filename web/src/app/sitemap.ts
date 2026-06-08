@@ -67,6 +67,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
             priority: 0.5,
         },
         {
+            url: `${BASE_URL}/gear`,
+            lastModified: new Date(),
+            changeFrequency: 'monthly',
+            priority: 0.5,
+        },
+        {
             url: `${BASE_URL}/tags`,
             lastModified: new Date(),
             changeFrequency: 'weekly',

@@ -40,7 +40,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://blog.nianshu2022.cn'),
   title: {
     default: "念舒档案局 | 00 后技术折腾者的成长样本库",
-    template: "%s | 念舒",
+    template: "%s | 念舒档案局",
   },
   description: "念舒档案局，一个 00 后技术折腾者的成长样本库，归档技术踩坑、部署实践、成长经历和个人项目。",
   keywords: ["念舒", "念舒档案局", "技术折腾", "个人品牌", "Next.js", "00后", "技术博客"],

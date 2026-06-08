@@ -6,7 +6,7 @@
 
 ## 当前版本
 
-- 版本：`V1.0.2`
+- 版本：`V1.0.3`
 - 主站：<https://blog.nianshu2022.cn>
 - 技术栈：Next.js 15、React 19、Tailwind CSS v4、TypeScript
 

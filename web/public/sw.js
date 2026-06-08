@@ -1,6 +1,6 @@
 // 使用版本号管理缓存，部署时可手动或自动修改此值
-const CACHE_VERSION = 'v6';
-const CACHE_NAME = `nianshu-blog-${CACHE_VERSION}`;
+const CACHE_VERSION = 'v8';
+const CACHE_NAME = `nianshu-archive-bureau-${CACHE_VERSION}`;
 
 self.addEventListener('install', () => {
     self.skipWaiting();
@@ -11,7 +11,9 @@ self.addEventListener('activate', (event) => {
         caches.keys().then((cacheNames) => {
             return Promise.all(
                 cacheNames.map((cacheName) => {
-                    if (cacheName.startsWith('nianshu-blog-') && cacheName !== CACHE_NAME) {
+                    const isLegacyCache = cacheName.startsWith('nianshu-blog-');
+                    const isArchiveCache = cacheName.startsWith('nianshu-archive-bureau-');
+                    if ((isLegacyCache || isArchiveCache) && cacheName !== CACHE_NAME) {
                         return caches.delete(cacheName);
                     }
                 })
