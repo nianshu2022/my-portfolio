@@ -1,32 +1,67 @@
-# 念舒的数字花园
+# 念舒档案局
 
-这是《念舒的数字花园》的多端代码仓库。目录已经按端拆分，避免网页端、内容 API 和微信小程序代码混在一起。
+一个 00 后技术折腾者的成长样本库。
 
-## 目录
+`V1.0.0` 是主站从「数字花园」升级为「念舒档案局」后的第一个正式版本。它把博客、成长记录、在线服务和个人品牌入口整理成一套公开档案系统，让访客第一眼先记住「念舒是谁」，再进入内容。
+
+## 当前版本
+
+- 版本：`V1.0.0`
+- 主站：<https://blog.nianshu2022.cn>
+- 技术栈：Next.js 15、React 19、Tailwind CSS v4、TypeScript
+
+## V1.0.0 重点
+
+- 全站视觉升级为档案局风格：网格纸、档案编号、案卷列表、红色批注和公章元素。
+- 首页聚焦个人品牌：技术折腾者、00 后成长样本、持续记录的公开档案。
+- 技术文章改为「案卷」表达，按时间生成案卷编号。
+- 成长内容改为「样本」表达，弱化普通博客模板感。
+- 使用设计稿公章裁切生成透明 PNG，替代浏览器渲染不稳定的弧形 SVG 文字。
+
+## 目录结构
 
 ```text
 .
-├── web/             # Next.js 网页版与静态内容 API
-├── miniprogram/     # 微信小程序版，后续可单独开源
-├── MINIAPP_PLAN.md  # 小程序开发计划清单
+├── web/             # Next.js 主站
+├── miniprogram/     # 小程序代码，当前版本不作为主站发布范围
+├── backend/         # 后端实验代码，当前版本不作为主站发布范围
+├── PRODUCT.md       # 主站产品与品牌定位
 └── package.json     # 根目录快捷脚本
 ```
 
-## 网页版
+## 本地预览
 
-网页版项目在 `web/` 目录，仍然是当前线上站点：
-
-```text
-https://blog.nianshu2022.cn
-```
-
-常用命令可以在根目录执行：
+在仓库根目录执行：
 
 ```bash
 npm run dev
-npm run build
-npm run generate:miniapp-api
 ```
+
+默认访问：
+
+```text
+http://localhost:3000
+```
+
+如果 `3000` 端口被占用，Next.js 会自动切到下一个可用端口，请以终端输出为准。
+
+## 常用命令
+
+```bash
+npm run dev
+npm run lint
+npm run build
+```
+
+也可以进入 `web/` 单独执行：
+
+```bash
+cd web
+npm run dev
+npm run build
+```
+
+## Cloudflare Pages
 
 如果 Cloudflare Pages 从仓库根目录构建：
 
@@ -42,15 +77,6 @@ Build command: npm run build
 Build output directory: out
 ```
 
-也可以进入 `web/` 单独执行：
+## 发布范围
 
-```bash
-cd web
-npm run dev
-```
-
-## 小程序版
-
-小程序代码统一放在 `miniprogram/`。后续如果要单独开源，只需要把这个目录拆成独立仓库，并保留它自己的 `README.md`、`project.config.json`、`app.json` 等文件即可。
-
-开发计划见 [MINIAPP_PLAN.md](./MINIAPP_PLAN.md)。
+`V1.0.0` 聚焦 Web 主站。小程序和后端目录仍保留在仓库中，但不纳入本次版本发布内容。

@@ -163,27 +163,27 @@
 }
 
 :root {
-  --radius: 0.5rem;
-  --background: #f8f9fc;
-  --foreground: #0f172a;
-  --card: #ffffff;
-  --card-foreground: #0f172a;
-  --popover: #ffffff;
-  --popover-foreground: #0f172a;
+  --radius: 0.375rem;
+  --background: #f5f6f2;
+  --foreground: #171411;
+  --card: #fffefa;
+  --card-foreground: #171411;
+  --popover: #fffefa;
+  --popover-foreground: #171411;
 
-  --primary: #6366f1;
+  --primary: #b4232a;
   --primary-foreground: #ffffff;
-  --secondary: #f1f5f9;
-  --secondary-foreground: #0f172a;
-  --muted: #f1f5f9;
-  --muted-foreground: #64748b;
-  --accent: #eef2ff;
-  --accent-foreground: #4338ca;
+  --secondary: #ebece6;
+  --secondary-foreground: #171411;
+  --muted: #e8e8e0;
+  --muted-foreground: #69645c;
+  --accent: #fff1ee;
+  --accent-foreground: #8c171f;
 
   --destructive: oklch(0.577 0.245 27.325);
-  --border: #e2e8f0;
-  --input: #e2e8f0;
-  --ring: #6366f1;
+  --border: #d7d3ca;
+  --input: #d7d3ca;
+  --ring: #b4232a;
 
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
@@ -202,27 +202,27 @@
 }
 
 .dark {
-  --background: #0a0a0f;
-  --foreground: #e2e8f0;
-  --card: #12121a;
-  --card-foreground: #e2e8f0;
-  --popover: #12121a;
-  --popover-foreground: #e2e8f0;
+  --background: #12110f;
+  --foreground: #f2eee6;
+  --card: #1b1916;
+  --card-foreground: #f2eee6;
+  --popover: #1b1916;
+  --popover-foreground: #f2eee6;
 
-  --primary: #818cf8;
-  --primary-foreground: #0a0a0f;
-  --secondary: #1e1e2e;
-  --secondary-foreground: #e2e8f0;
+  --primary: #ff5a4f;
+  --primary-foreground: #12110f;
+  --secondary: #25221d;
+  --secondary-foreground: #f2eee6;
 
-  --muted: #1e1e2e;
-  --muted-foreground: #94a3b8;
-  --accent: #1e1b4b;
-  --accent-foreground: #a5b4fc;
+  --muted: #25221d;
+  --muted-foreground: #b9b0a3;
+  --accent: #321c18;
+  --accent-foreground: #ffb0a9;
 
   --destructive: oklch(0.704 0.191 22.216);
-  --border: #1e293b;
-  --input: #1e293b;
-  --ring: #818cf8;
+  --border: #3b362e;
+  --input: #3b362e;
+  --ring: #ff5a4f;
 
   --chart-1: oklch(0.488 0.243 264.376);
   --chart-2: oklch(0.696 0.17 162.48);
@@ -248,12 +248,17 @@
   body {
     @apply bg-background text-foreground;
     scroll-behavior: smooth;
+    background-image:
+      linear-gradient(rgba(23, 20, 17, 0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(23, 20, 17, 0.035) 1px, transparent 1px);
+    background-size: 44px 44px;
   }
 
   .dark body {
     background-image:
-      radial-gradient(ellipse 80% 50% at 50% -20%, rgba(99, 102, 241, 0.08), transparent),
-      radial-gradient(ellipse 60% 40% at 80% 100%, rgba(34, 211, 238, 0.04), transparent);
+      linear-gradient(rgba(242, 238, 230, 0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(242, 238, 230, 0.035) 1px, transparent 1px);
+    background-size: 44px 44px;
   }
 
   /* Global smooth scrolling override */
@@ -307,19 +312,19 @@
 @layer components {
 
   .garden-panel {
-    @apply border border-border bg-card/80 text-card-foreground shadow-[0_18px_45px_rgba(0,0,0,0.08)] dark:shadow-[0_18px_45px_rgba(0,0,0,0.3)] backdrop-blur-sm rounded-lg;
+    @apply border border-border bg-card/90 text-card-foreground rounded-md;
   }
 
   .dark .garden-panel {
-    border-color: rgba(99, 102, 241, 0.08);
+    border-color: rgba(255, 90, 79, 0.16);
   }
 
   .brand-panel {
-    @apply border border-border bg-card/85 text-card-foreground shadow-[0_24px_70px_rgba(0,0,0,0.12)] dark:shadow-[0_24px_70px_rgba(0,0,0,0.4)] backdrop-blur-sm rounded-lg;
+    @apply border border-border bg-card/90 text-card-foreground rounded-md;
   }
 
   .dark .brand-panel {
-    border-color: rgba(99, 102, 241, 0.1);
+    border-color: rgba(255, 90, 79, 0.18);
   }
 
   .garden-link {
@@ -327,7 +332,7 @@
   }
 
   .garden-kicker {
-    @apply text-xs font-semibold uppercase tracking-[0.18em] text-primary;
+    @apply text-xs font-semibold tracking-normal text-primary;
   }
 
   .garden-title {
@@ -339,7 +344,7 @@
   }
 
   .prose blockquote {
-    @apply not-italic border-l-4 border-indigo-400/70 bg-indigo-50/50 dark:bg-indigo-950/30 dark:border-indigo-500/50 px-6 py-4 my-8 rounded-r-xl text-left text-zinc-700 dark:text-zinc-300 shadow-sm leading-relaxed;
+    @apply not-italic border-l-4 border-primary bg-accent/70 px-6 py-4 my-8 rounded-r-md text-left text-foreground leading-relaxed;
   }
 
   /* Remove default quotes from typography plugin */
@@ -392,7 +397,349 @@
   }
 
   .prose code {
-    @apply bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded border border-slate-200 dark:border-slate-700/50 font-mono text-sm font-normal text-cyan-600 dark:text-cyan-400 before:content-none after:content-none;
+    @apply bg-secondary px-1.5 py-0.5 rounded-sm border border-border font-mono text-sm font-normal text-primary before:content-none after:content-none;
+  }
+
+  .archive-shell {
+    @apply mx-auto w-full px-4 pb-10 pt-20 sm:px-6 lg:px-8;
+  }
+
+  .archive-hero {
+    @apply relative grid gap-8 border-y border-foreground/80 py-8 lg:grid-cols-[1fr_0.98fr] lg:items-start lg:py-12;
+    min-height: min(760px, calc(100dvh - 7rem));
+  }
+
+  .archive-ruler {
+    @apply pointer-events-none absolute left-16 right-[53%] top-5 hidden justify-between border-b border-border pb-2 font-mono text-[10px] text-muted-foreground lg:flex;
+    background-image: linear-gradient(90deg, rgba(23, 20, 17, 0.38) 1px, transparent 1px);
+    background-position: left bottom;
+    background-repeat: repeat-x;
+    background-size: 24px 8px;
+  }
+
+  .dark .archive-ruler {
+    background-image: linear-gradient(90deg, rgba(242, 238, 230, 0.38) 1px, transparent 1px);
+  }
+
+  .archive-coordinate {
+    @apply pointer-events-none absolute bottom-8 left-0 top-8 hidden w-10 flex-col justify-between border-r border-border text-[10px] text-muted-foreground lg:flex;
+  }
+
+  .archive-coordinate span {
+    @apply -translate-x-1;
+  }
+
+  .archive-hero-copy {
+    @apply relative space-y-7 lg:pl-16 lg:pt-20;
+  }
+
+  .archive-serial {
+    @apply flex flex-wrap items-center gap-3 font-mono text-xs text-muted-foreground;
+  }
+
+  .archive-serial span:last-child {
+    @apply border border-primary px-1.5 py-0.5 text-primary;
+  }
+
+  .archive-hero-copy h1 {
+    @apply max-w-[10ch] text-[clamp(3.4rem,9vw,7rem)] font-black leading-none tracking-normal text-foreground;
+    text-wrap: balance;
+  }
+
+  .archive-lede {
+    @apply max-w-2xl text-xl leading-9 text-foreground sm:text-2xl;
+  }
+
+  .archive-lede::before {
+    content: "";
+    @apply mr-3 inline-block h-[3px] w-16 translate-y-[-0.35rem] bg-primary;
+  }
+
+  .archive-id-card {
+    @apply grid max-w-xl border border-foreground/40 bg-card/70 font-mono text-sm;
+  }
+
+  .archive-id-card div {
+    @apply grid grid-cols-[7rem_1fr] border-b border-border px-4 py-2 last:border-b-0;
+  }
+
+  .archive-id-card dt {
+    @apply text-muted-foreground;
+  }
+
+  .archive-id-card dd {
+    @apply flex items-center gap-2 font-semibold text-foreground;
+  }
+
+  .archive-live-dot {
+    @apply inline-block h-2 w-2 rounded-full bg-emerald-500;
+  }
+
+  .archive-seal {
+    @apply pointer-events-none absolute hidden h-36 w-36 object-contain opacity-90 2xl:block;
+    right: 4.05rem;
+    top: 23.85rem;
+    transform: rotate(-7deg);
+  }
+
+  .archive-actions {
+    @apply flex flex-wrap gap-4;
+  }
+
+  .archive-button {
+    @apply inline-flex h-14 items-center justify-center gap-3 border px-7 text-base font-bold transition-transform duration-200 hover:-translate-y-0.5 active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+  }
+
+  .archive-button-primary {
+    @apply border-foreground bg-foreground text-background;
+  }
+
+  .archive-button-secondary {
+    @apply border-foreground bg-transparent text-foreground hover:bg-card;
+  }
+
+  .archive-footnote {
+    @apply text-sm text-muted-foreground;
+  }
+
+  .archive-board {
+    @apply relative border border-foreground/60 bg-card/85;
+  }
+
+  @media (min-width: 1280px) {
+    .archive-board {
+      margin-right: 3.75rem;
+    }
+  }
+
+  .archive-board::before {
+    content: "";
+    @apply pointer-events-none absolute left-4 top-16 h-10 w-16 border-t-4 border-foreground;
+  }
+
+  .archive-board-header {
+    @apply flex items-center justify-between border-b border-foreground/40 px-5 py-4;
+  }
+
+  .archive-board-header h2,
+  .archive-board-grid h3 {
+    @apply text-xl font-black;
+  }
+
+  .archive-board-header a,
+  .archive-inline-link,
+  .archive-section-heading a {
+    @apply inline-flex items-center gap-2 text-sm font-semibold text-foreground transition-colors hover:text-primary;
+  }
+
+  .archive-case-list {
+    @apply divide-y divide-border;
+  }
+
+  .archive-case-row {
+    @apply grid items-center gap-3 px-5 py-4 text-sm transition-colors hover:bg-secondary/70 md:grid-cols-[3rem_3rem_1fr_6rem_7.5rem];
+  }
+
+  @media (min-width: 768px) {
+    .archive-case-date,
+    .archive-case-no {
+      @apply border-l border-border pl-4;
+    }
+  }
+
+  .archive-case-index {
+    @apply font-mono text-base font-bold text-primary;
+  }
+
+  .archive-case-stamp {
+    @apply w-fit border border-primary px-1.5 py-1 text-xs font-semibold text-primary;
+    writing-mode: vertical-rl;
+  }
+
+  .archive-case-main {
+    @apply grid gap-1;
+  }
+
+  .archive-case-main strong {
+    @apply line-clamp-1 text-base font-bold;
+  }
+
+  .archive-case-main small,
+  .archive-case-date,
+  .archive-case-no {
+    @apply font-mono text-xs text-muted-foreground;
+  }
+
+  .archive-board-grid {
+    @apply grid border-t border-foreground/40 md:grid-cols-2;
+  }
+
+  .archive-board-grid > div {
+    @apply min-h-48 border-b border-border p-5 last:border-b-0 md:border-b-0 md:border-r md:last:border-r-0;
+  }
+
+  .archive-progress-list,
+  .archive-service-list {
+    @apply mt-4 grid gap-3 text-sm;
+  }
+
+  .archive-progress-list li,
+  .archive-service-list li {
+    @apply relative flex items-center justify-between gap-4 border-b border-border pb-3;
+  }
+
+  .archive-progress-list em,
+  .archive-service-list em {
+    @apply flex items-center gap-2 font-mono text-xs not-italic text-primary;
+  }
+
+  .archive-progress-list b {
+    @apply absolute bottom-0 left-0 h-[3px] bg-primary;
+    width: var(--progress);
+  }
+
+  .archive-progress-list li::after {
+    content: "";
+    @apply absolute bottom-0 left-0 right-0 h-[3px] bg-foreground/10;
+  }
+
+  .archive-progress-list b {
+    z-index: 1;
+  }
+
+  .archive-barcode {
+    @apply pointer-events-none absolute bottom-5 top-5 hidden w-8 flex-col items-center justify-between text-[10px] text-muted-foreground xl:flex;
+    right: -3.7rem;
+  }
+
+  .archive-barcode::before {
+    content: "";
+    @apply h-36 w-7;
+    background:
+      repeating-linear-gradient(90deg,
+        currentColor 0 2px,
+        transparent 2px 4px,
+        currentColor 4px 5px,
+        transparent 5px 8px);
+  }
+
+  .archive-barcode span {
+    writing-mode: vertical-rl;
+    letter-spacing: 0.08em;
+  }
+
+  .archive-index-section,
+  .archive-growth-section {
+    @apply border-b border-foreground/80 py-10;
+  }
+
+  .archive-section-heading {
+    @apply flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between;
+  }
+
+  .archive-section-heading > div {
+    @apply sm:mr-auto;
+  }
+
+  .archive-section-heading > span {
+    @apply w-fit border border-primary px-2 py-1 font-mono text-xl font-bold text-primary;
+  }
+
+  .archive-section-heading h2 {
+    @apply text-4xl font-black tracking-normal sm:text-5xl;
+  }
+
+  .archive-section-heading p {
+    @apply mt-2 max-w-xl text-sm leading-7 text-muted-foreground;
+  }
+
+  .archive-section-heading-compact {
+    @apply sm:items-start sm:justify-start;
+  }
+
+  .archive-timeline-ruler {
+    @apply my-8 hidden items-end justify-between border-b border-foreground/50 pb-2 font-mono text-xs text-muted-foreground sm:flex;
+    background-image: linear-gradient(90deg, rgba(23, 20, 17, 0.45) 1px, transparent 1px);
+    background-position: left bottom;
+    background-repeat: repeat-x;
+    background-size: 18px 10px;
+  }
+
+  .dark .archive-timeline-ruler {
+    background-image: linear-gradient(90deg, rgba(242, 238, 230, 0.45) 1px, transparent 1px);
+  }
+
+  .archive-index-grid {
+    @apply grid gap-4 sm:grid-cols-2 lg:grid-cols-4;
+  }
+
+  .archive-index-card {
+    @apply grid min-h-36 gap-4 border border-foreground/50 bg-card/75 p-6 transition-colors hover:bg-secondary;
+  }
+
+  .archive-index-card span {
+    @apply text-2xl font-black;
+  }
+
+  .archive-index-card strong {
+    @apply font-mono text-sm text-primary;
+  }
+
+  .archive-index-card small {
+    @apply self-end text-sm leading-6 text-muted-foreground;
+  }
+
+  .archive-growth-section {
+    @apply grid gap-8 lg:grid-cols-[0.82fr_1fr] lg:items-stretch;
+  }
+
+  .archive-growth-media {
+    @apply relative min-h-[360px] overflow-hidden border border-foreground/50 bg-secondary;
+  }
+
+  .archive-growth-media img {
+    filter: grayscale(0.12) contrast(1.04);
+  }
+
+  .archive-growth-copy {
+    @apply flex flex-col justify-between gap-8;
+  }
+
+  .archive-sample-list {
+    @apply divide-y divide-border border-y border-foreground/50;
+  }
+
+  .archive-sample-row {
+    @apply grid gap-3 py-4 text-sm transition-colors hover:bg-secondary/70 sm:grid-cols-[3rem_1fr_7rem];
+  }
+
+  .archive-sample-row span,
+  .archive-sample-row small {
+    @apply font-mono text-muted-foreground;
+  }
+
+  .archive-sample-row strong {
+    @apply text-lg;
+  }
+
+  .archive-contact-strip {
+    @apply flex flex-wrap gap-3 border-t border-border pt-4;
+  }
+
+  .archive-contact-strip a {
+    @apply inline-flex items-center gap-2 border border-border px-3 py-2 text-sm font-semibold transition-colors hover:border-primary hover:text-primary;
+  }
+
+  .archive-footer {
+    @apply flex flex-col gap-4 py-8 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between;
+  }
+
+  .archive-footer > div {
+    @apply flex flex-wrap items-center gap-3;
+  }
+
+  .archive-footer a {
+    @apply hover:text-primary;
   }
 }
 

@@ -31,7 +31,7 @@ export default function MouseGlow() {
       className="pointer-events-none fixed inset-0 z-[1] transition-opacity duration-500"
       style={{
         opacity: visible ? 1 : 0,
-        background: `radial-gradient(600px circle at ${position.x}px ${position.y}px, rgba(99,102,241,0.06), transparent 40%)`,
+        background: `radial-gradient(520px circle at ${position.x}px ${position.y}px, rgba(180,35,42,0.045), transparent 42%)`,
         willChange: "background",
       }}
     />

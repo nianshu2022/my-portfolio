@@ -39,11 +39,11 @@ import Link from "next/link";
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://blog.nianshu2022.cn'),
   title: {
-    default: "念舒的数字花园 | 产品运营 & 技术折腾",
+    default: "念舒档案局 | 00 后技术折腾者的成长样本库",
     template: "%s | 念舒",
   },
-  description: "00后产品运营的个人网站，分享运营心得、增长策略与技术折腾笔记。致力于构建连接用户价值与技术实现的桥梁。",
-  keywords: ["产品运营", "念舒", "个人博客", "Next.js", "技术折腾", "增长黑客", "00后"],
+  description: "念舒档案局，一个 00 后技术折腾者的成长样本库，归档技术踩坑、部署实践、成长经历和个人项目。",
+  keywords: ["念舒", "念舒档案局", "技术折腾", "个人品牌", "Next.js", "00后", "技术博客"],
   authors: [{ name: "念舒", url: process.env.NEXT_PUBLIC_SITE_URL || 'https://blog.nianshu2022.cn' }],
   creator: "念舒",
 
@@ -51,9 +51,9 @@ export const metadata: Metadata = {
     type: "website",
     locale: "zh_CN",
     url: process.env.NEXT_PUBLIC_SITE_URL || 'https://blog.nianshu2022.cn',
-    title: "念舒的数字花园",
-    description: "00后产品运营的个人网站，分享运营心得与技术折腾笔记。",
-    siteName: "念舒的数字花园",
+    title: "念舒档案局",
+    description: "一个 00 后技术折腾者的成长样本库。",
+    siteName: "念舒档案局",
     images: [
       {
         url: "/img/avatar.png",
@@ -65,8 +65,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary",
-    title: "念舒的数字花园",
-    description: "00后产品运营的个人网站，分享运营心得与技术折腾笔记。",
+    title: "念舒档案局",
+    description: "一个 00 后技术折腾者的成长样本库。",
     images: ["/img/avatar.png"],
   },
   manifest: "/manifest.json",
@@ -113,27 +113,45 @@ export default function RootLayout({
         <MouseGlow />
         
         <ConditionalLayout>
-          <header className="fixed left-0 right-0 top-0 z-40 border-b border-border/30 bg-background/60 backdrop-blur-xl">
-            <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
-              <Link href="/" className="group inline-flex items-center gap-3 text-foreground">
-                <span className="flex h-8 w-8 items-center justify-center rounded-md bg-primary text-sm font-semibold text-primary-foreground">念</span>
-                <span className="hidden font-semibold tracking-normal sm:inline">念舒的数字花园</span>
-              </Link>
+          <header className="fixed left-0 right-0 top-0 z-40 border-b border-foreground/15 bg-background/88 backdrop-blur-md">
+            <div className="mx-auto flex h-16 w-full items-center justify-between px-4 sm:px-6 lg:px-8">
+              <div className="flex items-center gap-5">
+                <Link href="/" className="group inline-flex items-center gap-3 text-foreground">
+                  <span className="flex h-8 w-8 items-center justify-center border border-foreground bg-foreground text-sm font-black text-background">档</span>
+                  <span className="hidden font-black tracking-normal sm:inline">念舒档案局</span>
+                </Link>
+                <div className="hidden items-center gap-2 font-mono text-xs text-muted-foreground lg:flex">
+                  <span>公共档案 001 号</span>
+                  <span className="border border-primary px-1 text-primary">验</span>
+                </div>
+              </div>
               <nav className="hidden items-center gap-1 text-sm text-muted-foreground md:flex">
                 {[
-                  ["博客", "/blog"],
-                  ["随笔", "/essays"],
+                  ["技术案卷", "/blog"],
+                  ["成长样本", "/essays"],
                   ["搜索", "/search"],
-                  ["归档", "/archive"],
+                  ["时间索引", "/archive"],
                   ["装备", "/gear"],
-                  ["传送门", "/portal"],
+                  ["在线服务", "/portal"],
                   ["关于", "/about"],
                 ].map(([label, href]) => (
-                  <Link key={href} href={href} className="rounded-md px-3 py-2 transition-colors hover:bg-secondary hover:text-foreground">
+                  <Link key={href} href={href} className="px-3 py-2 font-semibold transition-colors hover:bg-secondary hover:text-foreground">
                     {label}
                   </Link>
                 ))}
               </nav>
+              <div className="hidden items-center gap-3 border-l border-border pl-4 xl:flex">
+                <span className="border border-foreground px-2 py-1 font-mono text-xs font-bold">系统状态</span>
+                <div className="grid gap-0.5 font-mono text-xs leading-none text-muted-foreground">
+                  <span>系统状态</span>
+                  <span className="text-foreground">正常运行</span>
+                </div>
+                <div className="flex gap-2" aria-hidden="true">
+                  <span className="h-2 w-2 rounded-full bg-muted" />
+                  <span className="h-2 w-2 rounded-full bg-emerald-500" />
+                  <span className="h-2 w-2 rounded-full bg-emerald-500" />
+                </div>
+              </div>
               <MobileNav />
             </div>
           </header>

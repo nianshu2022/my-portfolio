@@ -80,7 +80,7 @@ export default function ThemeToggle() {
 
     if (!mounted) {
         return (
-            <button className="p-2 rounded-full bg-zinc-100 dark:bg-zinc-800 w-9 h-9" aria-label="Toggle theme">
+            <button className="h-9 w-9 border border-border bg-card p-2" aria-label="Toggle theme">
                 <span className="sr-only">Loading theme</span>
             </button>
         );
@@ -89,13 +89,13 @@ export default function ThemeToggle() {
     return (
         <button
             onClick={toggle}
-            className="p-2 rounded-full bg-card/60 backdrop-blur-md hover:bg-secondary transition-colors shadow-sm border border-border/30 relative overflow-hidden"
+            className="relative h-9 w-9 overflow-hidden border border-border bg-card/80 p-2 backdrop-blur-md transition-colors hover:border-primary hover:bg-secondary"
             aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
         >
             {theme === "dark" ? (
-                <Sun className="w-5 h-5 text-yellow-500" />
+                <Sun className="h-5 w-5 text-primary" />
             ) : (
-                <Moon className="w-5 h-5 text-zinc-600" />
+                <Moon className="h-5 w-5 text-foreground" />
             )}
         </button>
     );

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import { ArrowRight, BookOpen, Feather, Search, Tag, X } from "lucide-react";
+import { ArrowRight, Search, Tag, X } from "lucide-react";
 import type { PostSummary } from "@/lib/posts";
 import { useSearchParams } from "next/navigation";
 import ScrollReveal from "@/components/ScrollReveal";
@@ -15,6 +15,33 @@ type ContentListProps = {
   type: "post" | "essay";
 };
 
+function buildArchiveNumbers(posts: PostSummary[]) {
+  const byYear = new Map<string, PostSummary[]>();
+
+  posts.forEach((post) => {
+    const year = post.date.slice(0, 4) || "0000";
+    byYear.set(year, [...(byYear.get(year) || []), post]);
+  });
+
+  const numbers = new Map<string, { short: string; full: string }>();
+  byYear.forEach((yearPosts, year) => {
+    yearPosts
+      .sort((a, b) => {
+        if (a.date !== b.date) return a.date.localeCompare(b.date);
+        return a.slug.localeCompare(b.slug);
+      })
+      .forEach((post, index) => {
+        const short = String(index + 1).padStart(3, "0");
+        numbers.set(post.slug, {
+          short,
+          full: `NS-${year}-${short}`,
+        });
+      });
+  });
+
+  return numbers;
+}
+
 export default function ContentList({ posts, type }: ContentListProps) {
   const searchParams = useSearchParams();
   const [activeTag, setActiveTag] = useState<string | null>(null);
@@ -23,12 +50,12 @@ export default function ContentList({ posts, type }: ContentListProps) {
 
   const isPost = type === "post";
   const basePath = isPost ? "/blog" : "/essays";
-  const Icon = isPost ? BookOpen : Feather;
-  const label = isPost ? "技术博客" : "生活随笔";
-  const kicker = isPost ? "技术笔记" : "生活随笔";
+  const label = isPost ? "技术案卷库" : "成长样本库";
   const subtitle = isPost
-    ? "聚焦可复用的部署经验、运维排障与 AI 工具实战。"
-    : "记录成长、选择和变化，也记录那些值得反复回看的时刻。";
+    ? "把部署、排障、升级和工具链实践整理成可复用的案卷。"
+    : "把阶段经历、比赛、毕业和生活切片留下来，记录一个 00 后正在形成自己的系统。";
+  const stamp = isPost ? "案卷" : "样本";
+  const archiveNumbers = useMemo(() => buildArchiveNumbers(posts), [posts]);
 
   const allTags = useMemo(() => {
     const tags = new Set<string>();
@@ -69,66 +96,71 @@ export default function ContentList({ posts, type }: ContentListProps) {
 
   return (
     <section className="w-full">
-      <header className="mb-8 border-b border-border pb-8">
-        <p className="garden-kicker">{kicker}</p>
-        <div className="mt-3 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+      <header className="border-b border-foreground/80 pb-8">
+        <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <h1 className="garden-title inline-flex items-center gap-3">
-              <Icon className="h-8 w-8 text-primary" />
+            <div className="mb-4 inline-flex border border-primary px-2 py-1 font-mono text-sm font-bold text-primary">
+              {isPost ? "TECH DOSSIERS" : "GROWTH SAMPLES"}
+            </div>
+            <h1 className="text-[clamp(2.8rem,8vw,5.6rem)] font-black leading-none tracking-normal text-foreground">
               {label}
             </h1>
-            <p className="garden-subtitle mt-3">{subtitle}</p>
+            <p className="mt-5 max-w-2xl text-base leading-8 text-muted-foreground sm:text-lg">
+              {subtitle}
+            </p>
           </div>
-          <span className="text-sm text-muted-foreground">{posts.length} 篇</span>
+          <div className="font-mono text-sm text-muted-foreground">
+            共 <strong className="text-foreground">{posts.length}</strong> 份{stamp}
+          </div>
         </div>
       </header>
 
-      {allTags.length > 1 && (
-        <div className="mb-8 flex flex-wrap items-center gap-2" role="group" aria-label="标签筛选">
-          <Tag className="h-4 w-4 text-muted-foreground" />
-          <button
-            onClick={() => setActiveTag(null)}
-            aria-pressed={activeTag === null}
-            className={`rounded-md border px-3 py-1.5 text-sm transition-colors ${
-              activeTag === null
-                ? "border-primary bg-primary text-primary-foreground"
-                : "border-border bg-card text-muted-foreground hover:bg-secondary"
-            }`}
-          >
-            全部
-          </button>
-          {allTags.map((tag) => (
+      <div className="grid gap-5 border-b border-border py-6">
+        {allTags.length > 1 && (
+          <div className="flex flex-wrap items-center gap-2" role="group" aria-label="标签筛选">
+            <Tag className="h-4 w-4 text-primary" />
             <button
-              key={tag}
-              onClick={() => setActiveTag(activeTag === tag ? null : tag)}
-              aria-pressed={activeTag === tag}
-              className={`rounded-md border px-3 py-1.5 text-sm transition-colors ${
-                activeTag === tag
+              onClick={() => setActiveTag(null)}
+              aria-pressed={activeTag === null}
+              className={`border px-3 py-1.5 text-sm font-semibold transition-colors ${
+                activeTag === null
                   ? "border-primary bg-primary text-primary-foreground"
-                  : "border-border bg-card text-muted-foreground hover:bg-secondary"
+                  : "border-border bg-card text-muted-foreground hover:border-foreground hover:text-foreground"
               }`}
             >
-              #{tag}
+              全部
             </button>
-          ))}
-        </div>
-      )}
+            {allTags.map((tag) => (
+              <button
+                key={tag}
+                onClick={() => setActiveTag(activeTag === tag ? null : tag)}
+                aria-pressed={activeTag === tag}
+                className={`border px-3 py-1.5 text-sm transition-colors ${
+                  activeTag === tag
+                    ? "border-primary bg-primary text-primary-foreground"
+                    : "border-border bg-card text-muted-foreground hover:border-foreground hover:text-foreground"
+                }`}
+              >
+                #{tag}
+              </button>
+            ))}
+          </div>
+        )}
 
-      <div className="mb-8">
-        <label className="group flex items-center gap-2 rounded-md border border-border bg-card px-3 py-2">
-          <Search className="h-4 w-4 text-muted-foreground" />
+        <label className="group flex items-center gap-3 border border-border bg-card px-3 py-3">
+          <Search className="h-4 w-4 text-primary" />
           <input
             type="search"
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="搜索标题、摘要或标签"
+            onChange={(event) => setQuery(event.target.value)}
+            placeholder={isPost ? "检索标题、问题或技术栈" : "检索标题、经历或标签"}
             className="w-full bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground"
           />
           {query && (
             <button
               onClick={() => setQuery("")}
               aria-label="清空搜索"
-              className="inline-flex h-6 w-6 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+              className="inline-flex h-7 w-7 items-center justify-center border border-border text-muted-foreground transition-colors hover:border-primary hover:text-primary"
             >
               <X className="h-3.5 w-3.5" />
             </button>
@@ -136,45 +168,51 @@ export default function ContentList({ posts, type }: ContentListProps) {
         </label>
       </div>
 
-      <div className="grid gap-3">
+      <div className="mt-8 border-y border-foreground/70">
         {filtered.length === 0 && (
-          <div className="garden-panel px-5 py-10 text-center text-sm text-muted-foreground">
-            没有匹配到内容，试试更短的关键词或清空筛选条件。
+          <div className="px-5 py-14 text-center text-sm text-muted-foreground">
+            没有匹配到{stamp}，试试更短的关键词或清空筛选条件。
           </div>
         )}
-        {filtered.map((post, i) => (
-          <ScrollReveal key={`${post.slug}-${i}`} delay={Math.min(i * 0.06, 0.3)}>
+
+        {filtered.map((post, index) => (
+          <ScrollReveal key={`${post.slug}-${index}`} delay={Math.min(index * 0.04, 0.24)}>
             <Link
               href={`${basePath}/${post.slug}`}
               data-article-link
-              className={`garden-panel group grid gap-3 p-5 transition-all hover:border-primary/30 hover:shadow-[0_0_20px_rgba(99,102,241,0.1)] ${activeIndex === i ? "ring-2 ring-primary" : ""}`}
+              className={`group grid gap-4 border-b border-border px-4 py-5 transition-colors last:border-b-0 hover:bg-secondary/70 lg:grid-cols-[4.5rem_4rem_1fr_7rem_8rem] lg:items-center ${
+                activeIndex === index ? "bg-accent" : ""
+              }`}
             >
-              <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
-                <h2 className="text-xl font-semibold tracking-normal transition-colors group-hover:text-primary">
+              <span className="font-mono text-xl font-black text-primary">
+                {archiveNumbers.get(post.slug)?.short || "000"}
+              </span>
+              <span className="w-fit border border-primary px-1.5 py-1 text-xs font-semibold text-primary lg:[writing-mode:vertical-rl]">
+                {stamp}
+              </span>
+              <span className="grid min-w-0 gap-2">
+                <strong className="text-xl font-black leading-snug tracking-normal transition-colors group-hover:text-primary">
                   {post.title}
-                </h2>
-                <span className="text-sm text-muted-foreground shrink-0">{post.date}</span>
-              </div>
-              <p className="line-clamp-2 text-sm leading-6 text-muted-foreground">
-                {post.description}
-              </p>
-              <div className="flex flex-wrap items-center justify-between gap-3">
-                <div className="flex flex-wrap gap-2">
-                  {(post.tags?.length ? post.tags : [FALLBACK_TAG])
-                    .slice(0, 4)
-                    .map((tag) => (
-                      <span
-                        key={tag}
-                        className="rounded-md bg-secondary px-2 py-1 text-xs text-muted-foreground"
-                      >
-                        #{tag}
-                      </span>
-                    ))}
-                </div>
-                <span className="inline-flex items-center gap-1 text-sm font-medium text-primary">
-                  阅读 <ArrowRight className="h-4 w-4" />
+                </strong>
+                <span className="line-clamp-2 text-sm leading-6 text-muted-foreground">
+                  {post.description}
                 </span>
-              </div>
+                <span className="flex flex-wrap gap-2">
+                  {(post.tags?.length ? post.tags : [FALLBACK_TAG]).slice(0, 4).map((tag) => (
+                    <em key={tag} className="border border-border bg-card px-2 py-1 font-mono text-xs not-italic text-muted-foreground">
+                      #{tag}
+                    </em>
+                  ))}
+                </span>
+              </span>
+              <span className="font-mono text-sm text-muted-foreground">{post.date}</span>
+              <span className="inline-flex items-center justify-between gap-2 font-mono text-xs text-muted-foreground lg:grid">
+                <span>{archiveNumbers.get(post.slug)?.full || "NS-0000-000"}</span>
+                <span className="inline-flex items-center gap-1 text-primary">
+                  阅读
+                  <ArrowRight className="h-3.5 w-3.5" />
+                </span>
+              </span>
             </Link>
           </ScrollReveal>
         ))}

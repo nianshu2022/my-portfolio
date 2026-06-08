@@ -1,13 +1,10 @@
 import FloatingNav from "@/components/FloatingNav";
 import ScrollReveal from "@/components/ScrollReveal";
-import TiltCard from "@/components/TiltCard";
 import GitHubStats from "@/components/widgets/GitHubStats";
 import ContributionHeatmap from "@/components/widgets/ContributionHeatmap";
-import MusicChart from "@/components/widgets/MusicChart";
-import VisitorMap from "@/components/widgets/VisitorMap";
 import VisitorCounter from "@/components/VisitorCounter";
 import Image from "next/image";
-import { Briefcase, Code, Github, Mail, Music, Network, Rocket, Server, Sparkles } from "lucide-react";
+import { ArrowRight, Github, Mail, Music } from "lucide-react";
 
 const contacts = [
   { name: "Email", value: "nianshu2022@sina.cn", link: "mailto:nianshu2022@sina.cn", icon: Mail },
@@ -16,142 +13,142 @@ const contacts = [
 ];
 
 const timeline = [
-  { title: "从网络开始", desc: "计算机网络技术让我先看见了系统背后的连接、规则和秩序。", icon: Network },
-  { title: "走向产品运营", desc: "进入运营后，我开始更在意人如何理解产品、使用产品，以及为什么留下或离开。", icon: Briefcase },
-  { title: "继续折腾技术", desc: "部署服务、研究开源项目、尝试 AI 工具，是我保持手感和好奇心的方式。", icon: Rocket },
-  { title: "把经历写下来", desc: "这个数字花园用来存放经验、复盘和生活记录，也给未来的自己留一条回看的路。", icon: Sparkles },
+  { year: "起点", title: "从网络开始", desc: "计算机网络技术让我先看见系统背后的连接、规则和秩序。" },
+  { year: "转向", title: "走向产品运营", desc: "进入运营后，我开始更在意人如何理解产品、使用产品，以及为什么留下或离开。" },
+  { year: "持续", title: "继续折腾技术", desc: "部署服务、研究开源项目、尝试 AI 工具，是我保持手感和好奇心的方式。" },
+  { year: "现在", title: "把经历写下来", desc: "念舒档案局用来存放技术案卷、成长样本和长期复盘。" },
 ];
 
 const stack = ["Next.js", "Tailwind CSS", "Cloudflare Pages", "Linux / CentOS", "Docker", "AI Tools"];
 
 export default function AboutPage() {
   return (
-    <main className="garden-shell">
+    <main className="archive-shell">
       <FloatingNav backUrl="/" />
 
-      <section className="grid gap-6 border-b border-border pb-10 sm:gap-8 sm:pb-14 lg:grid-cols-[0.92fr_1.08fr] lg:items-center">
+      <section className="grid gap-8 border-y border-foreground/75 py-8 lg:grid-cols-[0.82fr_1.18fr] lg:items-stretch">
         <ScrollReveal className="min-w-0">
-          <TiltCard>
-            <div className="brand-panel overflow-hidden">
-              <div className="relative h-[220px] sm:h-[300px] lg:h-[420px]">
-                <Image
-                  src="/img/graduation-profile-2024.jpg"
-                  alt="念舒的个人照片"
-                  fill
-                  className="object-cover"
-                  priority
-                  unoptimized
-                />
-              </div>
-              <div className="p-6">
-                <p className="garden-kicker">关于念舒</p>
-                <h1 className="mt-3 text-3xl font-semibold sm:text-4xl">念舒</h1>
-                <p className="mt-3 text-sm leading-7 text-muted-foreground">
-                  产品运营，技术实践者，长期写作者。正在把一些散落的经历慢慢整理成自己的系统。
-                </p>
-              </div>
-            </div>
-          </TiltCard>
+          <div className="archive-growth-media h-full min-h-[420px]">
+            <Image
+              src="/img/graduation-profile-2024.jpg"
+              alt="念舒的个人照片"
+              fill
+              className="object-cover"
+              priority
+              unoptimized
+            />
+          </div>
         </ScrollReveal>
 
-        <ScrollReveal delay={0.2} direction="right" className="min-w-0">
-          <div className="space-y-6 sm:space-y-8">
-            <div className="space-y-4 sm:space-y-5">
-              <h2 className="max-w-3xl text-2xl font-semibold leading-tight tracking-normal sm:text-4xl lg:text-5xl">
+        <ScrollReveal delay={0.15} direction="right" className="min-w-0">
+          <div className="flex h-full flex-col justify-between gap-8">
+            <div>
+              <div className="mb-5 inline-flex border border-primary px-2 py-1 font-mono text-sm font-bold text-primary">
+                主理人档案
+              </div>
+              <h1 className="max-w-4xl text-[clamp(3rem,7vw,5.8rem)] font-black leading-none tracking-normal">
+                念舒
+              </h1>
+              <p className="mt-6 max-w-3xl text-xl leading-9 text-muted-foreground">
                 我想做的，是把真实的问题看明白，再把它变成可用的体验。
-              </h2>
-              <p className="garden-subtitle max-w-2xl">
-                我在产品运营与技术实践之间工作，关注用户价值，也关注方案落地成本。
               </p>
             </div>
 
-            <div className="grid gap-3 sm:grid-cols-3">
-              {contacts.map((contact, i) => (
-                <ScrollReveal key={contact.name} delay={0.3 + i * 0.1} className="min-w-0">
-                  <TiltCard>
-                    <a href={contact.link} target="_blank" rel="noopener noreferrer" className="garden-panel block p-4 transition-all hover:border-primary/30 hover:shadow-[0_0_20px_rgba(99,102,241,0.1)]">
-                      <contact.icon className="mb-4 h-5 w-5 text-primary" />
-                      <p className="text-sm font-semibold">{contact.name}</p>
-                      <p className="mt-1 truncate text-sm text-muted-foreground">{contact.value}</p>
-                    </a>
-                  </TiltCard>
-                </ScrollReveal>
+            <dl className="archive-id-card max-w-2xl">
+              <div>
+                <dt>身份</dt>
+                <dd>00 后技术折腾者 / 产品实践者</dd>
+              </div>
+              <div>
+                <dt>关注</dt>
+                <dd>部署、排障、AI 工具、用户价值</dd>
+              </div>
+              <div>
+                <dt>站点</dt>
+                <dd>念舒档案局</dd>
+              </div>
+              <div>
+                <dt>状态</dt>
+                <dd>
+                  持续记录中
+                  <span className="archive-live-dot" aria-hidden="true" />
+                </dd>
+              </div>
+            </dl>
+
+            <div className="archive-contact-strip">
+              {contacts.map((contact) => (
+                <a key={contact.name} href={contact.link} target="_blank" rel="noopener noreferrer">
+                  {contact.name}
+                  <contact.icon className="h-4 w-4" />
+                </a>
               ))}
             </div>
-
-            <ScrollReveal delay={0.4} className="min-w-0">
-              <TiltCard>
-                <GitHubStats />
-              </TiltCard>
-            </ScrollReveal>
-            <ScrollReveal delay={0.5} className="min-w-0">
-              <TiltCard>
-                <ContributionHeatmap />
-              </TiltCard>
-            </ScrollReveal>
           </div>
         </ScrollReveal>
       </section>
 
-      <section className="grid gap-6 py-10 sm:gap-8 sm:py-14 lg:grid-cols-[1fr_340px]">
+      <section className="grid gap-8 border-b border-foreground/75 py-10 lg:grid-cols-[1fr_360px]">
         <ScrollReveal className="min-w-0">
           <div>
-            <p className="garden-kicker">成长足迹</p>
-            <h2 className="mt-3 text-2xl font-semibold sm:text-3xl">一路走来的线索</h2>
-            <div className="mt-5 relative sm:mt-6">
-              <div className="absolute left-6 top-0 bottom-0 w-px bg-gradient-to-b from-primary/40 via-primary/20 to-transparent hidden sm:block" />
-              <div className="grid gap-4 sm:grid-cols-2">
-                {timeline.map((item, i) => (
-                  <ScrollReveal key={item.title} delay={i * 0.1} className="min-w-0">
-                    <TiltCard>
-                      <div className="garden-panel p-5 relative">
-                        <div className="absolute -left-1 top-6 h-3 w-3 rounded-full border-2 border-primary bg-background hidden sm:block" />
-                        <item.icon className="mb-5 h-5 w-5 text-primary" />
-                        <h3 className="font-semibold">{item.title}</h3>
-                        <p className="mt-2 text-sm leading-6 text-muted-foreground">{item.desc}</p>
-                      </div>
-                    </TiltCard>
-                  </ScrollReveal>
-                ))}
+            <div className="archive-section-heading archive-section-heading-compact">
+              <span>01</span>
+              <div>
+                <h2>成长线索</h2>
+                <p>不是完成态简历，而是一个人如何从问题、实践和复盘里慢慢长出自己的系统。</p>
               </div>
+            </div>
+
+            <div className="mt-8 border-y border-foreground/60">
+              {timeline.map((item) => (
+                <div key={item.title} className="grid gap-3 border-b border-border px-4 py-5 last:border-b-0 sm:grid-cols-[5rem_11rem_1fr]">
+                  <span className="font-mono text-sm text-primary">{item.year}</span>
+                  <strong className="text-xl">{item.title}</strong>
+                  <p className="text-sm leading-7 text-muted-foreground">{item.desc}</p>
+                </div>
+              ))}
             </div>
           </div>
         </ScrollReveal>
 
-        <ScrollReveal delay={0.3} className="min-w-0">
-          <aside className="brand-panel p-6">
-            <div className="mb-5 flex items-center gap-2">
-              <Code className="h-5 w-5 text-primary" />
-              <h2 className="font-semibold">常用技术栈</h2>
-            </div>
-            <div className="flex flex-wrap gap-2">
+        <ScrollReveal delay={0.2} className="min-w-0">
+          <aside className="border border-foreground/50 bg-card/80 p-5">
+            <h2 className="text-2xl font-black">常用技术栈</h2>
+            <div className="mt-5 flex flex-wrap gap-2">
               {stack.map((item) => (
-                <span key={item} className="rounded-md border border-border bg-background/70 px-3 py-1.5 text-sm text-muted-foreground">
+                <span key={item} className="border border-border bg-background/70 px-3 py-1.5 font-mono text-xs text-muted-foreground">
                   {item}
                 </span>
               ))}
             </div>
             <div className="mt-6 border-t border-border pt-5 text-sm leading-7 text-muted-foreground">
-              <Server className="mb-3 h-5 w-5 text-primary" />
-              我希望这里不只是一个展示页，而是一个持续更新的工作台：能帮别人少走一点弯路，也能帮我自己记住来时的路。
+              这里不只是展示页，而是一个持续更新的公开档案：帮别人少走一点弯路，也帮我自己记住来时的路。
             </div>
-            <div className="mt-4 border-t border-border pt-4">
+            <div className="mt-5 border-t border-border pt-4">
               <VisitorCounter />
             </div>
           </aside>
         </ScrollReveal>
       </section>
 
-      <section className="grid gap-4 py-10 sm:grid-cols-2 sm:py-14">
-        <ScrollReveal delay={0.4} className="min-w-0">
-          <TiltCard>
-            <MusicChart />
-          </TiltCard>
+      <section className="grid gap-6 py-10 lg:grid-cols-2">
+        <ScrollReveal className="min-w-0">
+          <div className="border border-foreground/50 bg-card/80 p-5">
+            <div className="mb-4 flex items-center justify-between">
+              <h2 className="text-2xl font-black">开源记录</h2>
+              <a href="https://github.com/nianshu2022" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sm font-semibold hover:text-primary">
+                GitHub
+                <ArrowRight className="h-4 w-4" />
+              </a>
+            </div>
+            <GitHubStats />
+          </div>
         </ScrollReveal>
-        <ScrollReveal delay={0.5} className="min-w-0">
-          <TiltCard>
-            <VisitorMap />
-          </TiltCard>
+        <ScrollReveal delay={0.15} className="min-w-0">
+          <div className="border border-foreground/50 bg-card/80 p-5">
+            <h2 className="mb-4 text-2xl font-black">提交热力</h2>
+            <ContributionHeatmap />
+          </div>
         </ScrollReveal>
       </section>
     </main>

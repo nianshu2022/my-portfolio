@@ -23,7 +23,7 @@ export default function GridBackground() {
       className="pointer-events-none fixed inset-0 z-0 animate-glow-pulse"
       style={{
         backgroundImage:
-          "radial-gradient(circle, rgba(99,102,241,0.08) 1px, transparent 1px)",
+          "radial-gradient(circle, rgba(255,90,79,0.055) 1px, transparent 1px)",
         backgroundSize: "40px 40px",
       }}
     />

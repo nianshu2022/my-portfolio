@@ -95,9 +95,10 @@ export default async function PostPage(props: { params: Promise<{ slug: string }
 
     const sanitizeSchema = getSanitizeSchema();
     const mdComponents = getMarkdownComponents({ imageWidth: 1000, imageQuality: 75 });
+    const dossierNo = `NS-${post.date.slice(0, 4) || "0000"}-${post.slug.slice(0, 6).toUpperCase()}`;
 
     return (
-        <main className="flex min-h-screen flex-col items-center px-4 py-24 sm:px-8 relative overflow-hidden">
+        <main className="relative flex min-h-screen flex-col items-center overflow-hidden px-4 pb-24 pt-28 sm:px-8">
             <ScrollMemory />
             {/* JSON-LD Structured Data */}
             <script
@@ -113,22 +114,28 @@ export default async function PostPage(props: { params: Promise<{ slug: string }
             <FloatingTOC toc={post.toc} />
 
             {/* Main Content Wrapper - Includes Article Card and Sidebar */}
-            <div className="max-w-7xl w-full flex flex-col lg:flex-row lg:gap-8 relative">
+            <div className="relative flex w-full max-w-7xl flex-col lg:flex-row lg:gap-10">
 
                 {/* Article Content Container */}
-                <div className="flex-1 min-w-0 relative">
+                <div className="relative min-w-0 flex-1">
                     <div id="top" />
 
                     {/* Main Content */}
-                    <article className="w-full pb-10 pt-10 sm:pt-16">
+                    <article className="w-full pb-10">
 
-                        <div className="px-6 sm:px-12">
-                            <header className="mb-10 border-b border-border pb-10 sm:pl-4">
-                                <h1 className="mb-6 font-sans text-3xl font-bold leading-tight tracking-tight text-foreground sm:text-4xl">{post.title}</h1>
+                        <div className="px-0 sm:px-4">
+                            <header className="mb-12 border-y border-foreground/75 py-8">
+                                <div className="mb-6 flex flex-wrap items-center justify-between gap-3 font-mono text-xs text-muted-foreground">
+                                    <span className="border border-primary px-2 py-1 font-bold text-primary">技术案卷</span>
+                                    <span>{dossierNo}</span>
+                                </div>
+                                <h1 className="mb-8 max-w-4xl font-sans text-[clamp(2.3rem,6vw,4.8rem)] font-black leading-tight tracking-normal text-foreground">
+                                    {post.title}
+                                </h1>
 
                                 {/* Meta Info Row */}
-                                <div className="mb-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted-foreground">
-                                    <div className="inline-flex items-center gap-2 rounded-md border border-border bg-secondary px-2.5 py-1.5">
+                                <div className="mb-5 flex flex-wrap items-center gap-x-4 gap-y-3 text-sm text-muted-foreground">
+                                    <div className="inline-flex items-center gap-2 border border-border bg-card px-2.5 py-1.5 font-mono">
                                         <span className="font-mono">{post.date}</span>
                                     </div>
 
@@ -146,7 +153,7 @@ export default async function PostPage(props: { params: Promise<{ slug: string }
                                         <Eye className="h-4 w-4" />
                                         <BusuanziCounter />
                                     </div>
-                                    <div className="ml-auto">
+                                    <div className="ml-auto rounded-none">
                                         <FontSizeControl />
                                     </div>
                                 </div>
@@ -155,7 +162,7 @@ export default async function PostPage(props: { params: Promise<{ slug: string }
                                 {post.tags?.length > 0 && (
                                     <div className="flex gap-2 overflow-x-auto pb-2 custom-scrollbar -ml-1 pl-1">
                                         {post.tags.map(tag => (
-                                            <span key={tag} className="whitespace-nowrap rounded-md border border-border bg-secondary px-2.5 py-1 text-xs font-medium text-primary">
+                                            <span key={tag} className="whitespace-nowrap border border-border bg-card px-2.5 py-1 font-mono text-xs font-medium text-primary">
                                                 #{tag}
                                             </span>
                                         ))}
@@ -163,7 +170,7 @@ export default async function PostPage(props: { params: Promise<{ slug: string }
                                 )}
 
                                 {post.toc.length > 0 && (
-                                    <details className="mt-5 rounded-md border border-border bg-card/70 p-3 lg:hidden">
+                                    <details className="mt-5 border border-border bg-card/70 p-3 lg:hidden">
                                         <summary className="flex cursor-pointer list-none items-center gap-2 text-sm font-medium text-foreground">
                                             <ListTree className="h-4 w-4 text-primary" />
                                             文章目录
@@ -175,14 +182,14 @@ export default async function PostPage(props: { params: Promise<{ slug: string }
                                 )}
 
                                 {/* Decorative Separator */}
-                                <div className="flex items-center justify-center gap-4 mt-8">
-                                    <div className="h-px w-24 bg-gradient-to-r from-transparent via-indigo-300 to-transparent dark:via-indigo-800"></div>
-                                    <div className="w-2 h-2 rounded-full bg-primary"></div>
-                                    <div className="h-px w-24 bg-gradient-to-r from-transparent via-indigo-300 to-transparent dark:via-indigo-800"></div>
+                                <div className="mt-8 flex items-center gap-3">
+                                    <div className="h-px flex-1 bg-foreground/50"></div>
+                                    <div className="h-3 w-3 border border-primary bg-primary"></div>
+                                    <div className="h-px w-24 bg-foreground/50"></div>
                                 </div>
                             </header>
 
-                            <div className="blog-content prose prose-zinc dark:prose-invert max-w-none prose-headings:scroll-mt-28 sm:pl-4 prose-a:break-all prose-img:mx-auto" style={{ fontSize: 'var(--article-font-size, 16px)' }}>
+                            <div className="blog-content prose prose-zinc dark:prose-invert max-w-none prose-headings:scroll-mt-28 prose-a:break-all prose-img:mx-auto" style={{ fontSize: 'var(--article-font-size, 16px)' }}>
                                 <Markdown
                                     remarkPlugins={[remarkGfm]}
                                     rehypePlugins={[
@@ -196,7 +203,7 @@ export default async function PostPage(props: { params: Promise<{ slug: string }
                             </div>
 
                             {/* Copyright Section */}
-                            <div className="mt-16 pt-8 border-t border-border/50">
+                            <div className="mt-16 border-t border-foreground/60 pt-8">
                                 <div className="flex flex-col sm:flex-row items-center justify-between gap-6 py-4 text-sm text-muted-foreground font-sans">
                                     <div className="flex flex-col gap-2 text-center sm:text-left">
                                         <p>
@@ -229,9 +236,9 @@ export default async function PostPage(props: { params: Promise<{ slug: string }
                 <aside className="hidden w-64 shrink-0 lg:block">
                     <div className="sticky top-24 space-y-6">
                         {/* TOC Card */}
-                        <div className="garden-panel p-5 max-h-[80vh] overflow-y-auto custom-scrollbar">
+                        <div className="garden-panel max-h-[80vh] overflow-y-auto p-5 custom-scrollbar">
                             <h4 className="mb-3 text-xs font-semibold uppercase tracking-widest text-muted-foreground select-none">
-                                目录
+                                案卷目录
                             </h4>
                             <TableOfContents toc={post.toc} />
                         </div>
@@ -246,11 +253,11 @@ export default async function PostPage(props: { params: Promise<{ slug: string }
             </div >
 
             <div className="fixed inset-x-0 bottom-16 z-30 px-4 md:hidden">
-                <div className="mx-auto flex max-w-sm items-center gap-2 rounded-md border border-border/30 bg-background/60 p-2 shadow-lg backdrop-blur-xl">
-                    <a href="#top" className="flex-1 rounded-md bg-secondary px-3 py-2 text-center text-sm font-medium text-foreground transition-colors hover:bg-secondary/80">
+                <div className="mx-auto flex max-w-sm items-center gap-2 border border-border bg-background/90 p-2 backdrop-blur-md">
+                    <a href="#top" className="flex-1 bg-secondary px-3 py-2 text-center text-sm font-medium text-foreground transition-colors hover:bg-secondary/80">
                         回到顶部
                     </a>
-                    <a href="#comments-section" className="flex-1 rounded-md bg-primary px-3 py-2 text-center text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90">
+                    <a href="#comments-section" className="flex-1 bg-primary px-3 py-2 text-center text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90">
                         去评论
                     </a>
                 </div>

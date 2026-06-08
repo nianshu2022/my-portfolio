@@ -6,12 +6,12 @@ import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 
 const navLinks = [
-  ["博客", "/blog"],
-  ["随笔", "/essays"],
+  ["技术案卷", "/blog"],
+  ["成长样本", "/essays"],
   ["搜索", "/search"],
-  ["归档", "/archive"],
+  ["时间索引", "/archive"],
   ["装备", "/gear"],
-  ["传送门", "/portal"],
+  ["在线服务", "/portal"],
   ["关于", "/about"],
 ] as const;
 
@@ -62,7 +62,7 @@ export default function MobileNav() {
           />
           <div
             ref={panelRef}
-            className="absolute right-0 top-0 h-full w-72 bg-card border-l border-border shadow-2xl flex flex-col animate-in slide-in-from-right duration-200"
+            className="absolute right-0 top-0 flex h-full w-72 flex-col border-l border-border bg-card shadow-2xl animate-in slide-in-from-right duration-200"
           >
             <div className="flex items-center justify-between px-5 h-16 border-b border-border">
               <span className="text-sm font-semibold text-foreground">导航</span>
@@ -83,7 +83,7 @@ export default function MobileNav() {
                     href={href}
                     className={`flex items-center gap-3 rounded-md px-4 py-3 text-sm font-medium transition-colors ${
                       isActive
-                        ? "bg-primary/10 text-primary"
+                        ? "bg-accent text-primary"
                         : "text-muted-foreground hover:bg-secondary hover:text-foreground"
                     }`}
                   >
@@ -93,7 +93,7 @@ export default function MobileNav() {
               })}
             </nav>
             <div className="border-t border-border p-4 text-xs text-muted-foreground">
-              念舒的数字花园
+              念舒档案局
             </div>
           </div>
         </div>
