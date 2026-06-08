@@ -6,7 +6,7 @@
 
 ## 当前版本
 
-- 版本：`V1.0.0`
+- 版本：`V1.0.2`
 - 主站：<https://blog.nianshu2022.cn>
 - 技术栈：Next.js 15、React 19、Tailwind CSS v4、TypeScript
 
@@ -79,4 +79,4 @@ Build output directory: out
 
 ## 发布范围
 
-`V1.0.0` 聚焦 Web 主站。小程序和后端目录仍保留在仓库中，但不纳入本次版本发布内容。
+当前版本聚焦 Web 主站。小程序和后端目录仍保留在仓库中，但不纳入本次主站发布内容。

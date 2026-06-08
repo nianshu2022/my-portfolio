@@ -22,8 +22,8 @@ const geistMono = Geist_Mono({
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "white" },
-    { media: "(prefers-color-scheme: dark)", color: "black" },
+    { media: "(prefers-color-scheme: light)", color: "#b4232a" },
+    { media: "(prefers-color-scheme: dark)", color: "#ff5a4f" },
   ],
   width: "device-width",
   initialScale: 1,
@@ -99,7 +99,7 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <NextTopLoader
-          color="#818cf8"
+          color="#b4232a"
           initialPosition={0.08}
           crawlSpeed={200}
           height={3}
@@ -107,7 +107,7 @@ export default function RootLayout({
           showSpinner={false}
           easing="ease"
           speed={200}
-          shadow="0 0 10px #818cf8,0 0 5px #818cf8"
+          shadow="0 0 10px #b4232a,0 0 5px #b4232a"
         />
         <GridBackground />
         <MouseGlow />

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Music, AlertCircle } from "lucide-react";
+import Image from "next/image";
 import { fetchApi } from "@/lib/api/fetch-wrapper";
 import { useApi } from "@/lib/hooks/useApi";
 import type { NetEaseTrack } from "@/lib/api/types";
@@ -93,11 +94,14 @@ function TrackRow({ track, rank }: { track: NetEaseTrack; rank: number }) {
         {rank}
       </span>
       {track.album?.picUrl && !imgFailed ? (
-        <img
+        <Image
           src={track.album.picUrl}
           alt=""
+          width={32}
+          height={32}
           className="h-8 w-8 rounded object-cover"
           onError={() => setImgFailed(true)}
+          unoptimized
         />
       ) : (
         <div className="flex h-8 w-8 items-center justify-center rounded bg-muted">

@@ -1,6 +1,7 @@
 import type { Components } from "react-markdown";
 import { defaultSchema } from "rehype-sanitize";
 import type { Schema } from "hast-util-sanitize";
+import Image from "next/image";
 import CodeBlock from "@/components/ui/CodeBlock";
 
 export function getSanitizeSchema(): Schema {
@@ -96,15 +97,21 @@ export function getMarkdownComponents(opts?: { imageWidth?: number; imageQuality
         // ignore
       }
 
+      const alt = typeof props.alt === "string" ? props.alt : "";
+      const title = typeof props.title === "string" ? props.title : undefined;
+
       return (
-        <img
-          {...props}
+        <Image
           src={imageSrc}
-          alt={props.alt || ""}
+          alt={alt}
+          title={title}
+          width={imageWidth}
+          height={Math.round(imageWidth * 0.625)}
           style={style}
           className={className}
           referrerPolicy="no-referrer"
           loading="lazy"
+          unoptimized
         />
       );
     },

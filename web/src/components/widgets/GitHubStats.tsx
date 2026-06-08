@@ -1,6 +1,7 @@
 "use client";
 
 import { AlertCircle } from "lucide-react";
+import Image from "next/image";
 import { fetchApi } from "@/lib/api/fetch-wrapper";
 import { useApi } from "@/lib/hooks/useApi";
 import type { GitHubUserData } from "@/lib/api/types";
@@ -54,10 +55,13 @@ export default function GitHubStats() {
   return (
     <div className="garden-panel p-5">
       <a href={data.html_url} target="_blank" rel="noopener noreferrer" className="group flex items-center gap-4">
-        <img
+        <Image
           src={data.avatar_url}
           alt={data.login}
+          width={56}
+          height={56}
           className="h-14 w-14 rounded-full border border-border"
+          unoptimized
         />
         <div>
           <p className="font-semibold group-hover:text-primary">{data.login}</p>

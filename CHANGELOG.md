@@ -1,5 +1,18 @@
 # Changelog
 
+## V1.0.2
+
+### Changed
+
+- 将剩余动态图片渲染迁移到 `next/image`，清零 ESLint warning。
+- 同步 README 当前版本号。
+- 将浏览器主题色和页面顶部进度条调整为档案局红色系。
+
+### Verified
+
+- TypeScript 类型检查通过。
+- ESLint 无 warning。
+
 ## V1.0.1
 
 ### Changed
