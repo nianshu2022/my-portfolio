@@ -1,0 +1,62 @@
+<view class="page admin-comments">
+  <view class="admin-header fade-enter">
+    <view class="admin-title">全部留言</view>
+    <view class="admin-sub">管理全站读者的反馈与互动</view>
+  </view>
+
+  <view class="comment-list fade-enter" style="animation-delay: 0.1s;">
+    <view class="comment-card" wx:for="{{comments}}" wx:key="id">
+      <view class="card-top">
+        <view class="user-info">
+          <view class="avatar-mini">{{item.nickname[0]}}</view>
+          <view class="name-box">
+            <text class="user-name">{{item.nickname}}</text>
+            <text class="post-link">评论于：{{item.post_title}}</text>
+          </view>
+        </view>
+        <view class="action-row">
+          <view class="reply-btn" bindtap="showReplyModal" data-id="{{item.id}}" data-nickname="{{item.nickname}}">回复</view>
+          <view class="delete-btn" bindtap="deleteComment" data-id="{{item.id}}">删除</view>
+        </view>
+      </view>
+      
+      <view class="comment-body">
+        {{item.content}}
+      </view>
+
+      <view class="admin-reply-box" wx:if="{{item.reply_content}}">
+        <view class="reply-header">园丁回复：</view>
+        <view class="reply-body">{{item.reply_content}}</view>
+      </view>
+      
+      <view class="card-footer">
+        <text class="time">{{item.created_at}}</text>
+        <text class="slug">Slug: {{item.slug}}</text>
+      </view>
+    </view>
+
+    <view class="empty-state" wx:if="{{comments.length === 0}}">
+      <view class="empty-icon">🍃</view>
+      <text>暂时没有收到留言</text>
+    </view>
+  </view>
+
+  <!-- 回复弹窗 -->
+  <view class="reply-sheet {{showModal ? 'visible' : ''}}">
+    <view class="sheet-mask" bindtap="hideReplyModal"></view>
+    <view class="sheet-content">
+      <view class="sheet-header">
+        <text>回复 {{currentNickname}}</text>
+        <view class="sheet-close" bindtap="hideReplyModal">✕</view>
+      </view>
+      <textarea 
+        class="reply-input" 
+        placeholder="输入回复内容..." 
+        value="{{replyText}}" 
+        bindinput="onReplyInput"
+        focus="{{showModal}}"
+      />
+      <button class="submit-btn {{replyText ? 'active' : ''}}" bindtap="submitReply">提交回复</button>
+    </view>
+  </view>
+</view>

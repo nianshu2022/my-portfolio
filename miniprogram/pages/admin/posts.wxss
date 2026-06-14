@@ -1,0 +1,92 @@
+.admin-posts {
+  padding-bottom: 60rpx;
+}
+
+.admin-header {
+  padding: 40rpx 28rpx;
+  background: linear-gradient(135deg, var(--bg-card), var(--bg-soft));
+}
+
+.admin-title {
+  color: var(--text-title);
+  font-size: 42rpx;
+  font-weight: 900;
+}
+
+.admin-sub {
+  margin-top: 6rpx;
+  color: var(--text-sub);
+  font-size: 24rpx;
+}
+
+.post-list {
+  padding: 30rpx 24rpx;
+}
+
+.post-card {
+  margin-bottom: 24rpx;
+  border: 1rpx solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--bg-card);
+  overflow: hidden;
+}
+
+.post-main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 28rpx;
+}
+
+.post-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.type-tag {
+  display: inline-block;
+  padding: 4rpx 12rpx;
+  margin-bottom: 12rpx;
+  border-radius: 8rpx;
+  font-size: 20rpx;
+  font-weight: 800;
+}
+
+.type-tag.post {
+  color: #6366f1;
+  background: rgba(99, 102, 241, 0.1);
+}
+
+.type-tag.essay {
+  color: #10b981;
+  background: rgba(16, 185, 129, 0.1);
+}
+
+.post-title {
+  color: var(--text-title);
+  font-size: 30rpx;
+  font-weight: 800;
+  line-height: 1.4;
+}
+
+.post-meta {
+  margin-top: 8rpx;
+  color: var(--text-sub);
+  font-size: 22rpx;
+}
+
+.status-bar {
+  padding: 12rpx 28rpx;
+  font-size: 22rpx;
+  font-weight: 700;
+}
+
+.status-bar.online {
+  color: #10b981;
+  background: rgba(16, 185, 129, 0.05);
+}
+
+.status-bar.offline {
+  color: var(--text-sub);
+  background: var(--bg-soft);
+}

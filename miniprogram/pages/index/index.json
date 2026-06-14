@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "空间",
+  "enablePullDownRefresh": true,
+  "usingComponents": {
+    "empty-state": "/components/empty-state/index",
+    "skeleton-list": "/components/skeleton-list/index"
+  }
+}

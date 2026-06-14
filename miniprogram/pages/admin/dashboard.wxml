@@ -1,0 +1,106 @@
+<view class="page admin-ultimate">
+  <scroll-view scroll-y class="scroll-container">
+    <!-- 1. 核心看板 -->
+    <view class="hero-panel fade-enter">
+      <view class="panel-header">
+        <view class="status-indicator">
+          <view class="dot pulse"></view>
+          <text>系统运行中</text>
+        </view>
+        <text class="system-time">版本 4.0 // 加密连接</text>
+      </view>
+      
+      <view class="hero-main">
+        <view class="main-val-box">
+          <text class="glitch-text">{{stats.total_views || 0}}</text>
+          <view class="main-label">全站累计访问量</view>
+        </view>
+        
+        <view class="hero-stats-grid">
+          <view class="h-stat-item">
+            <view class="h-val">{{stats.total_likes || 0}}</view>
+            <view class="h-label">获赞总数</view>
+          </view>
+          <view class="h-stat-item">
+            <view class="h-val">{{stats.total_posts || 0}}</view>
+            <view class="h-label">内容总数</view>
+          </view>
+          <view class="h-stat-item">
+            <view class="h-val">{{stats.total_comments || 0}}</view>
+            <view class="h-label">待处理留言</view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 2. 管理中枢 (移除 Emoji，改用抽象图标色块) -->
+    <view class="bento-grid fade-enter" style="animation-delay: 0.1s;">
+      <navigator class="bento-card glass pressable" url="/pages/admin/comments">
+        <view class="bento-abstract-icon comment-bg"></view>
+        <view class="bento-info">
+          <view class="bento-title">留言审核</view>
+          <view class="bento-desc">管理反馈</view>
+        </view>
+        <view class="bento-badge" wx:if="{{stats.total_comments > 0}}">{{stats.total_comments}}</view>
+      </navigator>
+
+      <navigator class="bento-card glass pressable" url="/pages/admin/settings">
+        <view class="bento-abstract-icon config-bg"></view>
+        <view class="bento-info">
+          <view class="bento-title">全局配置</view>
+          <view class="bento-desc">空间名称</view>
+        </view>
+      </navigator>
+
+      <navigator class="bento-card glass pressable" url="/pages/admin/monitor">
+        <view class="bento-abstract-icon perf-bg"></view>
+        <view class="bento-info">
+          <view class="bento-title">性能监控</view>
+          <view class="bento-desc">网络监控</view>
+        </view>
+      </navigator>
+
+      <navigator class="bento-card glass pressable" url="/pages/admin/posts">
+        <view class="bento-abstract-icon post-bg"></view>
+        <view class="bento-info">
+          <view class="bento-title">内容维护</view>
+          <view class="bento-desc">文章管理</view>
+        </view>
+      </navigator>
+    </view>
+
+    <!-- 3. 数据榜单 -->
+    <view class="hud-section fade-enter" style="animation-delay: 0.2s;">
+      <view class="section-tag">热门内容排行</view>
+      <view class="ranking-hud glass">
+        <view class="rank-row" wx:for="{{rankings}}" wx:key="slug">
+          <view class="rank-num">{{index + 1}}</view>
+          <view class="rank-body">
+            <view class="rank-title">{{item.title}}</view>
+            <view class="rank-bar-container">
+              <view class="rank-bar-fill" style="width: {{item.views / rankings[0].views * 100}}%"></view>
+            </view>
+          </view>
+          <view class="rank-count">{{item.views}} 阅</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 4. 实时日志 -->
+    <view class="hud-section fade-enter" style="animation-delay: 0.3s;">
+      <view class="section-tag">实时审计日志</view>
+      <view class="terminal-box glass">
+        <view class="log-line" wx:for="{{activities}}" wx:key="time">
+          <text class="log-time">{{item.time}}</text>
+          <text class="log-user">{{item.user}}</text>
+          <text class="log-action">进行了 {{item.type === 'comment' ? '评论' : '收藏'}}</text>
+        </view>
+        <view class="log-line empty" wx:if="{{activities.length === 0}}">
+          系统当前无新增动态
+        </view>
+      </view>
+    </view>
+
+    <view class="safe-area-spacer"></view>
+  </scroll-view>
+</view>

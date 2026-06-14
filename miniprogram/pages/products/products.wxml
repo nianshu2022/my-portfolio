@@ -1,0 +1,67 @@
+<view class="page products-page">
+  <view class="page-header products-hero fade-enter">
+    <view class="eyebrow">Digital Shelf</view>
+    <view class="title">数字货架</view>
+    <view class="subtitle">把能复用的模板、工具思路和项目案例收在这里，适合边看边拿去改。</view>
+  </view>
+
+  <view class="shelf-card section">
+    <view class="shelf-kicker">Beta</view>
+    <view class="shelf-title">先上架轻量资源，不急着做重商业</view>
+    <view class="shelf-desc">当前阶段以内容和资源导航为主，购买、赞赏等能力先通过网站或联系入口承接，避免小程序审核前引入复杂支付逻辑。</view>
+  </view>
+
+  <view class="section">
+    <view class="section-title">资源分区</view>
+    <view class="product-grid">
+      <view class="product-card main">
+        <view class="product-badge">Free</view>
+        <view class="product-title">开源实践清单</view>
+        <view class="product-desc">部署、监控、自动化、内容 API 这些文章可以当作一套轻量实践路线图。</view>
+        <view class="meta-row">
+          <text class="pill type-pill">可直接阅读</text>
+          <text class="pill">工程</text>
+          <text class="pill">自动化</text>
+        </view>
+      </view>
+
+      <view class="product-card coral">
+        <view class="product-badge coral">Soon</view>
+        <view class="product-title">运营自动化模板</view>
+        <view class="product-desc">适合把表格、提醒、日报、监控动作整理成小工具。</view>
+      </view>
+
+      <view class="product-card mint">
+        <view class="product-badge mint">Case</view>
+        <view class="product-title">个人站改造案例</view>
+        <view class="product-desc">从内容结构、视觉层次到转化入口，拆解一次完整优化。</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="section">
+    <view class="section-title">支持作者</view>
+    <view class="support-card">
+      <view class="support-title">如果内容帮到你</view>
+      <view class="support-desc">可以先分享小程序、收藏文章，或者复制网站继续阅读。后续如果开通赞赏，会在这里补充正式入口。</view>
+      <view class="support-actions">
+        <button class="support-button primary" open-type="share">分享小程序</button>
+        <button class="support-button" bindtap="copySite">复制网站</button>
+      </view>
+    </view>
+  </view>
+
+  <view class="section">
+    <view class="section-title">想要定制版？</view>
+    <view class="card custom-card">
+      <view class="card-title">从一个具体问题开始</view>
+      <view class="card-desc">如果你想把自己的内容、项目、流程也整理成这样的系统，可以先复制昵称或进入合作实验室。</view>
+      <view class="action-row">
+        <navigator class="action-button" url="/pages/services/services">合作实验室</navigator>
+        <button class="action-button secondary-button" bindtap="copyName">复制昵称</button>
+      </view>
+    </view>
+  </view>
+
+  <bottom-nav selected="-1" />
+</view>

@@ -459,6 +459,97 @@
     @apply grid max-w-xl border border-foreground/40 bg-card/70 font-mono text-sm;
   }
 
+  .admin-workbench {
+    @apply min-h-screen bg-background text-foreground;
+    background-image:
+      linear-gradient(rgba(23, 20, 17, 0.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(23, 20, 17, 0.045) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+
+  .dark .admin-workbench {
+    background-image:
+      linear-gradient(rgba(242, 238, 230, 0.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(242, 238, 230, 0.045) 1px, transparent 1px);
+  }
+
+  .admin-page {
+    @apply space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-500;
+  }
+
+  .admin-page-header {
+    @apply flex flex-col gap-4 border-b border-foreground/70 pb-5 sm:flex-row sm:items-end sm:justify-between;
+  }
+
+  .admin-page-kicker {
+    @apply mb-2 inline-flex border border-primary px-2 py-1 font-mono text-xs font-bold text-primary;
+  }
+
+  .admin-page-title {
+    @apply text-3xl font-black leading-none tracking-normal text-foreground sm:text-4xl;
+  }
+
+  .admin-page-desc {
+    @apply mt-2 max-w-2xl text-sm leading-7 text-muted-foreground;
+  }
+
+  .admin-panel {
+    @apply border border-foreground/45 bg-card/80;
+  }
+
+  .admin-panel-pad {
+    @apply p-5;
+  }
+
+  .admin-stamp {
+    @apply inline-flex items-center gap-2 border border-primary bg-background/70 px-3 py-1.5 font-mono text-xs font-bold text-primary;
+  }
+
+  .admin-muted-box {
+    @apply border border-border bg-background/70;
+  }
+
+  .admin-input {
+    @apply w-full border border-foreground/35 bg-background/80 px-3 py-2.5 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-primary;
+  }
+
+  .admin-button {
+    @apply inline-flex items-center justify-center gap-2 border border-foreground bg-foreground px-4 py-2.5 text-sm font-bold text-background transition-colors hover:border-primary hover:bg-primary disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .admin-button-secondary {
+    @apply inline-flex items-center justify-center gap-2 border border-foreground/50 bg-background px-4 py-2.5 text-sm font-bold text-foreground transition-colors hover:border-primary hover:text-primary disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .admin-icon-button {
+    @apply inline-flex h-9 w-9 items-center justify-center border border-border bg-background text-muted-foreground transition-colors hover:border-primary hover:text-primary;
+  }
+
+  .admin-table {
+    @apply w-full min-w-[760px] text-left text-sm;
+  }
+
+  .admin-table thead tr {
+    @apply border-b border-foreground/45 bg-secondary/60 font-mono text-xs text-muted-foreground;
+  }
+
+  .admin-table th,
+  .admin-table td {
+    @apply px-4 py-3;
+  }
+
+  .admin-table tbody tr {
+    @apply border-b border-border transition-colors hover:bg-secondary/40;
+  }
+
+  .admin-table tbody tr:last-child {
+    @apply border-b-0;
+  }
+
+  .admin-loading {
+    @apply flex h-[60vh] flex-col items-center justify-center gap-4 text-muted-foreground;
+  }
+
   .archive-id-card div {
     @apply grid grid-cols-[7rem_1fr] border-b border-border px-4 py-2 last:border-b-0;
   }

@@ -1,0 +1,28 @@
+<view class="page essays-page">
+  <view class="page-header essays-header fade-enter">
+    <view class="eyebrow">Life Fragments</view>
+    <view class="title">生活随笔</view>
+    <view class="subtitle">成长、经历和那些被认真保存下来的片段，像相册也像备忘录。</view>
+  </view>
+
+  <skeleton-list wx:if="{{loading}}" count="3" />
+  <empty-state wx:elif="{{error}}" tone="error" title="随笔加载失败" desc="{{error}}" action-text="重新加载" bind:action="loadData" />
+  <empty-state wx:elif="{{items.length === 0}}" title="还没有生活随笔" desc="新的片段会按创建时间出现在这里。" />
+
+  <view wx:else class="section feed-grid">
+    <view wx:for="{{items}}" wx:key="id" class="feed-card pressable" data-collection="{{item.detailCollection}}" data-slug="{{item.slug}}" bindtap="openDetail">
+      <view class="feed-top">
+        <text class="feed-type">ESSAY</text>
+        <text class="feed-date">{{item.displayDate}}</text>
+      </view>
+      <view class="feed-title">{{item.title}}</view>
+      <view class="feed-desc">{{item.description}}</view>
+      <view class="chip-row">
+        <text class="chip chip-reading">随笔</text>
+        <text wx:for="{{item.tags}}" wx:key="*this" wx:for-index="tagIndex" wx:if="{{tagIndex < 3}}" class="chip">#{{item}}</text>
+      </view>
+    </view>
+  </view>
+
+  <bottom-nav selected="-1" />
+</view>

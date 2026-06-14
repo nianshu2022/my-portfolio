@@ -1,0 +1,102 @@
+<view class="page detail-page">
+  <skeleton-list wx:if="{{loading}}" count="{{3}}" />
+  <empty-state wx:elif="{{error}}" tone="error" title="这朵花暂时打不开" desc="{{error}}" action-text="重新加载" bind:action="loadData" />
+
+  <block wx:else>
+    <view class="detail-header fade-enter">
+      <view class="meta-row first-meta">
+        <text class="pill type-pill">{{post.typeLabel}}</text>
+        <text class="pill">{{post.displayDate}}</text>
+        <text class="pill">{{post.readingTime}}</text>
+      </view>
+      <view class="detail-title">{{post.title}}</view>
+      <view class="detail-desc">{{post.description}}</view>
+      <view class="tag-row">
+        <view wx:for="{{post.tags}}" wx:key="*this" class="tag-chip pressable" data-tag="{{item}}" bindtap="openTag">#{{item}}</view>
+      </view>
+      
+      <view class="detail-stats">
+        <view class="stat-item">
+          <text class="stat-icon">👁</text>
+          <text class="stat-value">{{post.views || 0}}</text>
+        </view>
+        <view class="stat-item">
+          <text class="stat-icon">♥</text>
+          <text class="stat-value">{{post.likes || 0}}</text>
+        </view>
+      </view>
+    </view>
+
+    <image wx:if="{{post.cover}}" class="cover" src="{{post.cover}}" mode="aspectFill" bindtap="previewCover" />
+    <image wx:elif="{{post.award}}" class="cover" src="{{post.award}}" mode="aspectFill" bindtap="previewCover" />
+
+    <view class="reader-sheet">
+      <rich-text class="markdown" nodes="{{contentNodes}}"></rich-text>
+    </view>
+
+    <view wx:if="{{nextItem}}" class="next-card pressable" bindtap="openNext">
+      <view class="next-kicker">下一站漫游</view>
+      <view class="next-title">{{nextItem.title}}</view>
+      <view class="next-desc">{{nextItem.typeLabel}} · {{nextItem.displayDate}}</view>
+    </view>
+
+    <view class="detail-toolbar">
+      <view class="toolbar-surface">
+        <button class="toolbar-button {{liked ? 'active liked' : ''}}" bindtap="toggleLike">
+          <text class="toolbar-icon">{{liked ? '♥' : '♡'}}</text>
+          <text class="toolbar-label">{{liked ? '已喜欢' : '喜欢'}}</text>
+        </button>
+        <button class="toolbar-button {{favorited ? 'active saved' : ''}}" bindtap="toggleFavorite">
+          <text class="toolbar-icon">{{favorited ? '★' : '☆'}}</text>
+          <text class="toolbar-label">{{favorited ? '已收藏' : '收藏'}}</text>
+        </button>
+      </view>
+    </view>
+    <view class="detail-comments">
+      <view class="comment-header">
+        <text class="comment-title">留言板</text>
+        <text class="comment-count">{{comments.length || 0}} 条讨论</text>
+      </view>
+
+      <view wx:if="{{comments.length > 0}}" class="comment-list">
+        <view wx:for="{{comments}}" wx:key="id" class="comment-item">
+          <view class="comment-user">
+            <view class="avatar-mini">{{item.nickname[0]}}</view>
+            <view class="user-info">
+              <text class="user-name">{{item.nickname}}</text>
+              <text class="comment-time">{{item.created_at}}</text>
+            </view>
+          </view>
+          <view class="comment-content">{{item.content}}</view>
+          <!-- 管理员回复 -->
+          <view class="admin-reply-box" wx:if="{{item.reply_content}}">
+            <view class="reply-header">园丁回复</view>
+            <view class="reply-body">{{item.reply_content}}</view>
+          </view>
+        </view>
+      </view>
+      <view wx:else class="comment-empty">
+        <text class="empty-icon">💬</text>
+        <text class="empty-text">暂时还没有留言，来做第一个吧</text>
+      </view>
+
+      <button class="write-comment-btn" bindtap="showCommentSheet">我也说两句...</button>
+    </view>
+
+    <!-- 发表评论弹窗 -->
+    <view class="comment-sheet {{sheetVisible ? 'visible' : ''}}">
+      <view class="sheet-mask" bindtap="hideCommentSheet"></view>
+      <view class="sheet-content">
+        <view class="sheet-header">
+          <text>发表留言</text>
+          <text class="sheet-close" bindtap="hideCommentSheet">✕</text>
+        </view>
+        <view class="sheet-body">
+          <input class="nickname-input" placeholder="怎么称呼你？" value="{{nickname}}" bindinput="onNicknameInput" />
+          <textarea class="content-input" placeholder="想对念舒说点什么..." value="{{commentContent}}" bindinput="onContentInput" maxlength="200" />
+          <button class="submit-btn {{canSubmit ? 'active' : ''}}" bindtap="submitComment">发送留言</button>
+        </view>
+      </view>
+    </view>
+  </block>
+</view>

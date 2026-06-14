@@ -1,0 +1,28 @@
+<view class="page list-page">
+  <view class="page-header list-header fade-enter">
+    <view class="eyebrow">Engineering Notes</view>
+    <view class="title">技术博客</view>
+    <view class="subtitle">把部署、运维、自动化和踩坑现场做成可复用的路线图。</view>
+  </view>
+
+  <skeleton-list wx:if="{{loading}}" count="3" />
+  <empty-state wx:elif="{{error}}" tone="error" title="文章加载失败" desc="{{error}}" action-text="重新加载" bind:action="loadData" />
+  <empty-state wx:elif="{{items.length === 0}}" title="还没有技术文章" desc="新的折腾笔记会按创建时间出现在这里。" />
+
+  <view wx:else class="section feed-grid">
+    <view wx:for="{{items}}" wx:key="id" class="feed-card pressable" data-collection="{{item.detailCollection}}" data-slug="{{item.slug}}" bindtap="openDetail">
+      <view class="feed-top">
+        <text class="feed-type">POST</text>
+        <text class="feed-date">{{item.displayDate}}</text>
+      </view>
+      <view class="feed-title">{{item.title}}</view>
+      <view class="feed-desc">{{item.description}}</view>
+      <view class="chip-row">
+        <text class="chip chip-reading">{{item.readingTime}}</text>
+        <text wx:for="{{item.tags}}" wx:key="*this" wx:for-index="tagIndex" wx:if="{{tagIndex < 3}}" class="chip">#{{item}}</text>
+      </view>
+    </view>
+  </view>
+
+  <bottom-nav selected="-1" />
+</view>

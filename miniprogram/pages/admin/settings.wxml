@@ -1,0 +1,43 @@
+<view class="page admin-settings">
+  <view class="admin-header fade-enter">
+    <view class="admin-title">全局配置</view>
+    <view class="admin-sub">无需重新发布，实时控制空间信息</view>
+  </view>
+
+  <view class="settings-form fade-enter" style="animation-delay: 0.1s;">
+    <view class="form-group">
+      <view class="label">空间名称</view>
+      <input 
+        class="input-field" 
+        value="{{config.site_name}}" 
+        placeholder="例如：Nianshu 的空间" 
+        bindinput="onInput" 
+        data-key="site_name"
+      />
+    </view>
+
+    <view class="form-group">
+      <view class="label">园丁格言 (Bio)</view>
+      <textarea 
+        class="textarea-field" 
+        value="{{config.site_bio}}" 
+        placeholder="介绍一下你自己和你的花园..." 
+        bindinput="onInput" 
+        data-key="site_bio"
+      />
+    </view>
+
+    <view class="form-group">
+      <view class="label">全站公告 (Notice)</view>
+      <textarea 
+        class="textarea-field" 
+        value="{{config.site_notice}}" 
+        placeholder="显示在首页顶部的公告信息" 
+        bindinput="onInput" 
+        data-key="site_notice"
+      />
+    </view>
+
+    <button class="save-btn {{changed ? 'active' : ''}}" bindtap="saveSettings">保存并生效</button>
+  </view>
+</view>

@@ -1,0 +1,76 @@
+<view class="page home-v4">
+  <view class="hero-shell fade-enter">
+    <view class="hero-glow hero-glow-a"></view>
+    <view class="hero-glow hero-glow-b"></view>
+    <view class="hero-copy">
+      <view class="hero-kicker">PERSONAL WORKSPACE</view>
+      <view class="hero-title">{{siteName}}</view>
+      <view class="hero-sub">{{notice}}</view>
+    </view>
+    <view class="hero-visual float-slow" aria-hidden="true">
+      <view class="glass-tile tile-a">NOTE</view>
+      <view class="glass-tile tile-b">LOG</view>
+      <view class="glass-tile tile-c">META</view>
+    </view>
+  </view>
+
+  <view class="bento section">
+    <navigator class="bento-card tech-card pressable" url="/pages/posts/posts">
+      <view class="bento-art tech-art" aria-hidden="true">
+        <view class="tech-node node-a"></view>
+        <view class="tech-node node-b"></view>
+        <view class="tech-node node-c"></view>
+        <view class="tech-line line-a"></view>
+        <view class="tech-line line-b"></view>
+        <view class="code-mark">CODE</view>
+      </view>
+      <view class="bento-title">技术手记</view>
+      <view class="bento-number-row">
+        <text class="bento-number">{{stats.posts}}</text>
+        <text class="bento-unit">份记录</text>
+      </view>
+    </navigator>
+
+    <navigator class="bento-card essay-card pressable" url="/pages/essays/essays">
+      <view class="bento-art essay-art" aria-hidden="true">
+        <view class="paper-sheet sheet-a"></view>
+        <view class="paper-sheet sheet-b"></view>
+        <view class="ink-dot dot-a"></view>
+        <view class="ink-dot dot-b"></view>
+      </view>
+      <view class="bento-title">学习日志</view>
+      <view class="bento-number-row">
+        <text class="bento-number">{{stats.essays}}</text>
+        <text class="bento-unit">份手记</text>
+      </view>
+    </navigator>
+  </view>
+
+  <view class="section">
+    <view class="panel-head">
+      <view class="section-title no-margin">
+        <text>近期记录</text>
+        <text class="muted">{{items.length}} 份</text>
+      </view>
+    </view>
+
+    <skeleton-list wx:if="{{loading}}" count="{{3}}" />
+    <empty-state wx:elif="{{error}}" tone="error" title="内容流走丢了" desc="{{error}}" action-text="重新加载" bind:action="loadData" />
+    <empty-state wx:elif="{{items.length === 0}}" title="这里暂时没有记录" desc="等有新的想法时，我会记录在这里。" />
+
+    <view wx:else class="log-grid">
+      <view wx:for="{{items}}" wx:key="id" class="log-card pressable" data-collection="{{item.detailCollection}}" data-slug="{{item.slug}}" bindtap="openDetail">
+        <view class="log-top">
+          <text class="log-type">{{item.typeLabel}}</text>
+          <text class="log-date">{{item.displayDate}}</text>
+        </view>
+        <view class="log-title">{{item.title}}</view>
+        <view class="log-desc">{{item.description}}</view>
+        <view class="chip-row">
+          <text class="chip chip-reading">{{item.readingTime}}</text>
+          <text wx:for="{{item.tags}}" wx:key="*this" wx:for-index="tagIndex" wx:if="{{tagIndex < 2}}" class="chip">#{{item}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

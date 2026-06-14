@@ -1,0 +1,43 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/tags/tags",
+    "pages/reading/index",
+    "pages/about/about",
+    "pages/detail/detail",
+    "pages/posts/posts",
+    "pages/essays/essays",
+    "pages/products/products",
+    "pages/services/services",
+    "pages/admin/dashboard",
+    "pages/admin/comments",
+    "pages/admin/posts",
+    "pages/admin/settings",
+    "pages/admin/monitor"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#ffffff",
+    "navigationBarTitleText": "Nianshu 的空间",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#f8fafc"
+  },
+  "tabBar": {
+    "color": "#6b7193",
+    "selectedColor": "#6366f1",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "white",
+    "list": [
+      { "pagePath": "pages/index/index", "text": "花园" },
+      { "pagePath": "pages/tags/tags", "text": "索引" },
+      { "pagePath": "pages/reading/index", "text": "书架" },
+      { "pagePath": "pages/about/about", "text": "我的" }
+    ],
+    "custom": true
+  },
+  "darkmode": true,
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents",
+  "style": "v2",
+  "__usePrivacyCheck__": true
+}

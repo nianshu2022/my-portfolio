@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "日常日志",
+  "enablePullDownRefresh": true,
+  "usingComponents": {
+    "bottom-nav": "/components/bottom-nav/index",
+    "empty-state": "/components/empty-state/index",
+    "skeleton-list": "/components/skeleton-list/index"
+  }
+}

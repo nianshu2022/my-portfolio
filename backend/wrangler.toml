@@ -1,0 +1,16 @@
+name = "nianshu-garden-api"
+main = "src/index.ts"
+compatibility_date = "2024-05-05"
+
+[vars]
+ADMIN_PASSWORD = "1qaz@WSX"
+# SITE_URL = "https://blog.nianshu2022.cn"
+
+[[d1_databases]]
+binding = "DB" # 这里的名字要和代码中的一致
+database_name = "nianshu-garden-db"
+database_id = "c90ef4a2-3a84-48b4-a6ce-576c196326fa" # 执行 npx wrangler d1 create 后填入
+
+[[routes]]
+pattern = "garden-api.nianshu2022.cn"
+custom_domain = true

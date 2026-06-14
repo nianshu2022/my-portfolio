@@ -1,0 +1,54 @@
+/* Liquid Garden tokens: Gen-Z premium mini program */
+page,
+view {
+  --bg-page: #eef2ff;
+  --bg-page-warm: #fff7ed;
+  --bg-card: #ffffff;
+  --bg-elevated: rgba(255, 255, 255, 0.92);
+  --bg-glass: rgba(255, 255, 255, 0.72);
+  --bg-soft: #f4f7ff;
+  --text-title: #17113f;
+  --text-body: #2d3152;
+  --text-sub: #59617f;
+  --text-inverse: #ffffff;
+  --line: rgba(99, 102, 241, 0.16);
+  --line-strong: rgba(49, 46, 129, 0.18);
+  --brand: #6366f1;
+  --brand-deep: #4338ca;
+  --brand-soft: #eef2ff;
+  --accent-blue: #2563eb;
+  --accent-violet: #8b5cf6;
+  --accent-mint: #22c55e;
+  --accent-coral: #fb7185;
+  --tag-bg: #eef5ff;
+  --radius-sm: 14rpx;
+  --radius-md: 22rpx;
+  --radius-lg: 32rpx;
+  --radius-xl: 44rpx;
+  --space-page: 28rpx;
+  --shadow-card: 0 18rpx 48rpx rgba(67, 56, 202, 0.11);
+  --shadow-soft: 0 10rpx 28rpx rgba(37, 99, 235, 0.08);
+}
+
+@media (prefers-color-scheme: dark) {
+  page, view {
+    --bg-page: #0b0f1a;
+    --bg-page-warm: #14142b;
+    --bg-card: #161b33;
+    --bg-elevated: rgba(22, 27, 51, 0.96);
+    --bg-glass: rgba(11, 15, 26, 0.82);
+    --bg-soft: #1c224a;
+    --text-title: #ffffff;
+    --text-body: #e2e8f0;
+    --text-sub: #94a3b8;
+    --text-inverse: #ffffff;
+    --line: rgba(255, 255, 255, 0.08);
+    --line-strong: rgba(255, 255, 255, 0.15);
+    --brand: #7c3aed;
+    --brand-deep: #a78bfa;
+    --brand-soft: rgba(124, 58, 237, 0.2);
+    --tag-bg: #1c224a;
+    --shadow-card: 0 20rpx 50rpx rgba(0, 0, 0, 0.5);
+    --shadow-soft: 0 10rpx 30rpx rgba(0, 0, 0, 0.4);
+  }
+}

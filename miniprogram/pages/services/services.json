@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "合作实验室",
+  "usingComponents": {
+    "bottom-nav": "/components/bottom-nav/index"
+  }
+}

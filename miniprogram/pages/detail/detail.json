@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "内容详情",
+  "usingComponents": {
+    "empty-state": "/components/empty-state/index",
+    "skeleton-list": "/components/skeleton-list/index"
+  }
+}

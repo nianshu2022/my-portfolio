@@ -1,0 +1,63 @@
+<view class="page about-v4">
+  <!-- 1. Profile Poster Hero -->
+  <view class="hero-poster fade-enter">
+    <view class="hero-backdrop"></view>
+    <view class="hero-content">
+      <view class="avatar-ring-container">
+        <view class="halo halo-1"></view>
+        <view class="halo halo-2"></view>
+        <image class="avatar-img" src="https://blog.nianshu2022.cn/img/avatar.webp" mode="aspectFill" />
+      </view>
+      <view class="hero-name">Nianshu</view>
+      <view class="hero-title">Product Ops / Digital Builder</view>
+      
+      <view class="glass-bio">
+        <text class="bio-quotes left">“</text>
+        {{bio || '专注于产品逻辑与技术实现，记录个人成长与折腾历程。'}}
+        <text class="bio-quotes right">”</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 2. Connect Garden (Premium List) -->
+  <view class="section connect-section fade-enter" style="animation-delay: 0.1s;">
+    <view class="section-title">连接空间</view>
+    <view class="connect-list-premium">
+      <navigator class="premium-card pressable" url="/pages/services/services">
+        <view class="pc-icon-box lab-icon"></view>
+        <view class="pc-content">
+          <view class="pc-title">合作实验室</view>
+          <view class="pc-desc">探索落地项目与咨询服务</view>
+        </view>
+        <view class="pc-arrow">→</view>
+      </navigator>
+      
+      <navigator class="premium-card pressable" url="/pages/products/products">
+        <view class="pc-icon-box shelf-icon"></view>
+        <view class="pc-content">
+          <view class="pc-title">数字货架</view>
+          <view class="pc-desc">获取高质量模板与实用资源</view>
+        </view>
+        <view class="pc-arrow">→</view>
+      </navigator>
+
+      <!-- 管理入口 (仅管理员可见) -->
+      <navigator wx:if="{{isAdmin}}" class="premium-card pressable admin-card" url="/pages/admin/dashboard">
+        <view class="pc-icon-box admin-icon"></view>
+        <view class="pc-content">
+          <view class="pc-title">空间管理中心</view>
+          <view class="pc-desc">数据统计、留言管理、记录状态</view>
+        </view>
+        <view class="pc-arrow">进入</view>
+      </navigator>
+    </view>
+    
+    <view class="website-pill pressable" bindtap="copySite">
+      <view class="pill-icon web-icon"></view>
+      <view class="pill-text">blog.nianshu2022.cn</view>
+      <view class="pill-action">复制链接</view>
+    </view>
+  </view>
+  
+
+</view>

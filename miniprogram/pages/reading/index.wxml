@@ -1,0 +1,38 @@
+<view class="page reading-page">
+  <view class="reading-hero fade-enter">
+    <view class="reading-kicker">Pocket Shelf</view>
+    <view class="reading-title">我的书架</view>
+    <view class="reading-sub">收藏、喜欢和阅读历史会自动落在这里，负责把“继续阅读”这件事接住。</view>
+    <view class="reading-stats">
+      <view><text>{{stats.history}}</text><text>历史</text></view>
+      <view><text>{{stats.favorites}}</text><text>收藏</text></view>
+      <view><text>{{stats.likes}}</text><text>喜欢</text></view>
+      <view><text>{{stats.today}}</text><text>今日</text></view>
+    </view>
+  </view>
+
+  <view class="reading-tabs section">
+    <button class="reading-tab {{tab === 'history' ? 'active' : ''}}" data-tab="history" bindtap="switchTab">最近看过</button>
+    <button class="reading-tab {{tab === 'favorites' ? 'active' : ''}}" data-tab="favorites" bindtap="switchTab">口袋书签</button>
+    <button class="reading-tab {{tab === 'likes' ? 'active' : ''}}" data-tab="likes" bindtap="switchTab">喜欢过的</button>
+  </view>
+
+  <empty-state wx:if="{{items.length === 0}}" tone="soft" title="这里还没有内容" desc="{{tab === 'favorites' ? '还没有收藏，遇到喜欢的文章就收进来。' : tab === 'likes' ? '喜欢列表还空着，读到心动处就点一下。' : '阅读历史还空着，去首页随机漫游一下吧。'}}" action-text="回到首页" url="/pages/index/index" />
+
+  <view wx:else class="section">
+    <view wx:for="{{items}}" wx:key="slug" class="feed-card pressable" data-collection="{{item.detailCollection}}" data-slug="{{item.slug}}" bindtap="openDetail">
+      <view class="feed-top">
+        <text class="feed-type">{{item.typeLabel}}</text>
+        <text class="feed-date">{{item.displayDate}}</text>
+      </view>
+      <view class="feed-title">{{item.title}}</view>
+      <view class="feed-desc">{{item.description}}</view>
+      <view class="chip-row">
+        <text wx:if="{{item.readingTime}}" class="chip chip-reading">{{item.readingTime}}</text>
+        <text wx:for="{{item.tags}}" wx:key="*this" wx:for-index="tagIndex" wx:if="{{tagIndex < 2}}" class="chip">#{{item}}</text>
+      </view>
+    </view>
+
+    <button wx:if="{{tab === 'history'}}" class="clear-button" bindtap="clearHistory">清空阅读历史</button>
+  </view>
+</view>

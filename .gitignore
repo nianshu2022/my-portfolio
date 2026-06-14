@@ -33,6 +33,8 @@
 .DS_Store
 *.pem
 *.zip
+project.private.config.json
+**/project.private.config.json
 
 # debug
 npm-debug.log*

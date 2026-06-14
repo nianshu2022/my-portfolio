@@ -1,17 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { 
-  Settings, 
-  Shield, 
-  Database, 
-  RefreshCcw, 
-  CheckCircle2, 
-  AlertTriangle,
-  Server,
-  Loader2,
-  Trash2
-} from "lucide-react";
+import { useEffect, useState } from "react";
+import { AlertTriangle, CheckCircle2, Database, Loader2, RefreshCcw, Server, Settings, Shield, Trash2 } from "lucide-react";
 
 type SystemInfo = {
   database: Record<string, number>;
@@ -31,7 +21,7 @@ export default function AdminSettingsPage() {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || "";
     try {
       const res = await fetch(`${apiUrl}/api/admin/health`, {
-        headers: { "Authorization": `Bearer ${token}` }
+        headers: { Authorization: `Bearer ${token}` },
       });
       if (res.ok) setInfo(await res.json());
     } catch (err) {
@@ -41,22 +31,24 @@ export default function AdminSettingsPage() {
     }
   };
 
-  useEffect(() => { fetchInfo(); }, []);
+  useEffect(() => {
+    fetchInfo();
+  }, []);
 
   const handleCleanStats = async () => {
     if (!confirm("确定要清理无效的浏览统计吗？这可能会影响部分显示数据。")) return;
-    
+
     setIsCleaning(true);
     const token = localStorage.getItem("admin_token");
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || "";
-    
+
     try {
       const res = await fetch(`${apiUrl}/api/admin/clean-stats`, {
         method: "POST",
-        headers: { "Authorization": `Bearer ${token}` }
+        headers: { Authorization: `Bearer ${token}` },
       });
       if (res.ok) {
-        setFeedback("清理成功！");
+        setFeedback("清理成功");
         setTimeout(() => setFeedback(""), 3000);
       }
     } catch {
@@ -68,116 +60,106 @@ export default function AdminSettingsPage() {
 
   if (isLoading) {
     return (
-      <div className="flex h-[60vh] flex-col items-center justify-center gap-4 text-slate-400">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        <p className="text-sm font-medium tracking-widest uppercase">System Checking...</p>
+      <div className="admin-loading">
+        <Loader2 className="h-7 w-7 animate-spin text-primary" />
+        <p className="font-mono text-xs font-bold">读取系统设置</p>
       </div>
     );
   }
 
+  const totalRecords = Object.values(info?.database || {}).reduce((total, count) => total + count, 0);
+
   return (
-    <div className="max-w-4xl space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
-      <header>
-        <h1 className="text-3xl font-bold text-white tracking-tight">系统设置</h1>
-        <p className="mt-2 text-slate-400">监控档案局底层运行状况与安全配置。</p>
+    <div className="admin-page max-w-5xl">
+      <header className="admin-page-header">
+        <div>
+          <div className="admin-page-kicker">SYSTEM SETTINGS</div>
+          <h1 className="admin-page-title">系统设置</h1>
+          <p className="admin-page-desc">管理后台运行信息、安全令牌说明和低频维护操作。</p>
+        </div>
+        <div className="admin-stamp">Admin v1.0.4</div>
       </header>
 
-      {/* 状态看板 */}
-      <div className="grid gap-6 sm:grid-cols-2">
-        <div className="rounded-2xl border border-white/5 bg-white/[0.02] p-6">
-          <div className="flex items-center gap-3 text-emerald-400">
-            <Server className="h-5 w-5" />
-            <h2 className="font-bold">运行环境</h2>
-          </div>
-          <div className="mt-4 space-y-3">
-            <div className="flex justify-between text-sm">
-              <span className="text-slate-500">部署平台</span>
-              <span className="text-slate-200">{info?.platform}</span>
+      <section className="grid gap-4 sm:grid-cols-2">
+        <div className="admin-panel admin-panel-pad">
+          <h2 className="mb-5 flex items-center gap-2 text-xl font-black">
+            <Server className="h-5 w-5 text-primary" />
+            运行环境
+          </h2>
+          <dl className="grid border border-border font-mono text-xs">
+            <div className="grid grid-cols-[6rem_1fr] border-b border-border">
+              <dt className="border-r border-border px-3 py-2 text-muted-foreground">平台</dt>
+              <dd className="px-3 py-2 font-bold">{info?.platform}</dd>
             </div>
-            <div className="flex justify-between text-sm">
-              <span className="text-slate-500">运行时</span>
-              <span className="text-slate-200">{info?.runtime}</span>
+            <div className="grid grid-cols-[6rem_1fr] border-b border-border">
+              <dt className="border-r border-border px-3 py-2 text-muted-foreground">运行时</dt>
+              <dd className="px-3 py-2 font-bold">{info?.runtime}</dd>
             </div>
-            <div className="flex justify-between text-sm">
-              <span className="text-slate-500">边缘节点</span>
-              <span className="text-slate-200 font-mono text-xs">{info?.location}</span>
+            <div className="grid grid-cols-[6rem_1fr]">
+              <dt className="border-r border-border px-3 py-2 text-muted-foreground">节点</dt>
+              <dd className="px-3 py-2 font-bold">{info?.location}</dd>
             </div>
-          </div>
+          </dl>
         </div>
 
-        <div className="rounded-2xl border border-white/5 bg-white/[0.02] p-6">
-          <div className="flex items-center gap-3 text-blue-400">
-            <Database className="h-5 w-5" />
-            <h2 className="font-bold">数据统计</h2>
-          </div>
-          <div className="mt-4 space-y-3">
-            <div className="flex justify-between text-sm">
-              <span className="text-slate-500">数据库类型</span>
-              <span className="text-slate-200">Cloudflare D1 (SQLite)</span>
+        <div className="admin-panel admin-panel-pad">
+          <h2 className="mb-5 flex items-center gap-2 text-xl font-black">
+            <Database className="h-5 w-5 text-primary" />
+            数据统计
+          </h2>
+          <dl className="grid border border-border font-mono text-xs">
+            <div className="grid grid-cols-[6rem_1fr] border-b border-border">
+              <dt className="border-r border-border px-3 py-2 text-muted-foreground">数据库</dt>
+              <dd className="px-3 py-2 font-bold">Cloudflare D1</dd>
             </div>
-            <div className="flex justify-between text-sm">
-              <span className="text-slate-500">总记录数</span>
-              <span className="text-slate-200">{(
-                Object.values(info?.database || {}).reduce((total, count) => total + count, 0)
-              )} 条</span>
+            <div className="grid grid-cols-[6rem_1fr]">
+              <dt className="border-r border-border px-3 py-2 text-muted-foreground">记录数</dt>
+              <dd className="px-3 py-2 font-bold">{totalRecords} 条</dd>
             </div>
-          </div>
+          </dl>
         </div>
-      </div>
+      </section>
 
-      {/* 安全中心 */}
-      <section className="space-y-4">
-        <h3 className="flex items-center gap-2 text-lg font-bold text-white px-2">
-          <Shield className="h-5 w-5 text-amber-500" />
+      <section className="admin-panel admin-panel-pad">
+        <h2 className="mb-4 flex items-center gap-2 text-xl font-black">
+          <Shield className="h-5 w-5 text-primary" />
           安全与令牌
-        </h3>
-        <div className="rounded-2xl border border-amber-500/10 bg-amber-500/5 p-6">
-          <div className="flex items-start gap-4">
-            <AlertTriangle className="mt-1 h-5 w-5 text-amber-500 shrink-0" />
-            <div className="flex-1 space-y-2">
-              <p className="text-sm font-bold text-amber-200">正在使用环境变量管理权限</p>
-              <p className="text-xs text-amber-200/60 leading-relaxed">
-                当前的 Web 后台访问令牌存储在 Cloudflare Workers 的 Secrets 中。如需修改，请在本地终端执行：
-                <code className="mx-1 rounded bg-black/30 px-1 py-0.5 text-amber-400 font-mono">wrangler secret put ADMIN_PASSWORD</code>
-              </p>
-            </div>
+        </h2>
+        <div className="flex gap-4 border border-primary/40 bg-primary/5 p-4">
+          <AlertTriangle className="mt-1 h-5 w-5 shrink-0 text-primary" />
+          <div className="space-y-2">
+            <p className="text-sm font-bold">后台访问令牌由环境变量管理</p>
+            <p className="text-sm leading-7 text-muted-foreground">
+              当前 Web 后台访问令牌存储在 Cloudflare Workers Secrets 中。如需修改，请在本地终端执行
+              <code className="mx-1 border border-border bg-background px-1.5 py-0.5 font-mono text-xs text-primary">wrangler secret put ADMIN_PASSWORD</code>
+              后重新部署后端服务。
+            </p>
           </div>
         </div>
       </section>
 
-      {/* 数据维护 */}
-      <section className="space-y-4">
-        <h3 className="flex items-center gap-2 text-lg font-bold text-white px-2">
+      <section className="admin-panel admin-panel-pad">
+        <h2 className="mb-4 flex items-center gap-2 text-xl font-black">
           <Settings className="h-5 w-5 text-primary" />
           数据维护
-        </h3>
-        <div className="rounded-2xl border border-white/5 bg-white/[0.02] p-6">
-          <div className="flex items-center justify-between">
-            <div className="space-y-1">
-              <p className="text-sm font-bold text-white">清理无效浏览数据</p>
-              <p className="text-xs text-slate-500">清除没有对应文章记录的冗余统计条目。</p>
-            </div>
-            <button 
-              onClick={handleCleanStats}
-              disabled={isCleaning}
-              className="flex items-center gap-2 rounded-xl bg-rose-500/10 px-4 py-2 text-sm font-bold text-rose-500 transition-all hover:bg-rose-500/20 disabled:opacity-50"
-            >
-              {isCleaning ? <RefreshCcw className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
-              执行清理
-            </button>
+        </h2>
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <p className="text-sm font-bold">清理无效浏览数据</p>
+            <p className="mt-1 text-sm text-muted-foreground">清除没有对应文章记录的冗余统计条目。</p>
           </div>
-          {feedback && (
-            <div className="mt-4 flex items-center gap-2 text-xs text-emerald-400 animate-in fade-in slide-in-from-left-2">
-              <CheckCircle2 className="h-3 w-3" />
-              {feedback}
-            </div>
-          )}
+          <button onClick={handleCleanStats} disabled={isCleaning} className="admin-button-secondary">
+            {isCleaning ? <RefreshCcw className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
+            执行清理
+          </button>
         </div>
+        {feedback && (
+          <div className="mt-4 flex items-center gap-2 font-mono text-xs font-bold text-primary">
+            <CheckCircle2 className="h-3.5 w-3.5" />
+            {feedback}
+          </div>
+        )}
       </section>
-
-      <footer className="pt-10 text-center">
-        <p className="text-xs text-slate-600">念舒档案局 · Admin Console v1.0.1</p>
-      </footer>
     </div>
   );
 }
