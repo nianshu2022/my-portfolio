@@ -1,54 +1,54 @@
-const api = require('../../utils/api');
-
-function dateValue(item) {
-  const raw = String(item.date || '').replace(' ', 'T');
-  const time = new Date(raw).getTime();
-  return Number.isNaN(time) ? 0 : time;
-}
-
-function byCreatedDesc(a, b) {
-  const diff = dateValue(b) - dateValue(a);
-  if (diff !== 0) return diff;
-  return String(a.slug || '').localeCompare(String(b.slug || ''), 'zh-CN');
-}
+const { getAllEssays } = require('../../utils/api')
 
 Page({
   data: {
     loading: true,
-    error: '',
-    items: []
+    essays: []
   },
 
   onLoad() {
-    this.loadData();
+    this.loadData()
   },
 
-  onPullDownRefresh() {
-    this.loadData().finally(() => wx.stopPullDownRefresh());
-  },
-
-  async loadData() {
-    this.setData({ loading: true, error: '' });
-
-    try {
-      const essays = await api.getEssays();
-      const items = essays.map(api.normalizeItem).sort(byCreatedDesc);
-      this.setData({
-        items,
-        loading: false
-      });
-    } catch (error) {
-      this.setData({
-        loading: false,
-        error: error.message || '随笔加载失败，请稍后再试。'
-      });
+  onShow() {
+    if (typeof this.getTabBar === 'function' && this.getTabBar()) {
+      this.getTabBar().setData({ selected: 2 })
     }
   },
 
-  openDetail(event) {
-    const { collection, slug } = event.currentTarget.dataset;
+  onPullDownRefresh() {
+    this.loadData().then(() => {
+      wx.stopPullDownRefresh()
+    })
+  },
+
+  async loadData() {
+    this.setData({ loading: true })
+    
+    try {
+      const essays = await getAllEssays()
+      this.setData({
+        essays,
+        loading: false
+      })
+    } catch (err) {
+      console.error('加载失败:', err)
+      this.setData({ loading: false })
+      wx.showToast({ title: '加载失败', icon: 'none' })
+    }
+  },
+
+  onEssayTap(e) {
+    const { slug } = e.detail
     wx.navigateTo({
-      url: `/pages/detail/detail?collection=${collection}&slug=${slug}`
-    });
+      url: `/pages/detail/detail?slug=${slug}&type=essay`
+    })
+  },
+
+  onShareAppMessage() {
+    return {
+      title: '成长样本 - 念舒档案局',
+      path: '/pages/essays/essays'
+    }
   }
-});
+})

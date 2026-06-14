@@ -1,121 +1,150 @@
-const BASE_URL = 'https://garden-api.nianshu2022.cn';
-const REQUEST_TIMEOUT = 20000;
+/* 念舒档案局 - API 工具 */
 
-function formatError(path, detail) {
-  const message = detail?.errMsg || detail?.message || String(detail || '未知错误');
-  return new Error(`请求 ${path} 失败：${message}`);
-}
+const BASE_URL = 'https://blog.nianshu2022.cn'
 
-function requestOnce(path, method = 'GET', data = null) {
-  const app = getApp();
-  const openid = app?.globalData?.openid || '';
-
+/**
+ * 获取所有文章
+ */
+function getAllPosts() {
   return new Promise((resolve, reject) => {
     wx.request({
-      url: `${BASE_URL}${path}`,
-      method,
-      data,
-      header: {
-        'x-openid': openid
-      },
-      timeout: REQUEST_TIMEOUT,
-      success(res) {
-        if (res.statusCode >= 200 && res.statusCode < 300) {
-          resolve(res.data);
-          return;
+      url: `${BASE_URL}/api/posts.json`,
+      method: 'GET',
+      success: (res) => {
+        if (res.statusCode === 200) {
+          resolve(res.data)
+        } else {
+          reject(new Error(`请求失败: ${res.statusCode}`))
         }
-
-        reject(new Error(`请求 ${path} 失败：HTTP ${res.statusCode}`));
       },
-      fail(error) {
-        reject(formatError(path, error));
+      fail: (err) => {
+        reject(err)
       }
-    });
-  });
+    })
+  })
 }
 
-async function request(path, method = 'GET', data = null) {
-  try {
-    return await requestOnce(path, method, data);
-  } catch (firstError) {
-    console.warn('[Garden API] request retry', {
-      path,
-      method,
-      message: firstError.message
-    });
-
-    try {
-      return await requestOnce(path, method, data);
-    } catch (secondError) {
-      console.error('[Garden API] request failed', {
-        path,
-        method,
-        first: firstError.message,
-        second: secondError.message
-      });
-      throw secondError;
-    }
-  }
+/**
+ * 获取文章详情
+ */
+function getPostBySlug(slug) {
+  return new Promise((resolve, reject) => {
+    wx.request({
+      url: `${BASE_URL}/api/posts/${slug}.json`,
+      method: 'GET',
+      success: (res) => {
+        if (res.statusCode === 200) {
+          resolve(res.data)
+        } else {
+          reject(new Error(`请求失败: ${res.statusCode}`))
+        }
+      },
+      fail: (err) => {
+        reject(err)
+      }
+    })
+  })
 }
 
-function getGarden() {
-  return request('/api/garden');
+/**
+ * 获取所有随笔
+ */
+function getAllEssays() {
+  return new Promise((resolve, reject) => {
+    wx.request({
+      url: `${BASE_URL}/api/essays.json`,
+      method: 'GET',
+      success: (res) => {
+        if (res.statusCode === 200) {
+          resolve(res.data)
+        } else {
+          reject(new Error(`请求失败: ${res.statusCode}`))
+        }
+      },
+      fail: (err) => {
+        reject(err)
+      }
+    })
+  })
 }
 
-function getPosts() {
-  return request('/api/garden').then(items => items.filter(i => i.type === 'post'));
+/**
+ * 获取随笔详情
+ */
+function getEssayBySlug(slug) {
+  return new Promise((resolve, reject) => {
+    wx.request({
+      url: `${BASE_URL}/api/essays/${slug}.json`,
+      method: 'GET',
+      success: (res) => {
+        if (res.statusCode === 200) {
+          resolve(res.data)
+        } else {
+          reject(new Error(`请求失败: ${res.statusCode}`))
+        }
+      },
+      fail: (err) => {
+        reject(err)
+      }
+    })
+  })
 }
 
-function getEssays() {
-  return request('/api/garden').then(items => items.filter(i => i.type === 'essay'));
+/**
+ * 获取标签列表
+ */
+function getAllTags() {
+  return new Promise((resolve, reject) => {
+    wx.request({
+      url: `${BASE_URL}/api/tags.json`,
+      method: 'GET',
+      success: (res) => {
+        if (res.statusCode === 200) {
+          resolve(res.data)
+        } else {
+          reject(new Error(`请求失败: ${res.statusCode}`))
+        }
+      },
+      fail: (err) => {
+        reject(err)
+      }
+    })
+  })
 }
 
-function getTags() {
-  return request('/api/tags');
-}
-
-function getDetail(collection, slug) {
-  return request(`/api/posts/${slug}`);
-}
-
-function search(keyword) {
-  return request(`/api/search?q=${encodeURIComponent(keyword || '')}`);
-}
-
-function getComments(slug) {
-  return request(`/api/posts/${slug}/comments`);
-}
-
-function postComment(slug, data) {
-  return request(`/api/posts/${slug}/comments`, 'POST', data);
-}
-
-function normalizeItem(item) {
-  const typeLabel = item.type === 'essay' ? '日志' : '笔记';
-  const tags = typeof item.tags === 'string' ? JSON.parse(item.tags) : (item.tags || []);
-  const readingTime = item.reading_time || item.readingTime || '';
-
-  return {
-    ...item,
-    tags,
-    readingTime,
-    typeLabel,
-    detailCollection: item.category || item.collection || (item.type === 'essay' ? 'essays' : 'posts'),
-    displayDate: String(item.date || '').slice(0, 10),
-    displayMeta: `${typeLabel} · ${String(item.date || '').slice(0, 10)} · ${readingTime}`
-  };
+/**
+ * 搜索内容
+ */
+function searchContent(keyword) {
+  return new Promise((resolve, reject) => {
+    wx.request({
+      url: `${BASE_URL}/api/garden.json`,
+      method: 'GET',
+      success: (res) => {
+        if (res.statusCode === 200) {
+          const items = res.data || []
+          const filtered = items.filter(item => 
+            item.title?.toLowerCase().includes(keyword.toLowerCase()) ||
+            item.description?.toLowerCase().includes(keyword.toLowerCase()) ||
+            (item.tags || []).some(tag => tag.toLowerCase().includes(keyword.toLowerCase()))
+          )
+          resolve(filtered)
+        } else {
+          reject(new Error(`请求失败: ${res.statusCode}`))
+        }
+      },
+      fail: (err) => {
+        reject(err)
+      }
+    })
+  })
 }
 
 module.exports = {
-  BASE_URL,
-  request,
-  getGarden,
-  getPosts,
-  getEssays,
-  getTags,
-  getDetail,
-  search,
-  getComments,
-  postComment,
-  normalizeItem
-};
+  getAllPosts,
+  getPostBySlug,
+  getAllEssays,
+  getEssayBySlug,
+  getAllTags,
+  searchContent
+}

@@ -1,0 +1,15 @@
+<view class="skeleton-list">
+  <view class="skeleton-item" wx:for="{{items}}" wx:key="*this">
+    <view class="skeleton-header">
+      <view class="skeleton-badge"></view>
+      <view class="skeleton-stamp"></view>
+    </view>
+    <view class="skeleton-title"></view>
+    <view class="skeleton-text"></view>
+    <view class="skeleton-footer">
+      <view class="skeleton-tag"></view>
+      <view class="skeleton-tag"></view>
+      <view class="skeleton-date"></view>
+    </view>
+  </view>
+</view>

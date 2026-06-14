@@ -1,0 +1,145 @@
+/* 网格纸背景效果 */
+
+.grid-paper {
+  position: relative;
+  background-color: var(--bg-page);
+}
+
+.grid-paper::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    linear-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+  background-size: 40rpx 40rpx;
+  pointer-events: none;
+}
+
+/* 档案局边框 */
+.archive-border {
+  border: 2rpx solid var(--border-dark);
+  position: relative;
+}
+
+.archive-border::after {
+  content: '';
+  position: absolute;
+  top: 4rpx;
+  left: 4rpx;
+  right: 4rpx;
+  bottom: 4rpx;
+  border: 1rpx solid var(--border-color);
+  pointer-events: none;
+}
+
+/* 编号标签 */
+.serial-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 4rpx 12rpx;
+  background: var(--color-primary);
+  color: var(--text-inverse);
+  font-family: var(--font-mono);
+  font-size: 20rpx;
+  font-weight: 700;
+  letter-spacing: 2rpx;
+}
+
+/* 验证标记 */
+.verify-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36rpx;
+  height: 36rpx;
+  border: 2rpx solid var(--color-primary);
+  color: var(--color-primary);
+  font-size: 20rpx;
+  font-weight: 700;
+}
+
+/* 进度条 */
+.progress-bar {
+  height: 6rpx;
+  background: var(--border-color);
+  border-radius: 3rpx;
+  overflow: hidden;
+}
+
+.progress-bar .fill {
+  height: 100%;
+  background: var(--color-primary);
+  border-radius: 3rpx;
+  transition: width var(--transition-normal);
+}
+
+/* 档案局印章 */
+.archive-seal {
+  position: absolute;
+  width: 120rpx;
+  height: 120rpx;
+  opacity: 0.15;
+  transform: rotate(-15deg);
+}
+
+/* 时间线 */
+.timeline {
+  position: relative;
+  padding-left: 40rpx;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 16rpx;
+  top: 0;
+  bottom: 0;
+  width: 2rpx;
+  background: var(--border-color);
+}
+
+.timeline-item {
+  position: relative;
+  padding-bottom: var(--space-lg);
+}
+
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -32rpx;
+  top: 12rpx;
+  width: 12rpx;
+  height: 12rpx;
+  background: var(--color-primary);
+  border-radius: 50%;
+}
+
+/* 条形码装饰 */
+.barcode {
+  display: flex;
+  align-items: center;
+  gap: 4rpx;
+  opacity: 0.3;
+}
+
+.barcode-line {
+  width: 2rpx;
+  height: 20rpx;
+  background: var(--text-title);
+}
+
+.barcode-line:nth-child(odd) {
+  height: 28rpx;
+}
+
+.barcode-text {
+  font-family: var(--font-mono);
+  font-size: 16rpx;
+  color: var(--text-muted);
+  letter-spacing: 2rpx;
+  margin-left: 8rpx;
+}

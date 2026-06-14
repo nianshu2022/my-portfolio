@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-14T14:02:10.869Z",
+  "generatedAt": "2026-06-14T14:28:53.902Z",
   "source": "build script probe",
   "timeoutMs": 8000,
   "services": [
@@ -27,7 +27,7 @@
       "check": {
         "status": "protected",
         "statusCode": 200,
-        "latencyMs": 4161,
+        "latencyMs": 1891,
         "message": "reachable"
       }
     },

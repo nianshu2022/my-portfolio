@@ -1,49 +1,51 @@
-<view class="page discover-page">
-  <view class="page-header tags-header fade-enter">
-    <view class="eyebrow">Digital Space</view>
-    <view class="title">索引查询</view>
-    <view class="subtitle">按关键词和标签检索我的学习笔记与实验记录。</view>
+<view class="page-tags">
+  <!-- 标签云 -->
+  <view class="tags-section">
+    <view class="section-header">
+      <text class="section-title">标签索引</text>
+      <text class="section-count">{{tags.length}} 个标签</text>
+    </view>
+    
+    <view class="tags-cloud">
+      <tag-chip
+        wx:for="{{tags}}"
+        wx:key="name"
+        text="{{item.name}}"
+        count="{{item.count}}"
+        active="{{activeTag === item.name}}"
+        bindtap="onTagTap"
+      />
+    </view>
   </view>
 
-  <skeleton-list wx:if="{{loading}}" count="{{4}}" variant="compact" />
-  <empty-state wx:elif="{{error}}" tone="error" title="索引加载失败" desc="{{error}}" action-text="重新加载" bind:action="loadData" />
-
-  <block wx:else>
-    <view class="discover-tools">
-      <view class="search-row discover-search single-tool">
-        <text class="search-icon">⌕</text>
-        <input class="input search-input" value="{{keyword}}" placeholder="搜索标题、摘要或标签..." bindinput="onSearch" />
-        <view wx:if="{{keyword}}" class="search-clear-btn" bindtap="clearFilters">
-          <text class="clear-x">×</text>
-        </view>
-      </view>
+  <!-- 筛选结果 -->
+  <view class="result-section">
+    <view class="result-header" wx:if="{{activeTag}}">
+      <text class="result-tag">筛选: {{activeTag}}</text>
+      <text class="result-count">{{filteredPosts.length}} 份案卷</text>
     </view>
 
-    <view class="discover-summary">
-      <view>
-        <text class="summary-title">{{keyword ? '搜索结果' : '全部笔记'}}</text>
-        <text class="summary-desc">{{keyword ? '正在查看包含 “' + keyword + '” 的内容' : '按照更新时间倒序排列'}}</text>
-      </view>
-      <text wx:if="{{!keyword}}" class="muted">{{filteredItems.length}} 份记录</text>
-    </view>
+    <skeleton-list wx:if="{{loading}}" count="5" />
 
-    <empty-state wx:if="{{filteredItems.length === 0}}" title="暂时没找到相关内容" desc="试试换个关键词，或者清除筛选。" action-text="清除筛选" bind:action="clearFilters" />
+    <block wx:elif="{{filteredPosts.length > 0}}">
+      <case-card
+        wx:for="{{filteredPosts}}"
+        wx:key="slug"
+        title="{{item.title}}"
+        date="{{item.date}}"
+        tags="{{item.tags}}"
+        caseNumber="{{caseNumbers[item.slug]}}"
+        type="post"
+        slug="{{item.slug}}"
+        bindtap="onCaseTap"
+      />
+    </block>
 
-    <view wx:else class="discover-list">
-      <view wx:for="{{filteredItems}}" wx:key="id" class="discover-card pressable" data-collection="{{item.detailCollection}}" data-slug="{{item.slug}}" bindtap="openDetail">
-        <view class="discover-card-top">
-          <text class="pill type-pill">{{item.typeLabel}}</text>
-          <text class="pill">{{item.displayDate}}</text>
-        </view>
-        <view class="discover-title">{{item.title}}</view>
-        <view class="discover-desc">{{item.description}}</view>
-        <view class="meta-row">
-          <text wx:if="{{item.readingTime}}" class="pill">{{item.readingTime}}</text>
-          <text wx:for="{{item.tags}}" wx:key="*this" wx:for-index="tagIndex" wx:if="{{tagIndex < 3}}" class="pill">#{{item}}</text>
-        </view>
-      </view>
-    </view>
-
-
-  </block>
+    <empty-state 
+      wx:else 
+      icon="🔍" 
+      title="暂无匹配案卷" 
+      desc="{{activeTag ? '该标签下暂无内容' : '正在整理中'}}" 
+    />
+  </view>
 </view>

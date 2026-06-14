@@ -1,97 +1,93 @@
-const api = require('../../utils/api');
-const tabbar = require('../../utils/tabbar');
+const { getAllPosts } = require('../../utils/api')
+const { generateCaseNumber } = require('../../utils/format')
 
 Page({
   data: {
     loading: true,
-    error: '',
-    keyword: '',
-    items: [],
-    filteredItems: []
+    posts: [],
+    filteredPosts: [],
+    tags: [],
+    activeTag: '',
+    caseNumbers: {}
   },
 
   onLoad() {
-    this.loadData();
+    this.loadData()
   },
 
   onShow() {
-    tabbar.selectTab(this, 1);
-  },
-
-  onPullDownRefresh() {
-    this.loadData().finally(() => wx.stopPullDownRefresh());
-  },
-
-  async loadData() {
-    this.setData({ loading: true, error: '' });
-
-    try {
-      const garden = await api.getGarden();
-      const items = garden.map(api.normalizeItem);
-
-      this.setData({
-        items,
-        filteredItems: this.filterItems(items, this.data.keyword),
-        loading: false
-      });
-    } catch (error) {
-      this.setData({
-        loading: false,
-        error: error.message || '内容加载失败，请稍后再试。'
-      });
+    if (typeof this.getTabBar === 'function' && this.getTabBar()) {
+      this.getTabBar().setData({ selected: 1 })
     }
   },
 
-  filterItems(items, keyword) {
-    const query = String(keyword || '').trim().toLowerCase();
-
-    return items.filter((item) => {
-      const tags = item.tags || [];
-      const haystack = `${item.title} ${item.description} ${tags.join(' ')} ${item.typeLabel}`.toLowerCase();
-      const matchedKeyword = !query || haystack.includes(query);
-      return matchedKeyword;
-    });
+  onPullDownRefresh() {
+    this.loadData().then(() => {
+      wx.stopPullDownRefresh()
+    })
   },
 
-  refreshVisible(patch = {}) {
-    const keyword = patch.keyword !== undefined ? patch.keyword : this.data.keyword;
+  async loadData() {
+    this.setData({ loading: true })
+    
+    try {
+      const posts = await getAllPosts()
+      
+      const tagMap = {}
+      posts.forEach(post => {
+        (post.tags || []).forEach(tag => {
+          tagMap[tag] = (tagMap[tag] || 0) + 1
+        })
+      })
+      
+      const tags = Object.entries(tagMap)
+        .sort((a, b) => b[1] - a[1])
+        .map(([name, count]) => ({ name, count }))
+
+      const caseNumbers = {}
+      posts.forEach((post, index) => {
+        caseNumbers[post.slug] = generateCaseNumber(post.slug, post.date, index)
+      })
+
+      this.setData({
+        posts,
+        filteredPosts: posts,
+        tags,
+        caseNumbers,
+        loading: false
+      })
+    } catch (err) {
+      console.error('加载失败:', err)
+      this.setData({ loading: false })
+      wx.showToast({ title: '加载失败', icon: 'none' })
+    }
+  },
+
+  onTagTap(e) {
+    const { text } = e.detail
+    const activeTag = this.data.activeTag === text ? '' : text
+    
+    const filteredPosts = activeTag
+      ? this.data.posts.filter(p => (p.tags || []).includes(activeTag))
+      : this.data.posts
 
     this.setData({
-      ...patch,
-      filteredItems: this.filterItems(this.data.items, keyword)
-    });
+      activeTag,
+      filteredPosts
+    })
   },
 
-  onSearch(event) {
-    const keyword = event.detail.value;
-    this.setData({ keyword });
-
-    // 防抖处理：避免输入时高频请求
-    if (this.searchTimer) clearTimeout(this.searchTimer);
-    this.searchTimer = setTimeout(async () => {
-      this.setData({ loading: true });
-      try {
-        const results = await api.search(keyword);
-        this.setData({
-          filteredItems: results.map(api.normalizeItem),
-          loading: false
-        });
-      } catch (err) {
-        console.error('Search failed', err);
-        this.setData({ loading: false });
-      }
-    }, 300);
-  },
-
-  clearFilters() {
-    this.setData({ keyword: '' });
-    this.loadData();
-  },
-
-  openDetail(event) {
-    const { collection, slug } = event.currentTarget.dataset;
+  onCaseTap(e) {
+    const { slug, type } = e.detail
     wx.navigateTo({
-      url: `/pages/detail/detail?collection=${collection}&slug=${slug}`
-    });
+      url: `/pages/detail/detail?slug=${slug}&type=${type}`
+    })
+  },
+
+  onShareAppMessage() {
+    return {
+      title: '案卷索引 - 念舒档案局',
+      path: '/pages/tags/tags'
+    }
   }
-});
+})

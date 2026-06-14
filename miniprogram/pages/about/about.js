@@ -1,69 +1,61 @@
-const tabbar = require('../../utils/tabbar');
-
 Page({
   data: {
-    isAdmin: false
+    profile: {
+      name: '念舒',
+      title: '00 后技术折腾者 / 产品实践者',
+      location: '中国 / 兰州',
+      bio: '一个在技术路上不断折腾的 00 后，记录真实的踩坑经历和成长过程。',
+      links: [
+        { name: 'GitHub', url: 'https://github.com/nianshu2022' },
+        { name: '博客', url: 'https://blog.nianshu2022.cn' }
+      ]
+    },
+    timeline: [
+      { year: '2024', title: '毕业', desc: '大学生活结束，开始新的征程' },
+      { year: '2023', title: 'ICT 大赛', desc: '参加全国大学生 ICT 大赛' },
+      { year: '2022', title: '独立开发', desc: '开始独立开发之路' },
+      { year: '2021', title: '技术探索', desc: '深入学习前端开发' }
+    ]
   },
 
   onShow() {
-    tabbar.selectTab(this, 3);
-    this.checkAdminStatus();
-    this.applySettings();
-  },
-
-  applySettings() {
-    const app = getApp();
-    const updateSettings = (settings) => {
-      if (settings && settings.site_bio) {
-        this.setData({ bio: settings.site_bio });
-      }
-    };
-
-    if (app.globalData.settings) {
-      updateSettings(app.globalData.settings);
-    } else {
-      app.settingsReadyCallback = updateSettings;
+    if (typeof this.getTabBar === 'function' && this.getTabBar()) {
+      this.getTabBar().setData({ selected: 3 })
     }
-  },
-
-  async checkAdminStatus() {
-    const api = require('../../utils/api');
-    try {
-      const res = await api.request('/api/admin/check', 'GET');
-      this.setData({ isAdmin: !!res.isAdmin });
-    } catch (e) {
-      this.setData({ isAdmin: false });
-    }
-  },
-
-  copySite() {
-    wx.setClipboardData({
-      data: 'https://blog.nianshu2022.cn',
-      success() {
-        wx.showModal({
-          title: '链接已复制',
-          content: '受微信限制，无法直接跳转。请打开手机浏览器粘贴访问。',
-          showCancel: false,
-          confirmText: '好的',
-          confirmColor: '#4f46e5'
-        });
-      }
-    });
-  },
-
-  copyWechat() {
-    wx.setClipboardData({
-      data: '念舒',
-      success() {
-        wx.showToast({ title: '已复制昵称', icon: 'success' });
-      }
-    });
   },
 
   onShareAppMessage() {
     return {
-      title: 'Nianshu 的空间',
-      path: '/pages/index/index'
-    };
+      title: '认识念舒 - 念舒档案局',
+      path: '/pages/about/about'
+    }
+  },
+
+  copyLink(e) {
+    const { url } = e.currentTarget.dataset
+    wx.setClipboardData({
+      data: url,
+      success: () => {
+        wx.showToast({ title: '链接已复制', icon: 'success' })
+      }
+    })
+  },
+
+  goGithub() {
+    wx.setClipboardData({
+      data: 'https://github.com/nianshu2022',
+      success: () => {
+        wx.showToast({ title: 'GitHub 链接已复制', icon: 'success' })
+      }
+    })
+  },
+
+  goBlog() {
+    wx.setClipboardData({
+      data: 'https://blog.nianshu2022.cn',
+      success: () => {
+        wx.showToast({ title: '博客链接已复制', icon: 'success' })
+      }
+    })
   }
-});
+})

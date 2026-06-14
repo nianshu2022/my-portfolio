@@ -1,63 +1,82 @@
-<view class="page about-v4">
-  <!-- 1. Profile Poster Hero -->
-  <view class="hero-poster fade-enter">
-    <view class="hero-backdrop"></view>
-    <view class="hero-content">
-      <view class="avatar-ring-container">
-        <view class="halo halo-1"></view>
-        <view class="halo halo-2"></view>
-        <image class="avatar-img" src="https://blog.nianshu2022.cn/img/avatar.webp" mode="aspectFill" />
+<view class="page-about">
+  <!-- 个人简介 -->
+  <view class="profile-section">
+    <view class="profile-card">
+      <view class="serial-tag">个人档案</view>
+      <view class="profile-header">
+        <view class="avatar">
+          <text class="avatar-text">念</text>
+        </view>
+        <view class="profile-info">
+          <text class="profile-name">{{profile.name}}</text>
+          <text class="profile-title">{{profile.title}}</text>
+        </view>
       </view>
-      <view class="hero-name">Nianshu</view>
-      <view class="hero-title">Product Ops / Digital Builder</view>
       
-      <view class="glass-bio">
-        <text class="bio-quotes left">“</text>
-        {{bio || '专注于产品逻辑与技术实现，记录个人成长与折腾历程。'}}
-        <text class="bio-quotes right">”</text>
+      <view class="profile-meta">
+        <view class="meta-item">
+          <text class="meta-label">编号</text>
+          <text class="meta-value mono">NIANSHU-2001</text>
+        </view>
+        <view class="meta-item">
+          <text class="meta-label">坐标</text>
+          <text class="meta-value">{{profile.location}}</text>
+        </view>
+        <view class="meta-item">
+          <text class="meta-label">状态</text>
+          <text class="meta-value status">持续记录中</text>
+        </view>
       </view>
+      
+      <text class="profile-bio">{{profile.bio}}</text>
     </view>
   </view>
 
-  <!-- 2. Connect Garden (Premium List) -->
-  <view class="section connect-section fade-enter" style="animation-delay: 0.1s;">
-    <view class="section-title">连接空间</view>
-    <view class="connect-list-premium">
-      <navigator class="premium-card pressable" url="/pages/services/services">
-        <view class="pc-icon-box lab-icon"></view>
-        <view class="pc-content">
-          <view class="pc-title">合作实验室</view>
-          <view class="pc-desc">探索落地项目与咨询服务</view>
-        </view>
-        <view class="pc-arrow">→</view>
-      </navigator>
-      
-      <navigator class="premium-card pressable" url="/pages/products/products">
-        <view class="pc-icon-box shelf-icon"></view>
-        <view class="pc-content">
-          <view class="pc-title">数字货架</view>
-          <view class="pc-desc">获取高质量模板与实用资源</view>
-        </view>
-        <view class="pc-arrow">→</view>
-      </navigator>
-
-      <!-- 管理入口 (仅管理员可见) -->
-      <navigator wx:if="{{isAdmin}}" class="premium-card pressable admin-card" url="/pages/admin/dashboard">
-        <view class="pc-icon-box admin-icon"></view>
-        <view class="pc-content">
-          <view class="pc-title">空间管理中心</view>
-          <view class="pc-desc">数据统计、留言管理、记录状态</view>
-        </view>
-        <view class="pc-arrow">进入</view>
-      </navigator>
+  <!-- 成长时间线 -->
+  <view class="timeline-section">
+    <view class="section-header">
+      <text class="section-title">成长轨迹</text>
     </view>
     
-    <view class="website-pill pressable" bindtap="copySite">
-      <view class="pill-icon web-icon"></view>
-      <view class="pill-text">blog.nianshu2022.cn</view>
-      <view class="pill-action">复制链接</view>
+    <view class="timeline">
+      <view class="timeline-item" wx:for="{{timeline}}" wx:key="year">
+        <view class="timeline-dot"></view>
+        <view class="timeline-content">
+          <view class="timeline-header">
+            <text class="timeline-year">{{item.year}}</text>
+            <text class="timeline-title">{{item.title}}</text>
+          </view>
+          <text class="timeline-desc">{{item.desc}}</text>
+        </view>
+      </view>
     </view>
   </view>
-  
 
+  <!-- 外部链接 -->
+  <view class="links-section">
+    <view class="section-header">
+      <text class="section-title">外部链接</text>
+    </view>
+    
+    <view class="links-list">
+      <view class="link-item" bindtap="goGithub">
+        <text class="link-icon">🐙</text>
+        <text class="link-text">GitHub</text>
+        <text class="link-arrow">→</text>
+      </view>
+      <view class="link-item" bindtap="goBlog">
+        <text class="link-icon">🌐</text>
+        <text class="link-text">博客主站</text>
+        <text class="link-arrow">→</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部装饰 -->
+  <view class="footer-decor">
+    <view class="barcode">
+      <view class="barcode-line" wx:for="{{[1,2,3,4,5,6,7,8,9,10]}}" wx:key="*this"></view>
+      <text class="barcode-text">NIANSHU ARCHIVES</text>
+    </view>
+  </view>
 </view>

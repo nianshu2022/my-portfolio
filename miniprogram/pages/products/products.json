@@ -1,6 +1,0 @@
-{
-  "navigationBarTitleText": "数字货架",
-  "usingComponents": {
-    "bottom-nav": "/components/bottom-nav/index"
-  }
-}

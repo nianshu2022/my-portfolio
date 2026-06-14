@@ -1,0 +1,38 @@
+.tag-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8rpx;
+  padding: 8rpx 20rpx;
+  background: var(--bg-card);
+  border: 1rpx solid var(--border-color);
+  transition: all var(--transition-fast);
+}
+
+.tag-chip:active {
+  transform: scale(0.95);
+}
+
+.tag-chip.active {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.tag-text {
+  font-size: 24rpx;
+  color: var(--text-body);
+}
+
+.tag-chip.active .tag-text {
+  color: var(--text-inverse);
+}
+
+.tag-count {
+  font-size: 20rpx;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
+.tag-chip.active .tag-count {
+  color: var(--text-inverse);
+  opacity: 0.8;
+}

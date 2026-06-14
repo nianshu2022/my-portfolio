@@ -1,93 +1,92 @@
-const api = require('../../utils/api');
-const tabbar = require('../../utils/tabbar');
+const { getAllPosts, getAllEssays } = require('../../utils/api')
+const { formatDate, generateCaseNumber, getExcerpt } = require('../../utils/format')
 
 Page({
   data: {
     loading: true,
-    error: '',
-    items: [],
-    feeds: {
-      latest: []
-    },
+    posts: [],
+    essays: [],
+    latestCases: [],
+    caseNumbers: {},
     stats: {
-      posts: 0,
-      essays: 0,
-      tags: 0,
-      minutes: 0
+      postCount: 0,
+      essayCount: 0,
+      tagCount: 0
     }
   },
 
   onLoad() {
-    this.loadData();
-    this.applySettings();
+    this.loadData()
   },
 
   onShow() {
-    tabbar.selectTab(this, 0);
-  },
-
-  applySettings() {
-    const app = getApp();
-    const updateSettings = (settings) => {
-      if (settings) {
-        this.setData({ 
-          notice: settings.site_notice || '欢迎来到我的数字空间',
-          siteName: settings.site_name || 'Nianshu 的空间'
-        });
-        if (settings.site_name) {
-          wx.setNavigationBarTitle({ title: settings.site_name });
-        }
-      }
-    };
-
-    if (app.globalData.settings) {
-      updateSettings(app.globalData.settings);
-    } else {
-      app.settingsReadyCallback = updateSettings;
+    if (typeof this.getTabBar === 'function' && this.getTabBar()) {
+      this.getTabBar().setData({ selected: 0 })
     }
   },
 
   onPullDownRefresh() {
-    this.loadData().finally(() => wx.stopPullDownRefresh());
+    this.loadData().then(() => {
+      wx.stopPullDownRefresh()
+    })
   },
 
   async loadData() {
-    this.setData({ loading: true, error: '' });
-
+    this.setData({ loading: true })
+    
     try {
-      const [garden, tags] = await Promise.all([api.getGarden(), api.getTags()]);
-      const normalized = garden.map(api.normalizeItem);
+      const [posts, essays] = await Promise.all([
+        getAllPosts(),
+        getAllEssays()
+      ])
 
-      const latest = normalized.slice(0, 2);
-      const minutes = normalized.reduce((total, item) => {
-        const matched = String(item.readingTime || '').match(/\d+/);
-        return total + (matched ? Number(matched[0]) : 0);
-      }, 0);
+      const caseNumbers = {}
+      posts.forEach((post, index) => {
+        caseNumbers[post.slug] = generateCaseNumber(post.slug, post.date, index)
+      })
 
       this.setData({
-        loading: false,
-        feeds: { latest },
-        items: latest,
+        posts,
+        essays,
+        latestCases: posts.slice(0, 5),
+        caseNumbers,
         stats: {
-          posts: garden.filter((item) => item.type === 'post').length,
-          essays: garden.filter((item) => item.type === 'essay').length,
-          tags: tags.length,
-          minutes
-        }
-      });
-    } catch (error) {
-      this.setData({
-        loading: false,
-        error: error.message || '内容加载失败，请稍后再试。'
-      });
+          postCount: posts.length,
+          essayCount: essays.length,
+          tagCount: [...new Set(posts.flatMap(p => p.tags || []).concat(essays.flatMap(e => e.tags || [])))].length
+        },
+        loading: false
+      })
+    } catch (err) {
+      console.error('加载失败:', err)
+      this.setData({ loading: false })
+      wx.showToast({ title: '加载失败', icon: 'none' })
     }
   },
 
-
-  openDetail(event) {
-    const { collection, slug } = event.currentTarget.dataset;
+  onCaseTap(e) {
+    const { slug, type } = e.detail
     wx.navigateTo({
-      url: `/pages/detail/detail?collection=${collection}&slug=${slug}`
-    });
+      url: `/pages/detail/detail?slug=${slug}&type=${type}`
+    })
+  },
+
+  goBlog() {
+    wx.switchTab({ url: '/pages/tags/tags' })
+  },
+
+  goEssays() {
+    wx.switchTab({ url: '/pages/essays/essays' })
+  },
+
+  goAbout() {
+    wx.switchTab({ url: '/pages/about/about' })
+  },
+
+  onShareAppMessage() {
+    return {
+      title: '念舒档案局 - 00后技术折腾者的成长样本库',
+      path: '/pages/index/index'
+    }
   }
-});
+})

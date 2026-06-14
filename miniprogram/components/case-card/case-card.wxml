@@ -1,0 +1,25 @@
+<view class="case-card" bindtap="onTap">
+  <view class="case-header">
+    <view class="case-number-badge">
+      <text class="number">{{shortNumber}}</text>
+    </view>
+    <view class="case-stamp">
+      <text>{{type === 'post' ? '案卷' : '样本'}}</text>
+    </view>
+  </view>
+  
+  <view class="case-body">
+    <text class="case-title">{{title}}</text>
+    <text class="case-excerpt" wx:if="{{excerpt}}">{{excerpt}}</text>
+  </view>
+  
+  <view class="case-footer">
+    <view class="case-tags" wx:if="{{tags.length > 0}}">
+      <text class="tag" wx:for="{{tags}}" wx:key="*this" wx:if="{{index < 3}}">{{item}}</text>
+    </view>
+    <view class="case-meta">
+      <text class="case-date">{{date}}</text>
+      <text class="case-no">{{caseNumber}}</text>
+    </view>
+  </view>
+</view>

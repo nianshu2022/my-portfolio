@@ -1,8 +1,10 @@
 {
-  "navigationBarTitleText": "实时动态",
-  "enablePullDownRefresh": true,
   "usingComponents": {
-    "empty-state": "/components/empty-state/index",
-    "skeleton-list": "/components/skeleton-list/index"
-  }
+    "tag-chip": "/components/tag-chip/tag-chip",
+    "case-card": "/components/case-card/case-card",
+    "skeleton-list": "/components/skeleton-list/skeleton-list",
+    "empty-state": "/components/empty-state/empty-state"
+  },
+  "navigationBarTitleText": "案卷索引",
+  "enablePullDownRefresh": true
 }

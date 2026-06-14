@@ -1,9 +1,9 @@
 {
-  "navigationBarTitleText": "日常日志",
-  "enablePullDownRefresh": true,
   "usingComponents": {
-    "bottom-nav": "/components/bottom-nav/index",
-    "empty-state": "/components/empty-state/index",
-    "skeleton-list": "/components/skeleton-list/index"
-  }
+    "case-card": "/components/case-card/case-card",
+    "skeleton-list": "/components/skeleton-list/skeleton-list",
+    "empty-state": "/components/empty-state/empty-state"
+  },
+  "navigationBarTitleText": "成长样本",
+  "enablePullDownRefresh": true
 }
