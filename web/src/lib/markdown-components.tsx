@@ -66,7 +66,7 @@ export function getMarkdownComponents(opts?: { imageWidth?: number; imageQuality
 
       const style: React.CSSProperties = {
         width: "100%",
-        maxWidth: "760px",
+        maxWidth: "560px",
         height: "auto",
         borderRadius: "8px",
         backgroundColor: "transparent",

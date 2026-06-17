@@ -2,7 +2,6 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import ScrollToTop from "@/components/ScrollToTop";
-import KeyboardHint from "@/components/KeyboardHint";
 import ServiceWorkerRegister from "@/components/ServiceWorkerRegister";
 import ThemeToggle from "@/components/ThemeToggle";
 import MouseGlow from "@/components/MouseGlow";
@@ -167,7 +166,6 @@ export default function RootLayout({
         <ConditionalLayout>
           <BottomNav />
           <ScrollToTop />
-          <KeyboardHint />
         </ConditionalLayout>
 
 

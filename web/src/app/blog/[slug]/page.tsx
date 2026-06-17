@@ -241,15 +241,18 @@ export default async function PostPage(props: { params: Promise<{ slug: string }
                 </div>
 
                 {/* Sidebar */}
+                {(post.toc.length > 0 || post.award) && (
                 <aside className="hidden w-64 shrink-0 lg:block">
                     <div className="sticky top-24 space-y-6">
                         {/* TOC Card */}
-                        <div className="garden-panel max-h-[80vh] overflow-y-auto p-5 custom-scrollbar">
-                            <h4 className="mb-3 text-xs font-semibold uppercase tracking-widest text-muted-foreground select-none">
-                                案卷目录
-                            </h4>
-                            <TableOfContents toc={post.toc} />
-                        </div>
+                        {post.toc.length > 0 && (
+                            <div className="garden-panel max-h-[80vh] overflow-y-auto p-5 custom-scrollbar">
+                                <h4 className="mb-3 text-xs font-semibold uppercase tracking-widest text-muted-foreground select-none">
+                                    案卷目录
+                                </h4>
+                                <TableOfContents toc={post.toc} />
+                            </div>
+                        )}
 
                         {/* Award Card */}
                         {post.award && (
@@ -257,6 +260,7 @@ export default async function PostPage(props: { params: Promise<{ slug: string }
                         )}
                     </div>
                 </aside>
+                )}
 
             </div >
 

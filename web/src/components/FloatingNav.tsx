@@ -12,7 +12,7 @@ export default function FloatingNav({ backUrl = "/blog" }: FloatingNavProps) {
   const router = useRouter();
 
   return (
-    <div className="fixed bottom-16 left-4 z-50 transition-all duration-300 md:bottom-4 xl:bottom-auto xl:left-4 xl:top-20">
+    <div className="fixed left-4 top-20 z-50 transition-all duration-300">
       <Button
         variant="secondary"
         size="icon"

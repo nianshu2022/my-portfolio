@@ -3,8 +3,9 @@ title: "入职四年小记：继续搬砖，继续生长"
 date: "2026-06-17"
 description: "入职第4年，回头看这一路，有项目、有成长、有普通日子的坚持，也有继续向前的底气。"
 tags: ["入职纪念", "职场成长", "生活随笔", "年度记录"]
-cover: "/img/work-anniversary-2026.png"
 ---
+
+![入职纪念](/img/work-anniversary-2026.png)
 
 今天是入职的第 4 年。
 

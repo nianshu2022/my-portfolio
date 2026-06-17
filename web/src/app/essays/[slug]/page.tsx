@@ -266,20 +266,24 @@ export default async function EssayPage(props: { params: Promise<{ slug: string 
                 </div>
 
                 {/* Sidebar */}
+                {(post.toc.length > 0 || post.award) && (
                 <aside className="hidden w-64 shrink-0 lg:block">
                     <div className="sticky top-24 space-y-6">
-                        <div className="garden-panel p-5 max-h-[80vh] overflow-y-auto custom-scrollbar">
-                            <h4 className="mb-3 text-xs font-semibold uppercase tracking-widest text-muted-foreground select-none">
-                                样本目录
-                            </h4>
-                            <TableOfContents toc={post.toc} />
-                        </div>
+                        {post.toc.length > 0 && (
+                            <div className="garden-panel p-5 max-h-[80vh] overflow-y-auto custom-scrollbar">
+                                <h4 className="mb-3 text-xs font-semibold uppercase tracking-widest text-muted-foreground select-none">
+                                    样本目录
+                                </h4>
+                                <TableOfContents toc={post.toc} />
+                            </div>
+                        )}
 
                         {post.award && (
                             <SidebarAward src={post.award} />
                         )}
                     </div>
                 </aside>
+                )}
             </div>
 
             {/* Mobile bottom bar */}
