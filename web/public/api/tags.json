@@ -198,6 +198,12 @@
     "essays": 0
   },
   {
+    "name": "年度记录",
+    "count": 1,
+    "posts": 0,
+    "essays": 1
+  },
+  {
     "name": "企业微信",
     "count": 1,
     "posts": 1,
@@ -217,6 +223,18 @@
   },
   {
     "name": "荣耀",
+    "count": 1,
+    "posts": 0,
+    "essays": 1
+  },
+  {
+    "name": "入职纪念",
+    "count": 1,
+    "posts": 0,
+    "essays": 1
+  },
+  {
+    "name": "生活随笔",
     "count": 1,
     "posts": 0,
     "essays": 1
@@ -256,6 +274,12 @@
     "count": 1,
     "posts": 1,
     "essays": 0
+  },
+  {
+    "name": "职场成长",
+    "count": 1,
+    "posts": 0,
+    "essays": 1
   },
   {
     "name": "职业规划",

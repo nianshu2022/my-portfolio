@@ -1,7 +1,7 @@
 {
   "name": "念舒档案局",
   "baseUrl": "https://blog.nianshu2022.cn",
-  "generatedAt": "2026-06-14T14:29:00.176Z",
+  "generatedAt": "2026-06-17T05:39:54.001Z",
   "collections": [
     {
       "name": "posts",
@@ -17,9 +17,9 @@
     }
   ],
   "counts": {
-    "items": 20,
+    "items": 21,
     "posts": 15,
-    "essays": 5,
-    "tags": 69
+    "essays": 6,
+    "tags": 73
   }
 }
