@@ -65,6 +65,8 @@ export function getMarkdownComponents(opts?: { imageWidth?: number; imageQuality
       }
 
       const style: React.CSSProperties = {
+        width: "100%",
+        maxWidth: "760px",
         height: "auto",
         borderRadius: "8px",
         backgroundColor: "transparent",
@@ -82,7 +84,7 @@ export function getMarkdownComponents(opts?: { imageWidth?: number; imageQuality
           if (isNaN(widthValue) || widthValue < 1 || widthValue > 2000) {
             style.width = "100%";
           } else {
-            style.width = widthParam;
+            style.width = `${widthValue}px`;
           }
           style.maxWidth = "100%";
           className += " mb-6 sm:inline-block sm:mx-0 sm:mb-4 sm:mr-8";

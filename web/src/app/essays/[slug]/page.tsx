@@ -199,7 +199,8 @@ export default async function EssayPage(props: { params: Promise<{ slug: string 
                                         alt={post.title}
                                         fill
                                         unoptimized
-                                        className="object-cover"
+                                        priority
+                                        className="object-contain"
                                     />
                                 </div>
                                 <figcaption className="border-t border-border px-4 py-2 font-mono text-xs text-muted-foreground">
@@ -214,7 +215,7 @@ export default async function EssayPage(props: { params: Promise<{ slug: string 
                             <span>{sampleNo}</span>
                         </div>
 
-                        <div className="essay-content prose prose-lg prose-zinc dark:prose-invert max-w-none border-l border-foreground/20 pl-4 prose-headings:font-sans prose-headings:tracking-tight prose-a:break-all prose-img:mx-auto prose-img:rounded-none sm:pl-6" style={{ fontSize: 'var(--article-font-size, 17px)' }}>
+                        <div className="essay-content prose prose-lg prose-zinc dark:prose-invert max-w-none border-l border-foreground/20 pl-4 prose-headings:font-sans prose-headings:tracking-tight prose-a:break-all prose-img:mx-auto sm:pl-6" style={{ fontSize: 'var(--article-font-size, 17px)' }}>
                             <Markdown
                                 remarkPlugins={[remarkGfm]}
                                 rehypePlugins={[
