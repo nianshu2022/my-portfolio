@@ -1,13 +1,13 @@
 {
-    "name": "念舒档案局",
-    "short_name": "念舒档案局",
-    "description": "一个 00 后技术折腾者的成长样本库，归档技术案卷、成长样本和在线服务。",
+    "name": "念舒",
+    "short_name": "念舒",
+    "description": "念舒的个人博客——一个 00 后技术折腾者，分享前端开发、AI 应用、独立开发与成长经历。",
     "start_url": "/",
     "scope": "/",
     "lang": "zh-CN",
     "display": "standalone",
-    "background_color": "#f5f6f2",
-    "theme_color": "#b4232a",
+    "background_color": "#09090b",
+    "theme_color": "#6366f1",
     "categories": ["personalization", "productivity", "education"],
     "icons": [
         {
