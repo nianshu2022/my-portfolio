@@ -1,7 +1,6 @@
 "use client";
 
-import { motion, useInView, type Variants } from "motion/react";
-import { useRef } from "react";
+import { motion, type Variants } from "motion/react";
 
 interface SplitTextProps {
   text: string;
@@ -13,20 +12,17 @@ interface SplitTextProps {
 }
 
 /**
- * React Bits–style SplitText:
- * Splits text into characters or words and animates each in with a stagger.
- * Uses `motion` (Framer Motion v12) which is already installed.
+ * React Bits–style SplitText.
+ * For above-the-fold hero content — animates in on mount (no IntersectionObserver),
+ * so the text is never stuck invisible.
  */
 export default function SplitText({
   text,
   className = "",
   delay = 0,
-  stagger = 0.03,
+  stagger = 0.04,
   by = "char",
 }: SplitTextProps) {
-  const ref = useRef<HTMLSpanElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-40px" });
-
   const containerVariants: Variants = {
     hidden: {},
     visible: {
@@ -35,7 +31,7 @@ export default function SplitText({
   };
 
   const itemVariants: Variants = {
-    hidden: { opacity: 0, y: 18, filter: "blur(6px)" },
+    hidden: { opacity: 0, y: 16, filter: "blur(8px)" },
     visible: {
       opacity: 1,
       y: 0,
@@ -48,11 +44,10 @@ export default function SplitText({
 
   return (
     <motion.span
-      ref={ref}
       className={`inline-block ${className}`}
       variants={containerVariants}
       initial="hidden"
-      animate={isInView ? "visible" : "hidden"}
+      animate="visible"   // ← always animate on mount, no IntersectionObserver
       aria-label={text}
     >
       {tokens.map((token, i) => (
@@ -62,7 +57,6 @@ export default function SplitText({
           className="inline-block"
           aria-hidden="true"
         >
-          {/* non-breaking space preserves word gaps */}
           {token === " " ? "\u00A0" : token}
           {by === "word" && i < tokens.length - 1 ? "\u00A0" : ""}
         </motion.span>

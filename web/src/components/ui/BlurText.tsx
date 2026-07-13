@@ -1,7 +1,6 @@
 "use client";
 
-import { motion, useInView, type Variants } from "motion/react";
-import { useRef } from "react";
+import { motion, type Variants } from "motion/react";
 
 interface BlurTextProps {
   text: string;
@@ -11,8 +10,8 @@ interface BlurTextProps {
 }
 
 /**
- * React Bits–style BlurText:
- * Words fade + unblur into view one by one when the element enters the viewport.
+ * React Bits–style BlurText.
+ * For above-the-fold hero content — animates in on mount (no IntersectionObserver).
  */
 export default function BlurText({
   text,
@@ -20,9 +19,6 @@ export default function BlurText({
   delay = 0,
   stagger = 0.06,
 }: BlurTextProps) {
-  const ref = useRef<HTMLSpanElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-40px" });
-
   const containerVariants: Variants = {
     hidden: {},
     visible: {
@@ -31,7 +27,7 @@ export default function BlurText({
   };
 
   const wordVariants: Variants = {
-    hidden: { opacity: 0, filter: "blur(14px)", y: 6 },
+    hidden: { opacity: 0, filter: "blur(12px)", y: 6 },
     visible: {
       opacity: 1,
       filter: "blur(0px)",
@@ -42,11 +38,10 @@ export default function BlurText({
 
   return (
     <motion.span
-      ref={ref}
       className={`inline ${className}`}
       variants={containerVariants}
       initial="hidden"
-      animate={isInView ? "visible" : "hidden"}
+      animate="visible"   // ← always animate on mount
       aria-label={text}
     >
       {text.split(" ").map((word, i) => (
