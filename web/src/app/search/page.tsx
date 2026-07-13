@@ -2,11 +2,10 @@ import type { Metadata } from "next";
 import FloatingNav from "@/components/FloatingNav";
 import SearchResults from "@/components/SearchResults";
 import { getAllEssaySummaries, getAllPostSummaries } from "@/lib/posts";
-import { Search } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "档案检索",
-  description: "在念舒档案局中检索技术案卷与成长样本。",
+  title: "搜索",
+  description: "在念舒的博客中搜索文章和随笔。",
 };
 
 export default function SearchPage() {
@@ -14,19 +13,16 @@ export default function SearchPage() {
   const essays = getAllEssaySummaries();
 
   return (
-    <main className="archive-shell max-w-6xl">
+    <main className="ns-shell">
       <FloatingNav backUrl="/" />
 
-      <header className="mb-10 border-y border-foreground/80 py-8">
-        <p className="inline-flex items-center gap-2 border border-primary px-2 py-1 font-mono text-sm font-bold text-primary">
-          <Search className="h-4 w-4" />
-          SEARCH DESK
-        </p>
-        <h1 className="mt-5 text-[clamp(3rem,8vw,5.8rem)] font-black leading-none tracking-normal text-foreground">
-          档案检索台
+      <header className="mb-10 border-b border-border pb-10">
+        <p className="mb-3 text-sm font-semibold text-primary">✦ 全站检索</p>
+        <h1 className="text-5xl font-black leading-tight tracking-tight text-foreground sm:text-6xl">
+          <span className="gradient-text">搜索</span>
         </h1>
-        <p className="mt-5 max-w-2xl text-base leading-8 text-muted-foreground sm:text-lg">
-          输入技术栈、问题关键词或成长阶段，快速定位技术案卷和成长样本。
+        <p className="mt-4 max-w-xl text-lg text-muted-foreground">
+          输入技术栈、问题关键词或成长阶段，快速定位文章和随笔。
         </p>
       </header>
 

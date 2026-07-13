@@ -6,9 +6,9 @@ import { BookOpen, Feather, Archive, Info, Home } from "lucide-react";
 
 const navItems = [
   { label: "首页", href: "/", icon: Home },
-  { label: "案卷", href: "/blog", icon: BookOpen },
-  { label: "样本", href: "/essays", icon: Feather },
-  { label: "索引", href: "/archive", icon: Archive },
+  { label: "博客", href: "/blog", icon: BookOpen },
+  { label: "随笔", href: "/essays", icon: Feather },
+  { label: "归档", href: "/archive", icon: Archive },
   { label: "关于", href: "/about", icon: Info },
 ] as const;
 
@@ -16,7 +16,7 @@ export default function BottomNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-40 border-t border-foreground/15 bg-background/90 backdrop-blur-md md:hidden">
+    <nav className="fixed bottom-0 left-0 right-0 z-40 border-t border-border bg-background/90 backdrop-blur-xl md:hidden">
       <div className="mx-auto flex h-14 max-w-lg items-center justify-around">
         {navItems.map(({ label, href, icon: Icon }) => {
           const isActive =

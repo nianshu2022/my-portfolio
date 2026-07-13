@@ -15,33 +15,6 @@ type ContentListProps = {
   type: "post" | "essay";
 };
 
-function buildArchiveNumbers(posts: PostSummary[]) {
-  const byYear = new Map<string, PostSummary[]>();
-
-  posts.forEach((post) => {
-    const year = post.date.slice(0, 4) || "0000";
-    byYear.set(year, [...(byYear.get(year) || []), post]);
-  });
-
-  const numbers = new Map<string, { short: string; full: string }>();
-  byYear.forEach((yearPosts, year) => {
-    yearPosts
-      .sort((a, b) => {
-        if (a.date !== b.date) return a.date.localeCompare(b.date);
-        return a.slug.localeCompare(b.slug);
-      })
-      .forEach((post, index) => {
-        const short = String(index + 1).padStart(3, "0");
-        numbers.set(post.slug, {
-          short,
-          full: `NS-${year}-${short}`,
-        });
-      });
-  });
-
-  return numbers;
-}
-
 export default function ContentList({ posts, type }: ContentListProps) {
   const searchParams = useSearchParams();
   const [activeTag, setActiveTag] = useState<string | null>(null);
@@ -50,12 +23,10 @@ export default function ContentList({ posts, type }: ContentListProps) {
 
   const isPost = type === "post";
   const basePath = isPost ? "/blog" : "/essays";
-  const label = isPost ? "技术案卷库" : "成长样本库";
+  const label = isPost ? "博客文章" : "个人随笔";
   const subtitle = isPost
-    ? "把部署、排障、升级和工具链实践整理成可复用的案卷。"
-    : "把阶段经历、比赛、毕业和生活切片留下来，记录一个 00 后正在形成自己的系统。";
-  const stamp = isPost ? "案卷" : "样本";
-  const archiveNumbers = useMemo(() => buildArchiveNumbers(posts), [posts]);
+    ? "记录技术折腾的真实过程——踩坑、调试、部署和思考。"
+    : "记录成长的切片——经历、比赛、阶段复盘和生活感悟。";
 
   const allTags = useMemo(() => {
     const tags = new Set<string>();
@@ -96,36 +67,41 @@ export default function ContentList({ posts, type }: ContentListProps) {
 
   return (
     <section className="w-full">
-      <header className="border-b border-foreground/80 pb-8">
-        <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+      {/* ── Page Header ── */}
+      <header className="mb-8 border-b border-border pb-8">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <div className="mb-4 inline-flex border border-primary px-2 py-1 font-mono text-sm font-bold text-primary">
-              {isPost ? "TECH DOSSIERS" : "GROWTH SAMPLES"}
-            </div>
-            <h1 className="text-[clamp(2.8rem,8vw,5.6rem)] font-black leading-none tracking-normal text-foreground">
-              {label}
+            <p className="mb-3 text-sm font-semibold text-primary">
+              {isPost ? "✦ 技术 · 成长 · 记录" : "✦ 随想 · 生活 · 感悟"}
+            </p>
+            <h1 className="text-4xl font-black leading-tight tracking-tight text-foreground sm:text-5xl">
+              <span className="gradient-text">{label}</span>
             </h1>
-            <p className="mt-5 max-w-2xl text-base leading-8 text-muted-foreground sm:text-lg">
+            <p className="mt-3 max-w-xl text-base leading-8 text-muted-foreground">
               {subtitle}
             </p>
           </div>
-          <div className="font-mono text-sm text-muted-foreground">
-            共 <strong className="text-foreground">{posts.length}</strong> 份{stamp}
+          <div className="flex-shrink-0 rounded-2xl border border-border bg-card px-5 py-3 text-center">
+            <p className="text-3xl font-black text-foreground">{posts.length}</p>
+            <p className="mt-0.5 text-xs font-medium text-muted-foreground">
+              {isPost ? "篇文章" : "篇随笔"}
+            </p>
           </div>
         </div>
       </header>
 
-      <div className="grid gap-5 border-b border-border py-6">
+      {/* ── Filters ── */}
+      <div className="mb-6 space-y-4">
         {allTags.length > 1 && (
           <div className="flex flex-wrap items-center gap-2" role="group" aria-label="标签筛选">
             <Tag className="h-4 w-4 text-primary" />
             <button
               onClick={() => setActiveTag(null)}
               aria-pressed={activeTag === null}
-              className={`border px-3 py-1.5 text-sm font-semibold transition-colors ${
+              className={`rounded-full px-3.5 py-1.5 text-sm font-semibold transition-all ${
                 activeTag === null
-                  ? "border-primary bg-primary text-primary-foreground"
-                  : "border-border bg-card text-muted-foreground hover:border-foreground hover:text-foreground"
+                  ? "bg-primary text-primary-foreground shadow-sm"
+                  : "border border-border bg-card text-muted-foreground hover:border-primary/50 hover:text-foreground"
               }`}
             >
               全部
@@ -135,10 +111,10 @@ export default function ContentList({ posts, type }: ContentListProps) {
                 key={tag}
                 onClick={() => setActiveTag(activeTag === tag ? null : tag)}
                 aria-pressed={activeTag === tag}
-                className={`border px-3 py-1.5 text-sm transition-colors ${
+                className={`rounded-full px-3.5 py-1.5 text-sm transition-all ${
                   activeTag === tag
-                    ? "border-primary bg-primary text-primary-foreground"
-                    : "border-border bg-card text-muted-foreground hover:border-foreground hover:text-foreground"
+                    ? "bg-primary text-primary-foreground shadow-sm"
+                    : "border border-border bg-card text-muted-foreground hover:border-primary/50 hover:text-foreground"
                 }`}
               >
                 #{tag}
@@ -147,20 +123,20 @@ export default function ContentList({ posts, type }: ContentListProps) {
           </div>
         )}
 
-        <label className="group flex items-center gap-3 border border-border bg-card px-3 py-3">
-          <Search className="h-4 w-4 text-primary" />
+        <label className="flex items-center gap-3 rounded-xl border border-border bg-card px-4 py-3 transition-colors focus-within:border-primary/50">
+          <Search className="h-4 w-4 flex-shrink-0 text-primary" />
           <input
             type="search"
             value={query}
-            onChange={(event) => setQuery(event.target.value)}
-            placeholder={isPost ? "检索标题、问题或技术栈" : "检索标题、经历或标签"}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder={isPost ? "搜索标题、技术栈…" : "搜索标题、经历…"}
             className="w-full bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground"
           />
           {query && (
             <button
               onClick={() => setQuery("")}
               aria-label="清空搜索"
-              className="inline-flex h-7 w-7 items-center justify-center border border-border text-muted-foreground transition-colors hover:border-primary hover:text-primary"
+              className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-secondary text-muted-foreground transition-colors hover:text-foreground"
             >
               <X className="h-3.5 w-3.5" />
             </button>
@@ -168,51 +144,53 @@ export default function ContentList({ posts, type }: ContentListProps) {
         </label>
       </div>
 
-      <div className="mt-8 border-y border-foreground/70">
+      {/* ── Post List ── */}
+      <div className="space-y-3">
         {filtered.length === 0 && (
-          <div className="px-5 py-14 text-center text-sm text-muted-foreground">
-            没有匹配到{stamp}，试试更短的关键词或清空筛选条件。
+          <div className="rounded-2xl border border-border bg-card px-5 py-14 text-center text-sm text-muted-foreground">
+            没有匹配结果，试试更短的关键词或清空筛选条件。
           </div>
         )}
 
         {filtered.map((post, index) => (
-          <ScrollReveal key={`${post.slug}-${index}`} delay={Math.min(index * 0.04, 0.24)}>
+          <ScrollReveal key={`${post.slug}-${index}`} delay={Math.min(index * 0.04, 0.2)}>
             <Link
               href={`${basePath}/${post.slug}`}
               data-article-link
-              className={`group grid gap-4 border-b border-border px-4 py-5 transition-colors last:border-b-0 hover:bg-secondary/70 lg:grid-cols-[4.5rem_4rem_1fr_7rem_8rem] lg:items-center ${
-                activeIndex === index ? "bg-accent" : ""
+              className={`group flex flex-col gap-2 rounded-2xl border border-border bg-card p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md ${
+                activeIndex === index ? "border-primary/40 bg-secondary" : ""
               }`}
             >
-              <span className="font-mono text-xl font-black text-primary">
-                {archiveNumbers.get(post.slug)?.short || "000"}
-              </span>
-              <span className="w-fit border border-primary px-1.5 py-1 text-xs font-semibold text-primary lg:[writing-mode:vertical-rl]">
-                {stamp}
-              </span>
-              <span className="grid min-w-0 gap-2">
-                <strong className="text-xl font-black leading-snug tracking-normal transition-colors group-hover:text-primary">
-                  {post.title}
-                </strong>
-                <span className="line-clamp-2 text-sm leading-6 text-muted-foreground">
+              <div className="flex flex-wrap items-center gap-2">
+                {(post.tags?.length ? post.tags : [FALLBACK_TAG]).slice(0, 3).map((tag) => (
+                  <span
+                    key={tag}
+                    className="rounded-full bg-secondary px-2.5 py-0.5 text-xs font-medium text-muted-foreground"
+                  >
+                    #{tag}
+                  </span>
+                ))}
+                <time className="ml-auto text-xs font-medium text-muted-foreground">
+                  {post.date}
+                </time>
+              </div>
+
+              <h2 className="text-lg font-bold leading-snug text-foreground transition-colors group-hover:text-primary">
+                {post.title}
+              </h2>
+
+              {post.description && (
+                <p className="line-clamp-2 text-sm leading-6 text-muted-foreground">
                   {post.description}
+                </p>
+              )}
+
+              <div className="mt-1 flex items-center justify-end">
+                <span className="inline-flex items-center gap-1 text-xs font-semibold text-primary">
+                  阅读全文
+                  <ArrowRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
                 </span>
-                <span className="flex flex-wrap gap-2">
-                  {(post.tags?.length ? post.tags : [FALLBACK_TAG]).slice(0, 4).map((tag) => (
-                    <em key={tag} className="border border-border bg-card px-2 py-1 font-mono text-xs not-italic text-muted-foreground">
-                      #{tag}
-                    </em>
-                  ))}
-                </span>
-              </span>
-              <span className="font-mono text-sm text-muted-foreground">{post.date}</span>
-              <span className="inline-flex items-center justify-between gap-2 font-mono text-xs text-muted-foreground lg:grid">
-                <span>{archiveNumbers.get(post.slug)?.full || "NS-0000-000"}</span>
-                <span className="inline-flex items-center gap-1 text-primary">
-                  阅读
-                  <ArrowRight className="h-3.5 w-3.5" />
-                </span>
-              </span>
+              </div>
             </Link>
           </ScrollReveal>
         ))}

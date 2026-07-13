@@ -6,8 +6,9 @@ import Link from "next/link";
 import ScrollReveal from "@/components/ScrollReveal";
 import VisitorCounter from "@/components/VisitorCounter";
 import { getAllEssaySummaries, getAllPostSummaries } from "@/lib/posts";
-import type { PostSummary } from "@/lib/posts";
-import type { CSSProperties } from "react";
+import SplitText from "@/components/ui/SplitText";
+import BlurText from "@/components/ui/BlurText";
+import CountUp from "@/components/ui/CountUp";
 
 type PortalService = {
   name: string;
@@ -28,322 +29,271 @@ function getPublicServices(): PortalService[] {
   }
 }
 
-function countByTags(posts: PostSummary[], tags: string[]) {
-  return posts.filter((post) => post.tags?.some((tag) => tags.includes(tag))).length;
-}
-
-function buildCaseNumbers(posts: PostSummary[]) {
-  const byYear = new Map<string, PostSummary[]>();
-
-  posts.forEach((post) => {
-    const year = post.date.slice(0, 4) || "0000";
-    byYear.set(year, [...(byYear.get(year) || []), post]);
-  });
-
-  const numbers = new Map<string, { short: string; full: string }>();
-  byYear.forEach((yearPosts, year) => {
-    yearPosts
-      .sort((a, b) => {
-        if (a.date !== b.date) return a.date.localeCompare(b.date);
-        return a.slug.localeCompare(b.slug);
-      })
-      .forEach((post, index) => {
-        const short = String(index + 1).padStart(3, "0");
-        numbers.set(post.slug, {
-          short,
-          full: `NS-${year}-${short}`,
-        });
-      });
-  });
-
-  return numbers;
-}
+const skills = [
+  "Next.js", "React", "TypeScript", "TailwindCSS",
+  "Docker", "Cloudflare", "Linux", "AI / LLM",
+  "Node.js", "产品设计", "独立开发",
+];
 
 export default function Home() {
   const posts = getAllPostSummaries();
   const essays = getAllEssaySummaries();
   const publicServices = getPublicServices();
-  const caseNumbers = buildCaseNumbers(posts);
-  const latestCases = posts.slice(0, 5);
-  const growthSamples = essays.slice(0, 3);
-  const latestYear = [...posts, ...essays]
-    .map((item) => item.date.slice(0, 4))
-    .filter(Boolean)
-    .sort()
-    .at(-1);
-
-  const indexGroups = [
-    {
-      name: "前端开发",
-      count: countByTags(posts, ["Next.js", "React", "TailwindCSS", "Vue3", "前端开发"]),
-      note: "升级、组件、页面体验",
-    },
-    {
-      name: "后端与运维",
-      count: countByTags(posts, ["Cloudflare", "Docker", "Linux", "Serverless", "运维", "部署"]),
-      note: "部署、隧道、故障排查",
-    },
-    {
-      name: "AI 与本地模型",
-      count: countByTags(posts, ["AI", "DeepSeek", "Ollama", "Gemma", "大模型"]),
-      note: "本地化、工具链、实践记录",
-    },
-    {
-      name: "生活与成长",
-      count: essays.length,
-      note: "比赛、毕业、阶段复盘",
-    },
-  ];
-
+  const latestPosts = posts.slice(0, 6);
+  const growthSamples = essays.slice(0, 4);
   const activeServices = publicServices.filter((service) =>
     ["online", "protected"].includes(service.check?.status || "")
   );
-  const organizing = [
-    { name: "AI 学习与应用笔记", status: "补全中", progress: 63 },
-    { name: "独立开发的方法论", status: "复盘中", progress: 41 },
-    { name: "大学生活与成长复盘", status: "持续写", progress: 27 },
-  ];
 
   return (
-    <main className="archive-shell">
-      <section className="archive-hero">
-        <div className="archive-ruler" aria-hidden="true">
-          {Array.from({ length: 12 }).map((_, index) => (
-            <span key={index}>{String(index + 1).padStart(2, "0")}</span>
-          ))}
-        </div>
-        <div className="archive-coordinate" aria-hidden="true">
-          <span>A</span>
-          <span>B</span>
-          <span>C</span>
-          <span>D</span>
-          <span>E</span>
-          <span>F</span>
-        </div>
-
+    <main className="ns-shell">
+      {/* ===== HERO ===== */}
+      <section className="hero-section" id="hero">
         <ScrollReveal>
-          <div className="archive-hero-copy">
-            <div className="archive-serial">
-              <span>公共档案 001 号</span>
-              <span>公开</span>
-            </div>
-            <h1>念舒档案局</h1>
-            <p className="archive-lede">一个 00 后技术折腾者的成长样本库。</p>
-
-            <dl className="archive-id-card">
-              <div>
-                <dt>档案主理人</dt>
-                <dd>念舒</dd>
-              </div>
-              <div>
-                <dt>编号</dt>
-                <dd>NIANSHU-2001</dd>
-              </div>
-              <div>
-                <dt>身份</dt>
-                <dd>00 后技术折腾者 / 产品实践者</dd>
-              </div>
-              <div>
-                <dt>坐标</dt>
-                <dd>中国 / 兰州</dd>
-              </div>
-              <div>
-                <dt>记录范围</dt>
-                <dd>技术案卷、成长样本、在线服务</dd>
-              </div>
-              <div>
-                <dt>当前状态</dt>
-                <dd>
-                  持续记录中
-                  <span className="archive-live-dot" aria-hidden="true" />
-                </dd>
-              </div>
-            </dl>
-            <Image
-              src="/img/archive-seal.png"
-              alt=""
-              width={512}
-              height={512}
-              className="archive-seal"
-              aria-hidden="true"
-              unoptimized
-            />
-
-            <div className="archive-actions">
-              <Link href="/blog" className="archive-button archive-button-primary">
-                查看技术案卷
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-              <Link href="/about" className="archive-button archive-button-secondary">
-                认识念舒
-                <ArrowRight className="h-4 w-4" />
-              </Link>
+          <div className="hero-content">
+            <div className="hero-badge">
+              <span aria-hidden="true">✦</span>
+              00后 · 技术 · 成长 · 创造
             </div>
 
-            <p className="archive-footnote">
-              所有记录基于真实经历，持续归档，长期开放。
+            <h1 className="hero-title">
+              你好，我是
+              <br />
+              <SplitText
+                text="念舒"
+                className="gradient-text"
+                delay={0.1}
+                stagger={0.08}
+              />
+              {" "}
+              <span aria-label="挥手">👋</span>
+            </h1>
+
+            <p className="hero-subtitle">
+              <BlurText
+                text="前端开发者 · 独立折腾者 · 产品实践者"
+                delay={0.3}
+                stagger={0.05}
+              />
+              <br />
+              <BlurText
+                text="用代码记录学习，用文字记录成长。"
+                delay={0.55}
+                stagger={0.05}
+              />
             </p>
+
+            <div className="hero-actions">
+              <Link href="/blog" className="btn-primary" id="hero-blog-btn">
+                查看博客
+                <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              </Link>
+              <Link href="/about" className="btn-secondary" id="hero-about-btn">
+                认识我
+              </Link>
+            </div>
+
+            <div className="hero-stats" aria-label="站点统计">
+              <div>
+                <strong><CountUp to={posts.length} duration={1.2} /></strong>
+                <span>篇文章</span>
+              </div>
+              <div>
+                <strong><CountUp to={essays.length} duration={1.4} /></strong>
+                <span>篇随笔</span>
+              </div>
+              <div>
+                <strong><CountUp to={activeServices.length} duration={1.0} /></strong>
+                <span>项服务</span>
+              </div>
+              <div>
+                <strong>兰州</strong>
+                <span>📍 坐标</span>
+              </div>
+            </div>
           </div>
         </ScrollReveal>
 
-        <ScrollReveal delay={0.15} direction="right">
-          <aside className="archive-board" aria-label="最近技术案卷">
-            <div className="archive-board-header">
-              <h2>最近案卷</h2>
-              <Link href="/blog">
-                查看全部
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-            </div>
-
-            <div className="archive-case-list">
-              {latestCases.map((post) => {
-                const caseNumber = caseNumbers.get(post.slug) || { short: "000", full: "NS-0000-000" };
-
-                return (
-                  <Link key={post.slug} href={`/blog/${post.slug}`} className="archive-case-row">
-                    <span className="archive-case-index">{caseNumber.short}</span>
-                    <span className="archive-case-stamp">案卷</span>
-                    <span className="archive-case-main">
-                      <strong>{post.title}</strong>
-                      <small>{post.tags?.slice(0, 3).join(" · ") || "未分类"}</small>
-                    </span>
-                    <span className="archive-case-date">{post.date}</span>
-                    <span className="archive-case-no">{caseNumber.full}</span>
-                  </Link>
-                );
-              })}
-            </div>
-
-            <div className="archive-board-grid">
-              <div>
-                <h3>正在整理</h3>
-                <ul className="archive-progress-list">
-                  {organizing.map((item) => (
-                    <li key={item.name}>
-                      <span>{item.name}</span>
-                      <em>{item.progress}%</em>
-                      <b style={{ "--progress": `${item.progress}%` } as CSSProperties} />
-                    </li>
-                  ))}
-                </ul>
+        <ScrollReveal delay={0.1} direction="right">
+          <div className="hero-visual">
+            <div className="avatar-wrapper">
+              <div className="avatar-ring" aria-hidden="true">
+                <div className="avatar-ring-inner">
+                  <Image
+                    src="/img/avatar.png"
+                    alt="念舒"
+                    width={288}
+                    height={288}
+                    className="h-full w-full object-cover"
+                    priority
+                    unoptimized
+                  />
+                </div>
               </div>
-              <div>
-                <h3>公开服务</h3>
-                <ul className="archive-service-list">
-                  {(publicServices.length ? publicServices : [{ name: "在线服务", visibility: "public", check: { status: "" } }]).map((service) => (
-                    <li key={service.name}>
-                      <span>{service.name}</span>
-                      <em>
-                        {["online", "protected"].includes(service.check?.status || "") ? "运行中" : "待检查"}
-                        <span className="archive-live-dot" aria-hidden="true" />
-                      </em>
-                    </li>
-                  ))}
-                </ul>
-                <Link href="/portal" className="archive-inline-link">
-                  查看服务清单
-                  <ArrowRight className="h-4 w-4" />
-                </Link>
-              </div>
+              <span className="float-tag float-tag-1" aria-hidden="true">前端开发 ⚡</span>
+              <span className="float-tag float-tag-2" aria-hidden="true">AI 应用 🤖</span>
+              <span className="float-tag float-tag-3" aria-hidden="true">🏠 兰州</span>
             </div>
-            <div className="archive-barcode" aria-hidden="true">
-              <span>ARCHIVE BUREAU</span>
-              <span>NIANSHU ARCHIVES</span>
-            </div>
-          </aside>
+          </div>
         </ScrollReveal>
       </section>
 
-      <section className="archive-index-section">
-        <div className="archive-section-heading">
-          <span>01</span>
-          <div>
-            <h2>案卷索引</h2>
-            <p>按主题、技术栈与时间，快速定位你感兴趣的内容。</p>
-          </div>
-          <Link href="/archive">
-            进入时间索引
-            <ArrowRight className="h-4 w-4" />
+      {/* ===== RECENT POSTS ===== */}
+      <section className="posts-section" id="posts">
+        <div className="section-header">
+          <h2 className="section-title">最近在写</h2>
+          <Link href="/blog" className="section-link" id="posts-all-link">
+            查看全部
+            <ArrowRight className="h-4 w-4" aria-hidden="true" />
           </Link>
         </div>
 
-        <div className="archive-timeline-ruler" aria-hidden="true">
-          <span>2021</span>
-          <span>2022</span>
-          <span>2023</span>
-          <span>2024</span>
-          <span>{latestYear || "2025"}</span>
-        </div>
-
-        <div className="archive-index-grid">
-          {indexGroups.map((group) => (
-            <Link key={group.name} href={group.name === "生活与成长" ? "/essays" : "/blog"} className="archive-index-card">
-              <span>{group.name}</span>
-              <strong>{group.count} 份</strong>
-              <small>{group.note}</small>
+        <div className="posts-grid">
+          {latestPosts.map((post) => (
+            <Link
+              key={post.slug}
+              href={`/blog/${post.slug}`}
+              className="post-card"
+            >
+              {post.tags && post.tags.length > 0 && (
+                <div className="post-card-tags">
+                  {post.tags.slice(0, 2).map((tag) => (
+                    <span key={tag} className="tag-pill">{tag}</span>
+                  ))}
+                </div>
+              )}
+              <h3 className="post-card-title">{post.title}</h3>
+              <div className="post-card-footer">
+                <time className="post-card-date" dateTime={post.date}>{post.date}</time>
+                <div className="post-card-arrow" aria-hidden="true">
+                  <ArrowRight className="h-3.5 w-3.5" />
+                </div>
+              </div>
             </Link>
           ))}
         </div>
       </section>
 
-      <section className="archive-growth-section">
-        <div className="archive-growth-media">
-          <Image
-            src="/img/graduation-profile-2024.jpg"
-            alt="念舒的个人照片"
-            width={900}
-            height={680}
-            className="h-full w-full object-cover"
-            priority
-            unoptimized
-          />
-        </div>
-        <div className="archive-growth-copy">
-          <div className="archive-section-heading archive-section-heading-compact">
-            <span>02</span>
-            <div>
-              <h2>成长样本</h2>
-              <p>把阶段经历留下来，让技术之外的选择也能被看见。</p>
+      {/* ===== ABOUT / SKILLS ===== */}
+      <section className="about-section" id="about">
+        <ScrollReveal>
+          <div className="about-photo">
+            <Image
+              src="/img/graduation-profile-2024.jpg"
+              alt="念舒的个人照片"
+              width={600}
+              height={800}
+              className="h-full w-full object-cover"
+              unoptimized
+            />
+          </div>
+        </ScrollReveal>
+
+        <ScrollReveal delay={0.1}>
+          <div className="about-copy">
+            <h2 className="about-heading">
+              折腾者 · 记录者
+              <br />
+              <span className="gradient-text">创造者</span>
+            </h2>
+            <p className="about-body">
+              一个 00 后，在技术和产品的交界处折腾。喜欢把复杂的事情搞懂，
+              然后用简单的方式写出来。在这里记录真实的学习历程——
+              包括踩坑、突破和那些让我兴奋的发现。
+            </p>
+            <div className="skills-wrap" aria-label="技术栈">
+              {skills.map((skill) => (
+                <span key={skill} className="skill-pill">{skill}</span>
+              ))}
+            </div>
+            <div className="hero-actions">
+              <Link href="/about" className="btn-secondary" id="about-more-link">
+                了解更多
+                <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              </Link>
             </div>
           </div>
+        </ScrollReveal>
+      </section>
 
-          <div className="archive-sample-list">
+      {/* ===== ESSAYS ===== */}
+      {growthSamples.length > 0 && (
+        <section className="essays-section" id="essays">
+          <div className="section-header">
+            <h2 className="section-title">近期随笔</h2>
+            <Link href="/essays" className="section-link" id="essays-all-link">
+              查看全部
+              <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            </Link>
+          </div>
+          <div className="essay-list">
             {growthSamples.map((essay, index) => (
-              <Link key={essay.slug} href={`/essays/${essay.slug}`} className="archive-sample-row">
-                <span>{String(index + 1).padStart(2, "0")}</span>
-                <strong>{essay.title}</strong>
-                <small>{essay.date}</small>
+              <Link
+                key={essay.slug}
+                href={`/essays/${essay.slug}`}
+                className="essay-item"
+              >
+                <div className="essay-item-left">
+                  <span className="essay-index" aria-hidden="true">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                  <span className="essay-title">{essay.title}</span>
+                </div>
+                <time className="essay-date" dateTime={essay.date}>{essay.date}</time>
               </Link>
             ))}
           </div>
+        </section>
+      )}
 
-          <div className="archive-contact-strip">
-            <Link href="https://github.com/nianshu2022" target="_blank" rel="noopener noreferrer">
+      {/* ===== CONTACT ===== */}
+      <section className="contact-section" id="contact">
+        <div className="contact-inner">
+          <h2 className="contact-label">一起聊聊？</h2>
+          <p className="contact-sub">技术交流 · 合作咨询 · 随便聊聊，欢迎找我</p>
+          <div className="contact-links">
+            <a
+              href="https://github.com/nianshu2022"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="contact-link"
+              id="contact-github"
+            >
+              <Github className="h-4 w-4" aria-hidden="true" />
               GitHub
-              <Github className="h-4 w-4" />
-            </Link>
-            <a href="mailto:nianshu2022@sina.cn">
-              Email
-              <Mail className="h-4 w-4" />
             </a>
-            <a href="/feed.xml" target="_blank" rel="noopener noreferrer">
+            <a
+              href="mailto:nianshu2022@sina.cn"
+              className="contact-link"
+              id="contact-email"
+            >
+              <Mail className="h-4 w-4" aria-hidden="true" />
+              Email
+            </a>
+            <a
+              href="/feed.xml"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="contact-link"
+              id="contact-rss"
+            >
+              <Rss className="h-4 w-4" aria-hidden="true" />
               RSS
-              <Rss className="h-4 w-4" />
             </a>
           </div>
         </div>
       </section>
 
-      <footer className="archive-footer">
-        <div>
-          <span>© {new Date().getFullYear()} 念舒档案局</span>
+      {/* ===== FOOTER ===== */}
+      <footer className="ns-footer">
+        <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
+          <span>© {new Date().getFullYear()} 念舒</span>
           <Link href="/privacy">隐私政策</Link>
-        </div>
-        <div>
           <VisitorCounter />
-          <span>{posts.length} 份技术案卷 · {essays.length} 份成长样本 · {activeServices.length} 项公开服务运行中</span>
         </div>
+        <p className="mt-2 text-xs opacity-60">
+          {posts.length} 篇博客 · {essays.length} 篇随笔 · {activeServices.length} 项服务运行中
+        </p>
       </footer>
     </main>
   );

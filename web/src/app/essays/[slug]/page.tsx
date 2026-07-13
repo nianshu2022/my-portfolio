@@ -108,82 +108,72 @@ export default async function EssayPage(props: { params: Promise<{ slug: string 
     };
 
     return (
-        <main className="relative flex min-h-screen flex-col items-center overflow-hidden px-4 pb-24 pt-28 font-sans sm:px-8">
+        <main className="relative flex min-h-screen flex-col items-center overflow-x-clip px-4 pb-24 pt-28 font-sans sm:px-8">
             <ScrollMemory />
             <ReadingProgress />
             <script
                 type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }}
             />
 
             <FloatingNav backUrl="/essays" />
             <div id="top" />
 
-            <div className="relative flex w-full max-w-7xl flex-col overflow-hidden lg:flex-row lg:gap-10">
+            <div className="relative flex w-full max-w-7xl flex-col lg:flex-row lg:gap-10">
 
                 {/* Article Content */}
                 <div className="mx-auto min-w-0 flex-1 lg:mx-0">
                     <article className="w-full px-0 pb-12 sm:px-4">
-                        <header className="mb-12 border-y border-foreground/75 py-8">
+                        <header className="mb-10 pb-8 border-b border-border">
                             <div>
-                                <div className="mb-6 flex flex-wrap items-center gap-3 font-mono text-xs text-muted-foreground">
-                                    <span className="border border-primary px-2 py-1 font-bold text-primary">成长样本</span>
-                                    <span>个人阶段档案</span>
-                                    <span>{sampleNo}</span>
-                                </div>
-                                <h1 className="max-w-4xl text-[clamp(2.15rem,3.7vw,3.2rem)] font-black leading-[1.14] tracking-normal text-foreground">
+                                {/* Tags */}
+                                {post.tags?.length > 0 && (
+                                    <div className="mb-5 flex flex-wrap gap-2">
+                                        {post.tags.map(tag => (
+                                            <span key={tag} className="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">#{tag}</span>
+                                        ))}
+                                    </div>
+                                )}
+
+                                <h1 className="max-w-4xl text-[clamp(2rem,4vw,3rem)] font-black leading-[1.15] tracking-tight text-foreground">
                                     {post.title}
                                 </h1>
+
                                 {post.description && (
-                                    <p className="mt-5 max-w-3xl border-l-4 border-primary pl-4 text-base leading-8 text-muted-foreground">
+                                    <p className="mt-5 max-w-3xl text-base leading-8 text-muted-foreground border-l-4 border-primary/40 pl-4">
                                         {post.description}
                                     </p>
                                 )}
 
-                                <div className="mt-6 flex flex-wrap border-y border-foreground/45 bg-card/50 font-mono text-xs">
-                                    <span className="border-b border-border px-3 py-2 font-bold text-foreground sm:border-b-0 sm:border-r">样本登记</span>
-                                    <span className="border-b border-border px-3 py-2 sm:border-b-0 sm:border-r">编号 {sampleNo}</span>
-                                    <span className="border-b border-border px-3 py-2 sm:border-b-0 sm:border-r">日期 {post.date}</span>
-                                    <span className="border-b border-border px-3 py-2 sm:border-b-0 sm:border-r">字数 {post.wordCount}</span>
-                                    <span className="px-3 py-2 text-primary">已归档</span>
-                                </div>
-                            </div>
-
-                            <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-3 text-sm text-muted-foreground">
-                                <div className="flex items-center gap-2">
-                                    <Clock className="h-4 w-4" />
-                                    <span>{post.readingTime}</span>
-                                </div>
-
-                                <div className="flex items-center gap-2">
-                                    <Eye className="h-4 w-4" />
-                                    <BusuanziCounter />
-                                </div>
-
-                                <FontSizeControl />
-                            </div>
-
-                            {post.tags?.length > 0 && (
-                                <div className="mt-5 flex flex-wrap gap-2">
-                                    <span className="whitespace-nowrap border border-foreground/40 bg-foreground px-2.5 py-1 font-mono text-xs font-bold text-background">
-                                        样本标记
+                                {/* Meta row */}
+                                <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-muted-foreground">
+                                    <time dateTime={post.date} className="flex items-center gap-1.5">
+                                        <span className="h-1.5 w-1.5 rounded-full bg-primary/60" />
+                                        {post.date}
+                                    </time>
+                                    <span>{post.wordCount} 字</span>
+                                    <span className="flex items-center gap-1.5">
+                                        <Clock className="h-3.5 w-3.5" />
+                                        {post.readingTime}
                                     </span>
-                                    {post.tags.map(tag => (
-                                        <span key={tag} className="whitespace-nowrap border border-border bg-card px-2.5 py-1 font-mono text-xs font-medium text-primary">
-                                            #{tag}
-                                        </span>
-                                    ))}
+                                    <span className="flex items-center gap-1.5">
+                                        <Eye className="h-3.5 w-3.5" />
+                                        <BusuanziCounter />
+                                    </span>
+                                    <span className="ml-auto">
+                                        <FontSizeControl />
+                                    </span>
                                 </div>
-                            )}
+                            </div>
 
                             {/* Mobile TOC */}
                             {post.toc.length > 0 && (
-                                <details className="mt-5 rounded-md border border-border bg-card/70 p-3 lg:hidden text-left">
-                                    <summary className="flex cursor-pointer list-none items-center gap-2 text-sm font-medium text-foreground">
+                                <details className="mt-6 rounded-2xl border border-border bg-card/70 p-4 lg:hidden text-left">
+                                    <summary className="flex cursor-pointer list-none items-center gap-2 text-sm font-semibold text-foreground">
                                         <ListTree className="h-4 w-4 text-primary" />
                                         文章目录
                                     </summary>
-                                    <div className="mt-3 border-t border-border pt-3">
+                                    <div className="mt-4 border-t border-border pt-4">
                                         <TableOfContents toc={post.toc} />
                                     </div>
                                 </details>
@@ -192,7 +182,7 @@ export default async function EssayPage(props: { params: Promise<{ slug: string 
                         </header>
 
                         {post.cover && (
-                            <figure className="mb-10 border border-foreground/50 bg-card/80">
+                            <figure className="mb-10 overflow-hidden rounded-2xl border border-border">
                                 <div className="relative aspect-[16/9] overflow-hidden bg-secondary sm:aspect-[21/9]">
                                     <Image
                                         src={post.cover}
@@ -203,19 +193,14 @@ export default async function EssayPage(props: { params: Promise<{ slug: string 
                                         className="object-contain"
                                     />
                                 </div>
-                                <figcaption className="border-t border-border px-4 py-2 font-mono text-xs text-muted-foreground">
-                                    EVIDENCE PHOTO · {sampleNo}
-                                </figcaption>
                             </figure>
                         )}
 
-                        <div className="mb-6 flex items-center gap-3 border-b border-foreground/55 pb-3 font-mono text-xs text-muted-foreground">
-                            <span className="border border-foreground/40 px-2 py-1">样本正文</span>
+                        <div className="mb-6 flex items-center gap-3 border-b border-border pb-3 text-xs text-muted-foreground">
                             <span className="h-px flex-1 bg-border" />
-                            <span>{sampleNo}</span>
                         </div>
 
-                        <div className="essay-content prose prose-lg prose-zinc dark:prose-invert max-w-none border-l border-foreground/20 pl-4 prose-headings:font-sans prose-headings:tracking-tight prose-a:break-all prose-img:mx-auto sm:pl-6" style={{ fontSize: 'var(--article-font-size, 17px)' }}>
+                        <div className="essay-content prose prose-lg prose-zinc dark:prose-invert max-w-none prose-headings:font-sans prose-headings:tracking-tight prose-a:break-all prose-img:mx-auto" style={{ fontSize: 'var(--article-font-size, 17px)' }}>
                             <Markdown
                                 remarkPlugins={[remarkGfm]}
                                 rehypePlugins={[
@@ -267,17 +252,19 @@ export default async function EssayPage(props: { params: Promise<{ slug: string 
 
                 {/* Sidebar */}
                 {(post.toc.length > 0 || post.award) && (
-                <aside className="hidden w-64 shrink-0 lg:block">
-                    <div className="sticky top-24 space-y-6">
+                <aside className="hidden w-56 shrink-0 lg:block xl:w-64">
+                    <div className="sticky top-24 flex flex-col gap-5">
                         {post.toc.length > 0 && (
-                            <div className="garden-panel p-5 max-h-[80vh] overflow-y-auto custom-scrollbar">
-                                <h4 className="mb-3 text-xs font-semibold uppercase tracking-widest text-muted-foreground select-none">
-                                    样本目录
-                                </h4>
-                                <TableOfContents toc={post.toc} />
+                            <div className="rounded-2xl border border-border bg-card/80 backdrop-blur-sm">
+                                <div className="flex items-center justify-between border-b border-border px-4 py-3">
+                                    <span className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">目录</span>
+                                    <span className="text-xs text-muted-foreground">{post.toc.length} 节</span>
+                                </div>
+                                <div className="max-h-[calc(100vh-12rem)] overflow-y-auto p-3 custom-scrollbar">
+                                    <TableOfContents toc={post.toc} />
+                                </div>
                             </div>
                         )}
-
                         {post.award && (
                             <SidebarAward src={post.award} />
                         )}
@@ -287,12 +274,12 @@ export default async function EssayPage(props: { params: Promise<{ slug: string 
             </div>
 
             {/* Mobile bottom bar */}
-            <div className="fixed inset-x-0 bottom-16 z-30 px-4 md:hidden">
-                <div className="mx-auto flex max-w-sm items-center gap-2 border border-border bg-background/90 p-2 backdrop-blur-md">
-                    <a href="#top" className="flex-1 bg-secondary px-3 py-2 text-center text-sm font-medium text-foreground transition-colors hover:bg-secondary/80">
-                        回到顶部
+            <div className="fixed inset-x-0 bottom-16 z-30 flex justify-center px-4 md:hidden">
+                <div className="flex items-center gap-2 rounded-full border border-border bg-background/90 p-1.5 shadow-lg backdrop-blur-xl">
+                    <a href="#top" className="rounded-full bg-secondary px-5 py-2 text-sm font-medium text-foreground transition-colors hover:bg-secondary/80">
+                        回顶部
                     </a>
-                    <a href="#comments-section" className="flex-1 bg-primary px-3 py-2 text-center text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90">
+                    <a href="#comments-section" className="rounded-full bg-primary px-5 py-2 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90">
                         去评论
                     </a>
                 </div>

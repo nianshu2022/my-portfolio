@@ -1,12 +1,12 @@
 import { gearData, GearCategory } from "@/lib/gear-data";
-import { ArrowRight, Cpu } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import FloatingNav from "@/components/FloatingNav";
 import ScrollReveal from "@/components/ScrollReveal";
 
 export const metadata = {
-  title: "装备案卷",
-  description: "念舒档案局的硬件设备、开发环境与智能家居清单。",
+  title: "装备",
+  description: "念舒的硬件设备、开发环境与智能家居清单。",
 };
 
 const categories: GearCategory[] = ["Core Tech", "Wearables & Audio", "Smart Home", "Accessories", "Other"];
@@ -27,6 +27,14 @@ const categoryNotes: Record<GearCategory, string> = {
   "Other": "有纪念意义或低频但值得保留的物件。",
 };
 
+const categoryEmoji: Record<GearCategory, string> = {
+  "Core Tech": "💻",
+  "Wearables & Audio": "🎧",
+  "Smart Home": "🏠",
+  "Accessories": "🔌",
+  "Other": "📦",
+};
+
 export default function GearPage() {
   const groupedGear = categories.reduce((acc, category) => {
     acc[category] = gearData.filter((item) => item.category === category);
@@ -35,67 +43,61 @@ export default function GearPage() {
   const primaryGear = gearData.filter((item) => item.category === "Core Tech").slice(0, 3);
 
   return (
-    <main className="archive-shell">
+    <main className="ns-shell">
       <FloatingNav backUrl="/" />
 
-      <header className="border-y border-foreground/80 py-8">
-        <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
-          <div>
-            <p className="inline-flex items-center gap-2 border border-primary px-2 py-1 font-mono text-sm font-bold text-primary">
-              <Cpu className="h-4 w-4" />
-              GEAR FILES
-            </p>
-            <h1 className="mt-5 text-[clamp(3rem,8vw,5.8rem)] font-black leading-none tracking-normal text-foreground">
-              装备案卷
-            </h1>
-            <p className="mt-5 max-w-2xl text-base leading-8 text-muted-foreground sm:text-lg">
-              这些不是炫物清单，而是一个 00 后技术折腾者的实际工作台：主力设备、输入工具、智能家居和随身配件。
-            </p>
-          </div>
-          <dl className="grid min-w-64 border border-foreground/50 bg-card/80 font-mono text-xs">
-            <div className="grid grid-cols-[5rem_1fr] border-b border-border px-4 py-2">
-              <dt className="text-muted-foreground">编号</dt>
-              <dd className="font-bold text-foreground">GEAR-{new Date().getFullYear()}</dd>
-            </div>
-            <div className="grid grid-cols-[5rem_1fr] border-b border-border px-4 py-2">
-              <dt className="text-muted-foreground">数量</dt>
-              <dd className="font-bold text-foreground">{gearData.length} 件</dd>
-            </div>
-            <div className="grid grid-cols-[5rem_1fr] px-4 py-2">
-              <dt className="text-muted-foreground">状态</dt>
-              <dd className="text-primary">持续更新</dd>
-            </div>
-          </dl>
+      {/* ── Page Header ── */}
+      <header className="mb-10 border-b border-border pb-10">
+        <p className="mb-3 text-sm font-semibold text-primary">✦ 我的工作台</p>
+        <h1 className="text-5xl font-black leading-tight tracking-tight text-foreground sm:text-6xl">
+          <span className="gradient-text">装备</span>
+        </h1>
+        <p className="mt-4 max-w-xl text-lg text-muted-foreground">
+          这些不是炫物清单，而是一个 00 后技术折腾者的实际工作台：
+          主力设备、输入工具、智能家居和随身配件。
+        </p>
+        <div className="mt-6 inline-flex items-center gap-2 rounded-full border border-border bg-card px-4 py-2 text-sm font-medium text-muted-foreground">
+          <span className="h-2 w-2 rounded-full bg-emerald-500" />
+          共 {gearData.length} 件 · 持续更新
         </div>
       </header>
 
-      <section className="border-b border-foreground/75 py-10">
-        <div className="archive-section-heading">
-          <span>01</span>
-          <div>
-            <h2>主力工作台</h2>
-            <p>先看真正决定效率的核心设备：写代码、查资料、部署服务和移动处理都靠它们撑起来。</p>
-          </div>
-        </div>
-
-        <div className="mt-8 grid gap-4 lg:grid-cols-3">
+      {/* ── Hero Gear (Core Tech top 3) ── */}
+      <section className="mb-12">
+        <h2 className="mb-6 text-2xl font-black text-foreground">
+          主力工作台
+          <span className="ml-3 text-base font-normal text-muted-foreground">
+            决定效率的核心设备
+          </span>
+        </h2>
+        <div className="grid gap-4 lg:grid-cols-3">
           {primaryGear.map((item, index) => (
             <ScrollReveal key={item.id} delay={index * 0.08}>
-              <article className="grid h-full border border-foreground/50 bg-card/80">
-                <div className="relative aspect-[4/3] border-b border-border bg-background p-5">
+              <article className="overflow-hidden rounded-2xl border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-lg">
+                <div className="relative aspect-[4/3] bg-secondary/50">
                   {item.image ? (
-                    <Image src={item.image} alt={item.name} fill className="object-contain p-6" sizes="(min-width: 1024px) 33vw, 100vw" />
+                    <Image
+                      src={item.image}
+                      alt={item.name}
+                      fill
+                      className="object-contain p-8"
+                      sizes="(min-width: 1024px) 33vw, 100vw"
+                    />
                   ) : (
-                    <item.icon className="m-auto h-12 w-12 text-muted-foreground" />
+                    <div className="flex h-full items-center justify-center">
+                      <item.icon className="h-14 w-14 text-muted-foreground/40" />
+                    </div>
                   )}
                 </div>
                 <div className="p-5">
-                  <div className="mb-3 flex items-center justify-between gap-3 font-mono text-xs text-muted-foreground">
-                    <span>{String(index + 1).padStart(3, "0")}</span>
-                    <span>{item.brand}</span>
+                  <div className="mb-2 flex items-center justify-between">
+                    <span className="text-xs font-medium text-muted-foreground">{item.brand}</span>
+                    <span className="rounded-full bg-primary/10 px-2 py-0.5 text-xs font-bold text-primary">
+                      主力
+                    </span>
                   </div>
-                  <h3 className="text-2xl font-black">{item.name}</h3>
-                  <p className="mt-3 text-sm leading-7 text-muted-foreground">{item.description}</p>
+                  <h3 className="text-xl font-black text-foreground">{item.name}</h3>
+                  <p className="mt-2 text-sm leading-7 text-muted-foreground">{item.description}</p>
                 </div>
               </article>
             </ScrollReveal>
@@ -103,65 +105,78 @@ export default function GearPage() {
         </div>
       </section>
 
-      <section className="py-10">
-        <div className="archive-section-heading">
-          <span>02</span>
-          <div>
-            <h2>全部装备案卷</h2>
-            <p>按使用场景归档，方便知道每件东西在系统里承担什么角色。</p>
-          </div>
-        </div>
+      {/* ── All Gear by Category ── */}
+      <section className="border-t border-border pt-10">
+        <h2 className="mb-8 text-2xl font-black text-foreground">全部装备</h2>
+        <div className="space-y-10">
+          {categories.map((category) => {
+            const items = groupedGear[category];
+            if (!items?.length) return null;
 
-        <div className="mt-8 space-y-10">
-        {categories.map((category) => {
-          const items = groupedGear[category];
-          if (!items?.length) return null;
-
-          return (
-            <ScrollReveal key={category}>
-              <section>
-                <div className="mb-4 flex flex-col gap-3 border-b border-foreground/60 pb-4 sm:flex-row sm:items-end sm:justify-between">
-                  <div>
-                    <h2 className="text-3xl font-black">{categoryLabels[category] || category}</h2>
-                    <p className="mt-2 text-sm leading-6 text-muted-foreground">{categoryNotes[category]}</p>
+            return (
+              <ScrollReveal key={category}>
+                <div>
+                  <div className="mb-4 flex items-end justify-between border-b border-border pb-4">
+                    <div>
+                      <h3 className="text-xl font-black text-foreground">
+                        <span className="mr-2">{categoryEmoji[category]}</span>
+                        {categoryLabels[category] || category}
+                      </h3>
+                      <p className="mt-1 text-sm text-muted-foreground">{categoryNotes[category]}</p>
+                    </div>
+                    <span className="text-sm text-muted-foreground">{items.length} 件</span>
                   </div>
-                  <span className="font-mono text-sm text-muted-foreground">{items.length} 件</span>
-                </div>
 
-                <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-                  {items.map((item, i) => (
-                    <ScrollReveal key={item.id} delay={i * 0.06}>
-                      <article className="group flex h-full gap-4 border border-foreground/40 bg-card/80 p-4 transition-colors hover:bg-secondary/70">
-                        <div className="relative flex h-24 w-24 shrink-0 items-center justify-center border border-border bg-background p-2">
-                          {item.image ? (
-                            <Image src={item.image} alt={item.name} fill className="object-contain p-2 transition-transform duration-300 group-hover:scale-105" sizes="96px" />
-                          ) : (
-                            <item.icon className="h-8 w-8 text-muted-foreground" />
-                          )}
-                        </div>
-                        <div className="min-w-0">
-                          <div className="mb-2 flex flex-wrap items-center gap-2 font-mono">
-                            <span className="border border-border bg-background px-1.5 py-0.5 text-xs text-primary">{String(i + 1).padStart(3, "0")}</span>
-                            <span className="border border-border bg-background px-1.5 py-0.5 text-xs text-muted-foreground">{item.brand}</span>
-                            {item.model && <span className="text-xs text-muted-foreground">{item.model}</span>}
+                  <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+                    {items.map((item, i) => (
+                      <ScrollReveal key={item.id} delay={i * 0.05}>
+                        <article className="flex gap-4 rounded-2xl border border-border bg-card p-4 transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-sm">
+                          <div className="relative flex h-20 w-20 flex-shrink-0 items-center justify-center overflow-hidden rounded-xl bg-secondary/50">
+                            {item.image ? (
+                              <Image
+                                src={item.image}
+                                alt={item.name}
+                                fill
+                                className="object-contain p-2"
+                                sizes="80px"
+                              />
+                            ) : (
+                              <item.icon className="h-8 w-8 text-muted-foreground/50" />
+                            )}
                           </div>
-                          <h3 className="line-clamp-2 font-black transition-colors group-hover:text-primary">{item.name}</h3>
-                          <p className="mt-2 line-clamp-3 text-sm leading-6 text-muted-foreground">{item.description}</p>
-                          {item.link && (
-                            <a href={item.link} target="_blank" rel="noopener noreferrer" className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-primary">
-                              查看来源
-                              <ArrowRight className="h-3.5 w-3.5" />
-                            </a>
-                          )}
-                        </div>
-                      </article>
-                    </ScrollReveal>
-                  ))}
+                          <div className="min-w-0 flex-1">
+                            <div className="flex flex-wrap items-center gap-1.5 mb-1.5">
+                              <span className="rounded-full bg-secondary px-2 py-0.5 text-xs font-medium text-muted-foreground">
+                                {item.brand}
+                              </span>
+                              {item.model && (
+                                <span className="text-xs text-muted-foreground">{item.model}</span>
+                              )}
+                            </div>
+                            <h4 className="line-clamp-2 font-bold text-foreground">{item.name}</h4>
+                            <p className="mt-1.5 line-clamp-2 text-xs leading-5 text-muted-foreground">
+                              {item.description}
+                            </p>
+                            {item.link && (
+                              <a
+                                href={item.link}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-primary hover:text-accent-foreground"
+                              >
+                                查看来源
+                                <ArrowRight className="h-3 w-3" />
+                              </a>
+                            )}
+                          </div>
+                        </article>
+                      </ScrollReveal>
+                    ))}
+                  </div>
                 </div>
-              </section>
-            </ScrollReveal>
-          );
-        })}
+              </ScrollReveal>
+            );
+          })}
         </div>
       </section>
     </main>

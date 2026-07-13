@@ -6,12 +6,12 @@ import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 
 const navLinks = [
-  ["技术案卷", "/blog"],
-  ["成长样本", "/essays"],
+  ["博客", "/blog"],
+  ["随笔", "/essays"],
   ["搜索", "/search"],
-  ["时间索引", "/archive"],
+  ["归档", "/archive"],
   ["装备", "/gear"],
-  ["在线服务", "/portal"],
+  ["服务", "/portal"],
   ["关于", "/about"],
 ] as const;
 
@@ -20,19 +20,11 @@ export default function MobileNav() {
   const pathname = usePathname();
   const panelRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    setOpen(false);
-  }, [pathname]);
+  useEffect(() => { setOpen(false); }, [pathname]);
 
   useEffect(() => {
-    if (open) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => {
-      document.body.style.overflow = "";
-    };
+    document.body.style.overflow = open ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
   }, [open]);
 
   useEffect(() => {
@@ -46,9 +38,10 @@ export default function MobileNav() {
 
   return (
     <div className="md:hidden">
+      {/* Hamburger */}
       <button
         onClick={() => setOpen(true)}
-        className="flex h-9 w-9 items-center justify-center border border-border text-muted-foreground transition-colors hover:border-foreground hover:bg-secondary hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        className="flex h-9 w-9 items-center justify-center rounded-xl border border-border text-muted-foreground transition-colors hover:border-primary/40 hover:bg-secondary hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         aria-label="打开导航菜单"
         aria-expanded={open}
       >
@@ -57,49 +50,62 @@ export default function MobileNav() {
 
       {open && (
         <div className="fixed inset-0 z-[60]">
+          {/* Backdrop */}
           <div
             className="absolute inset-0 bg-black/40 backdrop-blur-sm"
             onClick={() => setOpen(false)}
           />
+
+          {/* Drawer */}
           <div
             ref={panelRef}
-            className="absolute right-0 top-0 flex h-full w-80 max-w-[86vw] flex-col border-l border-foreground/40 bg-card shadow-2xl animate-in slide-in-from-right duration-200"
+            className="absolute right-0 top-0 flex h-full w-72 max-w-[86vw] flex-col rounded-l-2xl border-l border-border bg-card/95 shadow-2xl backdrop-blur-xl animate-in slide-in-from-right duration-200"
           >
-            <div className="flex h-16 items-center justify-between border-b border-foreground/30 px-5">
-              <div className="grid">
-                <span className="font-mono text-[10px] text-primary">PUBLIC ARCHIVE 001</span>
-                <span className="text-sm font-black text-foreground">案卷目录</span>
+            {/* Header */}
+            <div className="flex h-16 items-center justify-between border-b border-border px-5">
+              <div>
+                <p className="text-xs font-semibold text-primary">念舒</p>
+                <p className="text-sm font-black text-foreground">导航</p>
               </div>
               <button
                 onClick={() => setOpen(false)}
-                className="flex h-8 w-8 items-center justify-center border border-border text-muted-foreground transition-colors hover:border-foreground hover:bg-secondary hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                className="flex h-8 w-8 items-center justify-center rounded-xl border border-border text-muted-foreground transition-colors hover:border-primary/40 hover:bg-secondary hover:text-foreground"
                 aria-label="关闭导航菜单"
               >
-                <X className="h-5 w-5" />
+                <X className="h-4 w-4" />
               </button>
             </div>
-            <nav className="flex-1 overflow-y-auto p-3">
-              {navLinks.map(([label, href], index) => {
-                const isActive = pathname === href || pathname.startsWith(href + "/");
-                return (
-                  <Link
-                    key={href}
-                    href={href}
-                    aria-current={isActive ? "page" : undefined}
-                    className={`grid grid-cols-[2.5rem_1fr] items-center border-b border-border px-3 py-4 text-sm font-semibold transition-colors ${
-                      isActive
-                        ? "bg-accent text-foreground"
-                        : "text-muted-foreground hover:bg-secondary hover:text-foreground"
-                    }`}
-                  >
-                    <span className="font-mono text-primary">{String(index + 1).padStart(2, "0")}</span>
-                    <span>{label}</span>
-                  </Link>
-                );
-              })}
+
+            {/* Links */}
+            <nav className="flex-1 overflow-y-auto px-3 py-4">
+              <ul className="space-y-1">
+                {navLinks.map(([label, href]) => {
+                  const isActive = pathname === href || pathname.startsWith(href + "/");
+                  return (
+                    <li key={href}>
+                      <Link
+                        href={href}
+                        aria-current={isActive ? "page" : undefined}
+                        className={`flex items-center rounded-xl px-4 py-3 text-sm font-semibold transition-all duration-150 ${
+                          isActive
+                            ? "bg-primary/10 text-primary"
+                            : "text-muted-foreground hover:bg-secondary hover:text-foreground"
+                        }`}
+                      >
+                        {isActive && (
+                          <span className="mr-2 h-1.5 w-1.5 rounded-full bg-primary" />
+                        )}
+                        {label}
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
             </nav>
-            <div className="border-t border-foreground/30 p-4 font-mono text-xs text-muted-foreground">
-              NIANSHU ARCHIVES · 中国 / 兰州
+
+            {/* Footer */}
+            <div className="border-t border-border px-5 py-4 text-xs text-muted-foreground">
+              念舒 · 技术 · 成长 · 创造
             </div>
           </div>
         </div>

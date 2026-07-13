@@ -8,8 +8,8 @@ import type { LucideIcon } from "lucide-react";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "公开服务",
-  description: "念舒档案局公开服务登记表与运行状态。",
+  title: "服务",
+  description: "念舒长期维护的公开入口和自托管服务状态。",
 };
 
 type ServiceStatus = "online" | "protected" | "degraded" | "offline";
@@ -57,100 +57,125 @@ function formatStatus(status: ServiceStatus): string {
   return "不可达";
 }
 
+const statusStyles: Record<ServiceStatus, { dot: string; badge: string }> = {
+  online: {
+    dot: "bg-emerald-500",
+    badge: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20",
+  },
+  protected: {
+    dot: "bg-amber-500",
+    badge: "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20",
+  },
+  degraded: {
+    dot: "bg-orange-500",
+    badge: "bg-orange-500/10 text-orange-600 dark:text-orange-400 border-orange-500/20",
+  },
+  offline: {
+    dot: "bg-red-500",
+    badge: "bg-red-500/10 text-red-600 dark:text-red-400 border-red-500/20",
+  },
+};
+
 export default function PortalPage() {
   const payload = readPortalStatus();
   const services = payload?.services ?? [];
   const lastCheckedAt = payload?.generatedAt ?? "未生成";
-  const statusSource = payload?.source ?? "未生成状态文件";
+  const online = services.filter((s) =>
+    ["online", "protected"].includes(s.check.status)
+  ).length;
 
   return (
-    <main className="archive-shell max-w-6xl">
+    <main className="ns-shell">
       <FloatingNav backUrl="/" />
 
-      <header className="mb-10 border-y border-foreground/80 py-8">
-        <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
-          <div>
-            <p className="inline-flex items-center gap-2 border border-primary px-2 py-1 font-mono text-sm font-bold text-primary">
-              <Server className="h-4 w-4" />
-              SERVICE REGISTRY
-            </p>
-            <h1 className="mt-5 text-[clamp(3rem,8vw,5.8rem)] font-black leading-none tracking-normal text-foreground">
-              公开服务
-            </h1>
-            <p className="mt-5 max-w-2xl text-base leading-8 text-muted-foreground sm:text-lg">
-              这里记录我长期维护的公开入口和自托管服务。能访问的不一定复杂，但都是真实运行过的东西。
-            </p>
+      {/* ── Page Header ── */}
+      <header className="mb-10 border-b border-border pb-10">
+        <p className="mb-3 text-sm font-semibold text-primary">✦ 自托管 · 长期维护</p>
+        <h1 className="text-5xl font-black leading-tight tracking-tight text-foreground sm:text-6xl">
+          <span className="gradient-text">在线服务</span>
+        </h1>
+        <p className="mt-4 max-w-xl text-lg text-muted-foreground">
+          这里记录我长期维护的公开入口和自托管服务。能访问的不一定复杂，但都是真实运行过的东西。
+        </p>
+        <div className="mt-6 flex flex-wrap gap-3">
+          <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-4 py-2 text-sm font-medium">
+            <span className="h-2 w-2 rounded-full bg-emerald-500" />
+            <span className="text-foreground">{online} 项</span>
+            <span className="text-muted-foreground">正在运行</span>
           </div>
-          <dl className="grid min-w-72 border border-foreground/50 bg-card/80 font-mono text-xs">
-            <div className="grid grid-cols-[5rem_1fr] border-b border-border px-4 py-2">
-              <dt className="text-muted-foreground">服务</dt>
-              <dd className="font-bold text-foreground">{services.length} 项</dd>
-            </div>
-            <div className="grid grid-cols-[5rem_1fr] border-b border-border px-4 py-2">
-              <dt className="text-muted-foreground">来源</dt>
-              <dd className="truncate">{statusSource}</dd>
-            </div>
-            <div className="grid grid-cols-[5rem_1fr] px-4 py-2">
-              <dt className="text-muted-foreground">检查</dt>
-              <dd className="truncate">{lastCheckedAt}</dd>
-            </div>
-          </dl>
+          <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-4 py-2 text-sm font-medium text-muted-foreground">
+            共 {services.length} 项服务
+          </div>
+          <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-4 py-2 text-xs text-muted-foreground">
+            检查时间：{lastCheckedAt}
+          </div>
         </div>
       </header>
 
-      <div className="border-y border-foreground/70">
+      {/* ── Services Grid ── */}
+      <div className="space-y-3">
         {services.map((service, i) => {
           const CategoryIcon = iconMap[service.iconKey] || Server;
-          const statusMap: Record<ServiceStatus, string> = {
-            online: "border-emerald-500/30 text-emerald-600 dark:text-emerald-400",
-            protected: "border-amber-500/30 text-amber-600 dark:text-amber-400",
-            degraded: "border-orange-500/30 text-orange-600 dark:text-orange-400",
-            offline: "border-red-500/30 text-red-600 dark:text-red-400",
-          };
-          const statusClass = statusMap[service.check.status] || statusMap.offline;
+          const style = statusStyles[service.check.status] || statusStyles.offline;
+
           return (
-            <ScrollReveal key={service.name} delay={i * 0.08}>
+            <ScrollReveal key={service.name} delay={i * 0.06}>
               <a
                 href={service.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group grid gap-4 border-b border-border px-4 py-5 transition-colors last:border-b-0 hover:bg-secondary/70 lg:grid-cols-[4rem_1fr_8rem_8rem_7rem] lg:items-center"
+                className="group flex items-center gap-4 rounded-2xl border border-border bg-card p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md"
               >
-                <span className="font-mono text-lg font-black text-primary">
-                  {String(i + 1).padStart(3, "0")}
-                </span>
-                <span className="flex min-w-0 items-center gap-4">
-                  <span className="flex h-12 w-12 shrink-0 items-center justify-center border border-border bg-background p-2">
-                      <Image src={service.icon} alt={service.name} width={32} height={32} className="h-8 w-8 object-contain" unoptimized />
-                  </span>
-                  <span className="min-w-0">
-                    <span className="flex items-center gap-2 text-xl font-black group-hover:text-primary">
+                {/* Service Icon */}
+                <div className="flex h-14 w-14 flex-shrink-0 items-center justify-center overflow-hidden rounded-xl border border-border bg-secondary/50">
+                  <Image
+                    src={service.icon}
+                    alt={service.name}
+                    width={36}
+                    height={36}
+                    className="h-9 w-9 object-contain"
+                    unoptimized
+                  />
+                </div>
+
+                {/* Info */}
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center gap-2">
+                    <span className="font-bold text-foreground transition-colors group-hover:text-primary">
                       {service.name}
-                      <ExternalLink className="h-4 w-4" />
                     </span>
-                    <span className="mt-1 block line-clamp-2 text-sm leading-6 text-muted-foreground">{service.description}</span>
+                    <ExternalLink className="h-3.5 w-3.5 flex-shrink-0 text-muted-foreground" />
+                    {service.visibility === "protected" && (
+                      <span className="flex items-center gap-1 rounded-full bg-secondary px-2 py-0.5 text-xs text-muted-foreground">
+                        <LockKeyhole className="h-3 w-3" />
+                        私有
+                      </span>
+                    )}
+                  </div>
+                  <p className="mt-1 line-clamp-1 text-sm text-muted-foreground">
+                    {service.description}
+                  </p>
+                </div>
+
+                {/* Status & Meta */}
+                <div className="hidden flex-shrink-0 flex-col items-end gap-2 sm:flex">
+                  <span
+                    className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold ${style.badge}`}
+                  >
+                    <span className={`h-1.5 w-1.5 rounded-full ${style.dot}`} />
+                    {formatStatus(service.check.status)}
                   </span>
-                </span>
-                <span className={`inline-flex w-fit items-center gap-1 border px-2 py-1 text-xs ${statusClass}`}>
-                  {service.check.status === "online" || service.check.status === "protected" ? <Activity className="h-3 w-3" /> : <WifiOff className="h-3 w-3" />}
-                  {formatStatus(service.check.status)}
-                </span>
-                <span className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
-                  {typeof service.check.statusCode === "number" && (
-                    <span className="border border-border bg-background px-2 py-1">HTTP {service.check.statusCode}</span>
-                  )}
-                  {typeof service.check.latencyMs === "number" && (
-                    <span className="border border-border bg-background px-2 py-1">{service.check.latencyMs} ms</span>
-                  )}
-                  {service.visibility === "protected" && (
-                    <span className="inline-flex items-center gap-1 border border-border bg-background px-2 py-1">
-                      <LockKeyhole className="h-3 w-3" /> 私有服务
-                    </span>
-                  )}
-                </span>
-                <span className="hidden items-center justify-end text-primary lg:flex">
-                  <CategoryIcon className="h-5 w-5" />
-                </span>
+                  <span className="flex gap-2 text-xs text-muted-foreground">
+                    {typeof service.check.statusCode === "number" && (
+                      <span>HTTP {service.check.statusCode}</span>
+                    )}
+                    {typeof service.check.latencyMs === "number" && (
+                      <span>{service.check.latencyMs} ms</span>
+                    )}
+                  </span>
+                </div>
+
+                <CategoryIcon className="h-5 w-5 flex-shrink-0 text-primary/40 group-hover:text-primary transition-colors" />
               </a>
             </ScrollReveal>
           );

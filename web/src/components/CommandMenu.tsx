@@ -149,7 +149,7 @@ export default function CommandMenu({ posts, essays }: CommandMenuProps) {
                     <input
                         ref={inputRef}
                         className="flex h-12 w-full bg-transparent py-3 font-mono text-sm outline-none placeholder:text-muted-foreground"
-                        placeholder="检索案卷、样本或标签..."
+                        placeholder="搜索文章、随笔或标签..."
                         value={query}
                         onChange={(e) => setQuery(e.target.value)}
                         onKeyDown={handleKeyDown}
@@ -163,7 +163,7 @@ export default function CommandMenu({ posts, essays }: CommandMenuProps) {
                 <div className="overflow-y-auto p-2">
                     {totalResults === 0 ? (
                         <div className="py-8 text-center text-sm text-muted-foreground">
-                            {query ? `未找到「${query}」相关档案` : "输入关键词开始检索"}
+                            {query ? `未找到「${query}」相关内容` : "输入关键词开始搜索"}
                         </div>
                     ) : (
                         <div className="space-y-1">
@@ -171,7 +171,7 @@ export default function CommandMenu({ posts, essays }: CommandMenuProps) {
                             {filteredPosts.length > 0 && (
                                 <>
                                     <div className="px-2 py-1.5 font-mono text-[10px] font-semibold text-muted-foreground">
-                                        技术案卷
+                                        博客文章
                                     </div>
                                     {filteredPosts.slice(0, 5).map((post) => {
                                         const idx = globalIdx++;
@@ -204,7 +204,7 @@ export default function CommandMenu({ posts, essays }: CommandMenuProps) {
                             {filteredEssays.length > 0 && (
                                 <>
                                     <div className="mt-1 px-2 py-1.5 font-mono text-[10px] font-semibold text-muted-foreground">
-                                        成长样本
+                                        个人随笔
                                     </div>
                                     {filteredEssays.slice(0, 5).map((essay) => {
                                         const idx = globalIdx++;

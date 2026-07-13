@@ -1,73 +1,99 @@
 import { friendLinks } from "@/lib/friends-data";
 import FloatingNav from "@/components/FloatingNav";
 import ScrollReveal from "@/components/ScrollReveal";
-import { Heart, Link2, Mail } from "lucide-react";
+import { Mail, Link2 } from "lucide-react";
 import Image from "next/image";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "外部路径",
-  description: "念舒档案局收藏和长期访问的外部站点。",
+  title: "友链",
+  description: "念舒长期阅读、反复访问的网站与博客。",
 };
 
 export default function FriendsPage() {
   return (
-    <main className="archive-shell max-w-6xl">
+    <main className="ns-shell">
       <FloatingNav backUrl="/" />
 
-      <header className="mb-10 border-y border-foreground/80 py-8">
-        <p className="inline-flex items-center gap-2 border border-primary px-2 py-1 font-mono text-sm font-bold text-primary">
-          <Heart className="h-4 w-4" />
-          EXTERNAL ROUTES
-        </p>
-        <h1 className="mt-5 text-[clamp(3rem,8vw,5.8rem)] font-black leading-none tracking-normal text-foreground">
-          外部路径
+      {/* ── Page Header ── */}
+      <header className="mb-10 border-b border-border pb-10">
+        <p className="mb-3 text-sm font-semibold text-primary">✦ 外部链接</p>
+        <h1 className="text-5xl font-black leading-tight tracking-tight text-foreground sm:text-6xl">
+          <span className="gradient-text">友链</span>
         </h1>
-        <p className="mt-5 max-w-2xl text-base leading-8 text-muted-foreground sm:text-lg">
+        <p className="mt-4 max-w-xl text-lg text-muted-foreground">
           长期阅读、反复访问、值得收藏的网站与博客。它们是我学习和观察互联网的外部参照。
         </p>
       </header>
 
-      <div className="border-y border-foreground/70">
+      {/* ── Friend List ── */}
+      <div className="space-y-3">
         {friendLinks.map((friend, i) => (
-          <ScrollReveal key={friend.name} delay={i * 0.06}>
+          <ScrollReveal key={friend.name} delay={i * 0.05}>
             <a
               href={friend.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="group grid gap-4 border-b border-border px-4 py-5 transition-colors last:border-b-0 hover:bg-secondary/70 sm:grid-cols-[4rem_4rem_1fr_12rem] sm:items-center"
+              className="group flex items-center gap-4 rounded-2xl border border-border bg-card p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md"
             >
-              <span className="font-mono text-lg font-black text-primary">{String(i + 1).padStart(3, "0")}</span>
-              <Image src={friend.avatar} alt={friend.name} width={48} height={48} className="h-12 w-12 border border-border object-cover" unoptimized />
-              <span className="min-w-0">
-                    <span className="flex items-center gap-2 truncate text-lg font-black transition-colors group-hover:text-primary">
-                      {friend.name}
-                      <Link2 className="h-4 w-4 shrink-0" />
+              {/* Avatar */}
+              <div className="relative h-14 w-14 flex-shrink-0 overflow-hidden rounded-full border border-border">
+                <Image
+                  src={friend.avatar}
+                  alt={friend.name}
+                  fill
+                  className="object-cover"
+                  unoptimized
+                />
+              </div>
+
+              {/* Info */}
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-2">
+                  <span className="font-bold text-foreground transition-colors group-hover:text-primary">
+                    {friend.name}
+                  </span>
+                  <Link2 className="h-3.5 w-3.5 flex-shrink-0 text-muted-foreground" />
+                </div>
+                <p className="mt-1 line-clamp-2 text-sm leading-6 text-muted-foreground">
+                  {friend.description}
+                </p>
+              </div>
+
+              {/* Tags */}
+              {friend.tags && friend.tags.length > 0 && (
+                <div className="hidden flex-shrink-0 flex-wrap gap-1.5 sm:flex">
+                  {friend.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="rounded-full bg-secondary px-2.5 py-0.5 text-xs font-medium text-muted-foreground"
+                    >
+                      {tag}
                     </span>
-                    <span className="mt-2 block line-clamp-2 text-sm leading-6 text-muted-foreground">{friend.description}</span>
-              </span>
-              <span className="flex flex-wrap gap-1 font-mono text-xs text-muted-foreground">
-                {friend.tags?.map((tag) => (
-                  <span key={tag} className="border border-border bg-card px-1.5 py-0.5">{tag}</span>
-                ))}
-              </span>
+                  ))}
+                </div>
+              )}
             </a>
           </ScrollReveal>
         ))}
 
-        <ScrollReveal delay={friendLinks.length * 0.06}>
+        {/* Apply Friend Link */}
+        <ScrollReveal delay={friendLinks.length * 0.05}>
           <a
-            href="mailto:nianshu2022@sina.cn?subject=%E7%94%B3%E8%AF%B7%E5%8F%8B%E9%93%BE"
-            className="group grid gap-4 px-4 py-5 text-muted-foreground transition-colors hover:bg-secondary/70 hover:text-foreground sm:grid-cols-[4rem_4rem_1fr]"
+            href="mailto:nianshu2022@sina.cn?subject=申请友链"
+            className="group flex items-center gap-4 rounded-2xl border border-dashed border-border bg-card/50 p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/50"
           >
-            <span className="font-mono text-lg font-black text-primary">{String(friendLinks.length + 1).padStart(3, "0")}</span>
-            <span className="flex h-12 w-12 items-center justify-center border border-border bg-card">
+            <div className="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-full border border-dashed border-primary/50 bg-primary/5">
               <Mail className="h-5 w-5 text-primary" />
-            </span>
-            <span>
-              <span className="block text-lg font-black text-foreground transition-colors group-hover:text-primary">申请友链</span>
-              <span className="mt-2 block text-sm leading-6">把你的网站发给我，我们互相留一条长期可达的路径。</span>
-            </span>
+            </div>
+            <div>
+              <p className="font-bold text-foreground group-hover:text-primary transition-colors">
+                申请友链
+              </p>
+              <p className="mt-1 text-sm text-muted-foreground">
+                把你的网站发给我，我们互相留一条长期可达的路径。
+              </p>
+            </div>
           </a>
         </ScrollReveal>
       </div>

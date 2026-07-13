@@ -13,7 +13,6 @@ export default function TableOfContents({ toc }: TableOfContentsProps) {
   const tocRef = useRef<HTMLUListElement>(null);
   const activeItemRef = useRef<HTMLLIElement | null>(null);
 
-  // 用 scroll 事件 + getBoundingClientRect 确保任何时刻都有高亮
   const getActiveId = useCallback(() => {
     const headings = toc
       .map((item) => document.getElementById(item.slug))
@@ -21,18 +20,14 @@ export default function TableOfContents({ toc }: TableOfContentsProps) {
 
     if (headings.length === 0) return "";
 
-    // 找到第一个"还没出屏幕顶部"的标题（距顶部最近但 ≥ 0 的）
-    // 如果全部在屏幕上方，取最后一个（说明用户已滚过所有标题）
-    const OFFSET = 96; // header 高度 + buffer
+    const OFFSET = 100;
     let activeSlug = headings[0].id;
 
     for (let i = 0; i < headings.length; i++) {
       const rect = headings[i].getBoundingClientRect();
       if (rect.top - OFFSET <= 0) {
-        // 这个标题已经滚过了顶部，标记为"当前或之前"
         activeSlug = headings[i].id;
       } else {
-        // 这个标题还在屏幕下方，停止
         break;
       }
     }
@@ -41,64 +36,91 @@ export default function TableOfContents({ toc }: TableOfContentsProps) {
   }, [toc]);
 
   useEffect(() => {
-    const onScroll = () => {
-      const id = getActiveId();
-      setActiveId(id);
-    };
-
-    // 初始化
+    const onScroll = () => setActiveId(getActiveId());
     onScroll();
-
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, [getActiveId]);
 
-  // 当 activeId 变化时，自动将目录滚动到可见区域
+  // Auto-scroll TOC to keep active item visible
   useEffect(() => {
     if (!activeItemRef.current || !tocRef.current) return;
     const container = tocRef.current.parentElement;
     if (!container) return;
-
     const item = activeItemRef.current;
     const containerRect = container.getBoundingClientRect();
     const itemRect = item.getBoundingClientRect();
-
     if (itemRect.top < containerRect.top || itemRect.bottom > containerRect.bottom) {
       item.scrollIntoView({ block: "nearest", behavior: "smooth" });
     }
   }, [activeId]);
+
+  if (toc.length === 0) return null;
+
+  // Count h2 sections for numbering
+  let h2Counter = 0;
 
   return (
     <nav aria-label="文章目录">
       <ul ref={tocRef} className="space-y-0.5">
         {toc.map((item) => {
           const isActive = activeId === item.slug;
+          const isH2 = item.level === 2;
+          const isH3 = item.level === 3;
+          if (isH2) h2Counter++;
+
           return (
-            <li key={item.slug}>
+            <li
+              key={item.slug}
+              ref={isActive ? (el) => { activeItemRef.current = el; } : undefined}
+            >
               <a
                 href={`#${item.slug}`}
                 onClick={(e) => {
                   e.preventDefault();
-                  document.getElementById(item.slug)?.scrollIntoView({
-                    behavior: "smooth",
-                  });
+                  document.getElementById(item.slug)?.scrollIntoView({ behavior: "smooth" });
                   setActiveId(item.slug);
                 }}
                 className={cn(
-                  "flex items-center gap-2 border-l-2 border-transparent px-3 py-1.5 text-[13px] leading-snug transition-all duration-200",
-                  item.level === 3 && "ml-3",
+                  "group relative flex items-start gap-2.5 rounded-lg py-1.5 pr-2 text-[13px] leading-snug transition-all duration-200",
+                  isH3 ? "ml-4 pl-2" : "pl-2",
                   isActive
-                    ? "border-primary bg-primary/10 text-primary font-medium"
-                    : "text-muted-foreground hover:border-border hover:bg-secondary/60 hover:text-foreground"
+                    ? "text-primary font-semibold"
+                    : "text-muted-foreground hover:text-foreground"
                 )}
               >
+                {/* Active indicator bar */}
                 <span
                   className={cn(
-                    "inline-block h-1.5 w-1.5 shrink-0 transition-colors duration-200",
-                    isActive ? "bg-primary" : "bg-border"
+                    "absolute left-0 top-1/2 -translate-y-1/2 w-0.5 rounded-full transition-all duration-300",
+                    isActive
+                      ? "h-4 bg-primary opacity-100"
+                      : "h-2 bg-border opacity-0 group-hover:opacity-60"
                   )}
                 />
-                <span className="truncate">{item.title}</span>
+
+                {/* Number or dot */}
+                {isH2 ? (
+                  <span
+                    className={cn(
+                      "mt-0.5 flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full text-[10px] font-bold transition-colors",
+                      isActive
+                        ? "bg-primary text-primary-foreground"
+                        : "bg-secondary text-muted-foreground group-hover:bg-primary/20 group-hover:text-primary"
+                    )}
+                  >
+                    {h2Counter}
+                  </span>
+                ) : (
+                  <span
+                    className={cn(
+                      "mt-[7px] h-1 w-1 flex-shrink-0 rounded-full transition-colors",
+                      isActive ? "bg-primary" : "bg-border group-hover:bg-primary/50"
+                    )}
+                  />
+                )}
+
+                <span className="flex-1 leading-relaxed">{item.title}</span>
               </a>
             </li>
           );

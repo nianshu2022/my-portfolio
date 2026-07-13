@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Outfit } from "next/font/google";
 import "./globals.css";
 import ScrollToTop from "@/components/ScrollToTop";
 import ServiceWorkerRegister from "@/components/ServiceWorkerRegister";
@@ -18,12 +18,18 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
+
+const outfit = Outfit({
+  variable: "--font-outfit",
+  subsets: ["latin"],
+  display: "swap",
+});
 const isProduction = process.env.NODE_ENV === "production";
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#b4232a" },
-    { media: "(prefers-color-scheme: dark)", color: "#ff5a4f" },
+    { media: "(prefers-color-scheme: light)", color: "#6366f1" },
+    { media: "(prefers-color-scheme: dark)", color: "#818cf8" },
   ],
   width: "device-width",
   initialScale: 1,
@@ -40,11 +46,11 @@ import Link from "next/link";
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://blog.nianshu2022.cn'),
   title: {
-    default: "念舒档案局 | 00 后技术折腾者的成长样本库",
-    template: "%s | 念舒档案局",
+    default: "念舒 | 技术 · 成长 · 创造",
+    template: "%s | 念舒",
   },
-  description: "念舒档案局，一个 00 后技术折腾者的成长样本库，归档技术踩坑、部署实践、成长经历和个人项目。",
-  keywords: ["念舒", "念舒档案局", "技术折腾", "个人品牌", "Next.js", "00后", "技术博客"],
+  description: "念舒的个人博客——一个 00 后技术折腾者，在这里分享前端开发、AI 应用、独立开发与成长经历。",
+  keywords: ["念舒", "技术博客", "前端开发", "独立开发", "Next.js", "00后", "AI"],
   authors: [{ name: "念舒", url: process.env.NEXT_PUBLIC_SITE_URL || 'https://blog.nianshu2022.cn' }],
   creator: "念舒",
 
@@ -52,9 +58,9 @@ export const metadata: Metadata = {
     type: "website",
     locale: "zh_CN",
     url: process.env.NEXT_PUBLIC_SITE_URL || 'https://blog.nianshu2022.cn',
-    title: "念舒档案局",
-    description: "一个 00 后技术折腾者的成长样本库。",
-    siteName: "念舒档案局",
+    title: "念舒 | 技术 · 成长 · 创造",
+    description: "一个 00 后技术折腾者的个人博客，分享代码与生活。",
+    siteName: "念舒",
     images: [
       {
         url: "/img/avatar.png",
@@ -66,8 +72,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary",
-    title: "念舒档案局",
-    description: "一个 00 后技术折腾者的成长样本库。",
+    title: "念舒 | 技术 · 成长 · 创造",
+    description: "一个 00 后技术折腾者的个人博客，分享代码与生活。",
     images: ["/img/avatar.png"],
   },
   icons: {
@@ -91,6 +97,10 @@ export default function RootLayout({
   return (
     <html lang="zh-CN" suppressHydrationWarning className="scroll-smooth" data-scroll-behavior="smooth">
       <head>
+        {/* Preconnect: image proxy & comments */}
+        <link rel="preconnect" href="https://wsrv.nl" />
+        <link rel="dns-prefetch" href="https://wsrv.nl" />
+        <link rel="preconnect" href="https://giscus.app" />
         <meta name="google-adsense-account" content="ca-pub-6153369929341681" />
         {/* P1: 防主题闪烁 - 在 JS 加载前同步设置 dark class，消除 FOUC */}
         <script dangerouslySetInnerHTML={{
@@ -101,11 +111,11 @@ export default function RootLayout({
         ) : null}
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen relative overflow-x-hidden bg-background text-foreground`}
+        className={`${geistSans.variable} ${geistMono.variable} ${outfit.variable} antialiased min-h-screen relative overflow-x-hidden bg-background text-foreground`}
         suppressHydrationWarning
       >
         <NextTopLoader
-          color="#b4232a"
+          color="#6366f1"
           initialPosition={0.08}
           crawlSpeed={200}
           height={3}
@@ -113,7 +123,7 @@ export default function RootLayout({
           showSpinner={false}
           easing="ease"
           speed={200}
-          shadow="0 0 10px #b4232a,0 0 5px #b4232a"
+          shadow="0 0 10px #6366f1,0 0 5px #8b5cf6"
         />
         <GridBackground />
         <MouseGlow />
@@ -125,29 +135,29 @@ export default function RootLayout({
           >
             跳到正文
           </a>
-          <header className="fixed left-0 right-0 top-0 z-40 border-b border-foreground/15 bg-background/88 backdrop-blur-md">
+          <header className="fixed left-0 right-0 top-0 z-40 border-b border-border/60 bg-background/80 backdrop-blur-xl">
             <div className="mx-auto flex h-16 w-full items-center justify-between px-4 sm:px-6 lg:px-8">
-              <div className="flex items-center gap-5">
-                <Link href="/" className="group inline-flex items-center gap-3 text-foreground">
-                  <span className="flex h-8 w-8 items-center justify-center border border-foreground bg-foreground text-sm font-black text-background">档</span>
-                  <span className="hidden font-black tracking-normal sm:inline">念舒档案局</span>
-                </Link>
-                <div className="hidden items-center gap-2 font-mono text-xs text-muted-foreground lg:flex">
-                  <span>公共档案 001 号</span>
-                  <span className="border border-primary px-1 text-primary">验</span>
-                </div>
-              </div>
+              {/* Logo */}
+              <Link href="/" className="group inline-flex items-center gap-2.5 text-foreground">
+                <span
+                  className="flex h-9 w-9 items-center justify-center rounded-xl text-sm font-black text-white"
+                  style={{ background: "linear-gradient(135deg, #6366f1, #8b5cf6)" }}
+                  aria-hidden="true"
+                >
+                  念
+                </span>
+                <span className="hidden font-black tracking-tight sm:inline">
+                  念舒
+                  <span className="ml-1 text-muted-foreground font-normal text-sm hidden lg:inline">
+                    技术 · 成长 · 创造
+                  </span>
+                </span>
+              </Link>
+
               <DesktopNav />
+
+              {/* Right controls */}
               <div className="hidden items-center gap-2 md:flex">
-                <div className="hidden items-center gap-2 border-l border-border pl-4 2xl:flex">
-                  <span className="border border-foreground px-2 py-1 font-mono text-xs font-bold">系统状态</span>
-                  <span className="font-mono text-xs text-muted-foreground">正常运行</span>
-                  <div className="flex gap-2" aria-hidden="true">
-                    <span className="h-2 w-2 rounded-full bg-muted" />
-                    <span className="h-2 w-2 rounded-full bg-emerald-500" />
-                    <span className="h-2 w-2 rounded-full bg-emerald-500" />
-                  </div>
-                </div>
                 <SearchHint />
                 <ThemeToggle />
               </div>

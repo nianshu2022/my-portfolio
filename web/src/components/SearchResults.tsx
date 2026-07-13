@@ -127,9 +127,9 @@ export default function SearchResults({ posts, essays }: SearchResultsProps) {
               <span className="font-mono text-lg font-black text-primary">
                 {String(i + 1).padStart(3, "0")}
               </span>
-              <span className="inline-flex w-fit items-center gap-1 border border-primary px-1.5 py-1 text-xs font-semibold text-primary">
+              <span className="inline-flex w-fit items-center gap-1 rounded-full bg-primary/10 px-2.5 py-1 text-xs font-semibold text-primary">
                 {type === "post" ? <BookOpen className="h-3.5 w-3.5" /> : <Feather className="h-3.5 w-3.5" />}
-                {type === "post" ? "案卷" : "样本"}
+                {type === "post" ? "文章" : "随笔"}
               </span>
               <span className="min-w-0">
                 <h2 className="line-clamp-2 text-lg font-black transition-colors group-hover:text-primary">

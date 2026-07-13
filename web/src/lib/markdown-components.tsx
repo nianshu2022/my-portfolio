@@ -65,14 +65,15 @@ export function getMarkdownComponents(opts?: { imageWidth?: number; imageQuality
       }
 
       const style: React.CSSProperties = {
-        width: "100%",
-        maxWidth: "560px",
+        width: "auto",
+        maxWidth: "480px",
         height: "auto",
-        borderRadius: "8px",
+        display: "block",
+        borderRadius: "12px",
         backgroundColor: "transparent",
         verticalAlign: "top",
       };
-      let className = "rounded-lg block mx-auto";
+      let className = "rounded-xl block mx-auto my-6 shadow-sm border border-border/30";
 
       try {
         const url = new URL(src, "http://dummy.com");
