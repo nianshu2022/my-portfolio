@@ -35,7 +35,7 @@ export default function BottomNav() {
               }`}
             >
               <span
-                className={`absolute top-0 h-0.5 w-8 bg-primary transition-transform ${
+                className={`absolute top-0 h-0.5 w-8 rounded-full bg-primary transition-transform duration-300 ${
                   isActive ? "scale-x-100" : "scale-x-0"
                 }`}
               />

@@ -27,7 +27,6 @@ export default function ThemeToggle() {
         localStorage.setItem("theme", newTheme);
     };
 
-    // Initial load reflection is handled by useEffect below, but let's keep it clean
     useEffect(() => {
         if (!mounted) return;
         reflectTheme(theme);
@@ -51,8 +50,6 @@ export default function ThemeToggle() {
 
         transition.ready.then(() => {
             // 计算扩散圆的半径 (从右上角按钮中心开始)
-            // 假设按钮位于右上角 approx 80px from right, 80px from top
-            // 更精确的做法是获取点击时的 event coordinates，但这里简化为右上角扩散
             const x = window.innerWidth - 50;
             const y = 50;
             const endRadius = Math.hypot(
@@ -78,25 +75,56 @@ export default function ThemeToggle() {
         });
     };
 
+    // SSR placeholder — same size as the real toggle to avoid layout shift
     if (!mounted) {
         return (
-            <button className="h-9 w-9 border border-border bg-card p-2" aria-label="Toggle theme">
-                <span className="sr-only">Loading theme</span>
-            </button>
+            <div
+                className="h-7 w-[3.25rem] rounded-full border border-border bg-secondary opacity-50"
+                aria-label="Toggle theme"
+            />
         );
     }
+
+    const isDark = theme === "dark";
 
     return (
         <button
             onClick={toggle}
-            className="relative h-9 w-9 overflow-hidden border border-border bg-card/80 p-2 backdrop-blur-md transition-colors hover:border-primary hover:bg-secondary"
-            aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+            className={`relative h-7 w-[3.25rem] flex-shrink-0 rounded-full border transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
+                isDark
+                    ? "border-primary/40 bg-primary/15"
+                    : "border-border bg-secondary"
+            }`}
+            aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
         >
-            {theme === "dark" ? (
-                <Sun className="h-5 w-5 text-primary" />
-            ) : (
-                <Moon className="h-5 w-5 text-foreground" />
-            )}
+            {/* Track background icons (decorative) */}
+            <span
+                aria-hidden="true"
+                className={`pointer-events-none absolute inset-0 flex items-center justify-between px-[7px] transition-opacity duration-200 ${isDark ? "opacity-0" : "opacity-35"}`}
+            >
+                <Sun className="h-3 w-3 text-amber-500" />
+                <span />
+            </span>
+            <span
+                aria-hidden="true"
+                className={`pointer-events-none absolute inset-0 flex items-center justify-between px-[7px] transition-opacity duration-200 ${isDark ? "opacity-35" : "opacity-0"}`}
+            >
+                <span />
+                <Moon className="h-3 w-3 text-primary" />
+            </span>
+
+            {/* Sliding knob */}
+            <span
+                className={`absolute top-[3px] flex h-5 w-5 items-center justify-center rounded-full bg-card shadow-sm transition-all duration-300 ${
+                    isDark ? "left-[calc(100%-1.375rem)]" : "left-[3px]"
+                }`}
+            >
+                {isDark ? (
+                    <Moon className="h-[11px] w-[11px] text-primary" />
+                ) : (
+                    <Sun className="h-[11px] w-[11px] text-amber-500" />
+                )}
+            </span>
         </button>
     );
 }

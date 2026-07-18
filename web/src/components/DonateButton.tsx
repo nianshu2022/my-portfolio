@@ -53,7 +53,7 @@ export default function DonateButton() {
                   感谢支持
                 </h3>
                 <p className="text-zinc-500 dark:text-zinc-400 text-sm mb-8">
-                  如果觉得文章对你有帮助，欢迎请我喝杯咖啡 ☕️
+                  如果觉得文章对你有帮助，欢迎请我喝杯咖啡。
                 </p>
 
                 <div className="grid grid-cols-2 gap-4">

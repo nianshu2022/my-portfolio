@@ -90,7 +90,7 @@ export default function PortalPage() {
 
       {/* ── Page Header ── */}
       <header className="mb-10 border-b border-border pb-10">
-        <p className="mb-3 text-sm font-semibold text-primary">✦ 自托管 · 长期维护</p>
+        <p className="mb-3 text-sm font-semibold text-primary">自托管 · 长期维护</p>
         <h1 className="text-5xl font-black leading-tight tracking-tight text-foreground sm:text-6xl">
           <span className="gradient-text">在线服务</span>
         </h1>

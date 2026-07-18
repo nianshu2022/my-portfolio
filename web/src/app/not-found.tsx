@@ -6,7 +6,10 @@ export default function NotFound() {
   const posts = getAllPostSummaries();
   const essays = getAllEssaySummaries();
   const allItems = [...posts, ...essays];
-  const recommendedItem = allItems[0] ?? null;
+  // Pick a random article for recommendation variety
+  const recommendedItem = allItems.length > 0
+    ? allItems[Math.floor(Math.random() * allItems.length)]
+    : null;
   const recommendedHref = recommendedItem
     ? posts.includes(recommendedItem)
       ? `/blog/${recommendedItem.slug}`

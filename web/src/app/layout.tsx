@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono, Outfit } from "next/font/google";
+import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import Link from "next/link";
+import NextTopLoader from "nextjs-toploader";
 import ScrollToTop from "@/components/ScrollToTop";
 import ServiceWorkerRegister from "@/components/ServiceWorkerRegister";
 import ThemeToggle from "@/components/ThemeToggle";
@@ -8,6 +10,12 @@ import MouseGlow from "@/components/MouseGlow";
 import GridBackground from "@/components/GridBackground";
 import PageTransition from "@/components/PageTransition";
 import ConditionalLayout from "@/components/ConditionalLayout";
+import CommandMenu from "@/components/CommandMenu";
+import SearchHint from "@/components/SearchHint";
+import MobileNav from "@/components/MobileNav";
+import BottomNav from "@/components/BottomNav";
+import DesktopNav from "@/components/DesktopNav";
+import { getAllPostSummaries, getAllEssaySummaries } from "@/lib/posts";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -19,11 +27,6 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const outfit = Outfit({
-  variable: "--font-outfit",
-  subsets: ["latin"],
-  display: "swap",
-});
 const isProduction = process.env.NODE_ENV === "production";
 
 export const viewport: Viewport = {
@@ -35,29 +38,20 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-import CommandMenu from "@/components/CommandMenu";
-import SearchHint from "@/components/SearchHint";
-import MobileNav from "@/components/MobileNav";
-import BottomNav from "@/components/BottomNav";
-import DesktopNav from "@/components/DesktopNav";
-import { getAllPostSummaries, getAllEssaySummaries } from "@/lib/posts";
-import Link from "next/link";
-
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://blog.nianshu2022.cn'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://blog.nianshu2022.cn"),
   title: {
     default: "念舒 | 技术 · 成长 · 创造",
     template: "%s | 念舒",
   },
   description: "念舒的个人博客——一个 00 后技术折腾者，在这里分享前端开发、AI 应用、独立开发与成长经历。",
   keywords: ["念舒", "技术博客", "前端开发", "独立开发", "Next.js", "00后", "AI"],
-  authors: [{ name: "念舒", url: process.env.NEXT_PUBLIC_SITE_URL || 'https://blog.nianshu2022.cn' }],
+  authors: [{ name: "念舒", url: process.env.NEXT_PUBLIC_SITE_URL || "https://blog.nianshu2022.cn" }],
   creator: "念舒",
-
   openGraph: {
     type: "website",
     locale: "zh_CN",
-    url: process.env.NEXT_PUBLIC_SITE_URL || 'https://blog.nianshu2022.cn',
+    url: process.env.NEXT_PUBLIC_SITE_URL || "https://blog.nianshu2022.cn",
     title: "念舒 | 技术 · 成长 · 创造",
     description: "一个 00 后技术折腾者的个人博客，分享代码与生活。",
     siteName: "念舒",
@@ -82,9 +76,6 @@ export const metadata: Metadata = {
   },
   manifest: "/manifest.json",
 };
-
-import NextTopLoader from 'nextjs-toploader';
-
 
 export default function RootLayout({
   children,
@@ -111,7 +102,7 @@ export default function RootLayout({
         ) : null}
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${outfit.variable} antialiased min-h-screen relative overflow-x-hidden bg-background text-foreground`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen relative overflow-x-hidden bg-background text-foreground`}
         suppressHydrationWarning
       >
         <NextTopLoader
@@ -127,7 +118,7 @@ export default function RootLayout({
         />
         <GridBackground />
         <MouseGlow />
-        
+
         <ConditionalLayout>
           <a
             href="#main-content"
@@ -177,9 +168,6 @@ export default function RootLayout({
           <BottomNav />
           <ScrollToTop />
         </ConditionalLayout>
-
-
-
 
         <CommandMenu posts={posts} essays={essays} />
         <ServiceWorkerRegister />

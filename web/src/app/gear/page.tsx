@@ -1,5 +1,5 @@
 import { gearData, GearCategory } from "@/lib/gear-data";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Laptop, Headphones, Home, Plug, Package, type LucideIcon } from "lucide-react";
 import Image from "next/image";
 import FloatingNav from "@/components/FloatingNav";
 import ScrollReveal from "@/components/ScrollReveal";
@@ -27,12 +27,13 @@ const categoryNotes: Record<GearCategory, string> = {
   "Other": "有纪念意义或低频但值得保留的物件。",
 };
 
-const categoryEmoji: Record<GearCategory, string> = {
-  "Core Tech": "💻",
-  "Wearables & Audio": "🎧",
-  "Smart Home": "🏠",
-  "Accessories": "🔌",
-  "Other": "📦",
+
+const categoryIcons: Record<GearCategory, LucideIcon> = {
+  "Core Tech": Laptop,
+  "Wearables & Audio": Headphones,
+  "Smart Home": Home,
+  "Accessories": Plug,
+  "Other": Package,
 };
 
 export default function GearPage() {
@@ -48,7 +49,7 @@ export default function GearPage() {
 
       {/* ── Page Header ── */}
       <header className="mb-10 border-b border-border pb-10">
-        <p className="mb-3 text-sm font-semibold text-primary">✦ 我的工作台</p>
+        <p className="mb-3 text-sm font-semibold text-primary">我的工作台</p>
         <h1 className="text-5xl font-black leading-tight tracking-tight text-foreground sm:text-6xl">
           <span className="gradient-text">装备</span>
         </h1>
@@ -118,8 +119,8 @@ export default function GearPage() {
                 <div>
                   <div className="mb-4 flex items-end justify-between border-b border-border pb-4">
                     <div>
-                      <h3 className="text-xl font-black text-foreground">
-                        <span className="mr-2">{categoryEmoji[category]}</span>
+                      <h3 className="text-xl font-black text-foreground flex items-center gap-2">
+                        {(() => { const Icon = categoryIcons[category]; return Icon ? <Icon className="h-5 w-5 text-primary" aria-hidden="true" /> : null; })()}
                         {categoryLabels[category] || category}
                       </h3>
                       <p className="mt-1 text-sm text-muted-foreground">{categoryNotes[category]}</p>

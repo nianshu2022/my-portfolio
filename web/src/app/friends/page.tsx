@@ -17,7 +17,7 @@ export default function FriendsPage() {
 
       {/* ── Page Header ── */}
       <header className="mb-10 border-b border-border pb-10">
-        <p className="mb-3 text-sm font-semibold text-primary">✦ 外部链接</p>
+        <p className="mb-3 text-sm font-semibold text-primary">外部链接</p>
         <h1 className="text-5xl font-black leading-tight tracking-tight text-foreground sm:text-6xl">
           <span className="gradient-text">友链</span>
         </h1>

@@ -70,11 +70,26 @@ export default function BlogList({ posts }: BlogListProps) {
       {allTags.length > 1 && (
         <div className="mb-8 flex flex-wrap items-center gap-2">
           <Tag className="h-4 w-4 text-muted-foreground" />
-          <button onClick={() => setActiveTag(null)} className={`rounded-md border px-3 py-1.5 text-sm ${activeTag === null ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card text-muted-foreground hover:bg-secondary"}`}>
+          <button
+            onClick={() => setActiveTag(null)}
+            className={`rounded-md border px-3 py-1.5 text-sm transition-colors duration-200 ${
+              activeTag === null
+                ? "border-primary bg-primary text-primary-foreground"
+                : "border-border bg-card text-muted-foreground hover:bg-secondary"
+            }`}
+          >
             全部
           </button>
           {allTags.map((tag) => (
-            <button key={tag} onClick={() => setActiveTag(activeTag === tag ? null : tag)} className={`rounded-md border px-3 py-1.5 text-sm ${activeTag === tag ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card text-muted-foreground hover:bg-secondary"}`}>
+            <button
+              key={tag}
+              onClick={() => setActiveTag(activeTag === tag ? null : tag)}
+              className={`rounded-md border px-3 py-1.5 text-sm transition-colors duration-200 ${
+                activeTag === tag
+                  ? "border-primary bg-primary text-primary-foreground"
+                  : "border-border bg-card text-muted-foreground hover:bg-secondary"
+              }`}
+            >
               #{tag}
             </button>
           ))}
@@ -82,7 +97,7 @@ export default function BlogList({ posts }: BlogListProps) {
       )}
 
       <div className="mb-8">
-        <label className="group flex items-center gap-2 rounded-md border border-border bg-card px-3 py-2">
+        <label className="group flex items-center gap-2 rounded-md border border-border bg-card px-3 py-2 transition-colors duration-200 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20">
           <Search className="h-4 w-4 text-muted-foreground" />
           <input
             value={query}

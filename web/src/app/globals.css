@@ -115,6 +115,44 @@
       box-shadow: 0 0 30px rgba(139, 92, 246, 0.7), 0 0 60px rgba(99, 102, 241, 0.35);
     }
   }
+
+  /* ===== UIverse-inspired animations ===== */
+
+  --animate-btn-shimmer: btn-shimmer 2.5s ease-in-out infinite;
+
+  @keyframes btn-shimmer {
+    0% { left: -100%; }
+    50%, 100% { left: 150%; }
+  }
+
+  --animate-card-shine: card-shine 0.65s ease forwards;
+
+  @keyframes card-shine {
+    from { left: -100%; }
+    to { left: 150%; }
+  }
+
+  --animate-heart-ring: heart-ring 0.55s ease-out forwards;
+
+  @keyframes heart-ring {
+    0% { transform: scale(0.8); opacity: 1; }
+    100% { transform: scale(2.6); opacity: 0; }
+  }
+
+  --animate-arrow-bounce: arrow-bounce 0.9s ease-in-out infinite;
+
+  @keyframes arrow-bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+  }
+
+  --animate-pulse-ring: pulse-ring 2.2s ease-in-out infinite;
+
+  @keyframes pulse-ring {
+    0% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.45); }
+    60% { box-shadow: 0 0 0 9px rgba(99, 102, 241, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); }
+  }
 }
 
 @utility animation-delay-2000 {
@@ -895,10 +933,48 @@
 
   .btn-primary {
     @apply inline-flex h-12 items-center justify-center gap-2 rounded-full bg-primary px-7 text-sm font-bold text-primary-foreground transition-all duration-200 hover:-translate-y-0.5 hover:opacity-90 hover:shadow-lg hover:shadow-primary/25;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Shimmer sweep — UIverse style */
+  .btn-primary::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.28), transparent);
+    transform: skewX(-20deg);
+    animation: btn-shimmer 2.5s ease-in-out infinite;
+    pointer-events: none;
   }
 
   .btn-secondary {
-    @apply inline-flex h-12 items-center justify-center gap-2 rounded-full border border-border bg-background px-7 text-sm font-bold text-foreground transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/50 hover:bg-secondary;
+    @apply inline-flex h-12 items-center justify-center gap-2 rounded-full border border-border bg-background px-7 text-sm font-bold text-foreground transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/50 hover:bg-secondary;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Gradient overlay on hover */
+  .btn-secondary::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 9999px;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, transparent 40%, rgba(139, 92, 246, 0.1) 100%);
+    opacity: 0;
+    transition: opacity 0.35s ease;
+    pointer-events: none;
+  }
+
+  .btn-secondary:hover {
+    box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.1), 0 6px 20px rgba(99, 102, 241, 0.13);
+  }
+
+  .btn-secondary:hover::before {
+    opacity: 1;
   }
 
   .hero-stats {
@@ -941,7 +1017,7 @@
 
   /* Floating tag labels around avatar */
   .float-tag {
-    @apply absolute whitespace-nowrap rounded-full border border-border bg-card/95 px-3 py-1.5 text-xs font-semibold text-foreground shadow-lg backdrop-blur-sm;
+    @apply absolute inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border border-border bg-card/95 px-3 py-1.5 text-xs font-semibold text-foreground shadow-lg backdrop-blur-sm;
     animation: float 5s ease-in-out infinite;
   }
 
@@ -986,7 +1062,48 @@
   }
 
   .post-card {
-    @apply relative flex flex-col gap-3 rounded-2xl border border-border bg-card p-5 transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-xl;
+    @apply relative flex flex-col gap-3 rounded-2xl border border-border bg-card p-5 transition-all duration-300 hover:-translate-y-1 hover:border-primary/30;
+    overflow: hidden;
+  }
+
+  /* Glowing top accent line on hover — UIverse style */
+  .post-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 15%;
+    right: 15%;
+    height: 1.5px;
+    background: linear-gradient(90deg, transparent, var(--primary), transparent);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .post-card:hover::before {
+    opacity: 1;
+  }
+
+  /* Diagonal shimmer sweep on hover */
+  .post-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 55%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.055), transparent);
+    transform: skewX(-15deg);
+    pointer-events: none;
+  }
+
+  .post-card:hover::after {
+    animation: card-shine 0.65s ease forwards;
+  }
+
+  .post-card:hover {
+    box-shadow: 0 20px 40px rgba(99, 102, 241, 0.1), 0 8px 16px rgba(0, 0, 0, 0.06);
   }
 
   .post-card-tags {
@@ -1054,7 +1171,18 @@
   }
 
   .skill-pill {
-    @apply cursor-default rounded-full border border-border bg-secondary px-3.5 py-1.5 text-sm font-medium text-foreground transition-colors hover:border-primary/50 hover:text-primary;
+    @apply cursor-default rounded-full border border-border bg-secondary px-3.5 py-1.5 text-sm font-medium text-foreground transition-all duration-300 hover:border-primary/50 hover:text-primary;
+  }
+
+  /* Glow badge on hover — UIverse style */
+  .skill-pill:hover {
+    box-shadow: 0 0 14px rgba(99, 102, 241, 0.22), inset 0 0 10px rgba(99, 102, 241, 0.06);
+    background-color: rgba(99, 102, 241, 0.07);
+  }
+
+  .dark .skill-pill:hover {
+    box-shadow: 0 0 18px rgba(129, 140, 248, 0.28), inset 0 0 12px rgba(129, 140, 248, 0.08);
+    background-color: rgba(129, 140, 248, 0.09);
   }
 
   /* — Essays Section — */

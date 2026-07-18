@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import { ArrowRight, Github, Mail, Rss } from "lucide-react";
+import { ArrowRight, Github, Mail, Rss, MapPin, Sparkles, Code2, Bot } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import ScrollReveal from "@/components/ScrollReveal";
@@ -9,6 +9,7 @@ import { getAllEssaySummaries, getAllPostSummaries } from "@/lib/posts";
 import SplitText from "@/components/ui/SplitText";
 import BlurText from "@/components/ui/BlurText";
 import CountUp from "@/components/ui/CountUp";
+import DynamicGreeting from "@/components/DynamicGreeting";
 
 type PortalService = {
   name: string;
@@ -52,21 +53,19 @@ export default function Home() {
         <ScrollReveal>
           <div className="hero-content">
             <div className="hero-badge">
-              <span aria-hidden="true">✦</span>
+              <Sparkles className="h-3 w-3" aria-hidden="true" />
               00后 · 技术 · 成长 · 创造
             </div>
 
             <h1 className="hero-title">
-              你好，我是
+              <DynamicGreeting />，我是
               <br />
               <SplitText
                 text="念舒"
-                className="gradient-text"
+                itemClassName="gradient-text"
                 delay={0.1}
                 stagger={0.08}
               />
-              {" "}
-              <span aria-label="挥手">👋</span>
             </h1>
 
             <p className="hero-subtitle">
@@ -108,7 +107,7 @@ export default function Home() {
               </div>
               <div>
                 <strong>兰州</strong>
-                <span>📍 坐标</span>
+                <span className="inline-flex items-center gap-1"><MapPin className="h-3 w-3" aria-hidden="true" />坐标</span>
               </div>
             </div>
           </div>
@@ -130,9 +129,15 @@ export default function Home() {
                   />
                 </div>
               </div>
-              <span className="float-tag float-tag-1" aria-hidden="true">前端开发 ⚡</span>
-              <span className="float-tag float-tag-2" aria-hidden="true">AI 应用 🤖</span>
-              <span className="float-tag float-tag-3" aria-hidden="true">🏠 兰州</span>
+              <span className="float-tag float-tag-1" aria-hidden="true">
+                <Code2 className="h-3 w-3" />前端开发
+              </span>
+              <span className="float-tag float-tag-2" aria-hidden="true">
+                <Bot className="h-3 w-3" />AI 应用
+              </span>
+              <span className="float-tag float-tag-3" aria-hidden="true">
+                <MapPin className="h-3 w-3" />兰州
+              </span>
             </div>
           </div>
         </ScrollReveal>

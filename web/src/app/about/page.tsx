@@ -4,7 +4,7 @@ import GitHubStats from "@/components/widgets/GitHubStats";
 import ContributionHeatmap from "@/components/widgets/ContributionHeatmap";
 import VisitorCounter from "@/components/VisitorCounter";
 import Image from "next/image";
-import { ArrowRight, Github, Mail, Music } from "lucide-react";
+import { ArrowRight, Github, Mail, Music, FileText, PenLine, Wrench, MapPin, Sparkles } from "lucide-react";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -43,9 +43,9 @@ const principles = [
 ];
 
 const proofFiles = [
-  { label: "📝 博客文章", value: "部署 / 排障 / AI 本地化", emoji: "📝" },
-  { label: "✍️ 个人随笔", value: "比赛 / 毕业 / 阶段复盘", emoji: "✍️" },
-  { label: "🛠️ 公开服务", value: "长期运行 / 持续维护", emoji: "🛠️" },
+  { label: "博客文章", value: "部署 / 排障 / AI 本地化", icon: FileText },
+  { label: "个人随笔", value: "比赛 / 毕业 / 阶段复盘", icon: PenLine },
+  { label: "公开服务", value: "长期运行 / 持续维护", icon: Wrench },
 ];
 
 export default function AboutPage() {
@@ -70,7 +70,10 @@ export default function AboutPage() {
 
         <ScrollReveal delay={0.12} className="min-w-0">
           <div className="flex flex-col gap-6">
-            <p className="text-sm font-semibold text-primary">✦ 认识我</p>
+            <p className="text-sm font-semibold text-primary inline-flex items-center gap-1.5">
+              <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />
+              认识我
+            </p>
             <h1 className="text-5xl font-black leading-tight tracking-tight text-foreground sm:text-6xl">
               你好，我是
               <br />
@@ -84,14 +87,17 @@ export default function AboutPage() {
             {/* Info Grid */}
             <div className="grid grid-cols-2 gap-3">
               {[
-                { label: "坐标", value: "🌏 兰州 · 中国" },
-                { label: "身份", value: "00后 · 技术折腾者" },
-                { label: "关注", value: "部署 · AI · 产品" },
-                { label: "状态", value: "🟢 持续记录中" },
+                { label: "坐标", value: "兰州 · 中国", icon: MapPin },
+                { label: "身份", value: "00后 · 技术折腾者", icon: null },
+                { label: "关注", value: "部署 · AI · 产品", icon: null },
+                { label: "状态", value: "持续记录中", icon: null },
               ].map((item) => (
                 <div key={item.label} className="rounded-xl border border-border bg-card p-3">
                   <p className="text-xs font-medium text-muted-foreground">{item.label}</p>
-                  <p className="mt-1 text-sm font-semibold text-foreground">{item.value}</p>
+                  <p className="mt-1 text-sm font-semibold text-foreground flex items-center gap-1.5">
+                    {item.icon && <item.icon className="h-3.5 w-3.5 text-primary" aria-hidden="true" />}
+                    {item.value}
+                  </p>
                 </div>
               ))}
             </div>
@@ -125,7 +131,9 @@ export default function AboutPage() {
           {proofFiles.map((item, i) => (
             <ScrollReveal key={item.label} delay={i * 0.08}>
               <div className="rounded-2xl border border-border bg-card p-6 transition-colors hover:border-primary/30">
-                <p className="text-3xl mb-3">{item.emoji}</p>
+                <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10">
+                  <item.icon className="h-5 w-5 text-primary" aria-hidden="true" />
+                </div>
                 <p className="text-sm font-semibold text-primary">{item.label}</p>
                 <p className="mt-2 text-base font-bold text-foreground">{item.value}</p>
               </div>

@@ -4,7 +4,12 @@ import { motion, type Variants } from "motion/react";
 
 interface SplitTextProps {
   text: string;
+  /** Applied to the outer wrapper span */
   className?: string;
+  /** Applied to each individual character / word span.
+   *  Use this for styles like gradient-text that rely on background-clip,
+   *  which only work when the styled element directly contains text nodes. */
+  itemClassName?: string;
   delay?: number;
   stagger?: number;
   /** split by "char" or "word" */
@@ -15,10 +20,14 @@ interface SplitTextProps {
  * React Bits–style SplitText.
  * For above-the-fold hero content — animates in on mount (no IntersectionObserver),
  * so the text is never stuck invisible.
+ *
+ * NOTE: pass gradient / background-clip styles via `itemClassName`, not `className`,
+ * because background-clip:text only takes effect on elements that directly hold text.
  */
 export default function SplitText({
   text,
   className = "",
+  itemClassName = "",
   delay = 0,
   stagger = 0.04,
   by = "char",
@@ -54,7 +63,7 @@ export default function SplitText({
         <motion.span
           key={i}
           variants={itemVariants}
-          className="inline-block"
+          className={`inline-block ${itemClassName}`}
           aria-hidden="true"
         >
           {token === " " ? "\u00A0" : token}

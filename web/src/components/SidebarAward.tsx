@@ -1,11 +1,18 @@
 "use client";
 
 import Image from "next/image";
-import { Shield } from "lucide-react";
+import { Shield, Trophy } from "lucide-react";
 import { useState } from "react";
 import ImagePreview from "./ImagePreview";
 
-export default function SidebarAward({ src }: { src: string }) {
+export default function SidebarAward({
+  src,
+  caption,
+}: {
+  src: string;
+  caption?: string;
+}) {
+  const defaultCaption = "荣获甘肃省教育厅颁发二等奖";
   const [previewIndex, setPreviewIndex] = useState<number | null>(null);
   
   // Split the src string by comma and trim whitespace to support multiple images
@@ -20,7 +27,7 @@ export default function SidebarAward({ src }: { src: string }) {
         </div>
 
         <h4 className="font-bold mb-4 text-sm text-amber-900 dark:text-amber-100 flex items-center gap-2 relative z-10">
-          <span className="text-lg">🏆</span>
+          <Trophy className="w-4 h-4 text-amber-600 dark:text-amber-400" aria-hidden="true" />
           获奖记录
         </h4>
 
@@ -49,7 +56,7 @@ export default function SidebarAward({ src }: { src: string }) {
         </div>
 
         <p className="text-xs text-amber-700/80 dark:text-amber-400 mt-3 text-center">
-           {images.length > 1 ? '点击图片查看详情' : '荣获甘肃省教育厅颁发二等奖'}
+           {images.length > 1 ? '点击图片查看详情' : (caption ?? defaultCaption)}
         </p>
       </div>
 
