@@ -1,6 +1,27 @@
 .page-index {
   min-height: 100vh;
   background: var(--bg-page);
+  padding-bottom: 180rpx;
+}
+
+/* 搜索入口 */
+.search-entry {
+  display: flex;
+  align-items: center;
+  background: var(--bg-card);
+  border-bottom: 1rpx solid var(--border-color);
+  padding: var(--space-md) var(--space-lg);
+  margin-bottom: var(--space-md);
+}
+
+.search-icon {
+  font-size: 28rpx;
+  margin-right: var(--space-sm);
+}
+
+.search-placeholder {
+  font-size: var(--font-body);
+  color: var(--text-muted);
 }
 
 /* 品牌区域 */
@@ -157,39 +178,6 @@
 
 .arrow {
   font-size: 24rpx;
-}
-
-/* 快捷入口 */
-.quick-entry {
-  display: flex;
-  gap: var(--space-md);
-  padding: 0 var(--space-lg);
-  margin-bottom: var(--space-xl);
-}
-
-.entry-item {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--space-sm);
-  padding: var(--space-lg);
-  background: var(--bg-card);
-  border: 1rpx solid var(--border-color);
-}
-
-.entry-item:active {
-  background: var(--bg-page);
-}
-
-.entry-icon {
-  font-size: 48rpx;
-}
-
-.entry-text {
-  font-size: var(--font-caption);
-  color: var(--text-body);
-  font-weight: 500;
 }
 
 /* 底部装饰 */

@@ -89,7 +89,7 @@ export default function AdminDashboard() {
         <div>
           <div className="admin-page-kicker">ADMIN-OVERVIEW</div>
           <h1 className="admin-page-title">数据概览</h1>
-          <p className="admin-page-desc">查看全站访问、互动、内容和最近动作，判断档案局是否持续稳定运行。</p>
+          <p className="admin-page-desc">查看全站访问、互动、内容和最近动作，判断站点是否持续稳定运行。</p>
         </div>
         <div className={`admin-stamp ${riskyActivities.length > 0 ? "border-primary text-primary" : ""}`}>
           {riskyActivities.length > 0 ? <AlertTriangle className="h-4 w-4" /> : <Activity className="h-4 w-4" />}

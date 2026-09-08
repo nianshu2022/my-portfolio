@@ -1,0 +1,102 @@
+<view class="page-history">
+  <!-- 页面标题 -->
+  <view class="page-header">
+    <view class="header-left">
+      <text class="header-code">LOG</text>
+      <text class="header-title">阅读记录</text>
+    </view>
+  </view>
+
+  <!-- Tab 切换 -->
+  <view class="tabs">
+    <view 
+      class="tab-item {{activeTab === 'history' ? 'active' : ''}}" 
+      data-tab="history"
+      bindtap="switchTab"
+    >
+      <text class="tab-text">阅读历史</text>
+    </view>
+    <view 
+      class="tab-item {{activeTab === 'favorites' ? 'active' : ''}}" 
+      data-tab="favorites"
+      bindtap="switchTab"
+    >
+      <text class="tab-text">我的收藏</text>
+    </view>
+  </view>
+
+  <!-- 阅读历史 -->
+  <view class="list-section" wx:if="{{activeTab === 'history'}}">
+    <view class="list-header" wx:if="{{history.length > 0}}">
+      <text class="list-title">{{history.length}} 条记录</text>
+      <text class="clear-btn" bindtap="onClearHistory">清空</text>
+    </view>
+
+    <block wx:if="{{history.length > 0}}">
+      <view 
+        class="history-item" 
+        wx:for="{{history}}" 
+        wx:key="slug"
+        data-slug="{{item.slug}}"
+        data-type="{{item.type}}"
+        bindtap="onItemTap"
+      >
+        <view class="item-index">{{index + 1}}</view>
+        <view class="item-content">
+          <text class="item-title">{{item.title}}</text>
+          <view class="item-meta">
+            <text class="item-type">{{item.type === 'post' ? 'DOC' : 'SMP'}}</text>
+            <text class="item-date">{{item.dateFormatted}}</text>
+          </view>
+        </view>
+        <text class="item-arrow">→</text>
+      </view>
+    </block>
+
+    <empty-state 
+      wx:else 
+      icon="empty" 
+      title="暂无阅读记录" 
+      desc="去看看案卷吧" 
+    />
+  </view>
+
+  <!-- 我的收藏 -->
+  <view class="list-section" wx:if="{{activeTab === 'favorites'}}">
+    <view class="list-header" wx:if="{{favorites.length > 0}}">
+      <text class="list-title">{{favorites.length}} 个收藏</text>
+    </view>
+
+    <block wx:if="{{favorites.length > 0}}">
+      <view 
+        class="favorite-item" 
+        wx:for="{{favorites}}" 
+        wx:key="slug"
+      >
+        <view class="item-index">★</view>
+        <view 
+          class="item-content"
+          data-slug="{{item.slug}}"
+          data-type="{{item.type}}"
+          bindtap="onItemTap"
+        >
+          <text class="item-title">{{item.title}}</text>
+          <view class="item-meta">
+            <text class="item-type">{{item.type === 'post' ? 'DOC' : 'SMP'}}</text>
+            <text class="item-date">{{item.dateFormatted}}</text>
+          </view>
+        </view>
+        <view class="remove-btn" data-slug="{{item.slug}}" catchtap="onRemoveFavorite">
+          <text>×</text>
+        </view>
+      </view>
+    </block>
+
+    <empty-state 
+      wx:else 
+      icon="empty" 
+      title="暂无收藏" 
+      desc="收藏喜欢的案卷，随时查看" 
+    />
+  </view>
+</view>

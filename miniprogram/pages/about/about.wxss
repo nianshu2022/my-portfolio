@@ -1,6 +1,38 @@
 .page-about {
   min-height: 100vh;
   background: var(--bg-page);
+  padding-bottom: 180rpx;
+}
+
+/* 页面标题 */
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-card);
+  border-bottom: 2rpx solid var(--border-dark);
+  padding: var(--space-xl) var(--space-lg);
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.header-code {
+  font-family: var(--font-mono);
+  font-size: 24rpx;
+  font-weight: 700;
+  color: var(--color-primary);
+  letter-spacing: 2rpx;
+}
+
+.header-title {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: var(--text-title);
+  letter-spacing: 2rpx;
 }
 
 /* 个人简介 */
@@ -25,24 +57,11 @@
   background: var(--color-primary);
 }
 
-.serial-tag {
-  display: inline-flex;
-  align-items: center;
-  padding: 6rpx 16rpx;
-  background: var(--color-primary);
-  color: var(--text-inverse);
-  font-family: var(--font-mono);
-  font-size: 22rpx;
-  font-weight: 700;
-  letter-spacing: 2rpx;
-  margin-bottom: var(--space-lg);
-}
-
 .profile-header {
   display: flex;
   align-items: center;
   gap: var(--space-lg);
-  margin-bottom: var(--space-lg);
+  margin-bottom: var(--space-xl);
 }
 
 .avatar {
@@ -84,14 +103,14 @@
   margin-bottom: var(--space-lg);
 }
 
-.meta-item {
+.meta-row {
   display: flex;
   align-items: center;
   padding: var(--space-sm) 0;
   border-bottom: 1rpx dashed var(--border-color);
 }
 
-.meta-item:last-child {
+.meta-row:last-child {
   border-bottom: none;
 }
 
@@ -128,15 +147,12 @@
   padding: var(--space-lg);
 }
 
-.section-header {
-  margin-bottom: var(--space-lg);
-}
-
 .section-title {
   font-size: var(--font-subtitle);
   font-weight: 700;
   color: var(--text-title);
   letter-spacing: 2rpx;
+  margin-bottom: var(--space-lg);
 }
 
 .timeline {
@@ -226,7 +242,16 @@
 }
 
 .link-icon {
-  font-size: 40rpx;
+  width: 48rpx;
+  height: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-primary);
+  color: var(--text-inverse);
+  font-family: var(--font-mono);
+  font-size: 16rpx;
+  font-weight: 700;
   margin-right: var(--space-md);
 }
 

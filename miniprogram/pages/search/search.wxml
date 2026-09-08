@@ -1,0 +1,63 @@
+<view class="page-search">
+  <!-- 搜索框 -->
+  <view class="search-bar">
+    <view class="search-input-wrap">
+      <text class="search-icon">⌕</text>
+      <input 
+        class="search-input" 
+        placeholder="搜索案卷标题、标签..." 
+        value="{{keyword}}"
+        bindinput="onInput"
+        focus="{{true}}"
+        confirm-type="search"
+      />
+      <text class="clear-btn" wx:if="{{keyword}}" bindtap="onClear">×</text>
+    </view>
+  </view>
+
+  <!-- 热门标签 -->
+  <view class="hot-tags" wx:if="{{!searched}}">
+    <text class="section-title">热门标签</text>
+    <view class="tags-list">
+      <view 
+        class="tag-item" 
+        wx:for="{{hotTags}}" 
+        wx:key="*this"
+        data-text="{{item}}"
+        bindtap="onTagTap"
+      >
+        {{item}}
+      </view>
+    </view>
+  </view>
+
+  <!-- 搜索结果 -->
+  <view class="results-section" wx:if="{{searched}}">
+    <view class="results-header">
+      <text class="results-title">搜索结果</text>
+      <text class="results-count">{{results.length}} 条</text>
+    </view>
+
+    <block wx:if="{{results.length > 0}}">
+      <case-card
+        wx:for="{{results}}"
+        wx:key="slug"
+        title="{{item.title}}"
+        date="{{item.date}}"
+        tags="{{item.tags}}"
+        caseNumber="SEARCH-{{index + 1}}"
+        excerpt="{{item.description}}"
+        type="{{item.type || 'post'}}"
+        slug="{{item.slug}}"
+        bindtap="onResultTap"
+      />
+    </block>
+
+    <empty-state 
+      wx:else 
+      icon="empty" 
+      title="未找到相关内容" 
+      desc="换个关键词试试" 
+    />
+  </view>
+</view>

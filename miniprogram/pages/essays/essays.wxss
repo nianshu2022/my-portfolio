@@ -1,24 +1,47 @@
 .page-essays {
   min-height: 100vh;
   background: var(--bg-page);
+  padding-bottom: 180rpx;
 }
 
+/* 页面标题 */
 .page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   background: var(--bg-card);
   border-bottom: 2rpx solid var(--border-dark);
-  padding: var(--space-2xl) var(--space-lg);
+  padding: var(--space-xl) var(--space-lg);
 }
 
-.page-title {
-  display: block;
-  font-size: 40rpx;
-  font-weight: 800;
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.header-code {
+  font-family: var(--font-mono);
+  font-size: 24rpx;
+  font-weight: 700;
+  color: var(--color-primary);
+  letter-spacing: 2rpx;
+}
+
+.header-title {
+  font-size: 36rpx;
+  font-weight: 700;
   color: var(--text-title);
-  letter-spacing: 4rpx;
-  margin-bottom: var(--space-sm);
+  letter-spacing: 2rpx;
 }
 
 .page-desc {
+  padding: var(--space-lg);
+  background: var(--bg-card);
+  border-bottom: 1rpx solid var(--border-color);
+}
+
+.page-desc text {
   font-size: var(--font-body);
   color: var(--text-sub);
 }

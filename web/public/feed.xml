@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <rss version="2.0">
   <channel>
-    <title>念舒档案局</title>
+    <title>念舒 | 技术 · 成长 · 创造</title>
     <link>https://blog.nianshu2022.cn</link>
-    <description>一个 00 后技术折腾者的成长样本库，记录技术案卷、成长样本和在线服务。</description>
+    <description>念舒的个人主页——一个 00 后技术折腾者，记录技术笔记、成长随笔与在线服务。</description>
     <language>zh-CN</language>
-    <lastBuildDate>Mon, 13 Jul 2026 07:09:11 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 08 Sep 2026 08:56:38 GMT</lastBuildDate>
     
     <item>
       <title>从零开始：用 Ollama + Open WebUI 本地部署 DeepSeek-R1 满血版/蒸馏版实战指南</title>
@@ -17,7 +17,7 @@
     <item>
       <title>踩坑实录：Next.js 15 + React 19 + Tailwind CSS v4 升级爬坑全过程</title>
       <link>https://blog.nianshu2022.cn/blog/nextjs15-react19-tailwindv4-migration</link>
-      <description>将数字花园升级到 Next.js 15 和 React 19 时被各种 Hydration 闪烁、Tailwind CSS v4 依赖锁死和 Server Action 的严格模式折磨？本文为你沉淀一份避坑踩雷的实操升级路线图。</description>
+      <description>将个人博客升级到 Next.js 15 和 React 19 时被各种 Hydration 闪烁、Tailwind CSS v4 依赖锁死和 Server Action 的严格模式折磨？本文为你沉淀一份避坑踩雷的实操升级路线图。</description>
       <pubDate>Tue, 12 May 2026 00:00:00 GMT</pubDate>
       <guid>https://blog.nianshu2022.cn/blog/nextjs15-react19-tailwindv4-migration</guid>
     </item>

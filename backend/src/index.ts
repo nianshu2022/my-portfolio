@@ -1,5 +1,5 @@
 /**
- * 念舒的数字花园 - Cloudflare Worker API
+ * 念舒 - Cloudflare Worker API
  */
 
 export interface Env {
@@ -143,6 +143,178 @@ export default {
           if (!nickname || !content) return new Response(JSON.stringify({ error: "Missing fields" }), { status: 400, headers: corsHeaders });
           await env.DB.prepare("INSERT INTO comments (slug, nickname, content) VALUES (?, ?, ?)").bind(slug, nickname, content).run();
           return new Response(JSON.stringify({ success: true }), { headers: corsHeaders });
+        }
+      }
+
+      // 7.5 暗号传输柜 (Secure Shares)
+      // 7.5.1 创建机密档案
+      if (path === "/api/shares" && method === "POST") {
+        const {
+          ciphertext,
+          iv,
+          salt,
+          verifier,
+          verifier_salt,
+          type,
+          filesize,
+          burn_after_reading,
+          expires_in_seconds
+        } = await request.json() as any;
+
+        if (!ciphertext || !iv || !salt || !verifier || !verifier_salt || !type) {
+          return new Response(JSON.stringify({ error: "Missing required fields" }), { status: 400, headers: corsHeaders });
+        }
+
+        // 限制内容大小 (密文 Base64 限制在 1MB 以内，对应明文约 750KB)
+        if (ciphertext.length > 1024 * 1024) {
+          return new Response(JSON.stringify({ error: "档案内容过大，限制在 750KB 以内" }), { status: 400, headers: corsHeaders });
+        }
+
+        // 计算过期时间
+        let expiresAt: string | null = null;
+        if (expires_in_seconds) {
+          expiresAt = new Date(Date.now() + expires_in_seconds * 1000).toISOString();
+        }
+
+        // 生成唯一 Slug (8位随机字符)
+        const generateSlug = (length = 8) => {
+          const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+          let result = "";
+          for (let i = 0; i < length; i++) {
+            result += chars.charAt(Math.floor(Math.random() * chars.length));
+          }
+          return result;
+        };
+
+        let id = generateSlug();
+        let exists = true;
+        for (let attempt = 0; attempt < 5; attempt++) {
+          const existing = await env.DB.prepare("SELECT id FROM secure_shares WHERE id = ?").bind(id).first();
+          if (!existing) {
+            exists = false;
+            break;
+          }
+          id = generateSlug();
+        }
+
+        if (exists) {
+          return new Response(JSON.stringify({ error: "无法生成唯一的档案编号，请重试" }), { status: 500, headers: corsHeaders });
+        }
+
+        // 写入数据库
+        await env.DB.prepare(`
+          INSERT INTO secure_shares (id, ciphertext, iv, salt, verifier, verifier_salt, type, filesize, burn_after_reading, expires_at)
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `).bind(
+          id,
+          ciphertext,
+          iv,
+          salt,
+          verifier,
+          verifier_salt,
+          type,
+          filesize || 0,
+          burn_after_reading ? 1 : 0,
+          expiresAt
+        ).run();
+
+        // 顺便清理一下已过期的档案（异步执行，不阻塞当前响应）
+        env.DB.prepare("DELETE FROM secure_shares WHERE expires_at IS NOT NULL AND expires_at < ?")
+          .bind(new Date().toISOString())
+          .run()
+          .catch(() => {});
+
+        return new Response(JSON.stringify({ success: true, id }), { headers: corsHeaders });
+      }
+
+      // 7.5.2 获取机密档案元数据 (安全，不返回密文)
+      const shareMetaMatch = path.match(/^\/api\/shares\/([^\/]+)\/meta$/);
+      if (shareMetaMatch && method === "GET") {
+        const id = shareMetaMatch[1];
+        const share = await env.DB.prepare(`
+          SELECT type, filesize, verifier_salt, burn_after_reading, expires_at, created_at 
+          FROM secure_shares WHERE id = ?
+        `).bind(id).first() as any;
+
+        if (!share) {
+          return new Response(JSON.stringify({ error: "机密档案不存在或已被销毁" }), { status: 404, headers: corsHeaders });
+        }
+
+        // 校验是否过期
+        if (share.expires_at && new Date(share.expires_at).getTime() < Date.now()) {
+          // 异步删除过期档案
+          await env.DB.prepare("DELETE FROM secure_shares WHERE id = ?").bind(id).run().catch(() => {});
+          return new Response(JSON.stringify({ error: "机密档案已过期失效" }), { status: 410, headers: corsHeaders });
+        }
+
+        return new Response(JSON.stringify({
+          success: true,
+          type: share.type,
+          filesize: share.filesize,
+          verifier_salt: share.verifier_salt,
+          burn_after_reading: share.burn_after_reading === 1,
+          expires_at: share.expires_at,
+          created_at: share.created_at
+        }), { headers: corsHeaders });
+      }
+
+      // 7.5.3 校验密码并提取档案 (如果是阅后即焚则立即销毁)
+      const shareVerifyMatch = path.match(/^\/api\/shares\/([^\/]+)\/verify$/);
+      if (shareVerifyMatch && method === "POST") {
+        const id = shareVerifyMatch[1];
+        const { verifier } = await request.json() as any;
+
+        if (!verifier) {
+          return new Response(JSON.stringify({ error: "Missing verifier" }), { status: 400, headers: corsHeaders });
+        }
+
+        const share = await env.DB.prepare("SELECT * FROM secure_shares WHERE id = ?").bind(id).first() as any;
+
+        if (!share) {
+          return new Response(JSON.stringify({ error: "机密档案不存在或已被销毁" }), { status: 404, headers: corsHeaders });
+        }
+
+        // 校验是否过期
+        if (share.expires_at && new Date(share.expires_at).getTime() < Date.now()) {
+          await env.DB.prepare("DELETE FROM secure_shares WHERE id = ?").bind(id).run().catch(() => {});
+          return new Response(JSON.stringify({ error: "机密档案已过期失效" }), { status: 410, headers: corsHeaders });
+        }
+
+        // 校验密码
+        if (verifier === share.verifier) {
+          // 密码正确，提取档案
+          
+          // 如果是阅后即焚，立即从数据库中彻底删除
+          if (share.burn_after_reading === 1) {
+            await env.DB.prepare("DELETE FROM secure_shares WHERE id = ?").bind(id).run();
+          }
+
+          return new Response(JSON.stringify({
+            success: true,
+            ciphertext: share.ciphertext,
+            iv: share.iv,
+            salt: share.salt,
+            type: share.type
+          }), { headers: corsHeaders });
+        } else {
+          // 密码错误，自增失败次数
+          const newAttempts = (share.failed_attempts || 0) + 1;
+          
+          if (newAttempts >= 5) {
+            // 失败次数达到 5 次，永久销毁档案！
+            await env.DB.prepare("DELETE FROM secure_shares WHERE id = ?").bind(id).run();
+            return new Response(JSON.stringify({
+              error: "密码错误次数过多，该机密档案已被永久销毁",
+              remaining: 0
+            }), { status: 401, headers: corsHeaders });
+          } else {
+            // 更新失败次数
+            await env.DB.prepare("UPDATE secure_shares SET failed_attempts = ? WHERE id = ?").bind(newAttempts, id).run();
+            return new Response(JSON.stringify({
+              error: "密码错误，解锁失败",
+              remaining: 5 - newAttempts
+            }), { status: 401, headers: corsHeaders });
+          }
         }
       }
 

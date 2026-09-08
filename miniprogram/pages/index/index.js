@@ -71,16 +71,8 @@ Page({
     })
   },
 
-  goBlog() {
-    wx.switchTab({ url: '/pages/tags/tags' })
-  },
-
-  goEssays() {
-    wx.switchTab({ url: '/pages/essays/essays' })
-  },
-
-  goAbout() {
-    wx.switchTab({ url: '/pages/about/about' })
+  goSearch() {
+    wx.navigateTo({ url: '/pages/search/search' })
   },
 
   onShareAppMessage() {

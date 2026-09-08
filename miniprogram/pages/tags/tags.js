@@ -64,8 +64,8 @@ Page({
   },
 
   onTagTap(e) {
-    const { text } = e.detail
-    const activeTag = this.data.activeTag === text ? '' : text
+    const { name } = e.currentTarget.dataset
+    const activeTag = this.data.activeTag === name ? '' : name
     
     const filteredPosts = activeTag
       ? this.data.posts.filter(p => (p.tags || []).includes(activeTag))

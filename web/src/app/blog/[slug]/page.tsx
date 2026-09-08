@@ -18,8 +18,23 @@ import ScrollMemory from "@/components/ScrollMemory";
 import FontSizeControl from "@/components/FontSizeControl";
 import ShareButton from "@/components/ShareButton";
 import LikeButton from "@/components/LikeButton";
+import fs from 'fs';
+import path from 'path';
+import AIPostGuide, { AIPostMeta } from "@/components/AIPostGuide";
 import rehypeSanitize from 'rehype-sanitize';
 import { getSanitizeSchema, getMarkdownComponents } from "@/lib/markdown-components";
+
+function getAIPostMeta(slug: string): AIPostMeta | null {
+    try {
+        const metaPath = path.join(process.cwd(), 'src/content/generated/ai-post-meta.json');
+        if (!fs.existsSync(metaPath)) return null;
+        const raw = fs.readFileSync(metaPath, 'utf8');
+        const data = JSON.parse(raw);
+        return data[slug] || null;
+    } catch {
+        return null;
+    }
+}
 
 export async function generateStaticParams() {
     const posts = getAllPosts();
@@ -79,6 +94,7 @@ export default async function PostPage(props: { params: Promise<{ slug: string }
 
     const sanitizeSchema = getSanitizeSchema();
     const mdComponents = getMarkdownComponents({ imageWidth: 1000, imageQuality: 75 });
+    const aiMeta = getAIPostMeta(post.slug);
 
     return (
         <main className="relative flex min-h-screen flex-col items-center overflow-x-clip px-4 pb-24 pt-28 sm:px-8">
@@ -150,6 +166,9 @@ export default async function PostPage(props: { params: Promise<{ slug: string }
                                 </details>
                             )}
                         </header>
+
+                        {/* ── AI Post Guide ── */}
+                        <AIPostGuide meta={aiMeta} />
 
                         {/* ── Markdown Content ── */}
                         <div

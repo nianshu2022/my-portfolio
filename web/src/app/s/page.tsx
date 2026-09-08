@@ -188,7 +188,7 @@ export default function SecureShareCreatePage() {
       ? "阅后即焚（成功提取1次后立即自毁）" 
       : `${EXPIRATION_OPTIONS.find(o => o.value === expiresIn)?.label || "自定义"}后自动销毁`;
     
-    return `【念舒档案局 · 暗号传输柜】\n您有一份机密档案待提取！\n\n提取通道：${origin}/s/${id}\n安全暗号：${pin}\n安全规则：${ruleText}\n\n(提示：发送订阅链接防检测安全通道，请复制链接在浏览器中打开提取)`;
+    return `【念舒 · 暗号传输柜】\n您有一份加密信息待提取！\n\n提取通道：${origin}/s/${id}\n安全暗号：${pin}\n安全规则：${ruleText}\n\n(提示：请复制链接在浏览器中打开提取)`;
   };
 
   return (

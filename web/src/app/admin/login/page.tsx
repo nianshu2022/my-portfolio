@@ -72,7 +72,7 @@ export default function AdminLoginPage() {
               </div>
               <div className="admin-page-kicker">ACCESS CHECK</div>
               <h2 className="text-3xl font-black tracking-normal">管理员认证</h2>
-              <p className="mt-2 text-sm leading-7 text-muted-foreground">输入访问令牌后进入档案局内部工作台。</p>
+              <p className="mt-2 text-sm leading-7 text-muted-foreground">输入访问令牌后进入管理后台工作台。</p>
             </div>
 
             <form onSubmit={handleLogin} className="space-y-5">

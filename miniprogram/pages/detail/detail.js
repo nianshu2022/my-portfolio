@@ -1,6 +1,7 @@
 const { getPostBySlug, getEssayBySlug } = require('../../utils/api')
 const { formatDate, calculateReadingTime } = require('../../utils/format')
 const { addFavorite, removeFavorite, isFavorite, addHistory } = require('../../utils/storage')
+const { parseMarkdown, extractToc } = require('../../utils/markdown')
 
 Page({
   data: {
@@ -9,7 +10,8 @@ Page({
     type: 'post',
     isFavorite: false,
     toc: [],
-    showToc: false
+    showToc: false,
+    parsedContent: ''
   },
 
   onLoad(options) {
@@ -28,8 +30,9 @@ Page({
 
       const isFav = isFavorite(slug)
       
-      // 提取目录
-      const toc = this.extractToc(post.content)
+      // 解析 Markdown
+      const parsedContent = parseMarkdown(post.content)
+      const toc = extractToc(post.content)
       
       // 添加阅读历史
       addHistory({
@@ -42,6 +45,7 @@ Page({
       this.setData({
         post,
         toc,
+        parsedContent,
         isFavorite: isFav,
         loading: false
       })
@@ -54,17 +58,6 @@ Page({
       this.setData({ loading: false })
       wx.showToast({ title: '加载失败', icon: 'none' })
     }
-  },
-
-  extractToc(content) {
-    if (!content) return []
-    const headings = content.match(/^#{2,3}\s+.+$/gm) || []
-    return headings.map((heading, index) => {
-      const level = heading.match(/^#+/)?.[0].length || 2
-      const title = heading.replace(/^#+\s+/, '')
-      const id = title.toLowerCase().replace(/\s+/g, '-')
-      return { id, title, level, index }
-    })
   },
 
   toggleFavorite() {

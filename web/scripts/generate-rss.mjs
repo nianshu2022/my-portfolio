@@ -53,9 +53,9 @@ function generateRss() {
     const rss = `<?xml version="1.0" encoding="UTF-8" ?>
 <rss version="2.0">
   <channel>
-    <title>念舒档案局</title>
+    <title>念舒 | 技术 · 成长 · 创造</title>
     <link>${BASE_URL}</link>
-    <description>一个 00 后技术折腾者的成长样本库，记录技术案卷、成长样本和在线服务。</description>
+    <description>念舒的个人主页——一个 00 后技术折腾者，记录技术笔记、成长随笔与在线服务。</description>
     <language>zh-CN</language>
     <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
     ${posts.map(post => {

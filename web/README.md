@@ -1,7 +1,7 @@
-# 念舒的数字花园
+# 念舒 (NianShu)
 
-> 一个基于 **Next.js 15** 构建的现代化个人博客与数字花园。
-> 融合了技术笔记、生活随笔与个人服务导航，致力于提供优雅、快速且极致的阅读体验。
+> 一个 00 后技术折腾者的个人主页与技术空间。
+> 基于 **Next.js 15 + React 19 + Tailwind CSS v4** 构建，记录技术文章、成长随笔与在线服务。
 
 [![部署状态](https://img.shields.io/badge/Deploy-Cloudflare_Pages-F38020?style=flat-square&logo=cloudflare)](https://pages.cloudflare.com/)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](LICENSE)

@@ -7,7 +7,8 @@
     "generate:miniapp-api": "node scripts/generate-miniapp-api.mjs",
     "generate:brand-icons": "node scripts/generate-brand-icons.mjs",
     "generate:portal-status": "node scripts/generate-portal-status.mjs",
-    "build": "node scripts/generate-portal-status.mjs && node scripts/generate-rss.mjs && node scripts/generate-miniapp-api.mjs && next build",
+    "generate:ai": "node scripts/generate-embeddings.mjs && node scripts/generate-ai-meta.mjs",
+    "build": "node scripts/generate-portal-status.mjs && node scripts/generate-rss.mjs && node scripts/generate-miniapp-api.mjs && node scripts/generate-embeddings.mjs && node scripts/generate-ai-meta.mjs && next build",
     "start": "next start",
     "lint": "eslint"
   },

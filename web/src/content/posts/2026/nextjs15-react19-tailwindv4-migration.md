@@ -1,11 +1,11 @@
 ---
 title: "踩坑实录：Next.js 15 + React 19 + Tailwind CSS v4 升级爬坑全过程"
 date: "2026-05-12"
-description: "将数字花园升级到 Next.js 15 和 React 19 时被各种 Hydration 闪烁、Tailwind CSS v4 依赖锁死和 Server Action 的严格模式折磨？本文为你沉淀一份避坑踩雷的实操升级路线图。"
+description: "将个人博客升级到 Next.js 15 和 React 19 时被各种 Hydration 闪烁、Tailwind CSS v4 依赖锁死和 Server Action 的严格模式折磨？本文为你沉淀一份避坑踩雷的实操升级路线图。"
 tags: ["Next.js", "React", "TailwindCSS", "前端开发", "架构升级"]
 ---
 
-> **前言**：作为一名极客，为了榨干个人博客数字花园的最后一滴渲染性能，我将本项目底层框架一举拉到了最新的 **Next.js 15 + React 19 + Tailwind CSS v4**。
+> **前言**：作为一名极客，为了榨干个人博客的最后一滴渲染性能，我将本项目底层框架一举拉到了最新的 **Next.js 15 + React 19 + Tailwind CSS v4**。
 >
 > 听起来非常酷炫对吧？但随之而来的，是一长串让人窒息的编译警告、Hydration Mismatch（水合失败闪烁）、以及 Tailwind v4 配置大改带来的构建崩溃。经历了漫长深夜的排查，我整理了这篇极具实操价值的“爬坑”全纪实，希望能让准备升级架构的朋友们少走几天弯路 😭。
 

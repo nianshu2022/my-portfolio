@@ -1,4 +1,10 @@
 <view class="page-index">
+  <!-- 搜索入口 -->
+  <view class="search-entry" bindtap="goSearch">
+    <text class="search-icon">⌕</text>
+    <text class="search-placeholder">搜索案卷、标签...</text>
+  </view>
+
   <!-- 品牌区域 -->
   <view class="hero-section">
     <view class="hero-inner">
@@ -77,26 +83,10 @@
 
     <empty-state 
       wx:else 
-      icon="📭" 
+      icon="empty" 
       title="暂无案卷" 
       desc="正在整理中，敬请期待" 
     />
-  </view>
-
-  <!-- 快捷入口 -->
-  <view class="quick-entry">
-    <view class="entry-item" bindtap="goBlog">
-      <text class="entry-icon">📋</text>
-      <text class="entry-text">技术案卷</text>
-    </view>
-    <view class="entry-item" bindtap="goEssays">
-      <text class="entry-icon">📝</text>
-      <text class="entry-text">成长样本</text>
-    </view>
-    <view class="entry-item" bindtap="goAbout">
-      <text class="entry-icon">📁</text>
-      <text class="entry-text">认识念舒</text>
-    </view>
   </view>
 
   <!-- 底部装饰 -->

@@ -1,8 +1,15 @@
 <view class="page-about">
+  <!-- 页面标题 -->
+  <view class="page-header">
+    <view class="header-left">
+      <text class="header-code">ARC</text>
+      <text class="header-title">个人档案</text>
+    </view>
+  </view>
+
   <!-- 个人简介 -->
   <view class="profile-section">
     <view class="profile-card">
-      <view class="serial-tag">个人档案</view>
       <view class="profile-header">
         <view class="avatar">
           <text class="avatar-text">念</text>
@@ -14,15 +21,15 @@
       </view>
       
       <view class="profile-meta">
-        <view class="meta-item">
+        <view class="meta-row">
           <text class="meta-label">编号</text>
           <text class="meta-value mono">NIANSHU-2001</text>
         </view>
-        <view class="meta-item">
+        <view class="meta-row">
           <text class="meta-label">坐标</text>
           <text class="meta-value">{{profile.location}}</text>
         </view>
-        <view class="meta-item">
+        <view class="meta-row">
           <text class="meta-label">状态</text>
           <text class="meta-value status">持续记录中</text>
         </view>
@@ -34,9 +41,7 @@
 
   <!-- 成长时间线 -->
   <view class="timeline-section">
-    <view class="section-header">
-      <text class="section-title">成长轨迹</text>
-    </view>
+    <view class="section-title">成长轨迹</view>
     
     <view class="timeline">
       <view class="timeline-item" wx:for="{{timeline}}" wx:key="year">
@@ -54,18 +59,16 @@
 
   <!-- 外部链接 -->
   <view class="links-section">
-    <view class="section-header">
-      <text class="section-title">外部链接</text>
-    </view>
+    <view class="section-title">外部链接</view>
     
     <view class="links-list">
       <view class="link-item" bindtap="goGithub">
-        <text class="link-icon">🐙</text>
+        <view class="link-icon">GH</view>
         <text class="link-text">GitHub</text>
         <text class="link-arrow">→</text>
       </view>
       <view class="link-item" bindtap="goBlog">
-        <text class="link-icon">🌐</text>
+        <view class="link-icon">WEB</view>
         <text class="link-text">博客主站</text>
         <text class="link-arrow">→</text>
       </view>

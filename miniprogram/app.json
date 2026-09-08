@@ -4,7 +4,9 @@
     "pages/tags/tags",
     "pages/essays/essays",
     "pages/about/about",
-    "pages/detail/detail"
+    "pages/detail/detail",
+    "pages/search/search",
+    "pages/history/history"
   ],
   "window": {
     "backgroundTextStyle": "dark",

@@ -15,6 +15,7 @@ import SearchHint from "@/components/SearchHint";
 import MobileNav from "@/components/MobileNav";
 import BottomNav from "@/components/BottomNav";
 import DesktopNav from "@/components/DesktopNav";
+import AIChatAssistant from "@/components/AIChatAssistant";
 import { getAllPostSummaries, getAllEssaySummaries } from "@/lib/posts";
 
 const geistSans = Geist({
@@ -44,8 +45,8 @@ export const metadata: Metadata = {
     default: "念舒 | 技术 · 成长 · 创造",
     template: "%s | 念舒",
   },
-  description: "念舒的个人博客——一个 00 后技术折腾者，在这里分享前端开发、AI 应用、独立开发与成长经历。",
-  keywords: ["念舒", "技术博客", "前端开发", "独立开发", "Next.js", "00后", "AI"],
+  description: "念舒的个人主页——一个 00 后技术折腾者，在这里记录技术笔记、成长随笔与在线服务。",
+  keywords: ["念舒", "技术博客", "前端开发", "独立开发", "Next.js", "00后", "AI", "Homelab"],
   authors: [{ name: "念舒", url: process.env.NEXT_PUBLIC_SITE_URL || "https://blog.nianshu2022.cn" }],
   creator: "念舒",
   openGraph: {
@@ -53,7 +54,7 @@ export const metadata: Metadata = {
     locale: "zh_CN",
     url: process.env.NEXT_PUBLIC_SITE_URL || "https://blog.nianshu2022.cn",
     title: "念舒 | 技术 · 成长 · 创造",
-    description: "一个 00 后技术折腾者的个人博客，分享代码与生活。",
+    description: "念舒的个人主页：一个 00 后技术折腾者的技术笔记与成长记录。",
     siteName: "念舒",
     images: [
       {
@@ -170,6 +171,7 @@ export default function RootLayout({
         </ConditionalLayout>
 
         <CommandMenu posts={posts} essays={essays} />
+        <AIChatAssistant />
         <ServiceWorkerRegister />
       </body>
     </html>

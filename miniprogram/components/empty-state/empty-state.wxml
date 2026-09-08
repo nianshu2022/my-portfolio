@@ -1,5 +1,11 @@
 <view class="empty-state">
-  <text class="empty-icon">{{icon}}</text>
+  <view class="empty-icon empty-icon-{{icon}}">
+    <text wx:if="{{icon === 'empty'}}">∅</text>
+    <text wx:elif="{{icon === 'search'}}">⌕</text>
+    <text wx:elif="{{icon === 'doc'}}">□</text>
+    <text wx:elif="{{icon === 'folder'}}">⌂</text>
+    <text wx:else>○</text>
+  </view>
   <text class="empty-title">{{title}}</text>
   <text class="empty-desc" wx:if="{{desc}}">{{desc}}</text>
   <view class="empty-btn" wx:if="{{btnText}}" bindtap="onBtnTap">

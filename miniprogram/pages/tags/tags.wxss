@@ -1,39 +1,94 @@
 .page-tags {
   min-height: 100vh;
   background: var(--bg-page);
+  padding-bottom: 180rpx;
 }
 
-/* 标签云 */
-.tags-section {
-  background: var(--bg-card);
-  border-bottom: 1rpx solid var(--border-color);
-  padding: var(--space-lg);
-}
-
-.section-header {
+/* 页面标题 */
+.page-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: var(--space-lg);
+  background: var(--bg-card);
+  border-bottom: 2rpx solid var(--border-dark);
+  padding: var(--space-xl) var(--space-lg);
 }
 
-.section-title {
-  font-size: var(--font-subtitle);
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.header-code {
+  font-family: var(--font-mono);
+  font-size: 24rpx;
+  font-weight: 700;
+  color: var(--color-primary);
+  letter-spacing: 2rpx;
+}
+
+.header-title {
+  font-size: 36rpx;
   font-weight: 700;
   color: var(--text-title);
   letter-spacing: 2rpx;
 }
 
-.section-count {
+.header-count {
   font-size: var(--font-caption);
   color: var(--text-muted);
-  font-family: var(--font-mono);
+}
+
+/* 标签云 */
+.tags-section {
+  padding: var(--space-lg);
+  background: var(--bg-card);
+  border-bottom: 1rpx solid var(--border-color);
 }
 
 .tags-cloud {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-sm);
+}
+
+.tag-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--bg-page);
+  border: 1rpx solid var(--border-color);
+  transition: all var(--transition-fast);
+}
+
+.tag-chip:active {
+  transform: scale(0.95);
+}
+
+.tag-chip.active {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.tag-name {
+  font-size: 24rpx;
+  color: var(--text-body);
+}
+
+.tag-chip.active .tag-name {
+  color: var(--text-inverse);
+}
+
+.tag-count {
+  font-size: 20rpx;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
+.tag-chip.active .tag-count {
+  color: rgba(255,255,255,0.7);
 }
 
 /* 筛选结果 */
@@ -46,9 +101,9 @@
   align-items: center;
   justify-content: space-between;
   margin-bottom: var(--space-lg);
-  padding: var(--space-md);
+  padding: var(--space-md) var(--space-lg);
   background: var(--bg-card);
-  border: 1rpx solid var(--border-color);
+  border-left: 4rpx solid var(--color-primary);
 }
 
 .result-tag {

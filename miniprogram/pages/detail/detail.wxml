@@ -9,38 +9,44 @@
   <block wx:elif="{{post}}">
     <!-- 头部信息 -->
     <view class="detail-header">
-      <view class="header-meta">
-        <view class="serial-tag">{{type === 'post' ? '案卷' : '样本'}}</view>
-        <text class="meta-date">{{post.date}}</text>
-        <text class="meta-reading">{{post.readingTime}}</text>
+      <view class="header-top">
+        <view class="header-meta">
+          <text class="meta-code">{{type === 'post' ? 'DOC' : 'SMP'}}</text>
+          <view class="meta-divider"></view>
+          <text class="meta-date">{{post.date}}</text>
+          <view class="meta-divider"></view>
+          <text class="meta-reading">{{post.readingTime}}</text>
+        </view>
       </view>
       <text class="detail-title">{{post.title}}</text>
       <view class="detail-tags" wx:if="{{post.tags.length > 0}}">
-        <text class="tag" wx:for="{{post.tags}}" wx:key="*this">{{item}}</text>
+        <view class="tag" wx:for="{{post.tags}}" wx:key="*this">
+          <text>{{item}}</text>
+        </view>
       </view>
     </view>
 
     <!-- 正文内容 -->
     <view class="detail-content">
-      <rich-text nodes="{{post.content}}" />
+      <rich-text nodes="{{parsedContent}}" />
     </view>
 
     <!-- 底部工具栏 -->
     <view class="detail-toolbar">
       <view class="toolbar-item {{isFavorite ? 'active' : ''}}" bindtap="toggleFavorite">
-        <text class="toolbar-icon">{{isFavorite ? '❤️' : '🤍'}}</text>
+        <view class="toolbar-icon">{{isFavorite ? '★' : '☆'}}</view>
         <text class="toolbar-text">{{isFavorite ? '已收藏' : '收藏'}}</text>
       </view>
       <view class="toolbar-item" bindtap="toggleToc" wx:if="{{toc.length > 0}}">
-        <text class="toolbar-icon">📑</text>
+        <view class="toolbar-icon">≡</view>
         <text class="toolbar-text">目录</text>
       </view>
       <view class="toolbar-item" bindtap="copyLink">
-        <text class="toolbar-icon">🔗</text>
+        <view class="toolbar-icon">⊕</view>
         <text class="toolbar-text">复制链接</text>
       </view>
       <button class="toolbar-item share-btn" open-type="share">
-        <text class="toolbar-icon">📤</text>
+        <view class="toolbar-icon">↗</view>
         <text class="toolbar-text">分享</text>
       </button>
     </view>
@@ -50,7 +56,7 @@
       <view class="toc-panel" catchtap="">
         <view class="toc-header">
           <text class="toc-title">目录</text>
-          <text class="toc-close" bindtap="toggleToc">✕</text>
+          <text class="toc-close" bindtap="toggleToc">×</text>
         </view>
         <scroll-view scroll-y class="toc-list">
           <view 
@@ -70,7 +76,7 @@
   <!-- 空状态 -->
   <empty-state 
     wx:else 
-    icon="📭" 
+      icon="empty" 
     title="案卷未找到" 
     desc="该内容可能已移除" 
     btnText="返回首页"

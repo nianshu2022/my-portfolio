@@ -168,7 +168,7 @@ function generateMiniappApi() {
   ensureDir(PUBLIC_API_DIR);
 
   const manifest = {
-    name: '念舒档案局',
+    name: '念舒',
     baseUrl: BASE_URL,
     generatedAt: new Date().toISOString(),
     collections: collections.map(({ listName, title, routePrefix }) => ({

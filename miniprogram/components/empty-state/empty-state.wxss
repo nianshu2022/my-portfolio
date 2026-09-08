@@ -8,8 +8,16 @@
 }
 
 .empty-icon {
-  font-size: 80rpx;
+  width: 120rpx;
+  height: 120rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2rpx solid var(--border-color);
   margin-bottom: var(--space-lg);
+  font-size: 48rpx;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
 }
 
 .empty-title {

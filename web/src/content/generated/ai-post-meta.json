@@ -1,0 +1,158 @@
+{
+  "gpmall-single-node-deployment": {
+    "title": "GPMall 商城单节点部署实战",
+    "mtime": 1764051845169.9592,
+    "updatedAt": "2026-09-08T08:51:55.982Z",
+    "tldr": "配置GPM商城的单节点部署环境，包括设置主机名名、配置本地yum源、安装Java、Redis、EEookeeperz、Eookeeperz、Kafka、数据库等等",
+    "keyTakeaways": [
+      "�核心要点z",
+      "1配置主机名名z",
+      "z 修改主机名称z"
+    ],
+    "mermaid": ""
+  },
+  "openstack-deployment-guide": {
+    "title": "部署 OpenStack 云平台",
+    "mtime": 1764051878083.1743,
+    "updatedAt": "2026-09-08T08:52:05.235Z",
+    "tldr": "本文介绍了如何在 CentOS 系统上部署 OpenpenStack 云平台的基础环境，包括安装运行环境、配置网络、关闭防火墙以及配置镜像和 Y源。",
+    "keyTakeaways": [
+      "选择 CentOS 7.4 或更高版本作为运行环境。",
+      "配置静态 IP �地址地址以确保网络连接稳定。",
+      "关闭防火墙以允许网络通信不受限制。"
+    ],
+    "mermaid": ""
+  },
+  "centos-installation-guide": {
+    "title": "VMware 安装 CentOS 7.5 操作系统",
+    "mtime": 1764051746773.3496,
+    "updatedAt": "2026-09-08T08:52:20.212Z",
+    "tldr": "在本文中，我们将通过 VMware 安装 CentOS 7，并配置一个简单的的基础架构，包括一个 controller � �节点和一个 compute 节点。\n\n。\n\n。\n\n”。",
+    "keyTakeaways": [
+      "准备实验环境，安装 VMware Workstation。",
+      "下 下载并为 CentOS 7-x86_64-DVD-11804.iso。",
+      "配置 controller �”节点和 compute 节点的，包括内存、硬盘和 IP 地址。"
+    ],
+    "mermaid": ""
+  },
+  "uptime-monitor-guide": {
+    "title": "我用 Cloudflare 免费撸了一个高颜值的网站监控系统",
+    "mtime": 1764080485433.009,
+    "updatedAt": "2026-09-08T08:52:36.963Z",
+    "tldr": "解决了网站监控、SSL证书监控、域名注册到期提醒等等问题。\n- 核心思路是利用 Cloudflare Workers 和 D Pages 构建一个零成本、高颜值的网站监控系统。",
+    "keyTakeaways": [],
+    "mermaid": ""
+  },
+  "cloudflare-tunnel-homelab-zerotrust": {
+    "title": "抛弃内网穿透与动态域名！用 Cloudflare Tunnel + Zero Trust 优雅且安全地接入 Homelab 边缘设备",
+    "mtime": 1778989558065.3042,
+    "updatedAt": "2026-09-08T08:52:46.477Z",
+    "tldr": "本文介绍了使用 Cloudflare Tunnel 和 Zero Trust 解决家庭内网服务对外访问的安全问题方案，避免了传统 DDNS 和端口映射方案的安全隐患，同时实现了优雅且安全的访问。",
+    "keyTakeaways": [],
+    "mermaid": ""
+  },
+  "deepseek-r1-ollama-local-deployment": {
+    "title": "从零开始：用 Ollama + Open WebUI 本地部署 DeepSeek-R1 满血版/蒸馏版实战指南",
+    "mtime": 1788855815704.8137,
+    "updatedAt": "2026-09-08T08:52:51.097Z",
+    "tldr": "本文文章详细介绍了如何在本地Mac或PC服务器上上上部署和使用DeepSeek-R模型，特别是针对注重数据隐私和网络环境不佳的开发者。通过选择合适的蒸馏版模型和使用Ollama工具，可以实现高效、便捷的本地部署和使用。",
+    "keyTakeaways": [
+      "如如何选择合适的蒸馏版模型？",
+      "如何使用Ollama进行本地拉取和运行DeepSeek-R模型？",
+      "如何部署WebUI界面以获得更好的使用体验？"
+    ],
+    "mermaid": ""
+  },
+  "docker-cleanup": {
+    "title": "监控疯狂报警：我是怎么干掉 /var/lib/docker 几十G垃圾的",
+    "mtime": 1775545106791.3352,
+    "updatedAt": "2026-09-08T08:53:19.886Z",
+    "tldr": "**核心思路**：通过 Docker 自命工具和系统日志工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具工具",
+    "keyTakeaways": [],
+    "mermaid": ""
+  },
+  "docker-offline-install-windows": {
+    "title": "Windows 离线安装 Docker Desktop 完全指南（含常见报错解决）",
+    "mtime": 1775525493577.9373,
+    "updatedAt": "2026-09-08T08:53:26.201Z",
+    "tldr": "D安装 Docker Desktop 在内网网环境中，需要手动下载并更新 WSL 的完整应用包D避免了自动更新失败的问题。",
+    "keyTakeaways": [
+      "-****",
+      "前置准备D",
+      "在有网的机器上 完成D下载 Docker Desktop 安 WSL 叻更新包D"
+    ],
+    "mermaid": ""
+  },
+  "gemma4-offline-multimodal": {
+    "title": "实录：手机跑通 Gemma 4 离线多模态大模型的踩坑笔记",
+    "mtime": 1788855795912.1355,
+    "updatedAt": "2026-09-08T08:53:35.635Z",
+    "tldr": "本文详细记录了作者在手机上成功跑通 GemMA 4 多模态大模型的过程，面对内存限制和安装环境的挑战，通过一系列步骤最终实现了模型的本地推理。核心思路是通过编译 `llama.cpp 代码和 和并下载 4-bit 量化模型文件来降低内存需求。",
+    "keyTakeaways": [
+      "**环境准备**",
+      "使用用推荐使用 F-Droid 官网下载 Termx E”。",
+      "”安装 需要的编译工具集，如如“如 clang、cmake、git �”。"
+    ],
+    "mermaid": ""
+  },
+  "nextjs15-react19-tailwindv4-migration": {
+    "title": "踩坑实录：Next.js 15 + React 19 + Tailwind CSS v4 升级爬坑全过程",
+    "mtime": 1788855809033.7974,
+    "updatedAt": "2026-09-08T08:53:45.065Z",
+    "tldr": "本文介绍了在升级 Next.js � React 以及 Tailwind CSS v4 时遇到的常见问题及解决方案，重点解决了暗黑模式下的闪烁问题和新版 Tailwind CSS v4 的配置调整。",
+    "keyTakeaways": [
+      "**防主题闪烁**：在 `<html>` 标签中加入同步脚本，确保客户端和 服务器端渲染的 CSS 一致。",
+      "**Tailwind CSS v4 配置**：移除 `tailwind.config.js`，在全局样式文件中使用 CSS 变量进行配置。",
+      "**水合失败闪烁**：通过同步脚本确保主题切换时不会与水合过程同步，避免页面闪烁。"
+    ],
+    "mermaid": ""
+  },
+  "nexus-pypi-offline-mirror": {
+    "title": "内网 Nexus 离线 PyPI 镜像搭建全攻略（含 PyTorch CUDA 版）",
+    "mtime": 1774418635033.957,
+    "updatedAt": "2026-09-08T08:54:07.972Z",
+    "tldr": "本文介绍了在与外网完全物理隔离的内内网环境中搭建私有 PyPI 镜像站的方法，通过 Sonatype Nexus Repository Manager Manager Manager Manager Manager Manager Manager Manager Manager Manager Manager，实现内部开发机可以离线安装 Python 包，核心N主要核心思路是先在外网跳板机下载所需 Python 包，然后将将将这些包拷贝至内网，再内网机通过 twine 安装这些包，最后NN在 Nexus 中上传这些包包并并配置开发机指向内网 Nexus。\n\nN",
+    "keyTakeaways": [
+      "在与外网完全物理隔离的内内内内网环境中搭建私N私私有 PyPI 镜像站的方法。",
+      "通过 Sonatype Nexus Repository Manager 实现内部开发机离线安装 Python 包。",
+      "�ÉtatN在外网跳板机下载下载下载下载所需 Python 包并N并并将将N将将将N将N将N将N将NN"
+    ],
+    "mermaid": ""
+  },
+  "uptime-monitor-v2-guide": {
+    "title": "白嫖 Cloudflare：零成本网站监控 Uptime Monitor 迎来史诗级 V2.0 重构！",
+    "mtime": 1774418635034.4705,
+    "updatedAt": "2026-09-08T08:54:17.885Z",
+    "tldr": "解决网站监控痛点，通过利用Cloudflare免费资源实现零成本监控，新增多种告警渠道和高级HTTP监控功能。",
+    "keyTakeaways": [
+      "新增多种告告通知渠道D支持钉钉D企业微信D飞书DTelegramD自定义Webhook。",
+      "支持高级HTTP监控D包括包括POST请求和自定义Headers和Body。",
+      "引入报报标签分类D方便批量操作和状态页升级D支持事件公告和动态配置。"
+    ],
+    "mermaid": ""
+  },
+  "wecom-daily-push-guide": {
+    "title": "告别查岗与遗忘！企业微信 + Python 零感打造专属情侣推送管家",
+    "mtime": 1777722836904.582,
+    "updatedAt": "2026-09-08T08:54:23.040Z",
+    "tldr": "本文介绍了如何使用企业微信和 �风天气API构建一个自动推送情侣纪念日和天气提醒的系统Python项目项目项目，通过通过企业微信的推送机制，实现无感推送，解决了情侣间因忘记重要日期或天气情况导致的沟通不畅问题题。",
+    "keyTakeaways": [],
+    "mermaid": ""
+  },
+  "securecrt-connect-centos": {
+    "title": "使用 SecureCRT 远程连接 CentOS 虚拟机",
+    "mtime": 1764051857484.173,
+    "updatedAt": "2026-09-08T08:55:24.635Z",
+    "tldr": "使用本文介绍了如何使用 SecureCRT 远程连接 CentOS 虙拟机，通过配置网络和关闭防火墙，简化了远程管理过程。",
+    "keyTakeaways": [],
+    "mermaid": ""
+  },
+  "wecom-daily-push-guide-2024": {
+    "title": "企业微信实现情侣每日定时推送全攻略！",
+    "mtime": 1763796542325.5146,
+    "updatedAt": "2026-09-08T08:55:33.762Z",
+    "tldr": "N 本文介绍了如何使用企业微信Q 微信实现情侣每日定时推送功能。主要 主要步骤包括包括注册企业微信N 填写相关信息N 创建应用N 查看agentldN � 配置可信IP IP地址N 获取企业IDN 剪关注企业微信 微信插件N 申请风天气气KeyN 部署程序N 配置文件N 修改图片地址 �\nN",
+    "keyTakeaways": [],
+    "mermaid": ""
+  }
+}

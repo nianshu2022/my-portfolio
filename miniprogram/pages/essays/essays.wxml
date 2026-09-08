@@ -1,7 +1,14 @@
 <view class="page-essays">
+  <!-- 页面标题 -->
   <view class="page-header">
-    <text class="page-title">成长样本</text>
-    <text class="page-desc">把阶段经历留下来，让技术之外的选择也能被看见</text>
+    <view class="header-left">
+      <text class="header-code">SMP</text>
+      <text class="header-title">成长样本</text>
+    </view>
+  </view>
+
+  <view class="page-desc">
+    <text>把阶段经历留下来，让技术之外的选择也能被看见</text>
   </view>
 
   <view class="essays-list">
@@ -14,7 +21,7 @@
         title="{{item.title}}"
         date="{{item.date}}"
         tags="{{item.tags}}"
-        caseNumber="样本-{{index + 1}}"
+        caseNumber="SMP-{{index + 1}}"
         excerpt="{{item.description}}"
         type="essay"
         slug="{{item.slug}}"
@@ -24,7 +31,7 @@
 
     <empty-state 
       wx:else 
-      icon="📝" 
+      icon="empty" 
       title="暂无成长样本" 
       desc="正在记录中，敬请期待" 
     />

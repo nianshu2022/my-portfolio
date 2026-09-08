@@ -28,7 +28,7 @@
     "type": "post",
     "collection": "posts",
     "title": "踩坑实录：Next.js 15 + React 19 + Tailwind CSS v4 升级爬坑全过程",
-    "description": "将数字花园升级到 Next.js 15 和 React 19 时被各种 Hydration 闪烁、Tailwind CSS v4 依赖锁死和 Server Action 的严格模式折磨？本文为你沉淀一份避坑踩雷的实操升级路线图。",
+    "description": "将个人博客升级到 Next.js 15 和 React 19 时被各种 Hydration 闪烁、Tailwind CSS v4 依赖锁死和 Server Action 的严格模式折磨？本文为你沉淀一份避坑踩雷的实操升级路线图。",
     "date": "2026-05-12",
     "tags": [
       "Next.js",
@@ -41,7 +41,7 @@
     "award": null,
     "url": "https://blog.nianshu2022.cn/blog/nextjs15-react19-tailwindv4-migration",
     "path": "/blog/nextjs15-react19-tailwindv4-migration",
-    "wordCount": 3244,
+    "wordCount": 3240,
     "readingTime": "7 分钟",
     "tocCount": 10
   },
@@ -110,7 +110,7 @@
     "award": null,
     "url": "https://blog.nianshu2022.cn/blog/gemma4-offline-multimodal",
     "path": "/blog/gemma4-offline-multimodal",
-    "wordCount": 2937,
+    "wordCount": 2932,
     "readingTime": "8 分钟",
     "tocCount": 7
   },

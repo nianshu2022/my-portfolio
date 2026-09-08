@@ -1,27 +1,33 @@
 <view class="page-tags">
+  <!-- 页面标题 -->
+  <view class="page-header">
+    <view class="header-left">
+      <text class="header-code">IDX</text>
+      <text class="header-title">案卷索引</text>
+    </view>
+    <text class="header-count">{{tags.length}} 个标签</text>
+  </view>
+
   <!-- 标签云 -->
   <view class="tags-section">
-    <view class="section-header">
-      <text class="section-title">标签索引</text>
-      <text class="section-count">{{tags.length}} 个标签</text>
-    </view>
-    
     <view class="tags-cloud">
-      <tag-chip
+      <view 
+        class="tag-chip {{activeTag === item.name ? 'active' : ''}}"
         wx:for="{{tags}}"
         wx:key="name"
-        text="{{item.name}}"
-        count="{{item.count}}"
-        active="{{activeTag === item.name}}"
+        data-name="{{item.name}}"
         bindtap="onTagTap"
-      />
+      >
+        <text class="tag-name">{{item.name}}</text>
+        <text class="tag-count">{{item.count}}</text>
+      </view>
     </view>
   </view>
 
   <!-- 筛选结果 -->
-  <view class="result-section">
-    <view class="result-header" wx:if="{{activeTag}}">
-      <text class="result-tag">筛选: {{activeTag}}</text>
+  <view class="result-section" wx:if="{{activeTag}}">
+    <view class="result-header">
+      <text class="result-tag">{{activeTag}}</text>
       <text class="result-count">{{filteredPosts.length}} 份案卷</text>
     </view>
 
@@ -43,9 +49,9 @@
 
     <empty-state 
       wx:else 
-      icon="🔍" 
+      icon="empty" 
       title="暂无匹配案卷" 
-      desc="{{activeTag ? '该标签下暂无内容' : '正在整理中'}}" 
+      desc="换个标签试试" 
     />
   </view>
 </view>

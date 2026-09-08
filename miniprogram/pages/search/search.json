@@ -1,0 +1,7 @@
+{
+  "usingComponents": {
+    "case-card": "/components/case-card/case-card",
+    "empty-state": "/components/empty-state/empty-state"
+  },
+  "navigationBarTitleText": "搜索"
+}
