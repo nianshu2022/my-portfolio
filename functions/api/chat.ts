@@ -26,6 +26,7 @@ interface Context {
   env: Env;
 }
 
+// 支持 OPTIONS 跨域预检
 export const onRequestOptions = async () => {
   return new Response(null, {
     status: 204,
@@ -72,6 +73,7 @@ export const onRequestPost = async (context: Context) => {
       });
     }
 
+    // 1. 获取知识库数据（通过同源静态资源获取）
     let referenceContext = "";
     const referencedArticles: Array<{ title: string; url: string }> = [];
 
@@ -83,6 +85,7 @@ export const onRequestPost = async (context: Context) => {
       if (kbRes.ok) {
         const knowledgeBase: any[] = await kbRes.json();
 
+        // 向量化提问
         const embedRes = await fetch(EMBED_URL, {
           method: "POST",
           headers: {
@@ -127,6 +130,7 @@ export const onRequestPost = async (context: Context) => {
       console.warn("RAG retrieval failed, falling back to base knowledge:", e);
     }
 
+    // 2. 组装 System Prompt
     const chatModel = env.AI_MODEL || "deepseek-ai/DeepSeek-R1-0528-Qwen3-8B";
     const systemPrompt = `你是技术博主“念舒”的 AI 智能数字分身。
 你的使命是基于念舒的真实博文、随笔和经历，帮助访客答疑解惑。
@@ -139,6 +143,7 @@ ${
     : `如果访客询问的问题在你的博文中未提及，请诚实说明，但可以凭借你的技术积累给出精炼专业的建议。`
 }`;
 
+    // 3. 请求模型接口并流式转发
     const sfResponse = await fetch(CHAT_URL, {
       method: "POST",
       headers: {
