@@ -31,17 +31,17 @@ export default function ScrollToTop() {
 
   return (
     <div
-      className={`fixed bottom-24 xl:bottom-8 right-8 xl:right-[calc(50%-42rem)] z-50 print:hidden transition-all duration-500 transform ${
-        isVisible ? "translate-y-0 opacity-100" : "translate-y-16 opacity-0 pointer-events-none"
+      className={`fixed bottom-[8.25rem] md:bottom-[4.75rem] right-4 md:right-6 z-40 print:hidden transition-all duration-300 transform ${
+        isVisible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0 pointer-events-none"
       }`}
     >
       <button
         onClick={scrollToTop}
-        className="group relative flex h-11 w-11 items-center justify-center rounded-full border border-primary/30 bg-card/80 text-foreground shadow-md backdrop-blur-xl transition-all duration-300 hover:border-primary hover:bg-secondary hover:shadow-lg hover:shadow-primary/20"
-        style={{ animation: "pulse-ring 2.2s ease-in-out infinite" }}
-        aria-label="Scroll to top"
+        className="group relative flex h-11 w-11 items-center justify-center rounded-full border border-primary/20 bg-background/90 text-foreground shadow-lg backdrop-blur-xl transition-all duration-300 hover:border-primary hover:bg-primary/10 hover:text-primary hover:scale-105 active:scale-95"
+        aria-label="返回顶部"
+        title="返回顶部"
       >
-        <ArrowUp className="h-5 w-5 transition-transform duration-300 group-hover:animate-[arrow-bounce_0.9s_ease-in-out_infinite]" />
+        <ArrowUp className="h-5 w-5 transition-transform duration-300 group-hover:-translate-y-0.5" />
       </button>
     </div>
   );

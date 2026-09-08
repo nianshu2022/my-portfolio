@@ -185,7 +185,7 @@ export default function AIChatAssistant() {
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="fixed bottom-6 right-6 z-40 flex items-center gap-2.5 rounded-full bg-gradient-to-r from-primary to-violet-600 px-4 py-3 text-white shadow-xl shadow-primary/25 transition-all hover:scale-105 active:scale-95 group"
+          className="fixed bottom-20 md:bottom-6 right-4 md:right-6 z-40 flex items-center gap-2.5 rounded-full bg-gradient-to-r from-primary to-violet-600 px-4 py-3 text-white shadow-xl shadow-primary/25 transition-all hover:scale-105 active:scale-95 group"
           aria-label="打开念舒 AI 问答"
         >
           <span className="relative flex h-3 w-3">
