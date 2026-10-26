@@ -10,7 +10,7 @@ draft: false
 
 ## 📺 先看我这台电视上的效果
 
-![2026 年 10 月 23 日保存的小米电视 Aerial 桌面截图](/img/posts/aerial-xiaomi-home.png)
+![2026 年 10 月 23 日保存的小米电视 Aerial 桌面截图](/img/posts/aerial-xiaomi-home-dc4cba32b080.png)
 
 这是 2026 年 10 月 23 日检查 Aerial 时保存的电视截图。背景是从高空俯瞰地球的画面，左上角显示时间和天气，下方是一排应用，选中的应用有明显的边框。
 
