@@ -1,7 +1,7 @@
 {
   "name": "念舒",
   "baseUrl": "https://blog.nianshu2022.cn",
-  "generatedAt": "2026-09-08T08:56:38.681Z",
+  "generatedAt": "2026-10-26T15:56:23.465Z",
   "collections": [
     {
       "name": "posts",
@@ -17,9 +17,9 @@
     }
   ],
   "counts": {
-    "items": 21,
-    "posts": 15,
+    "items": 22,
+    "posts": 16,
     "essays": 6,
-    "tags": 73
+    "tags": 77
   }
 }

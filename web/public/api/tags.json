@@ -102,6 +102,12 @@
     "essays": 0
   },
   {
+    "name": "电视桌面",
+    "count": 1,
+    "posts": 1,
+    "essays": 0
+  },
+  {
     "name": "多模态",
     "count": 1,
     "posts": 1,
@@ -258,6 +264,12 @@
     "essays": 0
   },
   {
+    "name": "小米电视",
+    "count": 1,
+    "posts": 1,
+    "essays": 0
+  },
+  {
     "name": "一等奖",
     "count": 1,
     "posts": 0,
@@ -306,7 +318,19 @@
     "essays": 0
   },
   {
+    "name": "Aerial",
+    "count": 1,
+    "posts": 1,
+    "essays": 0
+  },
+  {
     "name": "AI",
+    "count": 1,
+    "posts": 1,
+    "essays": 0
+  },
+  {
+    "name": "Android TV",
     "count": 1,
     "posts": 1,
     "essays": 0

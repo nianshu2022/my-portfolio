@@ -5,8 +5,15 @@
     <link>https://blog.nianshu2022.cn</link>
     <description>念舒的个人主页——一个 00 后技术折腾者，记录技术笔记、成长随笔与在线服务。</description>
     <language>zh-CN</language>
-    <lastBuildDate>Tue, 08 Sep 2026 08:56:38 GMT</lastBuildDate>
+    <lastBuildDate>Mon, 26 Oct 2026 15:56:23 GMT</lastBuildDate>
     
+    <item>
+      <title>给小米电视换上 Aerial：一次电视桌面的折腾记录</title>
+      <link>https://blog.nianshu2022.cn/blog/aerial-xiaomi-tv-experience</link>
+      <description>最近给家里的小米电视装上了 Aerial，把桌面换成风景背景和应用入口。这篇记录我在 MiTV-MTSU0、Android 14 上安装 Aerial 1.38 的情况：动态背景、主页守护，以及开机仍可能短暂出现原桌面的限制。它是一次实际折腾的记录，还不是长期使用评测。</description>
+      <pubDate>Mon, 26 Oct 2026 00:00:00 GMT</pubDate>
+      <guid>https://blog.nianshu2022.cn/blog/aerial-xiaomi-tv-experience</guid>
+    </item>
     <item>
       <title>从零开始：用 Ollama + Open WebUI 本地部署 DeepSeek-R1 满血版/蒸馏版实战指南</title>
       <link>https://blog.nianshu2022.cn/blog/deepseek-r1-ollama-local-deployment</link>

@@ -1,5 +1,27 @@
 [
   {
+    "id": "post:aerial-xiaomi-tv-experience",
+    "slug": "aerial-xiaomi-tv-experience",
+    "type": "post",
+    "collection": "posts",
+    "title": "给小米电视换上 Aerial：一次电视桌面的折腾记录",
+    "description": "最近给家里的小米电视装上了 Aerial，把桌面换成风景背景和应用入口。这篇记录我在 MiTV-MTSU0、Android 14 上安装 Aerial 1.38 的情况：动态背景、主页守护，以及开机仍可能短暂出现原桌面的限制。它是一次实际折腾的记录，还不是长期使用评测。",
+    "date": "2026-10-26",
+    "tags": [
+      "Aerial",
+      "小米电视",
+      "Android TV",
+      "电视桌面"
+    ],
+    "cover": null,
+    "award": null,
+    "url": "https://blog.nianshu2022.cn/blog/aerial-xiaomi-tv-experience",
+    "path": "/blog/aerial-xiaomi-tv-experience",
+    "wordCount": 1855,
+    "readingTime": "7 分钟",
+    "tocCount": 6
+  },
+  {
     "id": "post:deepseek-r1-ollama-local-deployment",
     "slug": "deepseek-r1-ollama-local-deployment",
     "type": "post",
